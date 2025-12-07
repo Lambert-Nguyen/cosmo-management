@@ -1,6 +1,7 @@
-{% extends "staff/base.html" %}
+{% extends "layouts/staff_layout.html" %}
 
-{% block title %}{{ task.title }} · AriStay{% endblock %}
+{% block page_title %}{{ task.title }}{% endblock %}
+{% block title %}{{ task.title }} · AriStay Staff{% endblock %}
 
 {% block content %}
 <div class="task-detail-container">

@@ -1,0 +1,474 @@
+{% extends "layouts/base_unified.html" %}
+{% load static %}
+{% load timezone_tags %}
+
+{% block title %}{% block page_title %}AriStay Staff Portal{% endblock %} · AriStay{% endblock %}
+
+{% block header %}
+<header class="header staff-header">
+    <div class="header-content container-fluid">
+        <div class="header-left">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
+                <span class="hamburger-icon">☰</span>
+            </button>
+            
+            <a href="{% url 'staff-dashboard' %}" class="logo">
+                <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay" height="32" class="logo-img">
+                <span class="logo-text">AriStay Staff</span>
+            </a>
+        </div>
+        
+        <div class="header-right">
+            {% block header_actions %}
+            <div class="user-info">
+                <div class="theme-toggle-container">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+                
+                <div class="user-profile">
+                    <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="user-role">{{ request.user.profile.get_role_display|default:"Staff" }}</span>
+                </div>
+                
+                <a href="{% url 'unified_logout' %}" class="btn btn-sm btn-outline-primary">
+                    Logout
+                </a>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block navigation %}
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-content">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Menu</h2>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">×</button>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="{% url 'staff-dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'staff-dashboard' %}active{% endif %}">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{% url 'staff-tasks' %}" class="nav-link {% if 'tasks' in request.path %}active{% endif %}">
+                    <span class="nav-icon">✓</span>
+                    <span class="nav-text">My Tasks</span>
+                    {% if unread_tasks_count %}
+                    <span class="nav-badge">{{ unread_tasks_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'bookings' in request.path %}active{% endif %}">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-text">Bookings</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'properties' in request.path %}active{% endif %}">
+                    <span class="nav-icon">🏢</span>
+                    <span class="nav-text">Properties</span>
+                </a>
+            </li>
+            
+            {% if request.user.is_staff or request.user.profile.is_manager %}
+            <li class="nav-divider"></li>
+            <li class="nav-section-title">Management</li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'team' in request.path %}active{% endif %}">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Team</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Reports</span>
+                </a>
+            </li>
+            {% endif %}
+            
+            <li class="nav-divider"></li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'profile' in request.path %}active{% endif %}">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Mobile Navigation Script -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggle = document.getElementById('mobileNavToggle');
+    const close = document.getElementById('sidebarClose');
+    
+    function openSidebar() {
+        sidebar.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    toggle?.addEventListener('click', openSidebar);
+    close?.addEventListener('click', closeSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+            closeSidebar();
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer staff-footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="footer-text">
+                © {{ current_year|default:"2025" }} AriStay. All rights reserved.
+            </p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Help</a>
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Terms</a>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* Staff Layout Specific Styles */
+.staff-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mobile-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all var(--transition-fast);
+}
+
+.mobile-nav-toggle:hover {
+    background: var(--color-gray-100);
+}
+
+@media (min-width: 768px) {
+    .mobile-nav-toggle {
+        display: none;
+    }
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.logo-img {
+    border-radius: var(--radius);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-profile {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+@media (min-width: 768px) {
+    .user-profile {
+        display: flex;
+    }
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
+.user-role {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: left var(--transition-base);
+    z-index: 1100;
+    overflow-y: auto;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        left: 0;
+        position: static;
+        height: auto;
+        box-shadow: none;
+        background: transparent;
+        width: auto;
+        margin: 1rem 0;
+    }
+    
+    .sidebar-overlay,
+    .sidebar-header {
+        display: none;
+    }
+    
+    .sidebar-content {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1099;
+}
+
+.sidebar.active ~ .sidebar-overlay {
+    display: block;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.sidebar-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    .nav-menu {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0;
+    }
+}
+
+.nav-item {
+    margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+    .nav-item {
+        margin-bottom: 0;
+    }
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: all var(--transition-fast);
+}
+
+.nav-link:hover {
+    background: var(--color-gray-100);
+    color: var(--color-primary);
+}
+
+.nav-link.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .nav-link {
+        padding: 0.5rem 1rem;
+    }
+    
+    .nav-icon {
+        display: none;
+    }
+}
+
+.nav-badge {
+    margin-left: auto;
+    background: var(--color-danger);
+    color: white;
+    font-size: var(--font-size-xs);
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+}
+
+.nav-divider {
+    height: 1px;
+    background: var(--color-gray-200);
+    margin: 1rem 0;
+}
+
+@media (min-width: 768px) {
+    .nav-divider {
+        display: none;
+    }
+}
+
+.nav-section-title {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    letter-spacing: 0.05em;
+}
+
+@media (min-width: 768px) {
+    .nav-section-title {
+        display: none;
+    }
+}
+
+/* Main Content */
+.main-content {
+    min-height: calc(100vh - 200px);
+    padding: 2rem 1rem;
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        padding: 2rem;
+    }
+}
+
+/* Footer */
+.staff-footer {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-text {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-link {
+    color: white;
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+}
+
+.footer-link:hover {
+    opacity: 1;
+}
+</style>
+{% endblock %}

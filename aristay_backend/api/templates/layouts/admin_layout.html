@@ -1,0 +1,199 @@
+{% extends "layouts/base_unified.html" %}
+{% load static %}
+
+{% block title %}{% block page_title %}AriStay Admin{% endblock %} · AriStay{% endblock %}
+
+{% block header %}
+<header class="header admin-header">
+    <div class="header-content container-fluid">
+        <div class="header-left">
+            <a href="/admin/" class="logo">
+                <img src="{% static 'images/aristay_logo.jpg' %}\" alt="AriStay" height="32" class="logo-img">
+                <span class="logo-text">AriStay Admin</span>
+            </a>
+        </div>
+        
+        <div class="header-right">
+            {% block header_actions %}
+            <div class="user-info">
+                <div class="user-profile">
+                    <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+                
+                <a href="{% url 'unified_logout' %}" class="btn btn-sm btn-outline-danger">
+                    Logout
+                </a>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block navigation %}
+<nav class="admin-nav">
+    <div class="container-fluid">
+        <ul class="nav-menu horizontal">
+            <li class="nav-item">
+                <a href="/admin/" class="nav-link">
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{% url 'admin_invite_codes' %}" class="nav-link {% if 'invite-codes' in request.path %}active{% endif %}">
+                    <span class="nav-text">Invite Codes</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="/manager/" class="nav-link">
+                    <span class="nav-text">Manager Console</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="/admin/api/property/" class="nav-link">
+                    <span class="nav-text">Properties</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="/admin/api/booking/" class="nav-link">
+                    <span class="nav-text">Bookings</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="/admin/auth/user/" class="nav-link">
+                    <span class="nav-text">Users</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer admin-footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="footer-text">
+                © {{ current_year|default:"2025" }} AriStay Admin Panel. All rights reserved.
+            </p>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* Admin Layout Specific Styles */
+.admin-header {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.admin-header .logo {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.admin-header .logo-img {
+    border-radius: var(--radius);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.admin-header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-header .user-profile {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .admin-header .user-profile {
+        display: flex;
+    }
+}
+
+.admin-header .user-name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+}
+
+.admin-header .user-role {
+    font-size: var(--font-size-xs);
+    opacity: 0.9;
+}
+
+.admin-nav {
+    background: white;
+    border-bottom: 2px solid var(--color-gray-200);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.nav-menu.horizontal {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nav-menu.horizontal .nav-item {
+    flex-shrink: 0;
+}
+
+.nav-menu.horizontal .nav-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.nav-menu.horizontal .nav-link:hover {
+    color: var(--color-danger);
+    background: var(--color-gray-50);
+}
+
+.nav-menu.horizontal .nav-link.active {
+    color: var(--color-danger);
+    border-bottom-color: var(--color-danger);
+    font-weight: 600;
+}
+
+.admin-footer {
+    background: var(--color-gray-900);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.admin-footer .footer-text {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+}
+</style>
+{% endblock %}

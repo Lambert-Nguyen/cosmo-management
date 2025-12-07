@@ -1,0 +1,246 @@
+{% extends "layouts/base_unified.html" %}
+{% load static %}
+
+{% block title %}{% block page_title %}Guest Portal{% endblock %} · AriStay{% endblock %}
+
+{% block header %}
+<header class="header portal-header">
+    <div class="header-content container">
+        <div class="header-left">
+            <a href="#" class="logo">
+                <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay" height="32" class="logo-img">
+                <span class="logo-text">AriStay</span>
+            </a>
+        </div>
+        
+        <div class="header-right">
+            {% block header_actions %}
+            {% if request.user.is_authenticated %}
+            <div class="user-info">
+                <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                <a href="{% url 'unified_logout' %}" class="btn btn-sm btn-outline-primary">
+                    Logout
+                </a>
+            </div>
+            {% else %}
+            <div class="auth-buttons">
+                <a href="{% url 'unified_login' %}" class="btn btn-sm btn-outline-primary">
+                    Login
+                </a>
+                <a href="{% url 'register' %}" class="btn btn-sm btn-primary">
+                    Sign Up
+                </a>
+            </div>
+            {% endif %}
+            {% endblock %}
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block navigation %}
+{% if request.user.is_authenticated %}
+<nav class="portal-nav">
+    <div class="container">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link">My Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Payments</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Messages</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+<footer class="footer portal-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>AriStay</h4>
+                <p>Premium property management services</p>
+            </div>
+            
+            <div class="footer-section">
+                <h5>Quick Links</h5>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h5>Legal</h5>
+                <ul class="footer-links">
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; {{ current_year|default:"2025" }} AriStay. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* Portal Layout Specific Styles */
+.portal-header {
+    background: white;
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: 1rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.portal-header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.portal-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.portal-header .logo-img {
+    border-radius: var(--radius);
+}
+
+.portal-header .user-info,
+.portal-header .auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.portal-header .user-name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .portal-header .user-name {
+        display: inline;
+    }
+}
+
+.portal-nav {
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.portal-nav .nav-menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.portal-nav .nav-item {
+    flex-shrink: 0;
+}
+
+.portal-nav .nav-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.portal-nav .nav-link:hover {
+    color: var(--color-primary);
+    background: white;
+}
+
+.portal-footer {
+    background: var(--color-gray-900);
+    color: white;
+    padding: 3rem 0 1rem;
+    margin-top: 4rem;
+}
+
+.portal-footer .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .portal-footer .footer-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.portal-footer .footer-section h4,
+.portal-footer .footer-section h5 {
+    margin-bottom: 1rem;
+    font-size: var(--font-size-lg);
+}
+
+.portal-footer .footer-section p {
+    opacity: 0.8;
+    font-size: var(--font-size-sm);
+}
+
+.portal-footer .footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.portal-footer .footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.portal-footer .footer-links a {
+    color: white;
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+}
+
+.portal-footer .footer-links a:hover {
+    opacity: 1;
+}
+
+.portal-footer .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.portal-footer .footer-bottom p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    opacity: 0.6;
+}
+</style>
+{% endblock %}
