@@ -20,6 +20,8 @@ jest.mock('../../../aristay_backend/static/js/core/api-client.js', () => ({
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 
 describe('NavigationManager', () => {
+  let requestSpy;
+  let uploadSpy;
   let navigationManager;
   let mockTaskContainer;
   let mockNavContainer;
@@ -51,7 +53,7 @@ describe('NavigationManager', () => {
     window.location = { href: '', pathname: '/staff/tasks/123/' };
 
     // Clear all mocks
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
     
     // Reset window instances
     window.navigationManagerInstance = null;
@@ -59,7 +61,7 @@ describe('NavigationManager', () => {
 
   afterEach(() => {
     document.body.innerHTML = '';
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('Constructor', () => {

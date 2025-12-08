@@ -5,25 +5,14 @@
 
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import { PhotoManager } from '../../../aristay_backend/static/js/modules/photo-manager.js';
-
-// Mock APIClient
-jest.mock('../../../aristay_backend/static/js/core/api-client.js', () => ({
-  APIClient: {
-    request: jest.fn(),
-    upload: jest.fn(),
-    get: jest.fn(),
-    post: jest.fn(),
-    patch: jest.fn(),
-    delete: jest.fn(),
-  }
-}));
-
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 
 describe('PhotoManager', () => {
   let photoManager;
   let mockContainer;
   let mockTaskContainer;
+  let requestSpy;
+  let uploadSpy;
 
   beforeEach(() => {
     // Reset DOM
@@ -70,8 +59,9 @@ describe('PhotoManager', () => {
     // Mock window.openPhotoModal
     window.openPhotoModal = jest.fn();
 
-    // Clear all mocks
-    jest.clearAllMocks();
+    // Spy on APIClient methods
+    requestSpy = jest.spyOn(APIClient, 'request').mockResolvedValue({ success: true });
+    uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true });
     
     // Reset window instances
     window.photoManagerInstance = null;
@@ -79,7 +69,7 @@ describe('PhotoManager', () => {
 
   afterEach(() => {
     document.body.innerHTML = '';
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
     delete global.confirm;
   });
 
@@ -124,7 +114,7 @@ describe('PhotoManager', () => {
     });
 
     it('should delete photo successfully', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
 
       await photoManager.deletePhoto('1');
 
@@ -138,7 +128,7 @@ describe('PhotoManager', () => {
     });
 
     it('should remove photo from UI after successful delete', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const removeSpy = jest.spyOn(photoManager, 'removePhotoFromUI');
 
       await photoManager.deletePhoto('1');
@@ -147,7 +137,7 @@ describe('PhotoManager', () => {
     });
 
     it('should show success notification', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const showNotificationSpy = jest.spyOn(photoManager, 'showNotification');
 
       await photoManager.deletePhoto('1');
@@ -168,7 +158,7 @@ describe('PhotoManager', () => {
 
     it('should handle delete errors', async () => {
       const error = new Error('Delete failed');
-      APIClient.request.mockRejectedValue(error);
+      requestSpy.mockRejectedValue(error);
       const showNotificationSpy = jest.spyOn(photoManager, 'showNotification');
 
       await photoManager.deletePhoto('1');
@@ -197,7 +187,7 @@ describe('PhotoManager', () => {
     });
 
     it('should archive photo successfully', async () => {
-      APIClient.request.mockResolvedValue({
+      requestSpy.mockResolvedValue({
         success: true,
         id: 1,
         photo_status: 'archived'
@@ -215,7 +205,7 @@ describe('PhotoManager', () => {
     });
 
     it('should update photo status in UI', async () => {
-      APIClient.request.mockResolvedValue({ success: true, id: 1 });
+      requestSpy.mockResolvedValue({ success: true, id: 1 });
       const updateSpy = jest.spyOn(photoManager, 'updatePhotoStatusUI');
 
       await photoManager.archivePhoto('1');
@@ -224,7 +214,7 @@ describe('PhotoManager', () => {
     });
 
     it('should show success notification', async () => {
-      APIClient.request.mockResolvedValue({ success: true, id: 1 });
+      requestSpy.mockResolvedValue({ success: true, id: 1 });
       const showNotificationSpy = jest.spyOn(photoManager, 'showNotification');
 
       await photoManager.archivePhoto('1');
@@ -234,7 +224,7 @@ describe('PhotoManager', () => {
 
     it('should handle archive errors', async () => {
       const error = new Error('Archive failed');
-      APIClient.request.mockRejectedValue(error);
+      requestSpy.mockRejectedValue(error);
       const showNotificationSpy = jest.spyOn(photoManager, 'showNotification');
 
       await photoManager.archivePhoto('1');
@@ -362,7 +352,7 @@ describe('PhotoManager', () => {
     it('should upload single photo', async () => {
       const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
       
-      APIClient.upload.mockResolvedValue({
+      uploadSpy.mockResolvedValue({
         success: true,
         id: 101,
         image_url: '/media/test.jpg',
@@ -382,7 +372,7 @@ describe('PhotoManager', () => {
         new File(['photo3'], 'test3.jpg', { type: 'image/jpeg' })
       ];
 
-      APIClient.upload.mockResolvedValue({
+      uploadSpy.mockResolvedValue({
         success: true,
         id: 101,
         image_url: '/media/test.jpg'
@@ -396,7 +386,7 @@ describe('PhotoManager', () => {
 
     it('should show success notification', async () => {
       const mockFiles = [new File(['photo'], 'test.jpg', { type: 'image/jpeg' })];
-      APIClient.upload.mockResolvedValue({ success: true, id: 101, image_url: '/test.jpg' });
+      uploadSpy.mockResolvedValue({ success: true, id: 101, image_url: '/test.jpg' });
       const showNotificationSpy = jest.spyOn(photoManager, 'showNotification');
 
       await photoManager.uploadPhotos(mockFiles, 'general');
@@ -410,7 +400,7 @@ describe('PhotoManager', () => {
     it('should handle upload errors', async () => {
       const mockFiles = [new File(['photo'], 'test.jpg', { type: 'image/jpeg' })];
       const error = new Error('Upload failed');
-      APIClient.upload.mockRejectedValue(error);
+      uploadSpy.mockRejectedValue(error);
       const showNotificationSpy = jest.spyOn(photoManager, 'showNotification');
 
       await expect(photoManager.uploadPhotos(mockFiles, 'general')).rejects.toThrow('Upload failed');
@@ -441,7 +431,7 @@ describe('PhotoManager', () => {
     it('should upload photo with correct form data', async () => {
       const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
       
-      APIClient.upload.mockResolvedValue({
+      uploadSpy.mockResolvedValue({
         success: true,
         id: 101,
         image_url: '/media/test.jpg'
@@ -464,7 +454,7 @@ describe('PhotoManager', () => {
         photo_type: 'before'
       };
       
-      APIClient.upload.mockResolvedValue(photoData);
+      uploadSpy.mockResolvedValue(photoData);
       const addPhotoSpy = jest.spyOn(photoManager, 'addPhotoToGallery');
 
       await photoManager.uploadSinglePhoto(mockFile, 'before');
@@ -476,7 +466,7 @@ describe('PhotoManager', () => {
       const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
       const error = new Error('Network error');
       
-      APIClient.upload.mockRejectedValue(error);
+      uploadSpy.mockRejectedValue(error);
 
       await expect(photoManager.uploadSinglePhoto(mockFile, 'general')).rejects.toThrow('Network error');
     });
@@ -657,7 +647,7 @@ describe('PhotoManager', () => {
     });
 
     it('should handle delete button click', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const deleteSpy = jest.spyOn(photoManager, 'deletePhoto');
 
       const deleteBtn = mockContainer.querySelector('[data-photo-id="1"].btn-delete-photo');
@@ -669,7 +659,7 @@ describe('PhotoManager', () => {
     });
 
     it('should handle archive button click', async () => {
-      APIClient.request.mockResolvedValue({ success: true, id: 1 });
+      requestSpy.mockResolvedValue({ success: true, id: 1 });
       const archiveSpy = jest.spyOn(photoManager, 'archivePhoto');
 
       const archiveBtn = mockContainer.querySelector('[data-photo-id="1"].btn-archive-photo');
@@ -693,7 +683,7 @@ describe('PhotoManager', () => {
     });
 
     it('should call deletePhoto through global bridge', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const deleteSpy = jest.spyOn(photoManager, 'deletePhoto');
 
       await window.deletePhoto('1');
@@ -707,7 +697,7 @@ describe('PhotoManager', () => {
     });
 
     it('should call archivePhoto through global bridge', async () => {
-      APIClient.request.mockResolvedValue({ success: true, id: 1 });
+      requestSpy.mockResolvedValue({ success: true, id: 1 });
       const archiveSpy = jest.spyOn(photoManager, 'archivePhoto');
 
       await window.archivePhoto('1');
