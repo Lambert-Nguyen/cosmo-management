@@ -3,20 +3,20 @@
  * Tests the APIClient utility for HTTP requests
  */
 
+import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 import { CSRFManager } from '../../../aristay_backend/static/js/core/csrf.js';
 
-// Mock CSRFManager
-jest.mock('../../../aristay_backend/static/js/core/csrf.js');
-
 describe('APIClient', () => {
+  let csrfSpy;
+  
   beforeEach(() => {
     global.fetch = jest.fn();
-    CSRFManager.getFetchHeaders.mockReturnValue({ 'X-CSRFToken': 'test-csrf-token' });
+    csrfSpy = jest.spyOn(CSRFManager, 'getFetchHeaders').mockReturnValue({ 'X-CSRFToken': 'test-csrf-token' });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('request()', () => {
@@ -30,7 +30,8 @@ describe('APIClient', () => {
 
       expect(fetch).toHaveBeenCalledWith('/api/test/', {
         method: 'GET',
-        headers: {}
+        headers: {},
+        credentials: 'same-origin'
       });
       expect(result).toEqual({ data: 'success' });
     });
@@ -52,6 +53,7 @@ describe('APIClient', () => {
           'X-CSRFToken': 'test-csrf-token',
           'Content-Type': 'application/json'
         },
+        credentials: 'same-origin',
         body: JSON.stringify({ key: 'value' })
       });
     });
@@ -73,6 +75,7 @@ describe('APIClient', () => {
       expect(fetch).toHaveBeenCalledWith('/api/upload/', {
         method: 'POST',
         headers: { 'X-CSRFToken': 'test-csrf-token' },
+        credentials: 'same-origin',
         body: formData
       });
     });
@@ -90,7 +93,7 @@ describe('APIClient', () => {
     test('handles network errors', async () => {
       global.fetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(APIClient.request('/api/test/')).rejects.toThrow('Network error');
+      await expect(APIClient.request('/api/test/')).rejects.toThrow('Network request failed');
     });
   });
 
@@ -109,6 +112,7 @@ describe('APIClient', () => {
           'X-CSRFToken': 'test-csrf-token',
           'Content-Type': 'application/json'
         },
+        credentials: 'same-origin',
         body: JSON.stringify({ name: 'Test' })
       });
       expect(result).toEqual({ id: 123 });
@@ -130,6 +134,7 @@ describe('APIClient', () => {
       expect(fetch).toHaveBeenCalledWith('/api/upload/', {
         method: 'POST',
         headers: { 'X-CSRFToken': 'test-csrf-token' },
+        credentials: 'same-origin',
         body: formData
       });
       expect(result).toEqual({ uploaded: true });

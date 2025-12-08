@@ -6,9 +6,6 @@ import { jest, describe, test, beforeEach, expect } from '@jest/globals';
 import { PhotoModal } from '../../../aristay_backend/static/js/modules/photo-modal.js';
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 
-// Mock APIClient
-jest.mock('../../../aristay_backend/static/js/core/api-client.js');
-
 describe('PhotoModal', () => {
   let requestSpy;
   let uploadSpy;
@@ -42,10 +39,15 @@ describe('PhotoModal', () => {
       value: 'complete'
     });
 
-    // Clear mocks
-    jest.restoreAllMocks();
+    // Spy on APIClient methods
+    requestSpy = jest.spyOn(APIClient, 'request').mockResolvedValue({ success: true });
+    uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true });
 
     photoModal = new PhotoModal();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('Constructor and Initialization', () => {

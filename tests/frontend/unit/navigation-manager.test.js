@@ -64,6 +64,10 @@ describe('NavigationManager', () => {
     jest.restoreAllMocks();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe('Constructor', () => {
     it('should initialize with task ID', async () => {
       APIClient.get.mockResolvedValue({
