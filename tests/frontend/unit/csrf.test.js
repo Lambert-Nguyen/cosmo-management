@@ -2,6 +2,7 @@
  * Unit tests for CSRFManager
  */
 
+import { jest, describe, test, beforeEach, expect } from '@jest/globals';
 import { CSRFManager } from '../../../aristay_backend/static/js/core/csrf.js';
 
 describe('CSRFManager', () => {

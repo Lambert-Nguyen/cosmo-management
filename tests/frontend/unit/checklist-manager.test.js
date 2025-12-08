@@ -534,8 +534,8 @@ describe('ChecklistManager', () => {
     });
 
     it('should handle file input changes', async () => {
+      const handlePhotoUploadSpy = jest.spyOn(checklistManager, 'handlePhotoUpload');
       uploadSpy.mockResolvedValue({ success: true, id: 101, image_url: '/test.jpg' });
-      const uploadSpy = jest.spyOn(checklistManager, 'handlePhotoUpload');
 
       const fileInput = mockContainer.querySelector('[data-response-id="1"].photo-upload');
       const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
@@ -549,7 +549,7 @@ describe('ChecklistManager', () => {
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(uploadSpy).toHaveBeenCalled();
+      expect(handlePhotoUploadSpy).toHaveBeenCalled();
     });
   });
 

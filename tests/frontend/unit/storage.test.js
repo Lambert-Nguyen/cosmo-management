@@ -2,6 +2,7 @@
  * Unit tests for StorageManager
  */
 
+import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
 import { StorageManager } from '../../../aristay_backend/static/js/core/storage.js';
 
 describe('StorageManager', () => {

@@ -6,9 +6,6 @@ import { jest, describe, test, beforeEach, expect } from '@jest/globals';
 import { TaskActions } from '../../../aristay_backend/static/js/modules/task-actions.js';
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 
-// Mock APIClient
-jest.mock('../../../aristay_backend/static/js/core/api-client.js');
-
 describe('TaskActions', () => {
   let requestSpy;
   let uploadSpy;
@@ -38,10 +35,15 @@ describe('TaskActions', () => {
     delete window.location;
     window.location = { href: '', reload: jest.fn() };
 
-    // Clear mocks
-    jest.restoreAllMocks();
+    // Spy on APIClient methods
+    requestSpy = jest.spyOn(APIClient, 'request').mockResolvedValue({ success: true });
+    uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true });
 
     taskActions = new TaskActions(mockTaskId);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('Constructor and Initialization', () => {
