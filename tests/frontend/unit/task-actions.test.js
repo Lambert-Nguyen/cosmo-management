@@ -10,6 +10,8 @@ import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js
 jest.mock('../../../aristay_backend/static/js/core/api-client.js');
 
 describe('TaskActions', () => {
+  let requestSpy;
+  let uploadSpy;
   let taskActions;
   const mockTaskId = '123';
 
@@ -37,7 +39,7 @@ describe('TaskActions', () => {
     window.location = { href: '', reload: jest.fn() };
 
     // Clear mocks
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
 
     taskActions = new TaskActions(mockTaskId);
   });
@@ -185,7 +187,7 @@ describe('TaskActions', () => {
   describe('deleteTask', () => {
     test('deletes task and navigates to task list', async () => {
       const taskTitle = 'Test Task';
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
 
       await taskActions.deleteTask(taskTitle);
 

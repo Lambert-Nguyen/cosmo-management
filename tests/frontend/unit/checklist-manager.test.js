@@ -21,6 +21,8 @@ jest.mock('../../../aristay_backend/static/js/core/api-client.js', () => ({
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 
 describe('ChecklistManager', () => {
+  let requestSpy;
+  let uploadSpy;
   let checklistManager;
   let mockContainer;
   let mockTaskContainer;
@@ -78,15 +80,19 @@ describe('ChecklistManager', () => {
     document.body.appendChild(notesModal);
 
     // Clear all mocks
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
     
     // Reset window instances
     window.checklistManagerInstance = null;
+
+    // Spy on APIClient methods
+    requestSpy = jest.spyOn(APIClient, 'request').mockResolvedValue({ success: true });
+    uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true });
   });
 
   afterEach(() => {
     document.body.innerHTML = '';
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('Constructor', () => {
@@ -127,7 +133,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should update checklist item to completed', async () => {
-      APIClient.request.mockResolvedValue({
+      requestSpy.mockResolvedValue({
         success: true,
         id: 1,
         is_completed: true
@@ -145,7 +151,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should update checklist item to not completed', async () => {
-      APIClient.request.mockResolvedValue({
+      requestSpy.mockResolvedValue({
         success: true,
         id: 2,
         is_completed: false
@@ -163,7 +169,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should update progress overview after successful update', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const updateProgressSpy = jest.spyOn(checklistManager, 'updateProgressOverview');
 
       await checklistManager.updateChecklistItem('1', true);
@@ -172,7 +178,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should show success notification', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
 
       await checklistManager.updateChecklistItem('1', true);
@@ -185,7 +191,7 @@ describe('ChecklistManager', () => {
 
     it('should handle API errors gracefully', async () => {
       const error = new Error('Network error');
-      APIClient.request.mockRejectedValue(error);
+      requestSpy.mockRejectedValue(error);
       const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
 
       await checklistManager.updateChecklistItem('1', true);
@@ -222,7 +228,7 @@ describe('ChecklistManager', () => {
         }
       };
 
-      APIClient.upload.mockResolvedValue({
+      uploadSpy.mockResolvedValue({
         success: true,
         id: 101,
         image_url: '/media/photos/test.jpg',
@@ -251,7 +257,7 @@ describe('ChecklistManager', () => {
         }
       };
 
-      APIClient.upload.mockResolvedValue({
+      uploadSpy.mockResolvedValue({
         success: true,
         id: 101,
         image_url: '/media/photos/test.jpg'
@@ -276,7 +282,7 @@ describe('ChecklistManager', () => {
         id: 101,
         image_url: '/media/photos/test.jpg'
       };
-      APIClient.upload.mockResolvedValue(photoData);
+      uploadSpy.mockResolvedValue(photoData);
 
       const addPhotoSpy = jest.spyOn(checklistManager, 'addPhotoToChecklistItem');
 
@@ -294,7 +300,7 @@ describe('ChecklistManager', () => {
         }
       };
 
-      APIClient.upload.mockResolvedValue({ success: true });
+      uploadSpy.mockResolvedValue({ success: true });
       const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
 
       await checklistManager.handlePhotoUpload(mockEvent);
@@ -315,7 +321,7 @@ describe('ChecklistManager', () => {
       };
 
       const error = new Error('Upload failed');
-      APIClient.upload.mockRejectedValue(error);
+      uploadSpy.mockRejectedValue(error);
       const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
 
       await checklistManager.handlePhotoUpload(mockEvent);
@@ -351,7 +357,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should save notes successfully', async () => {
-      APIClient.request.mockResolvedValue({
+      requestSpy.mockResolvedValue({
         success: true,
         notes: 'Test notes content'
       });
@@ -368,7 +374,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should show success notification', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
 
       await checklistManager.saveNotes('1', 'Test notes');
@@ -381,7 +387,7 @@ describe('ChecklistManager', () => {
 
     it('should handle save errors', async () => {
       const error = new Error('Save failed');
-      APIClient.request.mockRejectedValue(error);
+      requestSpy.mockRejectedValue(error);
       const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
 
       await checklistManager.saveNotes('1', 'Test notes');
@@ -506,7 +512,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should handle checkbox change events', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const updateSpy = jest.spyOn(checklistManager, 'updateChecklistItem');
 
       const checkbox = mockContainer.querySelector('[data-response-id="1"].checklist-checkbox');
@@ -528,7 +534,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should handle file input changes', async () => {
-      APIClient.upload.mockResolvedValue({ success: true, id: 101, image_url: '/test.jpg' });
+      uploadSpy.mockResolvedValue({ success: true, id: 101, image_url: '/test.jpg' });
       const uploadSpy = jest.spyOn(checklistManager, 'handlePhotoUpload');
 
       const fileInput = mockContainer.querySelector('[data-response-id="1"].photo-upload');
@@ -559,7 +565,7 @@ describe('ChecklistManager', () => {
     });
 
     it('should call instance method through global bridge', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       const updateSpy = jest.spyOn(checklistManager, 'updateChecklistItem');
 
       await window.updateChecklistItem('1', true);

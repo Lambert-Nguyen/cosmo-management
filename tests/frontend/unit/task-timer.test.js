@@ -10,6 +10,8 @@ import { StorageManager } from '../../../aristay_backend/static/js/core/storage.
 jest.mock('../../../aristay_backend/static/js/core/storage.js');
 
 describe('TaskTimer', () => {
+  let requestSpy;
+  let uploadSpy;
   let taskTimer;
   const mockTaskId = '123';
 
@@ -26,9 +28,13 @@ describe('TaskTimer', () => {
     global.confirm = jest.fn(() => true);
     
     // Clear mocks
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
     StorageManager.get.mockReturnValue(null);
-    StorageManager.set.mockImplementation(() => {});
+    StorageManager.set.mockImplementation(() => {
+
+    // Spy on APIClient methods
+    requestSpy = jest.spyOn(APIClient, 'request').mockResolvedValue({ success: true });
+    uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true });});
 
     // Clear any existing timers
     jest.useFakeTimers();

@@ -11,6 +11,8 @@ import { PhotoManager } from '../../../aristay_backend/static/js/modules/photo-m
 import { NavigationManager } from '../../../aristay_backend/static/js/modules/navigation-manager.js';
 
 describe('Task Detail Integration Tests', () => {
+  let requestSpy;
+  let uploadSpy;
   let checklistManager;
   let photoManager;
   let navigationManager;
@@ -31,6 +33,10 @@ describe('Task Detail Integration Tests', () => {
     checklistManager = new ChecklistManager(document.querySelector('.checklist-container'));
     photoManager = new PhotoManager(document.querySelector('.photo-gallery'));
     navigationManager = new NavigationManager();
+
+    // Spy on APIClient methods
+    requestSpy = jest.spyOn(APIClient, 'request').mockResolvedValue({ success: true });
+    uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true });
   });
   
   afterEach(() => {

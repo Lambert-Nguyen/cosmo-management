@@ -10,6 +10,8 @@ import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js
 jest.mock('../../../aristay_backend/static/js/core/api-client.js');
 
 describe('PhotoModal', () => {
+  let requestSpy;
+  let uploadSpy;
   let photoModal;
   const mockTaskId = '123';
 
@@ -41,7 +43,7 @@ describe('PhotoModal', () => {
     });
 
     // Clear mocks
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
 
     photoModal = new PhotoModal();
   });
@@ -198,7 +200,7 @@ describe('PhotoModal', () => {
 
   describe('approvePhoto', () => {
     test('approves photo via API when confirmed', async () => {
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       photoModal.open('https://example.com/photo.jpg', '456');
 
       await photoModal.approvePhoto('456');
@@ -225,7 +227,7 @@ describe('PhotoModal', () => {
 
     test('handles API errors gracefully', async () => {
       const errorMessage = 'Network error';
-      APIClient.request.mockRejectedValue(new Error(errorMessage));
+      requestSpy.mockRejectedValue(new Error(errorMessage));
       photoModal.open('https://example.com/photo.jpg', '456');
 
       await photoModal.approvePhoto('456');
@@ -238,7 +240,7 @@ describe('PhotoModal', () => {
     test('rejects photo with reason via API', async () => {
       const reason = 'Photo is blurry';
       global.prompt.mockReturnValue(reason);
-      APIClient.request.mockResolvedValue({ success: true });
+      requestSpy.mockResolvedValue({ success: true });
       photoModal.open('https://example.com/photo.jpg', '456');
 
       await photoModal.rejectPhoto('456');
@@ -277,7 +279,7 @@ describe('PhotoModal', () => {
     test('handles API errors gracefully', async () => {
       const errorMessage = 'Network error';
       global.prompt.mockReturnValue('Too dark');
-      APIClient.request.mockRejectedValue(new Error(errorMessage));
+      requestSpy.mockRejectedValue(new Error(errorMessage));
       photoModal.open('https://example.com/photo.jpg', '456');
 
       await photoModal.rejectPhoto('456');
