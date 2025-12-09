@@ -52,6 +52,26 @@ export class ChecklistManager {
         this.openNotesModal(responseId);
       }
     });
+
+    // Event delegation for photo buttons
+    this.container.addEventListener('click', (e) => {
+      const photoBtn = e.target.closest('.btn-photo');
+      if (photoBtn) {
+        const responseId = photoBtn.dataset.responseId;
+        this.openPhotoManager(responseId);
+      }
+    });
+
+    // Event delegation for complete task final button (no checklist case)
+    const completeFinalBtn = document.querySelector('.btn-complete-task-final');
+    if (completeFinalBtn) {
+      completeFinalBtn.addEventListener('click', () => {
+        const taskId = completeFinalBtn.dataset.taskId;
+        if (taskId && window.taskActionsInstance) {
+          window.taskActionsInstance.completeTask();
+        }
+      });
+    }
   }
 
   async updateChecklistItem(responseId, isCompleted) {
@@ -350,6 +370,34 @@ export class ChecklistManager {
     }
   }
 
+  openPhotoManager(responseId) {
+    if (!responseId) {
+      console.error('Response ID is required to open photo manager');
+      return;
+    }
+
+    console.log(`Opening photo manager for checklist item ${responseId}`);
+
+    // Find the photo upload input for this response
+    const checklistItem = this.container.querySelector(
+      `.checklist-item[data-response-id="${responseId}"]`
+    );
+
+    if (!checklistItem) {
+      console.error('Checklist item not found');
+      return;
+    }
+
+    // Try to find and trigger the file input
+    const fileInput = checklistItem.querySelector('input[type="file"].photo-upload-input');
+    if (fileInput) {
+      fileInput.click();
+    } else {
+      console.warn('Photo upload input not found for this item');
+      this.showNotification('Photo upload not available for this item', 'warning');
+    }
+  }
+
   closeModal() {
     const modals = document.querySelectorAll('.note-modal');
     modals.forEach(modal => {
@@ -401,6 +449,12 @@ if (typeof window !== 'undefined') {
   window.uploadPhotos = function(responseId, inputElement) {
     if (window.checklistManagerInstance) {
       window.checklistManagerInstance.handlePhotoUpload({ target: inputElement });
+    }
+  };
+
+  window.openPhotoManager = function(responseId) {
+    if (window.checklistManagerInstance) {
+      window.checklistManagerInstance.openPhotoManager(responseId);
     }
   };
 }
