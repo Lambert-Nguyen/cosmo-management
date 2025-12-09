@@ -74,6 +74,44 @@ describe('PhotoModal', () => {
       expect(consoleWarn).toHaveBeenCalledWith('Photo modal not found in DOM');
       consoleWarn.mockRestore();
     });
+    
+    test('waits for DOMContentLoaded when document is loading', () => {
+      document.body.innerHTML = `
+        <div id="taskDetailContainer" data-task-id="${mockTaskId}"></div>
+        <div id="photoModal" style="display: none;">
+          <img id="modalPhoto" src="" alt="">
+        </div>
+      `;
+      
+      Object.defineProperty(document, 'readyState', {
+        writable: true,
+        value: 'loading'
+      });
+      
+      const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
+      
+      const newModal = new PhotoModal();
+      
+      expect(addEventListenerSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
+      
+      addEventListenerSpy.mockRestore();
+      Object.defineProperty(document, 'readyState', {
+        writable: true,
+        value: 'complete'
+      });
+    });
+    
+    test('gets task ID from alternate selector when main container not found', () => {
+      document.body.innerHTML = `
+        <div data-task-id="999"></div>
+        <div id="photoModal" style="display: none;">
+          <img id="modalPhoto" src="" alt="">
+        </div>
+      `;
+      
+      const newModal = new PhotoModal();
+      expect(newModal.taskId).toBe('999');
+    });
   });
 
   describe('open', () => {
@@ -200,6 +238,34 @@ describe('PhotoModal', () => {
     });
   });
 
+  describe('Button Event Delegation', () => {
+    test('clicking approve button calls approvePhoto', async () => {
+      photoModal.open('https://example.com/photo.jpg', '456');
+      jest.spyOn(photoModal, 'approvePhoto').mockResolvedValue();
+
+      const approveBtn = document.querySelector('.btn-approve');
+      approveBtn.click();
+
+      // Wait for async event handler
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(photoModal.approvePhoto).toHaveBeenCalledWith('456');
+    });
+
+    test('clicking reject button calls rejectPhoto', async () => {
+      photoModal.open('https://example.com/photo.jpg', '456');
+      jest.spyOn(photoModal, 'rejectPhoto').mockResolvedValue();
+
+      const rejectBtn = document.querySelector('.btn-reject');
+      rejectBtn.click();
+
+      // Wait for async event handler
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(photoModal.rejectPhoto).toHaveBeenCalledWith('456');
+    });
+  });
+
   describe('approvePhoto', () => {
     test('approves photo via API when confirmed', async () => {
       requestSpy.mockResolvedValue({ success: true });
@@ -311,6 +377,8 @@ describe('PhotoModal', () => {
     });
 
     test('test function opens modal with placeholder', () => {
+      // Ensure instance is set before calling test function
+      window._photoModalInstance = photoModal;
       window.testPhotoModal();
 
       const modal = document.getElementById('photoModal');

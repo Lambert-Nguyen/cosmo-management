@@ -95,6 +95,42 @@ describe('APIClient', () => {
 
       await expect(APIClient.request('/api/test/')).rejects.toThrow('Network request failed');
     });
+    
+    test('handles 204 No Content response', async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        status: 204
+      });
+
+      const result = await APIClient.request('/api/delete/', { method: 'DELETE' });
+      expect(result).toEqual({ success: true });
+    });
+    
+    test('handles JSON parse error in error response', async () => {
+      global.fetch.mockResolvedValue({
+        ok: false,
+        status: 500,
+        statusText: 'Internal Server Error',
+        json: async () => {
+          throw new Error('Invalid JSON');
+        }
+      });
+
+      await expect(APIClient.request('/api/test/')).rejects.toThrow('Internal Server Error');
+    });
+    
+    test('handles response without statusText', async () => {
+      global.fetch.mockResolvedValue({
+        ok: false,
+        status: 500,
+        statusText: '',
+        json: async () => {
+          throw new Error('Invalid JSON');
+        }
+      });
+
+      await expect(APIClient.request('/api/test/')).rejects.toThrow('HTTP 500');
+    });
   });
 
   describe('post()', () => {
@@ -138,6 +174,65 @@ describe('APIClient', () => {
         body: formData
       });
       expect(result).toEqual({ uploaded: true });
+    });
+    
+    test('throws error when not passed FormData', async () => {
+      await expect(APIClient.upload('/api/upload/', { file: 'test' }))
+        .rejects.toThrow('upload() requires FormData instance');
+    });
+  });
+  
+  describe('HTTP method shortcuts', () => {
+    test('get() makes GET request', async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ data: 'test' })
+      });
+
+      await APIClient.get('/api/data/', { page: 1 });
+
+      expect(fetch).toHaveBeenCalledWith('/api/data/?page=1', expect.objectContaining({
+        method: 'GET'
+      }));
+    });
+    
+    test('put() makes PUT request', async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ updated: true })
+      });
+
+      await APIClient.put('/api/update/', { name: 'Updated' });
+
+      expect(fetch).toHaveBeenCalledWith('/api/update/', expect.objectContaining({
+        method: 'PUT'
+      }));
+    });
+    
+    test('patch() makes PATCH request', async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ patched: true })
+      });
+
+      await APIClient.patch('/api/patch/', { field: 'value' });
+
+      expect(fetch).toHaveBeenCalledWith('/api/patch/', expect.objectContaining({
+        method: 'PATCH'
+      }));
+    });
+    
+    test('delete() makes DELETE request', async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ deleted: true })
+      });
+
+      await APIClient.delete('/api/delete/');
+
+      expect(fetch).toHaveBeenCalledWith('/api/delete/', expect.objectContaining({
+        method: 'DELETE'
+      }));
     });
   });
 });
