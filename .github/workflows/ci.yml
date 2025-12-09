@@ -1,4 +1,6 @@
 name: Aristay CI
+permissions:
+  contents: read
 
 on:
   push:
