@@ -96,7 +96,7 @@ export class NavigationManager {
   initKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
       // Ignore if user is typing in input/textarea
-      if (e.target.matches('input, textarea, [contenteditable]')) {
+      if (e.target && e.target.matches && e.target.matches('input, textarea, [contenteditable]')) {
         return;
       }
 

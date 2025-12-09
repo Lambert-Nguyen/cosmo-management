@@ -319,7 +319,7 @@ describe('TaskTimer', () => {
       expect(typeof window.resetTimer).toBe('function');
     });
 
-    test('global functions call instance methods', () => {
+    test('global startTimer calls instance method', () => {
       taskTimer = new TaskTimer(mockTaskId);
       window.taskTimerInstance = taskTimer;
       jest.spyOn(taskTimer, 'start');
@@ -327,6 +327,36 @@ describe('TaskTimer', () => {
       window.startTimer();
 
       expect(taskTimer.start).toHaveBeenCalled();
+    });
+    
+    test('global pauseTimer calls instance method', () => {
+      taskTimer = new TaskTimer(mockTaskId);
+      window.taskTimerInstance = taskTimer;
+      jest.spyOn(taskTimer, 'pause');
+
+      window.pauseTimer();
+
+      expect(taskTimer.pause).toHaveBeenCalled();
+    });
+    
+    test('global stopTimer calls instance reset method', () => {
+      taskTimer = new TaskTimer(mockTaskId);
+      window.taskTimerInstance = taskTimer;
+      jest.spyOn(taskTimer, 'reset');
+
+      window.stopTimer();
+
+      expect(taskTimer.reset).toHaveBeenCalled();
+    });
+    
+    test('global resetTimer calls instance reset method', () => {
+      taskTimer = new TaskTimer(mockTaskId);
+      window.taskTimerInstance = taskTimer;
+      jest.spyOn(taskTimer, 'reset');
+
+      window.resetTimer();
+
+      expect(taskTimer.reset).toHaveBeenCalled();
     });
   });
 });

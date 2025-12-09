@@ -7,6 +7,7 @@ import { TaskActions } from '../../../aristay_backend/static/js/modules/task-act
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 
 describe('TaskActions', () => {
+  let postSpy;
   let requestSpy;
   let uploadSpy;
   let taskActions;
@@ -34,8 +35,14 @@ describe('TaskActions', () => {
     // Mock location
     delete window.location;
     window.location = { href: '', reload: jest.fn() };
+    
+    // Mock document.execCommand for older browsers
+    if (!document.execCommand) {
+      document.execCommand = jest.fn(() => true);
+    }
 
     // Spy on APIClient methods
+    postSpy = jest.spyOn(APIClient, 'post').mockResolvedValue({ success: true });
     requestSpy = jest.spyOn(APIClient, 'request').mockResolvedValue({ success: true });
     uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true });
 
@@ -110,6 +117,15 @@ describe('TaskActions', () => {
 
       expect(APIClient.post).not.toHaveBeenCalled();
     });
+    
+    test('handles API errors gracefully', async () => {
+      const errorMessage = 'Task cannot be completed';
+      APIClient.post.mockRejectedValue(new Error(errorMessage));
+
+      await taskActions.completeTask();
+
+      expect(global.alert).toHaveBeenCalledWith(`Failed to complete task: ${errorMessage}`);
+    });
   });
 
   describe('addNote', () => {
@@ -143,6 +159,16 @@ describe('TaskActions', () => {
 
       expect(APIClient.post).not.toHaveBeenCalled();
     });
+    
+    test('handles API errors gracefully', async () => {
+      global.prompt.mockReturnValue('Test note');
+      const errorMessage = 'Failed to save note';
+      APIClient.post.mockRejectedValue(new Error(errorMessage));
+
+      await taskActions.addNote();
+
+      expect(global.alert).toHaveBeenCalledWith(`Failed to add note: ${errorMessage}`);
+    });
   });
 
   describe('shareTask', () => {
@@ -168,6 +194,112 @@ describe('TaskActions', () => {
       expect(navigator.clipboard.writeText).toHaveBeenCalled();
       expect(global.alert).toHaveBeenCalledWith('Task link copied to clipboard!');
     });
+    
+    test('handles Web Share API errors and falls back to clipboard', async () => {
+      global.navigator.share = jest.fn().mockRejectedValue(new Error('Share cancelled'));
+      global.navigator.clipboard = {
+        writeText: jest.fn().mockResolvedValue()
+      };
+
+      await taskActions.shareTask();
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalled();
+    });
+    
+    test('uses fallback copy when clipboard API fails', async () => {
+      global.navigator.share = undefined;
+      const writeTextMock = jest.fn().mockRejectedValue(new Error('Clipboard denied'));
+      global.navigator.clipboard = {
+        writeText: writeTextMock
+      };
+
+      await taskActions.shareTask();
+      
+      // Wait for promise rejection to be handled
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      // Verify writeText was attempted
+      expect(writeTextMock).toHaveBeenCalled();
+      // Verify fallback alert was triggered
+      expect(global.alert).toHaveBeenCalled();
+    });
+    
+    test('uses textarea fallback when clipboard API not available', async () => {
+      global.navigator.share = undefined;
+      delete global.navigator.clipboard;
+      
+      if (!document.execCommand) {
+        document.execCommand = jest.fn(() => true);
+      } else {
+        jest.spyOn(document, 'execCommand').mockReturnValue(true);
+      }
+
+      await taskActions.shareTask();
+
+      expect(global.alert).toHaveBeenCalledWith('Task link copied to clipboard!');
+    });
+    
+    test('handles execCommand throwing error', async () => {
+      global.navigator.share = undefined;
+      delete global.navigator.clipboard;
+      
+      if (!document.execCommand) {
+        document.execCommand = jest.fn(() => {
+          throw new Error('execCommand failed');
+        });
+      } else {
+        jest.spyOn(document, 'execCommand').mockImplementation(() => {
+          throw new Error('execCommand failed');
+        });
+      }
+
+      await taskActions.shareTask();
+
+      expect(global.alert).toHaveBeenCalledWith(expect.stringContaining('Failed to copy link'));
+    });
+  });
+
+  describe('reportLostFound', () => {
+    test('submits lost & found report', async () => {
+      const description = 'Found a wallet';
+      global.prompt.mockReturnValue(description);
+      global.confirm.mockReturnValueOnce(true).mockReturnValueOnce(true); // First for found, second implicit
+      APIClient.post.mockResolvedValue({ success: true });
+
+      await taskActions.reportLostFound();
+
+      expect(global.prompt).toHaveBeenCalledWith('Describe the lost or found item:');
+      expect(APIClient.post).toHaveBeenCalledWith(
+        `/api/staff/tasks/${mockTaskId}/lost-found/`,
+        { description, found: true }
+      );
+    });
+    
+    test('does not submit when cancelled', async () => {
+      global.prompt.mockReturnValue(null);
+
+      await taskActions.reportLostFound();
+
+      expect(APIClient.post).not.toHaveBeenCalled();
+    });
+    
+    test('does not submit empty description', async () => {
+      global.prompt.mockReturnValue('   ');
+
+      await taskActions.reportLostFound();
+
+      expect(APIClient.post).not.toHaveBeenCalled();
+    });
+    
+    test('handles API errors gracefully', async () => {
+      global.prompt.mockReturnValue('Lost keys');
+      const errorMessage = 'Failed to submit report';
+      APIClient.post.mockRejectedValue(new Error(errorMessage));
+
+      await taskActions.reportLostFound();
+
+      expect(global.alert).toHaveBeenCalledWith(`Failed to submit report: ${errorMessage}`);
+    });
   });
 
   describe('duplicateTask', () => {
@@ -183,6 +315,23 @@ describe('TaskActions', () => {
         {}
       );
       expect(window.location.href).toBe(`/api/staff/tasks/${newTaskId}/`);
+    });
+    
+    test('does not duplicate when cancelled', async () => {
+      global.confirm.mockReturnValue(false);
+
+      await taskActions.duplicateTask();
+
+      expect(APIClient.post).not.toHaveBeenCalled();
+    });
+    
+    test('handles API errors gracefully', async () => {
+      const errorMessage = 'Duplication failed';
+      APIClient.post.mockRejectedValue(new Error(errorMessage));
+
+      await taskActions.duplicateTask();
+
+      expect(global.alert).toHaveBeenCalledWith(`Failed to duplicate task: ${errorMessage}`);
     });
   });
 
@@ -209,6 +358,24 @@ describe('TaskActions', () => {
       await taskActions.deleteTask('Test Task');
 
       expect(APIClient.request).not.toHaveBeenCalled();
+    });
+    
+    test('delete button click triggers deleteTask with task title', async () => {
+      jest.spyOn(taskActions, 'deleteTask').mockResolvedValue();
+      
+      const deleteBtn = document.querySelector('.btn-action.delete-task');
+      deleteBtn.click();
+      
+      expect(taskActions.deleteTask).toHaveBeenCalledWith('Test Task');
+    });
+    
+    test('handles API errors gracefully', async () => {
+      const errorMessage = 'Delete failed';
+      requestSpy.mockRejectedValue(new Error(errorMessage));
+
+      await taskActions.deleteTask('Test Task');
+
+      expect(global.alert).toHaveBeenCalledWith(`Failed to delete task: ${errorMessage}`);
     });
   });
 
@@ -243,17 +410,72 @@ describe('TaskActions', () => {
       expect(typeof window.completeTask).toBe('function');
       expect(typeof window.addNote).toBe('function');
       expect(typeof window.shareTask).toBe('function');
+      expect(typeof window.reportLostFound).toBe('function');
       expect(typeof window.duplicateTask).toBe('function');
       expect(typeof window.deleteTask).toBe('function');
     });
 
-    test('global functions call instance methods', async () => {
+    test('global startTask calls instance method', async () => {
       window.taskActionsInstance = taskActions;
       jest.spyOn(taskActions, 'startTask');
 
       window.startTask(mockTaskId);
 
       expect(taskActions.startTask).toHaveBeenCalled();
+    });
+    
+    test('global completeTask calls instance method', async () => {
+      window.taskActionsInstance = taskActions;
+      jest.spyOn(taskActions, 'completeTask');
+
+      window.completeTask(mockTaskId);
+
+      expect(taskActions.completeTask).toHaveBeenCalled();
+    });
+    
+    test('global addNote calls instance method', async () => {
+      window.taskActionsInstance = taskActions;
+      jest.spyOn(taskActions, 'addNote');
+
+      window.addNote();
+
+      expect(taskActions.addNote).toHaveBeenCalled();
+    });
+    
+    test('global shareTask calls instance method', async () => {
+      window.taskActionsInstance = taskActions;
+      jest.spyOn(taskActions, 'shareTask');
+
+      window.shareTask();
+
+      expect(taskActions.shareTask).toHaveBeenCalled();
+    });
+    
+    test('global reportLostFound calls instance method', async () => {
+      window.taskActionsInstance = taskActions;
+      jest.spyOn(taskActions, 'reportLostFound');
+
+      window.reportLostFound();
+
+      expect(taskActions.reportLostFound).toHaveBeenCalled();
+    });
+    
+    test('global duplicateTask calls instance method', async () => {
+      window.taskActionsInstance = taskActions;
+      jest.spyOn(taskActions, 'duplicateTask');
+
+      window.duplicateTask(mockTaskId);
+
+      expect(taskActions.duplicateTask).toHaveBeenCalled();
+    });
+    
+    test('global deleteTask calls instance method', async () => {
+      window.taskActionsInstance = taskActions;
+      jest.spyOn(taskActions, 'deleteTask');
+
+      window.deleteTask(mockTaskId, 'Test Task');
+
+      expect(taskActions.deleteTask).toHaveBeenCalledWith('Test Task');
     });
   });
 });

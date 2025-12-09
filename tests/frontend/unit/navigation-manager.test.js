@@ -5,23 +5,11 @@
 
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import { NavigationManager } from '../../../aristay_backend/static/js/modules/navigation-manager.js';
-
-// Mock APIClient
-jest.mock('../../../aristay_backend/static/js/core/api-client.js', () => ({
-  APIClient: {
-    request: jest.fn(),
-    get: jest.fn(),
-    post: jest.fn(),
-    patch: jest.fn(),
-    delete: jest.fn(),
-  }
-}));
-
 import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
 
 describe('NavigationManager', () => {
-  let requestSpy;
-  let uploadSpy;
+  let getSpy;
+  let postSpy;
   let navigationManager;
   let mockTaskContainer;
   let mockNavContainer;
@@ -52,8 +40,9 @@ describe('NavigationManager', () => {
     delete window.location;
     window.location = { href: '', pathname: '/staff/tasks/123/' };
 
-    // Clear all mocks
-    jest.restoreAllMocks();
+    // Setup API spies
+    getSpy = jest.spyOn(APIClient, 'get').mockResolvedValue({ success: true });
+    postSpy = jest.spyOn(APIClient, 'post').mockResolvedValue({ success: true });
     
     // Reset window instances
     window.navigationManagerInstance = null;
@@ -61,10 +50,6 @@ describe('NavigationManager', () => {
 
   afterEach(() => {
     document.body.innerHTML = '';
-    jest.restoreAllMocks();
-  });
-
-  afterEach(() => {
     jest.restoreAllMocks();
   });
 
@@ -183,8 +168,8 @@ describe('NavigationManager', () => {
       navigationManager = new NavigationManager();
       navigationManager.loadNavigationFromDOM();
 
-      expect(navigationManager.prevTaskId).toBeUndefined();
-      expect(navigationManager.nextTaskId).toBeUndefined();
+      expect(navigationManager.prevTaskId).toBeNull();
+      expect(navigationManager.nextTaskId).toBeNull();
     });
   });
 

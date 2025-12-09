@@ -50,6 +50,30 @@ describe('StorageManager', () => {
       const stored = JSON.parse(localStorage.getItem('nullable'));
       expect(stored).toBe(null);
     });
+    
+    test('handles circular reference error', () => {
+      const obj = { name: 'Test' };
+      obj.self = obj; // Create circular reference
+      
+      const result = StorageManager.set('circular', obj);
+      expect(result).toBe(false);
+    });
+    
+    test('handles storage quota exceeded error', () => {
+      // Mock setItem to throw QuotaExceededError
+      const originalSetItem = Storage.prototype.setItem;
+      Storage.prototype.setItem = jest.fn(() => {
+        const error = new Error('QuotaExceededError');
+        error.name = 'QuotaExceededError';
+        throw error;
+      });
+      
+      const result = StorageManager.set('large_data', 'x'.repeat(10000));
+      expect(result).toBe(false);
+      
+      // Restore original
+      Storage.prototype.setItem = originalSetItem;
+    });
   });
   
   describe('get()', () => {
@@ -77,6 +101,19 @@ describe('StorageManager', () => {
       const value = StorageManager.get('nonexistent');
       expect(value).toBe(null);
     });
+    
+    test('handles invalid JSON and returns default', () => {
+      localStorage.setItem('invalid_json', 'not valid json {]');
+      const value = StorageManager.get('invalid_json', 'fallback');
+      expect(value).toBe('fallback');
+    });
+    
+    test('handles corrupted data gracefully', () => {
+      localStorage.setItem('corrupted', 'undefined');
+      const value = StorageManager.get('corrupted', null);
+      // Should return default on parse error
+      expect(value).toBe(null);
+    });
   });
   
   describe('remove()', () => {
@@ -92,6 +129,18 @@ describe('StorageManager', () => {
       const result = StorageManager.remove('nonexistent');
       expect(result).toBe(true);
     });
+    
+    test('handles removeItem error gracefully', () => {
+      const originalRemoveItem = Storage.prototype.removeItem;
+      Storage.prototype.removeItem = jest.fn(() => {
+        throw new Error('Storage access denied');
+      });
+      
+      const result = StorageManager.remove('test_key');
+      expect(result).toBe(false);
+      
+      Storage.prototype.removeItem = originalRemoveItem;
+    });
   });
   
   describe('clear()', () => {
@@ -103,6 +152,18 @@ describe('StorageManager', () => {
       const result = StorageManager.clear();
       expect(result).toBe(true);
       expect(localStorage.length).toBe(0);
+    });
+    
+    test('handles clear error gracefully', () => {
+      const originalClear = Storage.prototype.clear;
+      Storage.prototype.clear = jest.fn(() => {
+        throw new Error('Storage access denied');
+      });
+      
+      const result = StorageManager.clear();
+      expect(result).toBe(false);
+      
+      Storage.prototype.clear = originalClear;
     });
   });
   
@@ -131,6 +192,27 @@ describe('StorageManager', () => {
       const keys = StorageManager.keys();
       expect(keys).toEqual([]);
     });
+    
+    test('handles error by throwing from localStorage access', () => {
+      // Mock localStorage to throw error when accessed
+      const originalLocalStorage = global.localStorage;
+      Object.defineProperty(global, 'localStorage', {
+        get: () => {
+          throw new Error('Cannot access storage');
+        },
+        configurable: true
+      });
+      
+      const keys = StorageManager.keys();
+      expect(keys).toEqual([]);
+      
+      // Restore
+      Object.defineProperty(global, 'localStorage', {
+        value: originalLocalStorage,
+        configurable: true,
+        writable: true
+      });
+    });
   });
   
   describe('size()', () => {
@@ -143,6 +225,26 @@ describe('StorageManager', () => {
     test('returns 0 for empty storage', () => {
       const size = StorageManager.size();
       expect(size).toBe(0);
+    });
+    
+    test('handles error by throwing from localStorage access', () => {
+      const originalLocalStorage = global.localStorage;
+      Object.defineProperty(global, 'localStorage', {
+        get: () => {
+          throw new Error('Cannot access storage');
+        },
+        configurable: true
+      });
+      
+      const size = StorageManager.size();
+      expect(size).toBe(0);
+      
+      // Restore
+      Object.defineProperty(global, 'localStorage', {
+        value: originalLocalStorage,
+        configurable: true,
+        writable: true
+      });
     });
   });
 });

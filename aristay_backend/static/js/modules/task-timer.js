@@ -17,8 +17,10 @@ export class TaskTimer {
     this.initUI();
     this.initEventListeners();
     
-    // Auto-start if timer was running
-    if (this.running) {
+    // Auto-start if timer was running (reset running flag first)
+    const shouldAutoStart = this.running;
+    if (shouldAutoStart) {
+      this.running = false;  // Reset so start() can proceed
       this.start();
     }
   }
@@ -160,6 +162,7 @@ export class TaskTimer {
     // Clean up when component is destroyed
     if (this.interval) {
       clearInterval(this.interval);
+      this.interval = null;
     }
     this.saveState();
   }
