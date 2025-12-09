@@ -5,10 +5,12 @@
         <a href="/api/staff/tasks/{{ task.id }}/edit/" class="btn-action edit-task">
             ✏️ Edit Task
         </a>
-        <button class="btn-action duplicate-task" onclick="window.duplicateTask('{{ task.id }}')">
+        <button class="btn-action duplicate-task" data-task-id="{{ task.id }}">
             📋 Duplicate
         </button>
-        <button class="btn-action delete-task btn-danger" onclick="window.deleteTask('{{ task.id }}', '{{ task.title|escapejs }}')">
+        <button class="btn-action delete-task btn-danger" 
+                data-task-id="{{ task.id }}"
+                data-task-title="{{ task.title|escapejs }}">
             🗑️ Delete
         </button>
     </div>

@@ -122,7 +122,7 @@
 
                     <div class="item-actions">
                         {% if 'photo' in response.item.item_type %}
-                        <button class="btn-photo" onclick="openPhotoManager({{ response.id }})">
+                        <button class="btn-photo" data-response-id="{{ response.id }}">
                             📷
                         </button>
                         {% endif %}
@@ -266,7 +266,7 @@
         <p class="empty-message">This task doesn't have a checklist template assigned.</p>
         {% if can_edit %}
         <div class="empty-actions">
-            <button type="button" class="btn btn-success" onclick="completeTask({{ task.id }})">
+            <button type="button" class="btn btn-success btn-complete-task-final" data-task-id="{{ task.id }}">
                 ✅ Mark Task Complete
             </button>
         </div>
