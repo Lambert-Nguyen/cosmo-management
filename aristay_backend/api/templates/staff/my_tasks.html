@@ -21,10 +21,10 @@
                     <a href="/api/staff/tasks/create/" class="btn btn-primary">
                         ✨ Create Task
                     </a>
-                    <button class="btn btn-secondary" onclick="toggleBulkActions()">
+                    <button class="btn btn-secondary" data-action="toggle-bulk-actions">
                         ⚡ Bulk Actions
                     </button>
-                    <button class="btn btn-outline" onclick="exportTasks()">
+                    <button class="btn btn-outline" data-action="export-tasks">
                         📤 Export
                     </button>
                 </div>
@@ -38,16 +38,16 @@
                     <span id="selectedCount">0</span> tasks selected
                 </div>
                 <div class="bulk-buttons">
-                    <button class="btn btn-success btn-sm" onclick="bulkUpdateStatus('in-progress')">
+                    <button class="btn btn-success btn-sm" data-action="bulk-update-status" data-status="in-progress">
                         ▶️ Start Selected
                     </button>
-                    <button class="btn btn-primary btn-sm" onclick="bulkUpdateStatus('completed')">
+                    <button class="btn btn-primary btn-sm" data-action="bulk-update-status" data-status="completed">
                         ✅ Complete Selected
                     </button>
-                    <button class="btn btn-warning btn-sm" onclick="bulkUpdateStatus('pending')">
+                    <button class="btn btn-warning btn-sm" data-action="bulk-update-status" data-status="pending">
                         ⏸️ Mark Pending
                     </button>
-                    <button class="btn btn-danger btn-sm" onclick="clearSelection()">
+                    <button class="btn btn-danger btn-sm" data-action="clear-selection">
                         ❌ Clear Selection
                     </button>
                 </div>
@@ -105,7 +105,7 @@
                 {% if search or status_filter or type_filter %}
                 <a href="/api/staff/tasks/" class="btn btn-secondary">🗑️ Clear All</a>
                 {% endif %}
-                <button type="button" class="btn btn-outline" onclick="toggleAdvancedFilters()">
+                <button type="button" class="btn btn-outline" data-action="toggle-advanced-filters">
                     ⚙️ Advanced
                 </button>
             </div>
@@ -149,7 +149,7 @@
             <div class="task-card" data-task-id="{{ task.id }}">
                 <div class="task-header">
                     <div class="task-select">
-                        <input type="checkbox" class="task-checkbox" value="{{ task.id }}" onchange="updateSelection()">
+                        <input type="checkbox" class="task-checkbox" value="{{ task.id }}">
                     </div>
 
                     <div class="task-title-section">
@@ -176,10 +176,10 @@
                     </div>
 
                     <div class="task-actions">
-                        <button class="btn-action btn-sm" onclick="quickAction('{{ task.id }}', 'start')" title="Start Task">
+                        <button class="btn-action btn-sm" data-action="quick-action" data-task-id="{{ task.id }}" data-quick-action="start" title="Start Task">
                             ▶️
                         </button>
-                        <button class="btn-action btn-sm" onclick="quickAction('{{ task.id }}', 'complete')" title="Complete Task">
+                        <button class="btn-action btn-sm" data-action="quick-action" data-task-id="{{ task.id }}" data-quick-action="complete" title="Complete Task">
                             ✅
                         </button>
                         <a href="/api/staff/tasks/{{ task.id }}/" class="btn-action btn-sm" title="View Details">
@@ -188,10 +188,10 @@
                         <a href="/api/staff/tasks/{{ task.id }}/edit/" class="btn-action btn-sm" title="Edit Task">
                             ✏️
                         </a>
-                        <button class="btn-action btn-sm" onclick="duplicateTask('{{ task.id }}')" title="Duplicate Task">
+                        <button class="btn-action btn-sm" data-action="duplicate-task" data-task-id="{{ task.id }}" title="Duplicate Task">
                             📋
                         </button>
-                        <button class="btn-action btn-sm btn-danger" onclick="deleteTask('{{ task.id }}', '{{ task.title|escapejs }}')" title="Delete Task">
+                        <button class="btn-action btn-sm btn-danger" data-action="delete-task" data-task-id="{{ task.id }}" data-task-title="{{ task.title|escapejs }}" title="Delete Task">
                             🗑️
                         </button>
                     </div>
@@ -263,7 +263,7 @@
                 <p class="empty-message">No tasks have been assigned to you yet.</p>
                 <div class="empty-actions">
                     <a href="/api/staff/" class="btn btn-primary">🏠 Go to Dashboard</a>
-                    <button class="btn btn-secondary" onclick="requestNewTasks()">📋 Request Tasks</button>
+                    <button class="btn btn-secondary" data-action="request-tasks">📋 Request Tasks</button>
                 </div>
                 {% endif %}
             </div>
@@ -979,696 +979,115 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-// Enhanced Tasks Page JavaScript
-let selectedTasks = new Set();
-let currentFilters = {};
+<script type="module">
+  import { MyTasksManager } from '{% static "js/modules/my-tasks-manager.js" %}';
+  // Module initializes itself on DOMContentLoaded
+</script>
 
-// Initialize page
-document.addEventListener('DOMContentLoaded', function() {
-    initializePage();
-    setupEventListeners();
-    loadSavedFilters();
-});
+<style>
+  /* Notification styles for MyTasksManager */
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease;
+  }
 
-function initializePage() {
-    // Initialize tooltips
-    initializeTooltips();
+  .notification-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    gap: 1rem;
+  }
 
-    // Initialize real-time updates
-    startRealTimeUpdates();
+  .notification-info { background: #3b82f6; }
+  .notification-success { background: #10b981; }
+  .notification-error { background: #ef4444; }
+  .notification-warning { background: #f59e0b; }
 
-    // Initialize keyboard shortcuts
-    setupKeyboardShortcuts();
+  .notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    min-width: 24px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
 
-    // Load any saved filter state
-    loadFilterState();
-}
+  .notification-close:hover {
+    opacity: 1;
+  }
 
-function setupEventListeners() {
-    // Filter form submission
-    const filterForm = document.querySelector('.filters-form');
-    if (filterForm) {
-        filterForm.addEventListener('submit', handleFilterSubmit);
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
     }
-
-    // Search input with debounce
-    const searchInput = document.getElementById('search');
-    if (searchInput) {
-        let searchTimeout;
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                autoSubmitFilters();
-            }, 500);
-        });
+    to {
+      transform: translateX(0);
+      opacity: 1;
     }
+  }
 
-    // Real-time filter updates
-    document.querySelectorAll('.filter-select').forEach(select => {
-        select.addEventListener('change', handleFilterChange);
-    });
+  .new-tasks-indicator {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: #10b981;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+    animation: bounceIn 0.5s ease;
+    font-weight: 500;
+  }
 
-    // Task selection
-    document.addEventListener('change', function(e) {
-        if (e.target.classList.contains('task-checkbox')) {
-            updateTaskSelection(e.target);
-        }
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', handleKeyboardShortcuts);
-}
-
-// Filter Management
-function handleFilterSubmit(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const filters = Object.fromEntries(formData.entries());
-
-    // Remove empty filters
-    Object.keys(filters).forEach(key => {
-        if (!filters[key]) delete filters[key];
-    });
-
-    // Save filter state
-    saveFilterState(filters);
-
-    // Submit form
-    e.target.submit();
-}
-
-function handleFilterChange(e) {
-    const filterName = e.target.name;
-    const filterValue = e.target.value;
-
-    currentFilters[filterName] = filterValue;
-
-    // Auto-submit for instant feedback
-    if (['status', 'type'].includes(filterName)) {
-        autoSubmitFilters();
+  @keyframes bounceIn {
+    0% {
+      transform: scale(0.3);
+      opacity: 0;
     }
-}
-
-function autoSubmitFilters() {
-    const form = document.querySelector('.filters-form');
-    if (form) {
-        // Add loading state
-        form.classList.add('loading');
-
-        // Submit after a short delay
-        setTimeout(() => {
-            form.submit();
-        }, 300);
+    50% {
+      transform: scale(1.05);
     }
-}
-
-function toggleAdvancedFilters() {
-    const advancedFilters = document.getElementById('advancedFilters');
-    const button = event.target;
-
-    if (advancedFilters.style.display === 'none') {
-        advancedFilters.style.display = 'block';
-        button.textContent = '⚙️ Hide Advanced';
-    } else {
-        advancedFilters.style.display = 'none';
-        button.textContent = '⚙️ Advanced';
+    70% {
+      transform: scale(0.9);
     }
-}
-
-// Task Selection and Bulk Actions
-function updateTaskSelection(checkbox) {
-    const taskId = checkbox.value;
-
-    if (checkbox.checked) {
-        selectedTasks.add(taskId);
-        checkbox.closest('.task-card').classList.add('selected');
-    } else {
-        selectedTasks.delete(taskId);
-        checkbox.closest('.task-card').classList.remove('selected');
+    100% {
+      transform: scale(1);
+      opacity: 1;
     }
+  }
 
-    updateBulkActionsVisibility();
-    updateSelectedCount();
-}
-
-function updateBulkActionsVisibility() {
-    const bulkPanel = document.getElementById('bulkActionsPanel');
-    if (selectedTasks.size > 0) {
-        bulkPanel.style.display = 'block';
-        setTimeout(() => {
-            bulkPanel.style.opacity = '1';
-            bulkPanel.style.transform = 'translateY(0)';
-        }, 10);
-    } else {
-        bulkPanel.style.opacity = '0';
-        bulkPanel.style.transform = 'translateY(-100%)';
-        setTimeout(() => {
-            bulkPanel.style.display = 'none';
-        }, 300);
-    }
-}
-
-function updateSelectedCount() {
-    const countElement = document.getElementById('selectedCount');
-    if (countElement) {
-        countElement.textContent = selectedTasks.size;
-    }
-}
-
-function toggleBulkActions() {
-    const bulkPanel = document.getElementById('bulkActionsPanel');
-    if (bulkPanel.style.display === 'none' || !bulkPanel.style.display) {
-        bulkPanel.style.display = 'block';
-        setTimeout(() => {
-            bulkPanel.style.opacity = '1';
-            bulkPanel.style.transform = 'translateY(0)';
-        }, 10);
-    } else {
-        bulkPanel.style.opacity = '0';
-        bulkPanel.style.transform = 'translateY(-100%)';
-        setTimeout(() => {
-            bulkPanel.style.display = 'none';
-        }, 300);
-    }
-}
-
-function clearSelection() {
-    selectedTasks.clear();
-    document.querySelectorAll('.task-checkbox').forEach(checkbox => {
-        checkbox.checked = false;
-        checkbox.closest('.task-card').classList.remove('selected');
-    });
-    updateBulkActionsVisibility();
-    updateSelectedCount();
-}
-
-async function bulkUpdateStatus(status) {
-    if (selectedTasks.size === 0) return;
-
-    const confirmMessage = `Update ${selectedTasks.size} task${selectedTasks.size > 1 ? 's' : ''} to ${status.replace('-', ' ')}?`;
-    if (!confirm(confirmMessage)) return;
-
-    const button = event.target;
-    const originalText = button.textContent;
-    button.textContent = '⏳ Updating...';
-    button.disabled = true;
-
-    try {
-        const results = await Promise.allSettled(
-            Array.from(selectedTasks).map(taskId => updateTaskStatus(taskId, status))
-        );
-
-        const successCount = results.filter(r => r.status === 'fulfilled' && r.value.success).length;
-        const failCount = results.length - successCount;
-
-        if (successCount > 0) {
-            showNotification(`Successfully updated ${successCount} task${successCount > 1 ? 's' : ''}`, 'success');
-        }
-
-        if (failCount > 0) {
-            showNotification(`Failed to update ${failCount} task${failCount > 1 ? 's' : ''}`, 'error');
-        }
-
-        // Clear selection and refresh
-        clearSelection();
-        setTimeout(() => location.reload(), 1500);
-
-    } catch (error) {
-        console.error('Bulk update error:', error);
-        showNotification('Bulk update failed', 'error');
-    } finally {
-        button.textContent = originalText;
-        button.disabled = false;
-    }
-}
-
-// Quick Actions
-function quickAction(taskId, action) {
-    switch (action) {
-        case 'start':
-            if (confirm('Start this task?')) {
-                updateTaskStatus(taskId, 'in-progress');
-            }
-            break;
-        case 'complete':
-            if (confirm('Mark this task as completed?')) {
-                updateTaskStatus(taskId, 'completed');
-            }
-            break;
-        case 'view':
-            window.location.href = `/api/staff/tasks/${taskId}/`;
-            break;
-    }
-}
-
-// New CRUD Actions
-function duplicateTask(taskId) {
-    if (confirm('Create a copy of this task?')) {
-        window.location.href = `/api/staff/tasks/${taskId}/duplicate/`;
-    }
-}
-
-function deleteTask(taskId, taskTitle) {
-    if (confirm(`Are you sure you want to delete "${taskTitle}"? This action cannot be undone.`)) {
-        // Create a form to submit the delete request
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/api/staff/tasks/${taskId}/delete/`;
-        
-        // Add CSRF token
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-        if (csrfToken) {
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrfmiddlewaretoken';
-            csrfInput.value = csrfToken.value;
-            form.appendChild(csrfInput);
-        }
-        
-        document.body.appendChild(form);
-        form.submit();
-    }
-}
-
-async function updateTaskStatus(taskId, status) {
-    const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
-    if (taskCard) {
-        taskCard.classList.add('loading');
-    }
-
-    try {
-        const response = await fetch(`/api/staff/tasks/${taskId}/status/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCsrfToken()
-            },
-            body: JSON.stringify({ status: status })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // Update UI immediately
-            updateTaskCardStatus(taskId, status, data.status_display);
-
-            // Show success feedback
-            showNotification(`Task ${data.status_display}`, 'success');
-
-            return { success: true, data };
-        } else {
-            throw new Error(data.error || 'Failed to update task');
-        }
-    } catch (error) {
-        console.error('Error updating task status:', error);
-        showNotification(`Failed to update task: ${error.message}`, 'error');
-        return { success: false, error };
-    } finally {
-        if (taskCard) {
-            taskCard.classList.remove('loading');
-        }
-    }
-}
-
-function updateTaskCardStatus(taskId, status, statusDisplay) {
-    const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
-    if (!taskCard) return;
-
-    // Update status badge
-    const statusBadge = taskCard.querySelector('.status-badge');
-    if (statusBadge) {
-        statusBadge.className = `status-badge status-${status}`;
-        statusBadge.textContent = statusDisplay;
-    }
-
-    // Update action buttons based on new status
-    const actionButtons = taskCard.querySelectorAll('.btn-action');
-    actionButtons.forEach(button => {
-        if (status === 'completed') {
-            button.disabled = true;
-            button.style.opacity = '0.5';
-        } else {
-            button.disabled = false;
-            button.style.opacity = '1';
-        }
-    });
-}
-
-// Export Functionality
-function exportTasks() {
-    const form = document.querySelector('.filters-form');
-    if (!form) return;
-
-    // Create export URL with current filters
-    const formData = new FormData(form);
-    const params = new URLSearchParams(formData);
-    params.set('export', 'csv');
-
-    const exportUrl = `/api/staff/tasks/?${params.toString()}`;
-
-    // Create temporary link and trigger download
-    const link = document.createElement('a');
-    link.href = exportUrl;
-    link.download = `tasks_export_${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    showNotification('Export started. Download will begin shortly.', 'info');
-}
-
-// Real-time Updates
-let updateInterval;
-
-function startRealTimeUpdates() {
-    updateInterval = setInterval(() => {
-        updateTaskCounts();
-        checkForNewTasks();
-    }, 30000); // Update every 30 seconds
-}
-
-function stopRealTimeUpdates() {
-    if (updateInterval) {
-        clearInterval(updateInterval);
-    }
-}
-
-async function updateTaskCounts() {
-    try {
-        const response = await fetch('/api/staff/task-counts/');
-        const data = await response.json();
-
-        if (data.success) {
-            updateStatsDisplay(data.counts);
-        }
-    } catch (error) {
-        console.error('Error updating task counts:', error);
-    }
-}
-
-function updateStatsDisplay(counts) {
-    // Update statistics cards
-    const statCards = document.querySelectorAll('.stat-card');
-
-    statCards.forEach(card => {
-        const label = card.querySelector('.stat-label');
-        if (!label) return;
-
-        let value = 0;
-        if (label.textContent.includes('Total')) {
-            value = counts.total || 0;
-        } else if (label.textContent.includes('Pending')) {
-            value = counts.pending || 0;
-        } else if (label.textContent.includes('Progress')) {
-            value = counts['in-progress'] || 0;
-        } else if (label.textContent.includes('Completed')) {
-            value = counts.completed || 0;
-        }
-
-        const numberElement = card.querySelector('.stat-number');
-        if (numberElement && parseInt(numberElement.textContent) !== value) {
-            numberElement.textContent = value;
-            card.style.animation = 'pulse 0.5s ease';
-            setTimeout(() => card.style.animation = '', 500);
-        }
-    });
-}
-
-let lastTaskCount = 0;
-
-async function checkForNewTasks() {
-    try {
-        const response = await fetch('/api/staff/task-counts/');
-        const data = await response.json();
-
-        if (data.success && data.counts.total > lastTaskCount && lastTaskCount > 0) {
-            const newTasks = data.counts.total - lastTaskCount;
-            showNotification(`${newTasks} new task${newTasks > 1 ? 's' : ''} available!`, 'info');
-
-            // Add visual indicator
-            addNewTasksIndicator(newTasks);
-        }
-
-        lastTaskCount = data.counts.total;
-    } catch (error) {
-        console.error('Error checking for new tasks:', error);
-    }
-}
-
-function addNewTasksIndicator(count) {
-    const indicator = document.createElement('div');
-    indicator.className = 'new-tasks-indicator';
-    indicator.innerHTML = `📬 ${count} new task${count > 1 ? 's' : ''}`;
-    indicator.onclick = () => {
-        indicator.remove();
-        location.reload();
-    };
-
-    document.body.appendChild(indicator);
-
-    setTimeout(() => {
-        if (indicator.parentElement) {
-            indicator.remove();
-        }
-    }, 10000);
-}
-
-// Filter State Management
-function saveFilterState(filters) {
-    try {
-        localStorage.setItem('taskFilters', JSON.stringify(filters));
-    } catch (error) {
-        console.error('Error saving filter state:', error);
-    }
-}
-
-function loadFilterState() {
-    try {
-        const saved = localStorage.getItem('taskFilters');
-        if (saved) {
-            currentFilters = JSON.parse(saved);
-            // Apply saved filters to form
-            Object.keys(currentFilters).forEach(key => {
-                const element = document.querySelector(`[name="${key}"]`);
-                if (element && currentFilters[key]) {
-                    element.value = currentFilters[key];
-                }
-            });
-        }
-    } catch (error) {
-        console.error('Error loading filter state:', error);
-    }
-}
-
-function loadSavedFilters() {
-    // Load any URL parameters into current filters
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.forEach((value, key) => {
-        currentFilters[key] = value;
-    });
-}
-
-// Keyboard Shortcuts
-function setupKeyboardShortcuts() {
-    document.addEventListener('keydown', handleKeyboardShortcuts);
-}
-
-function handleKeyboardShortcuts(e) {
-    // Ctrl/Cmd + A to select all tasks
-    if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
-        e.preventDefault();
-        selectAllTasks();
-    }
-
-    // Escape to clear selection
-    if (e.key === 'Escape') {
-        clearSelection();
-    }
-
-    // Ctrl/Cmd + F to focus search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault();
-        const searchInput = document.getElementById('search');
-        if (searchInput) {
-            searchInput.focus();
-            searchInput.select();
-        }
-    }
-}
-
-function selectAllTasks() {
-    const checkboxes = document.querySelectorAll('.task-checkbox:not(:checked)');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = true;
-        updateTaskSelection(checkbox);
-    });
-}
-
-// Utility Functions
-function getCsrfToken() {
-    const token = document.querySelector('[name=csrfmiddlewaretoken]');
-    return token ? token.value : '';
-}
-
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    document.querySelectorAll('.notification').forEach(n => n.remove());
-
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <span class="notification-message">${message}</span>
-            <button class="notification-close" onclick="this.remove()">×</button>
-        </div>
-    `;
-
-    document.body.appendChild(notification);
-
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.remove();
-        }
-    }, 5000);
-}
-
-function initializeTooltips() {
-    // Add tooltips to action buttons
-    document.querySelectorAll('.btn-action').forEach(button => {
-        const title = button.getAttribute('title');
-        if (title) {
-            button.setAttribute('aria-label', title);
-        }
-    });
-}
-
-function requestNewTasks() {
-    showNotification('Task request feature coming soon!', 'info');
-}
-
-// Cleanup on page unload
-window.addEventListener('beforeunload', function() {
-    stopRealTimeUpdates();
-});
-
-// Add notification styles
-const notificationStyles = document.createElement('style');
-notificationStyles.textContent = `
+  @media (max-width: 768px) {
     .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 10000;
-        max-width: 400px;
-        animation: slideInRight 0.3s ease;
-    }
-
-    .notification-content {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        color: white;
-        gap: 1rem;
-    }
-
-    .notification-info { background: #3b82f6; }
-    .notification-success { background: #10b981; }
-    .notification-error { background: #ef4444; }
-    .notification-warning { background: #f59e0b; }
-
-    .notification-close {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0;
-        min-width: 24px;
-        min-height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0.8;
-        transition: opacity 0.2s ease;
-    }
-
-    .notification-close:hover {
-        opacity: 1;
-    }
-
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+      top: 10px;
+      right: 10px;
+      left: 10px;
+      max-width: none;
     }
 
     .new-tasks-indicator {
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        background: #10b981;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 25px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        z-index: 1000;
-        animation: bounceIn 0.5s ease;
-        font-weight: 500;
+      top: 70px;
+      right: 10px;
+      left: 10px;
+      text-align: center;
     }
-
-    @keyframes bounceIn {
-        0% {
-            transform: scale(0.3);
-            opacity: 0;
-        }
-        50% {
-            transform: scale(1.05);
-        }
-        70% {
-            transform: scale(0.9);
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .notification {
-            top: 10px;
-            right: 10px;
-            left: 10px;
-            max-width: none;
-        }
-
-        .new-tasks-indicator {
-            top: 70px;
-            right: 10px;
-            left: 10px;
-            text-align: center;
-        }
-    }
-`;
-document.head.appendChild(notificationStyles);
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Set initial task count for new task detection
-    updateTaskCounts().then(() => {
-        lastTaskCount = document.querySelector('.stat-number') ?
-            parseInt(document.querySelector('.stat-number').textContent) : 0;
-    });
-});
-</script>
+  }
+</style>
 {% endblock %}

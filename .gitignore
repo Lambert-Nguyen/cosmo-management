@@ -93,3 +93,4 @@ logs/*.log
 cookies.txt
 *.tmp
 *.cache
+/aristay_backend/media
