@@ -739,4 +739,27 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
+
+<!-- Property Autocomplete Enhancement -->
+<script type="module">
+import { PropertyAutocomplete } from '{% static "js/modules/property-autocomplete.js" %}';
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Find property select field and enhance with autocomplete
+    const propertySelect = document.querySelector('#id_property_ref');
+    
+    if (propertySelect) {
+        // Mark for autocomplete enhancement
+        propertySelect.setAttribute('data-property-autocomplete', '');
+        
+        // Initialize autocomplete
+        new PropertyAutocomplete(propertySelect, {
+            searchUrl: '/api/properties/search/',
+            minChars: 0,
+            debounceMs: 300,
+            pageSize: 20
+        });
+    }
+});
+</script>
 {% endblock %}
