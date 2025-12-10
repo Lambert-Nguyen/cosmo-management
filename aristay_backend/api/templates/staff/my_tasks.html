@@ -10,9 +10,9 @@
         <div class="card-header">
             <div class="header-content">
                 <div>
-                    <h2 style="margin: 0; color: #1e293b;">📋 My Tasks</h2>
+                    <h2 class="m-0 text-gray-900">📋 My Tasks</h2>
                     {% if page_obj.paginator.count %}
-                    <p style="margin: 0.5rem 0 0 0; color: #64748b; font-size: 0.875rem;">
+                    <p class="mt-2 m-0 text-gray-600 text-sm">
                         {{ page_obj.paginator.count }} total tasks • Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
                     </p>
                     {% endif %}
@@ -32,7 +32,7 @@
         </div>
 
         <!-- Bulk Actions Panel -->
-        <div id="bulkActionsPanel" class="bulk-actions-panel" style="display: none;">
+        <div id="bulkActionsPanel" class="bulk-actions-panel hidden">
             <div class="bulk-actions-content">
                 <div class="selected-count">
                     <span id="selectedCount">0</span> tasks selected
@@ -111,7 +111,7 @@
             </div>
 
             <!-- Advanced Filters -->
-            <div id="advancedFilters" class="advanced-filters" style="display: none;">
+            <div id="advancedFilters" class="advanced-filters hidden">
                 <div class="filters-grid">
                     <div class="filter-group">
                         <label for="priority" class="filter-label">⭐ Priority</label>
@@ -305,7 +305,7 @@
             </div>
 
             <div class="pagination-jumper">
-                <form method="get" style="display: inline;">
+                <form method="get" class="inline-block">
                     {% for key, value in request.GET.items %}
                         {% if key != 'page' %}
                         <input type="hidden" name="{{ key }}" value="{{ value }}">
@@ -313,7 +313,7 @@
                     {% endfor %}
                     <label>Go to page:</label>
                     <input type="number" name="page" min="1" max="{{ page_obj.paginator.num_pages }}"
-                           value="{{ page_obj.number }}" style="width: 60px; margin: 0 0.5rem; padding: 0.25rem;">
+                           value="{{ page_obj.number }}" class="pagination-input">
                     <button type="submit" class="btn btn-outline btn-sm">Go</button>
                 </form>
             </div>
