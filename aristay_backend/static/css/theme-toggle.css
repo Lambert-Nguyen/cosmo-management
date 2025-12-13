@@ -470,13 +470,6 @@
 }
 
 /* Staff Dashboard Cards Dark Mode */
-[data-theme="dark"] .card {
-    background: var(--card-bg) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-primary) !important;
-    box-shadow: var(--shadow-md) !important;
-}
-
 [data-theme="dark"] .card-header {
     background: var(--bg-secondary) !important;
     color: var(--text-primary) !important;

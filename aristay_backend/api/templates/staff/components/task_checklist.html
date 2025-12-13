@@ -43,11 +43,11 @@
     - Grid layout: 1 column mobile, 2 columns tablet, 3 columns desktop
     - Photo grid: 2 columns mobile, 3 columns tablet, 4 columns desktop
   
-  Usage:
-    {% if checklist %}
-      {% include "staff/components/task_checklist.html" %}
-    {% endif %}
+    Usage:
+        Include staff/components/task_checklist.html when checklist exists
 #}
+
+{% load dict_extras %}
 
 <!-- Checklist Sections -->
 {% if checklist %}
@@ -172,7 +172,8 @@
                         <label class="form-label">Photos:</label>
                         <div class="photo-grid">
                             {# Unified: render TaskImage linked to this response (checklist photos) #}
-                            {% for photo in response.unified_photos %}
+                            {% with response_photos=unified_photos_by_response|get_item:response.id %}
+                            {% for photo in response_photos %}
                             <div class="photo-item" data-photo-id="{{ photo.id }}">
                                 <img src="{{ photo.image.url }}"
                                      alt="Checklist photo"
@@ -185,6 +186,7 @@
                                 {% endif %}
                             </div>
                             {% endfor %}
+                            {% endwith %}
                         </div>
 
                         {% if can_edit %}
@@ -197,7 +199,9 @@
                                    style="display: none;">
                             <button type="button" class="btn-upload" data-response-id="{{ response.id }}">
                                 📷 Add Photos
-                                {% if response.item.item_type == 'photo_required' and not response.unified_photos %}*{% endif %}
+                                {% with response_photos=unified_photos_by_response|get_item:response.id %}
+                                {% if response.item.item_type == 'photo_required' and not response_photos %}*{% endif %}
+                                {% endwith %}
                             </button>
                         </div>
                         {% endif %}
