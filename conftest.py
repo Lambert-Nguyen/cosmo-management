@@ -40,6 +40,30 @@ try:
     from django.apps import apps
     if not apps.ready:
         django.setup()
+
+    # ---------------------------------------------------------------------
+    # Compatibility shim: Django template context copying on Python 3.13
+    #
+    # Django's BaseContext.__copy__ in 5.1.x calls copy(super()), which can
+    # trigger a RecursionError under Python 3.13 when the Django test client
+    # copies template contexts (template_rendered signal).
+    #
+    # We patch BaseContext.__copy__ for tests only to avoid recursion while
+    # preserving the expected shallow-copy semantics.
+    # ---------------------------------------------------------------------
+    if sys.version_info >= (3, 13):
+        try:
+            from django.template.context import BaseContext
+
+            def _basecontext_copy_py313(self):
+                duplicate = self.__class__.__new__(self.__class__)
+                duplicate.__dict__.update(self.__dict__)
+                duplicate.dicts = self.dicts[:]
+                return duplicate
+
+            BaseContext.__copy__ = _basecontext_copy_py313
+        except Exception as _patch_exc:
+            print(f"Warning: Could not apply BaseContext.__copy__ shim: {_patch_exc}")
     
 except Exception as e:
     print(f"Warning: Django setup issue in conftest.py: {e}")
