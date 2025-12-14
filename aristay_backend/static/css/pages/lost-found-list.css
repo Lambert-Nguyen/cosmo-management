@@ -1,0 +1,141 @@
+/* Lost & Found List page */
+
+.lost-found-filter {
+  margin-bottom: 1.5rem;
+}
+
+.lost-found-filter-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.lost-found-status-select {
+  padding: 0.5rem;
+  border: 1px solid var(--color-gray-200, #e2e8f0);
+  border-radius: 4px;
+}
+
+.lost-found-item-card {
+  margin-bottom: 1rem;
+}
+
+.lost-found-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.lost-found-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.lost-found-item-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.lost-found-item-meta,
+.lost-found-item-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #666);
+  margin-bottom: 0.5rem;
+}
+
+.lost-found-item-status {
+  text-align: right;
+  flex: 0 0 auto;
+}
+
+.lost-found-status-badge {
+  margin-bottom: 0.25rem;
+}
+
+.lost-found-found-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #666);
+}
+
+.lost-found-item-details {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.lost-found-detail {
+  font-size: 0.875rem;
+}
+
+.lost-found-photos {
+  margin-bottom: 1rem;
+}
+
+.lost-found-photos-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.lost-found-photos-grid {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lost-found-photo-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.lost-found-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lost-found-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.lost-found-report-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.lost-found-photo-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.lost-found-photo-modal.is-open {
+  display: block;
+}
+
+.lost-found-photo-modal-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+}
+
+.lost-found-photo-modal-img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}

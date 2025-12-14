@@ -54,11 +54,20 @@ export class PhotoModal {
       }
     });
 
-    // Close button
-    const closeBtn = this.modal.querySelector('.close-modal');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => this.close());
+    // Close on backdrop click (markup uses separate backdrop element)
+    const backdrop = this.modal.querySelector('.modal-backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', () => this.close());
     }
+
+    // Close buttons (support multiple markup variants)
+    const closeButtons = this.modal.querySelectorAll('.close-modal, .modal-close');
+    closeButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.close();
+      });
+    });
 
     // Escape key to close
     document.addEventListener('keydown', (e) => {

@@ -28,24 +28,44 @@ class TestUISelectorFix(TestCase):
         
         with open(template_path, 'r') as f:
             content = f.read()
+
+        js_path = backend_path / "static" / "js" / "modules" / "task-actions.js"
+        if not js_path.exists():
+            self.fail(f"JS module file not found: {js_path}")
+        with open(js_path, 'r') as f:
+            js_content = f.read()
         
         print("🔍 VERIFICATION: UI Selector Fix")
         print("=" * 50)
         
         # Check 1: Correct button selectors
         print("\n✅ 1. BUTTON SELECTORS:")
-        
-        if ".btn-action.start-task" in content:
-            print("   ✅ Start task button selector correct")
+
+        # Template should contain the button classes (DOM contract)
+        if "btn-action start-task" in content:
+            print("   ✅ Start task button class present in template")
         else:
-            print("   ❌ Start task button selector incorrect")
-            self.fail("Start task button selector incorrect")
-        
-        if ".btn-action.complete-task" in content:
-            print("   ✅ Complete task button selector correct")
+            print("   ❌ Start task button class missing in template")
+            self.fail("Start task button class missing in template")
+
+        if "btn-action complete-task" in content:
+            print("   ✅ Complete task button class present in template")
         else:
-            print("   ❌ Complete task button selector incorrect")
-            self.fail("Complete task button selector incorrect")
+            print("   ❌ Complete task button class missing in template")
+            self.fail("Complete task button class missing in template")
+
+        # JS should use the correct selectors (behavior contract)
+        if ".btn-action.start-task" in js_content:
+            print("   ✅ Start task button selector correct in JS")
+        else:
+            print("   ❌ Start task button selector incorrect in JS")
+            self.fail("Start task button selector incorrect in JS")
+
+        if ".btn-action.complete-task" in js_content:
+            print("   ✅ Complete task button selector correct in JS")
+        else:
+            print("   ❌ Complete task button selector incorrect in JS")
+            self.fail("Complete task button selector incorrect in JS")
         
         # Check 2: Status display selectors
         print("\n✅ 2. STATUS DISPLAY SELECTORS:")
