@@ -203,12 +203,24 @@ function initTouchDeviceClass() {
   }
 }
 
+function initProgressFills() {
+  const fills = document.querySelectorAll('.progress-fill[data-progress]');
+  fills.forEach((fill) => {
+    const raw = fill.getAttribute('data-progress');
+    const value = Number.parseFloat(raw);
+    if (!Number.isFinite(value)) return;
+    const clamped = Math.max(0, Math.min(100, value));
+    fill.style.width = `${clamped}%`;
+  });
+}
+
 function initStaffBase() {
   // Backwards-compatible global helper
   window.getCsrfToken = getCsrfToken;
 
   initTouchDeviceClass();
   initTableContainers();
+  initProgressFills();
 
   const mobileNav = initMobileNav();
   const secret = initSecretMessage();

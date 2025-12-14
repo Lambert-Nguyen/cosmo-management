@@ -44,13 +44,13 @@
 
     <div class="progress-bar-container">
         <div class="progress-bar">
-            <div class="progress-fill" style="width: {{ checklist.completion_percentage }}%"></div>
+            <div class="progress-fill" data-progress="{{ checklist.completion_percentage }}"></div>
         </div>
         <div class="progress-milestones">
-            <span class="milestone" style="left: 25%">25%</span>
-            <span class="milestone" style="left: 50%">50%</span>
-            <span class="milestone" style="left: 75%">75%</span>
-            <span class="milestone" style="left: 100%">100%</span>
+            <span class="milestone milestone--25">25%</span>
+            <span class="milestone milestone--50">50%</span>
+            <span class="milestone milestone--75">75%</span>
+            <span class="milestone milestone--100">100%</span>
         </div>
     </div>
 

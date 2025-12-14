@@ -240,7 +240,7 @@
                             <span class="progress-percentage">{{ task.checklist.completion_percentage }}%</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: {{ task.checklist.completion_percentage }}%"></div>
+                            <div class="progress-fill" data-progress="{{ task.checklist.completion_percentage }}"></div>
                         </div>
                         <div class="progress-details">
                             {{ task.checklist.completed_items }} of {{ task.checklist.total_items }} items completed

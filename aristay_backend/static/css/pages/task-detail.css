@@ -698,6 +698,7 @@
 }
 
 .progress-fill {
+    width: 0;
     height: 100%;
     background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     border-radius: 6px;
@@ -719,6 +720,11 @@
     transform: translateX(-50%);
     font-weight: 500;
 }
+
+.milestone--25 { left: 25%; }
+.milestone--50 { left: 50%; }
+.milestone--75 { left: 75%; }
+.milestone--100 { left: 100%; }
 
 .progress-details {
     display: grid;
