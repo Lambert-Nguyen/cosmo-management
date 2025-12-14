@@ -13,15 +13,22 @@
 - Maintain **green tests** as the non‑negotiable quality gate.
 
 ### 1.2 Quality gate confirmation
-- Pytest ran successfully after the most recent template fix (inventory lookup), using:
-  - `python -m pytest -q`
+- Pytest ran successfully after the most recent refactor chunks (staff shell/pages/dashboards/checklists), using:
+  - `pytest -q`
 - Result: **100% pass** (warnings only).
 
-### 1.3 Lighthouse / review baseline
+### 1.3 Recent commits (today)
+- Refactor staff base/layout to external assets
+- Extract my_tasks inline assets
+- Extract task_form inline assets
+- Extract dashboard inline styles
+- Extract checklist templates inline CSS
+
+### 1.4 Lighthouse / review baseline
 The earlier merge review is recorded here:
 - docs/refactoring/FINAL_REVIEW_WITH_LIGHTHOUSE.md
 
-### 1.4 Completed refactors (staff pages)
+### 1.5 Completed refactors (staff pages)
 
 #### Staff Task Detail (large modernization)
 - Template moved from inline handlers/scripts to an ES-module architecture.
@@ -74,6 +81,13 @@ Files:
 
 Note: During this status review, the template tail had a corrupted leftover fragment; it was fixed and pytest re-ran successfully.
 
+#### Staff shell + core staff pages (recent)
+- Staff layout/base: removed inline `<style>`/handlers and moved logic to external CSS/ES modules.
+- My Tasks: extracted inline CSS + inline module snippet into `static/css/pages/my-tasks.css` and `static/js/pages/my-tasks.js`.
+- Task Form: extracted inline styles/scripts; replaced inline confirms with `data-confirm` and delegated handling.
+- Cleaning + Maintenance dashboards: removed inline style attributes/blocks; progress widths use `data-progress` + a small initializer.
+- Checklist Templates: extracted page CSS into `static/css/pages/checklist-templates.css`.
+
 ## 2) Current refactor conventions (the “rules” we follow)
 
 ### 2.1 Template conventions
@@ -106,35 +120,18 @@ This backlog list is based on repository scans for:
 
 ### 3.1 Staff templates (highest priority)
 
-**Inline event handlers (onclick)**
-- aristay_backend/api/templates/staff/base.html (3)
-- aristay_backend/api/templates/staff/task_form.html (1)
+Note: `<script src="...">` and `<script type="module" src="...">` includes are expected and not considered “inline JS”.
 
-**Inline script blocks (non-module)**
-- aristay_backend/api/templates/staff/base.html (2)
-- aristay_backend/api/templates/staff/task_form.html (1)
+**Remaining inline `style="..."` attributes / conditional style usage**
+- aristay_backend/api/templates/staff/laundry_dashboard.html
+- aristay_backend/api/templates/staff/lawn_pool_dashboard.html
+- aristay_backend/api/templates/staff/components/task_progress.html
+- aristay_backend/api/templates/staff/components/task_timer.html
+- aristay_backend/api/templates/staff/components/task_checklist.html
+- aristay_backend/api/templates/staff/components/task_header.html
 
-**Inline style blocks (`<style>…`)**
-- aristay_backend/api/templates/staff/my_tasks.html (2)
-- aristay_backend/api/templates/staff/task_form.html (1)
-- aristay_backend/api/templates/staff/maintenance_dashboard.html (1)
-- aristay_backend/api/templates/staff/cleaning_dashboard.html (1)
-- aristay_backend/api/templates/staff/checklist_templates.html (1)
-- aristay_backend/api/templates/staff/base.html (1)
-
-**Inline `style="..."` attributes (top offenders)**
-- aristay_backend/api/templates/staff/maintenance_dashboard.html (25)
-- aristay_backend/api/templates/staff/cleaning_dashboard.html (15)
-- aristay_backend/api/templates/staff/base.html (10)
-- aristay_backend/api/templates/staff/task_detail.html (5)
-- aristay_backend/api/templates/staff/laundry_dashboard.html (5)
-- aristay_backend/api/templates/staff/components/task_progress.html (5)
-- aristay_backend/api/templates/staff/task_form.html (4)
-- aristay_backend/api/templates/staff/lawn_pool_dashboard.html (4)
-- aristay_backend/api/templates/staff/components/task_timer.html (2)
-- aristay_backend/api/templates/staff/components/task_checklist.html (2)
-- aristay_backend/api/templates/staff/my_tasks.html (1)
-- aristay_backend/api/templates/staff/components/task_header.html (1)
+**Remaining style attributes in task detail markup**
+- aristay_backend/api/templates/staff/task_detail.html (a few `style="display: none;"` on modal/conditional sections)
 
 ### 3.2 Layout templates (high leverage)
 These affect many pages and should be addressed early.
