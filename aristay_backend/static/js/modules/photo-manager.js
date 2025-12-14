@@ -39,6 +39,24 @@ export class PhotoManager {
       }
     });
 
+    // Event delegation for approve/reject buttons
+    this.container.addEventListener('click', async (e) => {
+      const approveBtn = e.target.closest('.btn-approve');
+      const rejectBtn = e.target.closest('.btn-reject');
+
+      if (approveBtn) {
+        e.stopPropagation();
+        const photoId = approveBtn.dataset.photoId;
+        await this.approvePhoto(photoId);
+      }
+
+      if (rejectBtn) {
+        e.stopPropagation();
+        const photoId = rejectBtn.dataset.photoId;
+        await this.rejectPhoto(photoId);
+      }
+    });
+
     // Event delegation for delete buttons
     this.container.addEventListener('click', async (e) => {
       const deleteBtn = e.target.closest('.btn-delete-photo');
@@ -51,13 +69,71 @@ export class PhotoManager {
 
     // Event delegation for archive buttons
     this.container.addEventListener('click', async (e) => {
-      const archiveBtn = e.target.closest('.btn-archive-photo');
+      const archiveBtn = e.target.closest('.btn-archive-photo, .btn-archive');
       if (archiveBtn) {
         e.stopPropagation();
         const photoId = archiveBtn.dataset.photoId;
         await this.archivePhoto(photoId);
       }
     });
+  }
+
+  async approvePhoto(photoId) {
+    if (!photoId) {
+      console.error('Photo ID is required');
+      return;
+    }
+
+    if (!confirm('Approve this photo?')) return;
+
+    try {
+      const response = await APIClient.request(
+        `/api/tasks/${this.taskId}/images/${photoId}/`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ photo_status: 'approved' })
+        }
+      );
+
+      if (response.success || response.id) {
+        this.updatePhotoStatusUI(photoId, 'approved');
+        this.showNotification('Photo approved!', 'success');
+      }
+    } catch (error) {
+      console.error('❌ Error approving photo:', error);
+      this.showNotification(`Failed to approve photo: ${error.message}`, 'error');
+    }
+  }
+
+  async rejectPhoto(photoId) {
+    if (!photoId) {
+      console.error('Photo ID is required');
+      return;
+    }
+
+    const reason = prompt('Why are you rejecting this photo?');
+    if (!reason || reason.trim() === '') return;
+
+    try {
+      const response = await APIClient.request(
+        `/api/tasks/${this.taskId}/images/${photoId}/`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            photo_status: 'rejected',
+            rejection_reason: reason.trim()
+          })
+        }
+      );
+
+      if (response.success || response.id) {
+        this.updatePhotoStatusUI(photoId, 'rejected');
+        this.showNotification('Photo rejected!', 'success');
+      }
+    } catch (error) {
+      console.error('❌ Error rejecting photo:', error);
+      this.showNotification(`Failed to reject photo: ${error.message}`, 'error');
+    }
   }
 
   async deletePhoto(photoId) {
