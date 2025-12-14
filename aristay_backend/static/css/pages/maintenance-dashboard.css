@@ -1,0 +1,130 @@
+.dashboard-task-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.task-item--overdue {
+    border-left: 4px solid #f56565;
+}
+
+.due-date-overdue {
+    color: #c53030;
+}
+
+.empty-emoji-sm {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-emoji-md {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.center-actions {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.stock-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.stock-row-info {
+    flex: 1;
+}
+
+.stock-row-title {
+    font-weight: 500;
+}
+
+.stock-row-subtitle {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.stock-row-right {
+    text-align: right;
+}
+
+.stock-row-par {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.transaction-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.transaction-row-info {
+    flex: 1;
+}
+
+.transaction-row-title {
+    font-weight: 500;
+}
+
+.transaction-row-subtitle {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.transaction-row-right {
+    text-align: right;
+}
+
+.transaction-qty {
+    font-weight: 500;
+}
+
+.transaction-qty--in {
+    color: #38a169;
+}
+
+.transaction-qty--out {
+    color: #e53e3e;
+}
+
+.transaction-qty--adjust {
+    color: #dd6b20;
+}
+
+.transaction-date {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.maintenance-tips {
+    background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.maintenance-tips h4 {
+    margin-bottom: 1rem;
+    color: #2a69ac;
+}
+
+.tip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.tip-item {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
