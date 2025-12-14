@@ -196,7 +196,7 @@
                                    data-item-id="{{ response.id }}"
                                    accept="image/*"
                                    multiple
-                                   style="display: none;">
+                                   class="hidden">
                             <button type="button" class="btn-upload" data-response-id="{{ response.id }}">
                                 📷 Add Photos
                                 {% with response_photos=unified_photos_by_response|get_item:response.id %}
@@ -209,7 +209,7 @@
                     {% endif %}
 
                     <!-- Notes Section -->
-                    <div class="notes-section" id="notes-{{ response.id }}" style="display: none;">
+                    <div class="notes-section hidden" id="notes-{{ response.id }}">
                         {% if can_edit %}
                         <div class="form-group">
                             <label class="form-label">Notes:</label>

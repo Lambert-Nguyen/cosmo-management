@@ -56,7 +56,7 @@
                 {% endif %}
             </div>
 
-            <div class="task-description" {% if not task.description %}style="display: none;"{% endif %}>
+            <div class="task-description{% if not task.description %} hidden{% endif %}">
                 <h4>Description</h4>
                 <p>{{ task.description|default:"" }}</p>
             </div>
