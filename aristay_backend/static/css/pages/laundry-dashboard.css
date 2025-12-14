@@ -1,0 +1,9 @@
+.dashboard-task-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.dashboard-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
