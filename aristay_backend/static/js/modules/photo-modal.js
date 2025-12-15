@@ -120,14 +120,14 @@ export class PhotoModal {
     }
 
     // Show modal
-    this.modal.style.display = 'block';
+    this.modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden'; // Prevent background scroll
   }
 
   close() {
     if (!this.modal) return;
 
-    this.modal.style.display = 'none';
+    this.modal.classList.add('hidden');
     document.body.style.overflow = ''; // Restore scroll
     
     this.currentPhotoUrl = null;
@@ -137,7 +137,7 @@ export class PhotoModal {
   }
 
   isOpen() {
-    return this.modal && this.modal.style.display === 'block';
+    return !!(this.modal && !this.modal.classList.contains('hidden'));
   }
 
   async approvePhoto(photoId) {

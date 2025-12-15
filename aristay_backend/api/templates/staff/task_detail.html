@@ -63,7 +63,7 @@
                     {% endif %}
                 </div>
 
-                <div class="task-description" {% if not task.description %}style="display: none;"{% endif %}>
+                <div class="task-description{% if not task.description %} hidden{% endif %}">
                     <h4>Description</h4>
                     <p>{{ task.description|default:"" }}</p>
                 </div>
@@ -117,7 +117,7 @@
                 <!-- Unified Photo Gallery -->
                 {% if task.images.all %}
                 <div class="unified-photo-gallery">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div class="unified-photo-gallery-header">
                         <h4>📸 All Task Photos</h4>
                     </div>
                     <div class="photo-gallery-grid">
@@ -222,7 +222,7 @@
 </div>
 
 <!-- Enhanced Photo Modal with Zoom and Approval Controls -->
-<div id="photoModal" class="photo-modal" style="display: none;">
+<div id="photoModal" class="photo-modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
         <div class="modal-header">
@@ -263,7 +263,7 @@
 </div>
 
 <!-- Notes Modal -->
-<div id="noteModal" class="note-modal" style="display: none;">
+<div id="noteModal" class="note-modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
         <div class="modal-header">
@@ -286,7 +286,7 @@
 </div>
 
 <!-- Lost & Found Modal -->
-<div id="lostFoundModal" class="lost-found-modal" style="display: none;">
+<div id="lostFoundModal" class="lost-found-modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
         <div class="modal-header">

@@ -280,7 +280,7 @@ export class ChecklistManager {
     img.alt = 'Checklist photo';
     img.dataset.photoUrl = photoData.image_url || photoData.url;
     img.dataset.photoId = photoData.id;
-    img.onclick = () => window.openPhotoModal(img.dataset.photoUrl, photoData.id);
+    img.addEventListener('click', () => window.openPhotoModal(img.dataset.photoUrl, photoData.id));
 
     photoDiv.appendChild(img);
     photoGrid.appendChild(photoDiv);
@@ -312,7 +312,7 @@ export class ChecklistManager {
     modal.dataset.responseId = responseId;
 
     // Show modal
-    modal.style.display = 'block';
+    modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
     // Focus on textarea
@@ -362,11 +362,8 @@ export class ChecklistManager {
       notesElement.textContent = notes;
       
       // Show/hide notes section based on content
-      if (notes.trim()) {
-        notesElement.style.display = 'block';
-      } else {
-        notesElement.style.display = 'none';
-      }
+      if (notes.trim()) notesElement.classList.remove('hidden');
+      else notesElement.classList.add('hidden');
     }
   }
 
@@ -400,9 +397,7 @@ export class ChecklistManager {
 
   closeModal() {
     const modals = document.querySelectorAll('.note-modal');
-    modals.forEach(modal => {
-      modal.style.display = 'none';
-    });
+    modals.forEach((modal) => modal.classList.add('hidden'));
     document.body.style.overflow = '';
   }
 
