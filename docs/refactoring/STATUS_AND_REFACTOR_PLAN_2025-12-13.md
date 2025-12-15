@@ -1,6 +1,6 @@
-# Django UI Refactor — Status & Plan (2025-12-13)
+# Django UI Refactor — Status & Plan (2025-12-14)
 
-**Date**: December 13, 2025  
+**Date**: December 14, 2025  
 **Scope**: Django templates + static assets refactor (primary focus: Staff UI), removing inline JS/event handlers and inline CSS while keeping the test suite green.
 
 ## 1) What’s been done so far (review)
@@ -13,16 +13,23 @@
 - Maintain **green tests** as the non‑negotiable quality gate.
 
 ### 1.2 Quality gate confirmation
-- Pytest ran successfully after the most recent refactor chunks (staff shell/pages/dashboards/checklists), using:
+- Pytest ran successfully after the most recent refactor chunks (staff shell/pages/dashboards/checklists/components/task detail), using:
   - `pytest -q`
 - Result: **100% pass** (warnings only).
 
-### 1.3 Recent commits (today)
+### 1.3 Recent commits (this refactor stream)
+
+Earlier (already reflected in the previous snapshot):
 - Refactor staff base/layout to external assets
 - Extract my_tasks inline assets
 - Extract task_form inline assets
 - Extract dashboard inline styles
 - Extract checklist templates inline CSS
+
+New since the previous snapshot:
+- Extract laundry/lawn-pool dashboard inline styles
+- Remove inline styles from staff components
+- Remove remaining inline styles from task detail
 
 ### 1.4 Lighthouse / review baseline
 The earlier merge review is recorded here:
@@ -122,16 +129,9 @@ This backlog list is based on repository scans for:
 
 Note: `<script src="...">` and `<script type="module" src="...">` includes are expected and not considered “inline JS”.
 
-**Remaining inline `style="..."` attributes / conditional style usage**
-- aristay_backend/api/templates/staff/laundry_dashboard.html
-- aristay_backend/api/templates/staff/lawn_pool_dashboard.html
-- aristay_backend/api/templates/staff/components/task_progress.html
-- aristay_backend/api/templates/staff/components/task_timer.html
-- aristay_backend/api/templates/staff/components/task_checklist.html
-- aristay_backend/api/templates/staff/components/task_header.html
-
-**Remaining style attributes in task detail markup**
-- aristay_backend/api/templates/staff/task_detail.html (a few `style="display: none;"` on modal/conditional sections)
+**Status (as of 2025-12-14)**
+- Staff templates have been cleaned of inline `<style>` blocks, inline `style="..."` attributes, inline `<script>` blocks, and inline `on*=` event handlers.
+- Progress widths now use `data-progress` + a JS initializer; modal visibility uses `.hidden` class toggling.
 
 ### 3.2 Layout templates (high leverage)
 These affect many pages and should be addressed early.
@@ -238,6 +238,9 @@ These are the largest sources of `onclick=` and inline `style=`.
 - Apply the same pattern if we want consistency outside staff pages.
 - Prioritize user-facing portal pages over admin tools.
 
+Next high-leverage Portal target:
+- `aristay_backend/api/templates/portal/base.html` (currently contains large inline `<style>` and inline `<script>` blocks plus `on*=` handlers)
+
 ## 5) How to track progress (recommended workflow)
 
 ### 5.1 Run a scan
@@ -268,3 +271,8 @@ CSS pages:
 - aristay_backend/static/css/pages/task-detail.css
 - aristay_backend/static/css/pages/lost-found-list.css
 - aristay_backend/static/css/pages/inventory-lookup.css
+
+Recent CSS page additions:
+- aristay_backend/static/css/pages/laundry-dashboard.css
+- aristay_backend/static/css/pages/lawn-pool-dashboard.css
+- aristay_backend/static/css/pages/checklist-templates.css
