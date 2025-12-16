@@ -31,6 +31,11 @@ New since the previous snapshot:
 - Remove inline styles from staff components
 - Remove remaining inline styles from task detail
 
+New since starting the Portal phase:
+- Extract portal base inline assets (moved to `static/css/pages/portal-base.css` + `static/js/pages/portal-base.js`)
+- Extract portal home inline CSS (moved to `static/css/pages/portal-home.css`)
+- Tests updated where necessary to assert extracted CSS via linked stylesheets (instead of brittle inline-style assertions)
+
 ### 1.4 Lighthouse / review baseline
 The earlier merge review is recorded here:
 - docs/refactoring/FINAL_REVIEW_WITH_LIGHTHOUSE.md
@@ -142,11 +147,11 @@ These affect many pages and should be addressed early.
 
 ### 3.3 Portal templates (medium priority, user-facing)
 **Inline `style="..."` is common**
-- aristay_backend/api/templates/portal/home.html (59)
+- aristay_backend/api/templates/portal/home.html (59) ✅ completed (extracted to `static/css/pages/portal-home.css`)
 - aristay_backend/api/templates/portal/notification_settings.html (38)
 - aristay_backend/api/templates/portal/digest_settings.html (37)
 - aristay_backend/api/templates/portal/task_detail.html (35)
-- aristay_backend/api/templates/portal/base.html (12)
+- aristay_backend/api/templates/portal/base.html (12) ✅ completed (extracted to `static/css/pages/portal-base.css` + `static/js/pages/portal-base.js`)
 - aristay_backend/api/templates/portal/calendar.html (11)
 - aristay_backend/api/templates/portal/booking_detail.html (9)
 - aristay_backend/api/templates/portal/photo_management.html (8)
@@ -155,7 +160,7 @@ These affect many pages and should be addressed early.
 
 **Inline onclick handlers**
 - aristay_backend/api/templates/portal/calendar.html (7)
-- aristay_backend/api/templates/portal/base.html (3)
+- aristay_backend/api/templates/portal/base.html (3) ✅ completed
 - aristay_backend/api/templates/portal/photo_management.html (3)
 - aristay_backend/api/templates/portal/task_detail.html (2)
 - aristay_backend/api/templates/portal/notification_settings.html (1)
@@ -238,8 +243,37 @@ These are the largest sources of `onclick=` and inline `style=`.
 - Apply the same pattern if we want consistency outside staff pages.
 - Prioritize user-facing portal pages over admin tools.
 
-Next high-leverage Portal target:
-- `aristay_backend/api/templates/portal/base.html` (currently contains large inline `<style>` and inline `<script>` blocks plus `on*=` handlers)
+Next high-leverage Portal targets (in order):
+1) `aristay_backend/api/templates/portal/notification_settings.html`
+2) `aristay_backend/api/templates/portal/digest_settings.html`
+3) `aristay_backend/api/templates/portal/task_detail.html`
+4) `aristay_backend/api/templates/portal/calendar.html`
+
+Recommended plan for the remaining files (grouped into clean, test-validated commits):
+
+Portal (user-facing)
+- portal/notification_settings.html → extract CSS to `static/css/pages/portal-notification-settings.css`; move any inline handlers/scripts to `static/js/pages/portal-notification-settings.js` (delegate via `data-action`).
+- portal/digest_settings.html → extract CSS to `static/css/pages/portal-digest-settings.css`; move any inline handlers/scripts to `static/js/pages/portal-digest-settings.js`.
+- portal/task_detail.html → mirror Staff Task Detail patterns where applicable; extract CSS + replace inline handlers with `data-action`; isolate behavior in a page module.
+- portal/calendar.html → remove inline `onclick` (7) first; migrate dynamic styling to classes/data attributes + a page module.
+- portal/booking_detail.html, portal/photo_management.html, portal/property_detail.html, portal/property_list.html → CSS extraction + handler delegation (as needed), one file per commit if large.
+
+Layouts (high leverage)
+- layouts/portal_layout.html → move any inline `<style>/<script>` to `static/css/pages/portal-layout.css` and `static/js/pages/portal-layout.js` (or a shared module if used cross-portal).
+- layouts/public_layout.html → same pattern; keep DOM hooks stable.
+- layouts/admin_layout.html → same pattern; be conservative (admin templates can be brittle).
+- layouts/staff_layout.html → only if scans still show inline content; otherwise leave as-is.
+
+Admin / manager templates (lower priority unless actively used)
+- admin/enhanced_excel_import.html → CSS extraction first; if JS exists, move to a page module.
+- admin/charts_dashboard.html + manager_admin/index.html → remove inline `onclick` (13/12) via `data-action` delegation; extract CSS blocks.
+- admin/base_site.html, admin/system_recovery.html, admin/system_metrics.html, admin/file_cleanup.html, admin/conflict_resolution.html, photo_upload.html → CSS extraction + handler delegation, one-at-a-time.
+
+Misc pages
+- chat/chatbox.html, calendar/calendar_view.html, photo_management.html, photo_comparison.html → extract CSS and replace inline handlers.
+
+Quality gate for every commit:
+- Run `pytest -q` after each chunk; no behavior change; warnings OK.
 
 ## 5) How to track progress (recommended workflow)
 
