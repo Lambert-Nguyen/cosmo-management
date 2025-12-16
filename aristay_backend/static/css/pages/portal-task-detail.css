@@ -1,0 +1,205 @@
+/* Portal task detail page (extracted from portal/task_detail.html) */
+
+.portal-task-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1.5rem;
+}
+
+.portal-task-detail-header-right {
+    text-align: right;
+}
+
+.portal-task-detail-status {
+    margin-bottom: 0.5rem;
+}
+
+.portal-task-detail-description {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.portal-task-detail-meta {
+    margin-bottom: 1.5rem;
+}
+
+.portal-task-detail-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.portal-task-detail-inline-form {
+    display: inline;
+}
+
+.portal-task-detail-checklist-title-meta {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-left: 1rem;
+}
+
+.portal-task-detail-progress-track {
+    background: #e2e8f0;
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.portal-task-detail-progress-bar {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+.portal-task-detail-room {
+    margin-bottom: 2rem;
+}
+
+.portal-task-detail-room-title {
+    margin-bottom: 1rem;
+    color: #6366f1;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+}
+
+.portal-task-detail-response-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.portal-task-detail-response-row {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.portal-task-detail-check-icon {
+    margin-top: 0.25rem;
+    font-size: 1.2rem;
+}
+
+.portal-task-detail-response-body {
+    flex: 1;
+}
+
+.portal-task-detail-item-title {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.portal-task-detail-required-asterisk {
+    color: #e53e3e;
+    font-size: 0.875rem;
+}
+
+.portal-task-detail-muted-spaced {
+    margin-bottom: 0.5rem;
+}
+
+.portal-task-detail-item-meta {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.portal-task-detail-item-required-badge {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+}
+
+.portal-task-detail-response-block {
+    background: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+}
+
+.portal-task-detail-photos {
+    margin-top: 0.5rem;
+}
+
+.portal-task-detail-photos-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.portal-task-detail-photos-grid {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.portal-task-detail-photo-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.portal-task-detail-notes {
+    background: #fffbeb;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+}
+
+.portal-task-detail-completed {
+    font-size: 0.75rem;
+    color: #38a169;
+    margin-top: 0.5rem;
+}
+
+.portal-task-detail-interactive-cta {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.portal-task-detail-empty {
+    text-align: center;
+    padding: 2rem;
+}
+
+.portal-task-detail-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.portal-task-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.portal-task-detail-modal-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 2rem;
+}
+
+.portal-task-detail-modal-photo {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
