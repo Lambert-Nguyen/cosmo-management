@@ -148,8 +148,8 @@ These affect many pages and should be addressed early.
 ### 3.3 Portal templates (medium priority, user-facing)
 **Inline `style="..."` is common**
 - aristay_backend/api/templates/portal/home.html (59) ✅ completed (extracted to `static/css/pages/portal-home.css`)
-- aristay_backend/api/templates/portal/notification_settings.html (38)
-- aristay_backend/api/templates/portal/digest_settings.html (37)
+- aristay_backend/api/templates/portal/notification_settings.html (38) ✅ completed (extracted to `static/css/pages/portal-notification-settings.css` + `static/js/pages/portal-notification-settings.js`)
+- aristay_backend/api/templates/portal/digest_settings.html (37) ✅ completed (extracted to `static/css/pages/portal-digest-settings.css` + `static/js/pages/portal-digest-settings.js`)
 - aristay_backend/api/templates/portal/task_detail.html (35)
 - aristay_backend/api/templates/portal/base.html (12) ✅ completed (extracted to `static/css/pages/portal-base.css` + `static/js/pages/portal-base.js`)
 - aristay_backend/api/templates/portal/calendar.html (11)
@@ -244,16 +244,14 @@ These are the largest sources of `onclick=` and inline `style=`.
 - Prioritize user-facing portal pages over admin tools.
 
 Next high-leverage Portal targets (in order):
-1) `aristay_backend/api/templates/portal/notification_settings.html`
-2) `aristay_backend/api/templates/portal/digest_settings.html`
-3) `aristay_backend/api/templates/portal/task_detail.html`
-4) `aristay_backend/api/templates/portal/calendar.html`
+1) `aristay_backend/api/templates/portal/task_detail.html`
+2) `aristay_backend/api/templates/portal/calendar.html`
 
 Recommended plan for the remaining files (grouped into clean, test-validated commits):
 
 Portal (user-facing)
-- portal/notification_settings.html → extract CSS to `static/css/pages/portal-notification-settings.css`; move any inline handlers/scripts to `static/js/pages/portal-notification-settings.js` (delegate via `data-action`).
-- portal/digest_settings.html → extract CSS to `static/css/pages/portal-digest-settings.css`; move any inline handlers/scripts to `static/js/pages/portal-digest-settings.js`.
+- portal/notification_settings.html ✅ completed (CSS: `static/css/pages/portal-notification-settings.css`, JS: `static/js/pages/portal-notification-settings.js`).
+- portal/digest_settings.html ✅ completed (CSS: `static/css/pages/portal-digest-settings.css`, JS: `static/js/pages/portal-digest-settings.js`).
 - portal/task_detail.html → mirror Staff Task Detail patterns where applicable; extract CSS + replace inline handlers with `data-action`; isolate behavior in a page module.
 - portal/calendar.html → remove inline `onclick` (7) first; migrate dynamic styling to classes/data attributes + a page module.
 - portal/booking_detail.html, portal/photo_management.html, portal/property_detail.html, portal/property_list.html → CSS extraction + handler delegation (as needed), one file per commit if large.
