@@ -1,0 +1,260 @@
+/* Portal notification settings page (extracted from portal/notification_settings.html) */
+
+.portal-notif-shell {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.portal-notif-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+    border-radius: 12px;
+}
+
+.portal-notif-title {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+}
+
+.portal-notif-subtitle {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.portal-notif-unread-wrap {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.portal-notif-unread-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.portal-notif-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.portal-notif-action-btn {
+    font-size: 14px;
+}
+
+.portal-notif-action-btn--success {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+}
+
+.portal-notif-action-btn--muted {
+    background: #6b7280;
+    border-color: #6b7280;
+    color: white;
+}
+
+.portal-notif-card-inner {
+    padding: 24px;
+}
+
+.portal-notif-section-title {
+    margin: 0 0 20px 0;
+    color: #1e293b;
+}
+
+.notification-item {
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.notification-item--unread {
+    background: #f0f9ff;
+    border-color: #0ea5e9;
+}
+
+.notification-item--read {
+    background: #f8fafc;
+}
+
+.notification-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.notification-main {
+    flex: 1;
+}
+
+.notification-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.notification-unread-dot {
+    width: 8px;
+    height: 8px;
+    background: #0ea5e9;
+    border-radius: 50%;
+}
+
+.notification-verb {
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.notification-time {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.notification-desc {
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.notification-related {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.notification-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.portal-notif-mini-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.portal-notif-mini-btn--success {
+    background: #10b981;
+    color: white;
+}
+
+.portal-notif-mini-link {
+    padding: 4px 8px;
+    font-size: 11px;
+    background: #3b82f6;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.portal-notif-empty {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+}
+
+.portal-notif-empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.portal-notif-empty-title {
+    margin: 0 0 8px 0;
+    color: #374151;
+}
+
+.portal-notif-empty-subtitle {
+    margin: 0;
+    font-size: 14px;
+}
+
+.portal-notif-preferences {
+    margin-top: 24px;
+}
+
+.portal-notif-preferences-title {
+    margin: 0 0 16px 0;
+    color: #1e293b;
+}
+
+.portal-notif-preferences-info {
+    padding: 16px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+}
+
+.portal-notif-preferences-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.portal-notif-preferences-icon {
+    font-size: 16px;
+}
+
+.portal-notif-preferences-body {
+    flex: 1;
+}
+
+.portal-notif-preferences-subtitle {
+    margin: 0 0 8px 0;
+    color: #1e40af;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.portal-notif-preferences-text {
+    margin: 0;
+    color: #1e40af;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.portal-notif-message-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.portal-notif-message-content {
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.portal-notif-message-content.is-success {
+    background: #10b981;
+}
+
+.portal-notif-message-content.is-error {
+    background: #ef4444;
+}
