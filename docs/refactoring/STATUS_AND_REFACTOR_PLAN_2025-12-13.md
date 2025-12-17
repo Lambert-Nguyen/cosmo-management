@@ -1,6 +1,6 @@
-# Django UI Refactor — Status & Plan (2025-12-14)
+# Django UI Refactor — Status & Plan (2025-12-17)
 
-**Date**: December 14, 2025  
+**Date**: December 17, 2025  
 **Scope**: Django templates + static assets refactor (primary focus: Staff UI), removing inline JS/event handlers and inline CSS while keeping the test suite green.
 
 ## 1) What’s been done so far (review)
@@ -32,9 +32,16 @@ New since the previous snapshot:
 - Remove remaining inline styles from task detail
 
 New since starting the Portal phase:
-- Extract portal base inline assets (moved to `static/css/pages/portal-base.css` + `static/js/pages/portal-base.js`)
-- Extract portal home inline CSS (moved to `static/css/pages/portal-home.css`)
-- Tests updated where necessary to assert extracted CSS via linked stylesheets (instead of brittle inline-style assertions)
+- Extract portal calendar inline assets + modernize tests to assert external includes/JS file contents
+- Remove inline styles from portal booking detail (moved to `static/css/pages/portal-booking-detail.css`)
+- Extract portal photo management inline CSS/JS/handlers (moved to `static/css/pages/portal-photo-management.css` + `static/js/pages/portal-photo-management.js`)
+- Remove remaining inline styles from portal property detail/list (moved to `static/css/pages/portal-property-detail.css` and `static/css/pages/portal-property-list.css`)
+
+New since the Admin/Manager phase:
+- Admin: extract enhanced excel import CSS/JS (moved to `static/css/pages/admin-enhanced-excel-import.css` + `static/js/pages/admin-enhanced-excel-import.js`)
+- Admin: externalize charts dashboard CSS/JS (moved to `static/css/pages/admin-charts-dashboard.css` + `static/js/pages/admin-charts-dashboard.js`)
+- Manager: extract manager admin index CSS/JS (moved to `static/css/pages/manager-admin-index.css` + `static/js/pages/manager-admin-index.js`)
+- Shared layouts: moved inline layout CSS/scripts to `static/css/pages/layout-*.css` and `static/js/core/alerts.js`
 
 ### 1.4 Lighthouse / review baseline
 The earlier merge review is recorded here:
@@ -130,58 +137,92 @@ This backlog list is based on repository scans for:
 - inline `<style>` blocks
 - inline `<script>` blocks (non-module, no `src`, excluding JSON data scripts)
 
+**Latest scan snapshot (2025-12-17)**
+
+Notes:
+- Backup files (e.g. `*.backup`) are not part of the active UI surface and should be excluded from “remaining work” counts.
+
+Inline `onclick=` hotspots (top results):
+- `photo_upload.html` (8)
+- `admin/file_cleanup.html` (7)
+- `admin/conflict_resolution.html` (7)
+- `admin/system_logs.html` (5)
+- `chat/chatbox.html` (4)
+- `calendar/calendar_view.html` (4)
+- `admin/permission_management.html` (4)
+
+Inline `style=` hotspots (top results):
+- `admin/base_site.html` (41)
+- `admin/system_recovery.html` (36)
+- `admin/system_metrics.html` (24)
+- `invite_codes/list.html` (22)
+- `invite_codes/create.html` (16)
+- `photo_upload.html` (12)
+- `admin/system_logs.html` (11)
+- `manager_admin/base_site.html` (9)
+- `admin/excel_import.html` (9)
+
+Inline `<style>` blocks still present (not exhaustive):
+- `registration/register.html`, `photo_upload.html`, `photo_management.html`, `photo_comparison.html`, `manager_admin/login.html`, `manager_admin/base_site.html`, `invite_codes/base.html`, `chat/chatbox.html`, `calendar/calendar_view.html`, plus some admin templates.
+
+Inline `<script>` blocks still present (excluding external `src=` and JSON script tags):
+- `admin/base_site.html` (2)
+- `registration/register.html`, `photo_upload.html`, `photo_management.html`, `photo_comparison.html`, `invite_codes/*`, `chat/chatbox.html`, `calendar/calendar_view.html`, plus some admin templates.
+
+Portal templates: ✅ no remaining inline styles/handlers/scripts detected in the portal set.
+
 ### 3.1 Staff templates (highest priority)
 
 Note: `<script src="...">` and `<script type="module" src="...">` includes are expected and not considered “inline JS”.
 
-**Status (as of 2025-12-14)**
+**Status (as of 2025-12-16)**
 - Staff templates have been cleaned of inline `<style>` blocks, inline `style="..."` attributes, inline `<script>` blocks, and inline `on*=` event handlers.
 - Progress widths now use `data-progress` + a JS initializer; modal visibility uses `.hidden` class toggling.
 
 ### 3.2 Layout templates (high leverage)
 These affect many pages and should be addressed early.
-- aristay_backend/api/templates/layouts/staff_layout.html (inline `<style>`/`<script>` detected)
-- aristay_backend/api/templates/layouts/public_layout.html (inline `<style>`/`<script>` detected)
-- aristay_backend/api/templates/layouts/portal_layout.html (inline `<style>`/`<script>` detected)
-- aristay_backend/api/templates/layouts/admin_layout.html (inline `<style>`/`<script>` detected)
+
+✅ Completed:
+- `layouts/public_layout.html`, `layouts/portal_layout.html`, `layouts/admin_layout.html`, and the shared base templates now use extracted CSS and external scripts.
+- Extracted assets live in `static/css/pages/layout-public.css`, `static/css/pages/layout-portal.css`, `static/css/pages/layout-admin.css`, and `static/js/core/alerts.js`.
 
 ### 3.3 Portal templates (medium priority, user-facing)
 **Inline `style="..."` is common**
 - aristay_backend/api/templates/portal/home.html (59) ✅ completed (extracted to `static/css/pages/portal-home.css`)
 - aristay_backend/api/templates/portal/notification_settings.html (38) ✅ completed (extracted to `static/css/pages/portal-notification-settings.css` + `static/js/pages/portal-notification-settings.js`)
 - aristay_backend/api/templates/portal/digest_settings.html (37) ✅ completed (extracted to `static/css/pages/portal-digest-settings.css` + `static/js/pages/portal-digest-settings.js`)
-- aristay_backend/api/templates/portal/task_detail.html (35)
+- aristay_backend/api/templates/portal/task_detail.html ✅ completed
 - aristay_backend/api/templates/portal/base.html (12) ✅ completed (extracted to `static/css/pages/portal-base.css` + `static/js/pages/portal-base.js`)
-- aristay_backend/api/templates/portal/calendar.html (11)
-- aristay_backend/api/templates/portal/booking_detail.html (9)
-- aristay_backend/api/templates/portal/photo_management.html (8)
-- aristay_backend/api/templates/portal/property_detail.html (7)
-- aristay_backend/api/templates/portal/property_list.html (5)
+- aristay_backend/api/templates/portal/calendar.html ✅ completed
+- aristay_backend/api/templates/portal/booking_detail.html ✅ completed
+- aristay_backend/api/templates/portal/photo_management.html ✅ completed
+- aristay_backend/api/templates/portal/property_detail.html ✅ completed
+- aristay_backend/api/templates/portal/property_list.html ✅ completed
 
 **Inline onclick handlers**
-- aristay_backend/api/templates/portal/calendar.html (7)
 - aristay_backend/api/templates/portal/base.html (3) ✅ completed
-- aristay_backend/api/templates/portal/photo_management.html (3)
-- aristay_backend/api/templates/portal/task_detail.html (2)
 - aristay_backend/api/templates/portal/notification_settings.html (1)
+Note: portal templates no longer have inline `on*=` handlers detected; remaining portal work is inline styles only (property detail/list).
 
 ### 3.4 Admin / manager templates (lower priority unless actively used)
 These are the largest sources of `onclick=` and inline `style=`.
 
 **Inline onclick hotspots**
-- aristay_backend/api/templates/admin/charts_dashboard.html (13)
-- aristay_backend/api/templates/manager_admin/index.html (12)
 - aristay_backend/api/templates/admin/file_cleanup.html (7)
 - aristay_backend/api/templates/admin/conflict_resolution.html (7)
-- aristay_backend/api/templates/photo_upload.html (8)
+- aristay_backend/api/templates/photo_upload.html (10)
+
+✅ Completed:
+- `admin/charts_dashboard.html` (now external CSS/JS)
+- `manager_admin/index.html` (now external CSS/JS)
 
 **Inline style hotspots**
-- aristay_backend/api/templates/admin/enhanced_excel_import.html (62)
-- aristay_backend/api/templates/admin/charts_dashboard.html (60)
-- aristay_backend/api/templates/manager_admin/index.html (53)
 - aristay_backend/api/templates/admin/base_site.html (41)
 - aristay_backend/api/templates/admin/system_recovery.html (36)
 - aristay_backend/api/templates/admin/system_metrics.html (24)
+
+✅ Completed:
+- `admin/enhanced_excel_import.html` (now external CSS/JS)
 
 ### 3.5 Misc pages
 - aristay_backend/api/templates/chat/chatbox.html (onclick + style)
@@ -244,8 +285,7 @@ These are the largest sources of `onclick=` and inline `style=`.
 - Prioritize user-facing portal pages over admin tools.
 
 Next high-leverage Portal targets (in order):
-1) `aristay_backend/api/templates/portal/task_detail.html`
-2) `aristay_backend/api/templates/portal/calendar.html`
+1) Portal templates ✅ complete (current backlog is Admin/manager templates)
 
 Recommended plan for the remaining files (grouped into clean, test-validated commits):
 
