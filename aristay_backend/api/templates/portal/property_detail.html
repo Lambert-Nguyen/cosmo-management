@@ -1,9 +1,15 @@
 {% extends "portal/base.html" %}
-{% load timezone_tags %}
+{% load timezone_tags static %}
 {% block title %}{{ property.name }} · AriStay Portal{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/portal-property-detail.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="card">
-  <div style="display:flex; justify-content:space-between; align-items:center;">
+  <div class="portal-property-detail-header">
     <div>
       <div class="section-title">{{ property.name }}</div>
       {% if property.address %}<div class="muted">{{ property.address }}</div>{% endif %}
@@ -13,16 +19,16 @@
     </div>
   </div>
 
-  <div style="margin-top:16px;" class="grid">
+  <div class="grid portal-property-detail-grid">
     {% for label, items in groups.items %}
       <div class="card">
-        <div class="section-title" style="text-transform:capitalize;">{{ label }} bookings</div>
+        <div class="section-title portal-property-detail-group-title">{{ label }} bookings</div>
         {% if items %}
-          <ul style="margin:0; padding-left:18px;">
+          <ul class="portal-property-detail-booking-list">
             {% for b in items %}
-              <li style="margin:6px 0;">
+              <li class="portal-property-detail-booking-item">
                 {{ b.check_in_date|dual_timezone:user }} → {{ b.check_out_date|dual_timezone:user }}
-                <a class="button" style="margin-left:8px;" href="{% url 'portal-booking-detail' property.id b.id %}">Open</a>
+                <a class="button portal-property-detail-booking-open" href="{% url 'portal-booking-detail' property.id b.id %}">Open</a>
               </li>
             {% endfor %}
           </ul>
@@ -32,7 +38,7 @@
       </div>
     {% endfor %}
   </div>
-  <div style="margin-top:16px;">
+  <div class="portal-property-detail-admin-row">
     <a class="button" href="/admin/api/booking/">Manage Bookings</a>
   </div>
 </div>
