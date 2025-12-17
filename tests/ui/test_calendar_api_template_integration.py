@@ -3,6 +3,7 @@ Calendar API Template Integration Tests
 Tests for calendar API endpoints and template integration
 """
 import pytest
+from pathlib import Path
 from django.test import TestCase, Client, override_settings
 from django.contrib.auth import get_user_model
 from api.models import Property, Task, Booking, Profile
@@ -11,6 +12,12 @@ from datetime import timedelta
 from tests.utils.timezone_helpers import create_booking_dates, create_task_dates
 
 User = get_user_model()
+
+
+def _read_portal_calendar_js() -> str:
+    repo_root = Path(__file__).resolve().parents[2]
+    js_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+    return js_path.read_text(encoding='utf-8')
 
 
 @override_settings(
@@ -236,11 +243,12 @@ class CalendarAPITemplateIntegrationTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for JavaScript API call functions
-        self.assertContains(response, 'fetch(')
-        self.assertContains(response, 'loadCalendarEvents')
-        self.assertContains(response, 'loadFilterOptions')
-        self.assertContains(response, 'showDayEvents')
+        # JavaScript is externalized into a static module; validate it there
+        js = _read_portal_calendar_js()
+        self.assertIn('fetch(', js)
+        self.assertIn('loadCalendarEvents', js)
+        self.assertIn('loadFilterOptions', js)
+        self.assertIn('showDayEvents', js)
     
     def test_calendar_template_error_handling(self):
         """Test that calendar template handles API errors properly"""
@@ -249,11 +257,12 @@ class CalendarAPITemplateIntegrationTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for error handling
-        self.assertContains(response, 'catch')
-        self.assertContains(response, 'console.error')
-        self.assertContains(response, 'showError')
-        self.assertContains(response, 'hideLoading')
+        # Error handling lives in the external JS
+        js = _read_portal_calendar_js()
+        self.assertIn('catch', js)
+        self.assertIn('console.error', js)
+        self.assertIn('showError', js)
+        self.assertIn('hideLoading', js)
     
     def test_calendar_template_loading_states(self):
         """Test that calendar template shows loading states"""
@@ -265,8 +274,9 @@ class CalendarAPITemplateIntegrationTestCase(TestCase):
         # Check for loading states
         self.assertContains(response, 'loadingIndicator')
         self.assertContains(response, 'Loading calendar...')
-        self.assertContains(response, 'showLoading')
-        self.assertContains(response, 'hideLoading')
+        js = _read_portal_calendar_js()
+        self.assertIn('showLoading', js)
+        self.assertIn('hideLoading', js)
     
     def test_calendar_template_data_processing(self):
         """Test that calendar template processes API data correctly"""
@@ -275,8 +285,9 @@ class CalendarAPITemplateIntegrationTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for data processing functions
-        self.assertContains(response, 'processedEvents')
-        self.assertContains(response, 'extendedProps')
-        self.assertContains(response, 'toISOString')
-        self.assertContains(response, 'split')
+        # Data processing logic lives in the external JS
+        js = _read_portal_calendar_js()
+        self.assertIn('processedEvents', js)
+        self.assertIn('extendedProps', js)
+        self.assertIn('toISOString', js)
+        self.assertIn('split', js)

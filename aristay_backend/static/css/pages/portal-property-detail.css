@@ -1,0 +1,30 @@
+.portal-property-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.portal-property-detail-grid {
+  margin-top: 16px;
+}
+
+.portal-property-detail-group-title {
+  text-transform: capitalize;
+}
+
+.portal-property-detail-booking-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.portal-property-detail-booking-item {
+  margin: 6px 0;
+}
+
+.portal-property-detail-booking-open {
+  margin-left: 8px;
+}
+
+.portal-property-detail-admin-row {
+  margin-top: 16px;
+}

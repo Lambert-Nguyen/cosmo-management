@@ -1,0 +1,23 @@
+.portal-property-list-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.portal-property-list-name {
+  font-weight: 700;
+}
+
+.portal-property-list-address {
+  margin-top: 6px;
+}
+
+.portal-property-list-tags {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.portal-property-list-admin-row {
+  margin-top: 16px;
+}
