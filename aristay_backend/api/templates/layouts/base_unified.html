@@ -75,28 +75,7 @@
     <script type="module" src="{% static 'js/core/csrf.js' %}"></script>
     <script type="module" src="{% static 'js/core/api-client.js' %}"></script>
     <script type="module" src="{% static 'js/core/storage.js' %}"></script>
-    
-    <!-- Alert Auto-dismiss -->
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Auto-dismiss alerts after 5 seconds
-        document.querySelectorAll('.alert').forEach(alert => {
-            setTimeout(() => {
-                alert.classList.add('fade-out');
-                setTimeout(() => alert.remove(), 300);
-            }, 5000);
-        });
-        
-        // Manual close
-        document.querySelectorAll('.alert-close').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const alert = btn.closest('.alert');
-                alert.classList.add('fade-out');
-                setTimeout(() => alert.remove(), 300);
-            });
-        });
-    });
-    </script>
+    <script type="module" src="{% static 'js/core/alerts.js' %}"></script>
     
     {% block extra_js %}{% endblock %}
 </body>

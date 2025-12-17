@@ -1,0 +1,144 @@
+/* Extracted from layouts/portal_layout.html */
+
+.portal-header {
+    background: white;
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: 1rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.portal-header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.portal-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.portal-header .logo-img {
+    border-radius: var(--radius);
+}
+
+.portal-header .user-info,
+.portal-header .auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.portal-header .user-name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .portal-header .user-name {
+        display: inline;
+    }
+}
+
+.portal-nav {
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.portal-nav .nav-menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.portal-nav .nav-item {
+    flex-shrink: 0;
+}
+
+.portal-nav .nav-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.portal-nav .nav-link:hover {
+    color: var(--color-primary);
+    background: white;
+}
+
+.portal-footer {
+    background: var(--color-gray-900);
+    color: white;
+    padding: 3rem 0 1rem;
+    margin-top: 4rem;
+}
+
+.portal-footer .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .portal-footer .footer-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.portal-footer .footer-section h4,
+.portal-footer .footer-section h5 {
+    margin-bottom: 1rem;
+    font-size: var(--font-size-lg);
+}
+
+.portal-footer .footer-section p {
+    opacity: 0.8;
+    font-size: var(--font-size-sm);
+}
+
+.portal-footer .footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.portal-footer .footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.portal-footer .footer-links a {
+    color: white;
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+}
+
+.portal-footer .footer-links a:hover {
+    opacity: 1;
+}
+
+.portal-footer .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.portal-footer .footer-bottom p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    opacity: 0.6;
+}
