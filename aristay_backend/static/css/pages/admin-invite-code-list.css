@@ -1,2 +1,282 @@
 /* Admin Invite Code List Page Styles - Extracted from inline styles */
 /* This file contains all styles previously defined inline in the template */
+
+.invite-code-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-5, 20px);
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-8, 30px);
+    padding-bottom: var(--space-5, 20px);
+    border-bottom: 2px solid var(--border-color, #e0e0e0);
+}
+
+.page-title {
+    font-size: var(--font-size-2xl, 2rem);
+    color: var(--text-primary, #333);
+    margin: 0;
+}
+
+.breadcrumb {
+    font-size: var(--font-size-sm, 0.9rem);
+    color: var(--text-secondary, #666);
+}
+
+.breadcrumb a {
+    color: var(--color-primary, #007cba);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--space-3, 10px);
+}
+
+.btn {
+    padding: var(--space-3, 10px) var(--space-5, 20px);
+    border: none;
+    border-radius: var(--radius-md, 5px);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--color-primary, #007cba);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark, #005a87);
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary, #6c757d);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.filters-section {
+    background: var(--bg-secondary, #f8f9fa);
+    padding: var(--space-5, 20px);
+    border-radius: var(--radius-lg, 8px);
+    margin-bottom: var(--space-8, 30px);
+}
+
+.filters-row {
+    display: flex;
+    gap: var(--space-5, 20px);
+    align-items: end;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.filter-group label {
+    font-weight: 500;
+    margin-bottom: var(--space-1, 5px);
+    color: var(--text-primary, #333);
+}
+
+.filter-group select,
+.filter-group input {
+    padding: var(--space-2, 8px) var(--space-3, 12px);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--font-size-sm, 14px);
+}
+
+.filter-actions {
+    display: flex;
+    gap: var(--space-3, 10px);
+}
+
+.table-container {
+    background: white;
+    border-radius: var(--radius-lg, 8px);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.table th,
+.table td {
+    padding: var(--space-3, 12px) var(--space-4, 15px);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.table th {
+    background-color: var(--bg-secondary, #f8f9fa);
+    font-weight: 600;
+    color: var(--text-primary, #333);
+}
+
+.table tbody tr:hover {
+    background-color: var(--bg-secondary, #f8f9fa);
+}
+
+.status-badge {
+    padding: var(--space-1, 4px) var(--space-2, 8px);
+    border-radius: 12px;
+    font-size: var(--font-size-xs, 0.8rem);
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: var(--color-success-light, #d4edda);
+    color: var(--color-success-dark, #155724);
+}
+
+.status-inactive {
+    background-color: var(--color-danger-light, #f8d7da);
+    color: var(--color-danger-dark, #721c24);
+}
+
+.status-expired {
+    background-color: var(--color-warning-light, #fff3cd);
+    color: var(--color-warning-dark, #856404);
+}
+
+.status-usable {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.code-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: var(--color-primary, #007cba);
+}
+
+.action-cell {
+    display: flex;
+    gap: var(--space-1, 5px);
+}
+
+.btn-sm {
+    padding: var(--space-1, 5px) var(--space-3, 10px);
+    font-size: var(--font-size-xs, 0.8rem);
+}
+
+.btn-success {
+    background-color: var(--color-success, #28a745);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-warning {
+    background-color: var(--color-warning, #ffc107);
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-danger {
+    background-color: var(--color-danger, #dc3545);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-info {
+    background-color: var(--color-info, #17a2b8);
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-5, 20px);
+}
+
+.pagination a,
+.pagination span {
+    padding: var(--space-2, 8px) var(--space-3, 12px);
+    margin: 0 var(--space-1, 2px);
+    border: 1px solid var(--border-color, #ddd);
+    text-decoration: none;
+    color: var(--color-primary, #007cba);
+}
+
+.pagination .current {
+    background-color: var(--color-primary, #007cba);
+    color: white;
+    border-color: var(--color-primary, #007cba);
+}
+
+.pagination a:hover {
+    background-color: var(--bg-hover, #e9ecef);
+}
+
+.no-results {
+    text-align: center;
+    padding: var(--space-10, 40px);
+    color: var(--text-secondary, #666);
+    font-style: italic;
+}
+
+.stats-row {
+    display: flex;
+    gap: var(--space-5, 20px);
+    margin-bottom: var(--space-5, 20px);
+}
+
+.stat-card {
+    background: white;
+    padding: var(--space-4, 15px);
+    border-radius: var(--radius-lg, 8px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex: 1;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: var(--font-size-xl, 1.5rem);
+    font-weight: bold;
+    color: var(--color-primary, #007cba);
+}
+
+.stat-label {
+    font-size: var(--font-size-sm, 0.9rem);
+    color: var(--text-secondary, #666);
+    margin-top: var(--space-1, 5px);
+}
+
+/* Inline form styles */
+.inline-form {
+    display: inline;
+}

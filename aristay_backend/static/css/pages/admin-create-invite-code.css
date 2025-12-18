@@ -1,1 +1,274 @@
-/* Admin Create Invite Code Page Styles */
+/* ============================================
+   Create Invite Code Page Styles
+   ============================================ */
+
+.create-invite-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-8, 2rem);
+}
+
+.page-header {
+    margin-bottom: var(--space-8, 2rem);
+    padding-bottom: var(--space-4, 1rem);
+    border-bottom: 2px solid var(--color-border, #e1e8ed);
+}
+
+.page-title {
+    font-size: var(--font-size-2xl, 2rem);
+    font-weight: 700;
+    color: var(--color-text-primary, #2c3e50);
+    margin: 0;
+}
+
+.breadcrumb {
+    margin-top: var(--space-2, 0.5rem);
+    color: var(--color-text-secondary, #6c757d);
+}
+
+.breadcrumb a {
+    color: var(--color-link, #3498db);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   Form Container
+   ============================================ */
+
+.form-container {
+    background: var(--color-surface, white);
+    border-radius: var(--radius-lg, 12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: var(--space-8, 2rem);
+}
+
+.form-section {
+    margin-bottom: var(--space-8, 2rem);
+}
+
+.section-title {
+    font-size: var(--font-size-xl, 1.25rem);
+    font-weight: 600;
+    color: var(--color-text-primary, #2c3e50);
+    margin-bottom: var(--space-4, 1rem);
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--color-border, #e1e8ed);
+}
+
+/* ============================================
+   Form Layout
+   ============================================ */
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6, 1.5rem);
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.form-group {
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--space-2, 0.5rem);
+    font-weight: 600;
+    color: var(--color-text-primary, #2c3e50);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: var(--space-3, 0.75rem);
+    border: 2px solid var(--color-border, #e1e8ed);
+    border-radius: var(--radius-md, 8px);
+    font-size: var(--font-size-base, 1rem);
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary, #3498db);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-help {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary, #6c757d);
+    margin-top: var(--space-1, 0.25rem);
+}
+
+/* ============================================
+   Code Preview
+   ============================================ */
+
+.code-preview {
+    background: var(--color-bg-subtle, #f8f9fa);
+    border: 2px solid var(--color-border, #e1e8ed);
+    border-radius: var(--radius-md, 8px);
+    padding: var(--space-4, 1rem);
+    margin-top: var(--space-2, 0.5rem);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: var(--font-size-lg, 1.2rem);
+    letter-spacing: 2px;
+    text-align: center;
+    color: var(--color-text-primary, #2c3e50);
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.button-group {
+    display: flex;
+    gap: var(--space-4, 1rem);
+    justify-content: flex-end;
+    margin-top: var(--space-8, 2rem);
+    padding-top: var(--space-8, 2rem);
+    border-top: 1px solid var(--color-border, #e1e8ed);
+}
+
+.btn {
+    padding: var(--space-3, 0.75rem) var(--space-6, 1.5rem);
+    border: none;
+    border-radius: var(--radius-md, 8px);
+    font-size: var(--font-size-base, 1rem);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary, #3498db), #2980b9);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #1f5f8b);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-secondary {
+    background: var(--color-secondary, #6c757d);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   Alerts
+   ============================================ */
+
+.alert {
+    padding: var(--space-4, 1rem);
+    border-radius: var(--radius-md, 8px);
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* ============================================
+   Role Description
+   ============================================ */
+
+.role-description {
+    background: var(--color-bg-subtle, #f8f9fa);
+    padding: var(--space-4, 1rem);
+    border-radius: var(--radius-md, 8px);
+    margin-top: var(--space-2, 0.5rem);
+    font-size: var(--font-size-sm, 0.9rem);
+    color: var(--color-text-tertiary, #495057);
+}
+
+.role-description.hidden {
+    display: none;
+}
+
+/* ============================================
+   Usage Options
+   ============================================ */
+
+.usage-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4, 1rem);
+    margin-top: var(--space-2, 0.5rem);
+}
+
+.usage-option {
+    background: var(--color-bg-subtle, #f8f9fa);
+    border: 2px solid var(--color-border, #e1e8ed);
+    border-radius: var(--radius-md, 8px);
+    padding: var(--space-4, 1rem);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.usage-option:hover {
+    border-color: var(--color-primary, #3498db);
+    background: #e3f2fd;
+}
+
+.usage-option.selected {
+    border-color: var(--color-primary, #3498db);
+    background: #e3f2fd;
+}
+
+.usage-option input[type="radio"] {
+    margin-right: var(--space-2, 0.5rem);
+}
+
+.usage-option label {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-text-primary, #2c3e50);
+}
+
+.usage-option .description {
+    font-size: var(--font-size-sm, 0.85rem);
+    color: var(--color-text-secondary, #6c757d);
+    margin-top: var(--space-1, 0.25rem);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.hidden {
+    display: none;
+}
