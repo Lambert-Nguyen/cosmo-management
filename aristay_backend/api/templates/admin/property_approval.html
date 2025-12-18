@@ -61,10 +61,10 @@
                                         <i class="fas fa-arrow-left"></i> Back to Import
                                     </button>
                                     <div>
-                                        <button type="button" class="btn btn-outline-primary me-2" onclick="selectAll()">
+                                        <button type="button" class="btn btn-outline-primary me-2" data-action="select-all">
                                             <i class="fas fa-check-double"></i> Select All
                                         </button>
-                                        <button type="button" class="btn btn-outline-secondary me-2" onclick="deselectAll()">
+                                        <button type="button" class="btn btn-outline-secondary me-2" data-action="deselect-all">
                                             <i class="fas fa-times"></i> Deselect All
                                         </button>
                                         <button type="submit" class="btn btn-success">
@@ -81,22 +81,5 @@
     </div>
 </div>
 
-<script>
-function selectAll() {
-    document.querySelectorAll('input[name="approved_properties"]').forEach(checkbox => {
-        checkbox.checked = true;
-    });
-}
-
-function deselectAll() {
-    document.querySelectorAll('input[name="approved_properties"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-}
-
-// Auto-select all by default
-document.addEventListener('DOMContentLoaded', function() {
-    selectAll();
-});
-</script>
+<script src="{% static 'js/pages/admin-property-approval.js' %}"></script>
 {% endblock %}
