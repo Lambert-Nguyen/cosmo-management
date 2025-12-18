@@ -4,237 +4,9 @@
 {% block title %}Resolve Booking Conflicts - {{ block.super }}{% endblock %}
 
 {% block extrahead %}
+{{ block.super }}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-    .conflict-container {
-        margin: 20px 0;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #f9f9f9;
-    }
-    
-    .sticky-header {
-        position: sticky;
-        top: 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 15px 20px;
-        z-index: 1000;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        margin: -20px -20px 20px -20px;
-        border-radius: 0;
-    }
-    
-    .sticky-header h1 {
-        margin: 0;
-        font-size: 24px;
-        font-weight: 600;
-    }
-    
-    .sticky-header .summary {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 10px;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-    
-    .sticky-header .summary-stats {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    
-    .sticky-header .stat {
-        background: rgba(255,255,255,0.1);
-        padding: 5px 12px;
-        border-radius: 15px;
-        font-size: 14px;
-        font-weight: 500;
-    }
-    
-    .progress-container {
-        background: rgba(255,255,255,0.9);
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .conflict-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        padding: 15px;
-        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-        border-radius: 8px;
-        border-left: 4px solid #ffc107;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .confidence-score {
-        font-weight: bold;
-        color: #856404;
-    }
-    
-    .comparison-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 15px 0;
-    }
-    
-    .comparison-table th,
-    .comparison-table td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-    
-    .comparison-table th {
-        background-color: #f8f9fa;
-        font-weight: bold;
-    }
-    
-    .existing-data {
-        background-color: #fff3cd;
-    }
-    
-    .excel-data {
-        background-color: #d1ecf1;
-    }
-    
-    .conflict-type-badge {
-        display: inline-block;
-        padding: 3px 8px;
-        margin: 2px;
-        background-color: #dc3545;
-        color: white;
-        border-radius: 12px;
-        font-size: 0.8em;
-    }
-    
-    .resolution-buttons {
-        margin-top: 15px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-    
-    .btn {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.2s;
-    }
-    
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-    }
-    
-    .btn-success {
-        background-color: #28a745;
-        color: white;
-    }
-    
-    .btn-warning {
-        background-color: #ffc107;
-        color: #212529;
-    }
-    
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
-    
-    .btn:hover {
-        opacity: 0.8;
-    }
-    
-    .resolution-summary {
-        margin-top: 20px;
-        padding: 15px;
-        background-color: #d4edda;
-        border-radius: 5px;
-        border-left: 4px solid #28a745;
-    }
-    
-    .progress-bar {
-        width: 100%;
-        height: 20px;
-        background-color: #e9ecef;
-        border-radius: 10px;
-        overflow: hidden;
-        margin: 10px 0;
-    }
-    
-    .progress-fill {
-        height: 100%;
-        background-color: #28a745;
-        transition: width 0.3s ease;
-    }
-    
-    .mobile-responsive {
-        display: block;
-    }
-    
-    @media (max-width: 768px) {
-        .comparison-table {
-            font-size: 12px;
-        }
-        
-        .comparison-table th,
-        .comparison-table td {
-            padding: 5px;
-        }
-        
-        .resolution-buttons {
-            flex-direction: column;
-        }
-        
-        .btn {
-            width: 100%;
-            margin-bottom: 5px;
-        }
-        
-        .conflict-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-    }
-    
-    .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    }
-    
-    .loading-spinner {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/pages/admin-conflict-resolution.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -327,21 +99,21 @@
         </table>
         
         <div class="resolution-buttons">
-            <button class="btn btn-primary" onclick="resolveConflict({{ forloop.counter0 }}, 'update_existing')">
+            <button class="btn btn-primary" data-action="resolve-update" data-conflict-index="{{ forloop.counter0 }}">
                 Update Existing Booking
             </button>
-            <button class="btn btn-success" onclick="resolveConflict({{ forloop.counter0 }}, 'create_new')">
+            <button class="btn btn-success" data-action="resolve-create" data-conflict-index="{{ forloop.counter0 }}">
                 Create New Booking
             </button>
-            <button class="btn btn-secondary" onclick="resolveConflict({{ forloop.counter0 }}, 'skip')">
+            <button class="btn btn-secondary" data-action="resolve-skip" data-conflict-index="{{ forloop.counter0 }}">
                 Skip This Conflict
             </button>
-            <button class="btn btn-warning" onclick="previewResolution({{ forloop.counter0 }})">
+            <button class="btn btn-warning" data-action="preview" data-conflict-index="{{ forloop.counter0 }}">
                 Preview Changes
             </button>
         </div>
-        
-        <div class="resolution-status" id="status-{{ forloop.counter0 }}" style="display: none;">
+
+        <div class="resolution-status hidden" id="status-{{ forloop.counter0 }}">
             <!-- Resolution status will be shown here -->
         </div>
     </div>
@@ -350,13 +122,13 @@
     <div class="bulk-actions" style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 5px;">
         <h4>Bulk Actions</h4>
         <div class="resolution-buttons">
-            <button class="btn btn-primary" onclick="resolveAllConflicts('update_existing')">
+            <button class="btn btn-primary" data-action="bulk-update">
                 Update All Existing Bookings
             </button>
-            <button class="btn btn-success" onclick="resolveAllConflicts('create_new')">
+            <button class="btn btn-success" data-action="bulk-create">
                 Create All as New Bookings
             </button>
-            <button class="btn btn-secondary" onclick="resolveAllConflicts('skip')">
+            <button class="btn btn-secondary" data-action="bulk-skip">
                 Skip All Conflicts
             </button>
         </div>
@@ -373,258 +145,10 @@
 {% endif %}
 
 <script>
-let resolvedCount = 0;
-const totalConflicts = {{ conflicts|length }};
-
-function showLoading() {
-    document.getElementById('loadingOverlay').style.display = 'flex';
-}
-
-function hideLoading() {
-    document.getElementById('loadingOverlay').style.display = 'none';
-}
-
-function updateProgress() {
-    const progressPercent = (resolvedCount / totalConflicts) * 100;
-    document.getElementById('progressFill').style.width = progressPercent + '%';
-    document.getElementById('progressText').textContent = `${resolvedCount} of ${totalConflicts} resolved`;
-}
-
-function resolveConflict(conflictIndex, action) {
-    showLoading();
-
-    const resolutions = [{
-        conflict_index: conflictIndex,
-        action: action,
-        apply_changes: ['guest_name', 'dates', 'status'] // Apply all changes for updates
-    }];
-
-    fetch(`/api/resolve-conflicts/{{ import_session_id }}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCsrfToken()
-        },
-        body: JSON.stringify({ resolutions: resolutions })
-    })
-    .then(async response => {
-        let data;
-        try {
-            data = await response.json();
-        } catch (e) {
-            data = {};
-        }
-        if (!response.ok) {
-            // Try to extract error message from JSON, fallback to status text
-            const errorMsg = data && data.error
-                ? data.error
-                : `HTTP ${response.status}: ${response.statusText}`;
-            throw new Error(errorMsg);
-        }
-        return data;
-    })
-    .then(data => {
-        hideLoading();
-
-        if (data.success) {
-            // Show success status
-            const statusDiv = document.getElementById(`status-${conflictIndex}`);
-            statusDiv.style.display = 'block';
-            statusDiv.innerHTML = `
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle"></i>
-                    <strong>✓ Resolved:</strong> ${getActionDescription(action)}
-                    ${data.results ? `<br><small class="text-muted">Results: ${JSON.stringify(data.results)}</small>` : ''}
-                </div>
-            `;
-
-            // Disable buttons for this conflict
-            const conflictContainer = document.querySelector(`[data-conflict-index="${conflictIndex}"]`);
-            if (conflictContainer) {
-                const buttons = conflictContainer.querySelectorAll('.btn');
-                buttons.forEach(btn => {
-                    btn.disabled = true;
-                    btn.classList.add('disabled');
-                });
-            }
-
-            resolvedCount++;
-            updateProgress();
-
-            // Check if all conflicts are resolved
-            if (resolvedCount === totalConflicts) {
-                showCompletionMessage();
-            }
-        } else {
-            throw new Error(data.error || 'Unknown error occurred');
-        }
-    })
-    .catch(error => {
-        hideLoading();
-        console.error('Error:', error);
-
-        // Show user-friendly error message
-        const statusDiv = document.getElementById(`status-${conflictIndex}`);
-        if (statusDiv) {
-            statusDiv.style.display = 'block';
-            statusDiv.innerHTML = `
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <strong>Error:</strong> Failed to resolve conflict. ${error.message}
-                    <br><small class="text-muted">Please try again or contact support if the problem persists.</small>
-                </div>
-            `;
-        } else {
-            alert(`Failed to resolve conflict: ${error.message}`);
-        }
-    });
-}
-
-function resolveAllConflicts(action) {
-    if (!confirm(`Are you sure you want to ${getActionDescription(action)} for all conflicts? This action cannot be undone.`)) {
-        return;
-    }
-
-    showLoading();
-
-    const resolutions = [];
-    for (let i = 0; i < totalConflicts; i++) {
-        resolutions.push({
-            conflict_index: i,
-            action: action,
-            apply_changes: ['guest_name', 'dates', 'status']
-        });
-    }
-
-    fetch(`/api/resolve-conflicts/{{ import_session_id }}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCsrfToken()
-        },
-        body: JSON.stringify({ resolutions: resolutions })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        hideLoading();
-
-        if (data.success) {
-            // Show success message
-            const summary = document.createElement('div');
-            summary.className = 'alert alert-success mt-4';
-            summary.setAttribute('role', 'alert');
-            summary.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <strong>Success!</strong> All conflicts resolved successfully!
-                ${data.results ? `<br><small class="text-muted">Results: ${JSON.stringify(data.results)}</small>` : ''}
-                <br><a href="/admin/api/bookingimportlog/" class="btn btn-sm btn-outline-success mt-2">Return to Import Logs</a>
-            `;
-
-            // Replace bulk actions with success message
-            const bulkActions = document.querySelector('.bulk-actions');
-            if (bulkActions) {
-                bulkActions.innerHTML = '';
-                bulkActions.appendChild(summary);
-            }
-
-            // Disable all individual conflict buttons
-            document.querySelectorAll('.conflict-container .btn').forEach(btn => {
-                btn.disabled = true;
-                btn.classList.add('disabled');
-            });
-
-        } else {
-            throw new Error(data.error || 'Unknown error occurred');
-        }
-    })
-    .catch(error => {
-        hideLoading();
-        console.error('Error:', error);
-
-        // Show error message
-        const bulkActions = document.querySelector('.bulk-actions');
-        if (bulkActions) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'alert alert-danger mt-3';
-            errorDiv.setAttribute('role', 'alert');
-            errorDiv.innerHTML = `
-                <i class="fas fa-exclamation-triangle"></i>
-                <strong>Error:</strong> Failed to resolve all conflicts. ${error.message}
-                <br><small class="text-muted">Please try resolving conflicts individually or contact support.</small>
-            `;
-            bulkActions.appendChild(errorDiv);
-        } else {
-            alert(`Failed to resolve conflicts: ${error.message}`);
-        }
-    });
-}
-
-function previewResolution(conflictIndex) {
-    fetch(`/api/preview-conflict/{{ import_session_id }}/${conflictIndex}/`)
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showPreviewModal(data.preview);
-        } else {
-            alert('Error previewing resolution: ' + data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to preview resolution.');
-    });
-}
-
-function showPreviewModal(preview) {
-    // Simple preview - could be enhanced with a proper modal
-    const changes = preview.changes_summary;
-    let message = 'Preview of changes:\n\n';
-    
-    for (const [field, change] of Object.entries(changes)) {
-        message += `${field.toUpperCase()}:\n`;
-        message += `  Current: ${JSON.stringify(change.current)}\n`;
-        message += `  New: ${JSON.stringify(change.excel)}\n\n`;
-    }
-    
-    alert(message);
-}
-
-function getActionDescription(action) {
-    switch (action) {
-        case 'update_existing':
-            return 'update existing booking with Excel data';
-        case 'create_new':
-            return 'create new booking from Excel data';
-        case 'skip':
-            return 'skip this conflict (no changes)';
-        default:
-            return action;
-    }
-}
-
-function showCompletionMessage() {
-    const summary = document.createElement('div');
-    summary.className = 'resolution-summary';
-    summary.innerHTML = `
-        <h3>🎉 All Conflicts Resolved!</h3>
-        <p>All ${totalConflicts} conflicts have been successfully resolved.</p>
-        <a href="/admin/api/bookingimportlog/" class="btn btn-primary">
-            Back to Import Logs
-        </a>
-    `;
-    
-    document.querySelector('.bulk-actions').appendChild(summary);
-}
-
-function getCsrfToken() {
-    return document.querySelector('[name=csrfmiddlewaretoken]').value;
-}
+// Define import session ID for use in external JS
+window.importSessionId = '{{ import_session_id }}';
 </script>
+<script src="{% static 'js/pages/admin-conflict-resolution.js' %}"></script>
 
 {% csrf_token %}
 {% endblock %}
