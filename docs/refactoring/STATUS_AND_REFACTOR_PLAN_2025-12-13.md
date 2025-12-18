@@ -40,6 +40,7 @@ New since starting the Portal phase:
 New since the Admin/Manager phase:
 - Admin: extract enhanced excel import CSS/JS (moved to `static/css/pages/admin-enhanced-excel-import.css` + `static/js/pages/admin-enhanced-excel-import.js`)
 - Admin: externalize charts dashboard CSS/JS (moved to `static/css/pages/admin-charts-dashboard.css` + `static/js/pages/admin-charts-dashboard.js`)
+- Admin: externalize admin base site shell (moved to `static/css/pages/admin-base-site.css` + `static/js/pages/admin-base-site.js`)
 - Manager: extract manager admin index CSS/JS (moved to `static/css/pages/manager-admin-index.css` + `static/js/pages/manager-admin-index.js`)
 - Shared layouts: moved inline layout CSS/scripts to `static/css/pages/layout-*.css` and `static/js/core/alerts.js`
 
@@ -144,7 +145,7 @@ Notes:
 
 Inline `onclick=` hotspots (top results):
 - `photo_upload.html` (8)
-- `admin/file_cleanup.html` (7)
+- `admin/file_cleanup.html` (7) ✅ completed (extracted to `static/css/pages/admin-file-cleanup.css` + `static/js/pages/admin-file-cleanup.js`)
 - `admin/conflict_resolution.html` (7)
 - `admin/system_logs.html` (5)
 - `chat/chatbox.html` (4)
@@ -152,7 +153,7 @@ Inline `onclick=` hotspots (top results):
 - `admin/permission_management.html` (4)
 
 Inline `style=` hotspots (top results):
-- `admin/base_site.html` (41)
+- `admin/base_site.html` (41) ✅ completed (extracted to `static/css/pages/admin-base-site.css` + `static/js/pages/admin-base-site.js`)
 - `admin/system_recovery.html` (36)
 - `admin/system_metrics.html` (24)
 - `invite_codes/list.html` (22)
@@ -166,7 +167,7 @@ Inline `<style>` blocks still present (not exhaustive):
 - `registration/register.html`, `photo_upload.html`, `photo_management.html`, `photo_comparison.html`, `manager_admin/login.html`, `manager_admin/base_site.html`, `invite_codes/base.html`, `chat/chatbox.html`, `calendar/calendar_view.html`, plus some admin templates.
 
 Inline `<script>` blocks still present (excluding external `src=` and JSON script tags):
-- `admin/base_site.html` (2)
+- `admin/base_site.html` (2) ✅ completed (extracted to `static/js/pages/admin-base-site.js`)
 - `registration/register.html`, `photo_upload.html`, `photo_management.html`, `photo_comparison.html`, `invite_codes/*`, `chat/chatbox.html`, `calendar/calendar_view.html`, plus some admin templates.
 
 Portal templates: ✅ no remaining inline styles/handlers/scripts detected in the portal set.
@@ -184,6 +185,7 @@ These affect many pages and should be addressed early.
 
 ✅ Completed:
 - `layouts/public_layout.html`, `layouts/portal_layout.html`, `layouts/admin_layout.html`, and the shared base templates now use extracted CSS and external scripts.
+- `admin/base_site.html` (now external CSS/JS, no inline styles/scripts/handlers)
 - Extracted assets live in `static/css/pages/layout-public.css`, `static/css/pages/layout-portal.css`, `static/css/pages/layout-admin.css`, and `static/js/core/alerts.js`.
 
 ### 3.3 Portal templates (medium priority, user-facing)
@@ -208,7 +210,7 @@ Note: portal templates no longer have inline `on*=` handlers detected; remaining
 These are the largest sources of `onclick=` and inline `style=`.
 
 **Inline onclick hotspots**
-- aristay_backend/api/templates/admin/file_cleanup.html (7)
+- aristay_backend/api/templates/admin/file_cleanup.html (7) ✅ completed (CSS: `static/css/pages/admin-file-cleanup.css`, JS: `static/js/pages/admin-file-cleanup.js`)
 - aristay_backend/api/templates/admin/conflict_resolution.html (7)
 - aristay_backend/api/templates/photo_upload.html (10)
 
