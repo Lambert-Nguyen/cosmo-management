@@ -117,6 +117,13 @@
     .loading {
         opacity: 0.6;
     }
+
+    /* Refactored Inline Styles */
+    .empty-state-row td {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+    }
 </style>
 {% endblock %}
 
@@ -194,8 +201,8 @@
                     </td>
                 </tr>
                 {% empty %}
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 40px; color: #666;">
+                <tr class="empty-state-row">
+                    <td colspan="6">
                         No recent security events
                     </td>
                 </tr>
@@ -245,7 +252,7 @@
         tbody.innerHTML = '';
         
         if (events.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: #666;">No recent security events</td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="6">No recent security events</td></tr>';
             return;
         }
         

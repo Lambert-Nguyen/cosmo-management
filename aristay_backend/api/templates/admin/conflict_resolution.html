@@ -27,11 +27,11 @@
 </div>
 
 <div class="progress-container">
-    <h4 style="margin: 0 0 10px 0; color: #495057;">📈 Resolution Progress</h4>
+    <h4 class="progress-section-title">📈 Resolution Progress</h4>
     <div class="progress-bar">
-        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        <div class="progress-fill" id="progressFill" data-progress="0"></div>
     </div>
-    <p id="progressText" style="margin: 10px 0 0 0; color: #6c757d; font-weight: 500;">0 of {{ conflicts|length }} resolved</p>
+    <p id="progressText" class="progress-text">0 of {{ conflicts|length }} resolved</p>
 </div>
 
 {% if conflicts %}
@@ -119,7 +119,7 @@
     </div>
     {% endfor %}
     
-    <div class="bulk-actions" style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 5px;">
+    <div class="bulk-actions">
         <h4>Bulk Actions</h4>
         <div class="resolution-buttons">
             <button class="btn btn-primary" data-action="bulk-update">

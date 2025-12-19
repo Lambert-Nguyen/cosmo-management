@@ -237,15 +237,35 @@
             padding: var(--spacing-xl);
             margin: var(--spacing-sm);
         }
-        
+
         .login-logo {
             width: 60px;
             height: 60px;
         }
-        
+
         .login-title {
             font-size: 1.5rem;
         }
+    }
+
+    /* Refactored Inline Styles */
+    .portal-link {
+        color: #60a5fa;
+        text-decoration: underline;
+    }
+
+    .register-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .register-link:hover {
+        text-decoration: underline;
+    }
+
+    .login-footer .copyright {
+        margin-top: 1rem;
     }
     </style>
 </head>
@@ -269,7 +289,7 @@
                 <div class="{% if message.tags == 'error' %}error-message{% else %}success-message{% endif %}">
                     {{ message }}
                     {% if 'Access Denied' in message %}
-                        <br><a href="/api/portal/" style="color: #60a5fa; text-decoration: underline;">Go to Portal →</a>
+                        <br><a href="/api/portal/" class="portal-link">Go to Portal →</a>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -303,8 +323,8 @@
         </form>
 
         <div class="login-footer">
-            <p>Need an account? <a href="/register/" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Register with invite code</a></p>
-            <p style="margin-top: 1rem;">&copy; 2025 AriStay. All rights reserved.</p>
+            <p>Need an account? <a href="/register/" class="register-link">Register with invite code</a></p>
+            <p class="copyright">&copy; 2025 AriStay. All rights reserved.</p>
         </div>
     </div>
 </body>

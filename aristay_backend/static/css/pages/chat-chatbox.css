@@ -358,3 +358,10 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+/* ==================== Refactored Inline Styles ==================== */
+
+/* Hidden Utility */
+.hidden {
+    display: none !important;
+}

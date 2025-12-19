@@ -17,7 +17,7 @@
     </div>
 
     <!-- Status Indicator -->
-    <div style="text-align: center; margin-bottom: 30px;">
+    <div class="status-indicator-wrapper">
         {% if global_enabled %}
             <div class="status-indicator status-enabled">
                 ✅ Email Digest Enabled
@@ -79,7 +79,7 @@
             <p class="card-description">
                 Preview what the digest would look like without actually sending emails. Useful for testing template changes.
             </p>
-            <button type="button" class="btn btn-warning" onclick="testDigest()" {% if not global_enabled %}disabled{% endif %}>
+            <button type="button" class="btn btn-warning" data-action="test-digest" {% if not global_enabled %}disabled{% endif %}>
                 Run Test
             </button>
         </div>
@@ -100,7 +100,7 @@
     </div>
 
     <!-- Results Container -->
-    <div id="results-container" style="display: none; margin-top: 30px; padding: 20px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+    <div id="results-container" class="results-container hidden">
         <h3>Results</h3>
         <div id="results-content"></div>
     </div>
@@ -113,13 +113,21 @@
 </div>
 
 <script>
+// Event delegation for test digest button
+document.addEventListener('click', function(e) {
+    const testBtn = e.target.closest('[data-action="test-digest"]');
+    if (testBtn && !testBtn.disabled) {
+        testDigest();
+    }
+});
+
 // Send Digest Form Handler
 document.getElementById('sendDigestForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const testMode = document.getElementById('testMode').checked;
     showLoading();
-    
+
     fetch('', {
         method: 'POST',
         headers: {
@@ -148,7 +156,7 @@ document.getElementById('sendDigestForm').addEventListener('submit', function(e)
 // Test Digest Function
 function testDigest() {
     showLoading();
-    
+
     fetch('', {
         method: 'POST',
         headers: {
@@ -186,11 +194,11 @@ function hideLoading() {
 function showResults(data) {
     const resultsContainer = document.getElementById('results-container');
     const resultsContent = document.getElementById('results-content');
-    
+
     let html = '';
     if (data.success) {
         html = `
-            <div style="color: #166534; background: #dcfce7; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+            <div class="result-message result-message-success">
                 ✅ ${data.message}
             </div>
         `;
@@ -199,18 +207,18 @@ function showResults(data) {
         }
     } else {
         html = `
-            <div style="color: #991b1b; background: #fee2e2; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+            <div class="result-message result-message-error">
                 ❌ ${data.error || data.message || 'Unknown error occurred'}
             </div>
         `;
     }
-    
+
     resultsContent.innerHTML = html;
-    resultsContainer.style.display = 'block';
-    
+    resultsContainer.classList.remove('hidden');
+
     // Auto-hide results after 10 seconds
     setTimeout(() => {
-        resultsContainer.style.display = 'none';
+        resultsContainer.classList.add('hidden');
     }, 10000);
 }
 </script>

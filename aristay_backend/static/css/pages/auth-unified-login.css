@@ -308,3 +308,51 @@ body::before {
         transform: rotate(360deg);
     }
 }
+
+/* ==================== Refactored Inline Styles ==================== */
+
+/* Help Text Variants */
+.help-text-first {
+    margin-top: 14px;
+}
+
+.help-text-secondary {
+    margin-top: 10px;
+}
+
+/* Footer Styles */
+.login-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.login-footer-text {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.login-footer-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-footer-link:hover {
+    text-decoration: underline;
+}
+
+.login-footer-subtext {
+    margin: 0.3rem 0 0 0;
+    color: #6c757d;
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
