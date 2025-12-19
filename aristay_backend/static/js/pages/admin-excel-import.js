@@ -1,26 +1,24 @@
 /**
  * Admin Excel Import Page JavaScript
+ * Refactored to use event delegation (no inline handlers)
  */
 
-// Mobile-Optimized File Handling
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const fileInfo = document.getElementById('fileInfo');
-        const importForm = document.getElementById('importForm');
-
-        fileInfo.innerHTML = `
-            <strong>Selected File:</strong> ${file.name}<br>
-            <strong>Size:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
-            <strong>Type:</strong> ${file.type}
-        `;
-        fileInfo.classList.add('show');
-        importForm.style.display = 'block';
-    }
-}
-
-// Mobile-Optimized Form Submission
 document.addEventListener('DOMContentLoaded', function() {
+    // File input handling via event delegation
+    const excelFileInput = document.getElementById('excelFile');
+    if (excelFileInput) {
+        excelFileInput.addEventListener('change', handleFileSelect);
+    }
+
+    // Import log toggle via event delegation
+    document.addEventListener('click', function(e) {
+        const toggleBtn = e.target.closest('[data-action="toggle-import-log"]');
+        if (toggleBtn) {
+            toggleImportLog();
+        }
+    });
+
+    // Form submission handling
     const importFormEl = document.getElementById('importForm');
     if (importFormEl) {
         importFormEl.addEventListener('submit', function(e) {
@@ -32,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Importing...';
-            progressBar.style.display = 'block';
+            progressBar.classList.remove('hidden');
 
             // Simulate progress (in real implementation, this would be AJAX)
             let progress = 0;
@@ -54,11 +52,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Mobile-Optimized File Handling
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const fileInfo = document.getElementById('fileInfo');
+        const importForm = document.getElementById('importForm');
+
+        fileInfo.innerHTML = `
+            <strong>Selected File:</strong> ${file.name}<br>
+            <strong>Size:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
+            <strong>Type:</strong> ${file.type}
+        `;
+        fileInfo.classList.add('show');
+        importForm.classList.remove('hidden');
+    }
+}
+
 // Mobile-Optimized Import Log Toggle
 function toggleImportLog() {
     const importLog = document.getElementById('importLog');
-    const isVisible = importLog.style.display !== 'none';
-    importLog.style.display = isVisible ? 'none' : 'block';
+    importLog.classList.toggle('hidden');
 }
 
 // Mobile Drag and Drop Support

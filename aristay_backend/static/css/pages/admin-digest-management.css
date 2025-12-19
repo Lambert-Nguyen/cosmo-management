@@ -263,3 +263,41 @@
         font-size: var(--font-size-xl);
     }
 }
+
+/* ==================== Refactored Inline Styles ==================== */
+
+/* Status Indicator Wrapper */
+.status-indicator-wrapper {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Results Container */
+.results-container {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.results-container.hidden {
+    display: none;
+}
+
+/* Result Messages */
+.result-message {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.result-message-success {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.result-message-error {
+    color: #991b1b;
+    background: #fee2e2;
+}

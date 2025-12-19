@@ -27,11 +27,11 @@
 
     <!-- Mobile-Optimized Upload Section -->
     <div class="upload-section" id="uploadSection">
-        <h3 style="margin-bottom: var(--space-3); color: var(--color-text);">📁 Upload Excel File</h3>
-        <p style="margin-bottom: var(--space-3); color: var(--color-text-secondary);">Drag and drop your Excel file here or click to browse</p>
+        <h3 class="upload-section-title">📁 Upload Excel File</h3>
+        <p class="upload-section-description">Drag and drop your Excel file here or click to browse</p>
 
         <div class="file-input-wrapper">
-            <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls" onchange="handleFileSelect(event)">
+            <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls">
             <label for="excelFile" class="upload-button">📁 Choose Excel File</label>
         </div>
 
@@ -39,15 +39,15 @@
     </div>
 
     <!-- Mobile-Optimized Import Form -->
-    <form class="import-form" id="importForm" style="display: none;">
+    <form class="import-form hidden" id="importForm">
         <div class="grid cols-1">
             <div>
-                <label for="sheetName" style="display: block; margin-bottom: var(--space-1); font-weight: var(--font-weight-semibold);">Sheet Name:</label>
+                <label for="sheetName" class="form-label-block">Sheet Name:</label>
                 <input type="text" id="sheetName" name="sheet_name" value="Cleaning schedule" readonly>
             </div>
 
             <div>
-                <label for="autoCreateTasks" style="display: block; margin-bottom: var(--space-1); font-weight: var(--font-weight-semibold);">Auto-Create Tasks:</label>
+                <label for="autoCreateTasks" class="form-label-block">Auto-Create Tasks:</label>
                 <select id="autoCreateTasks" name="auto_create_tasks">
                     <option value="true">✅ Yes - Create cleaning tasks automatically</option>
                     <option value="false">❌ No - Import bookings only</option>
@@ -61,17 +61,17 @@
     </form>
 
     <!-- Mobile-Optimized Progress Bar -->
-    <div class="progress-bar" id="progressBar">
+    <div class="progress-bar hidden" id="progressBar">
         <div class="progress-fill" id="progressFill"></div>
     </div>
 
     <!-- Mobile-Optimized Import Log Display -->
     {% if import_log %}
     <div class="recent-imports">
-        <h3 style="margin-bottom: var(--space-3); color: var(--color-text);">📊 Last Import Results</h3>
+        <h3 class="recent-imports-title">📊 Last Import Results</h3>
 
         <div class="import-log-item {% if import_log.errors_count == 0 %}success{% else %}error{% endif %}">
-            <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--space-2);">
+            <div class="import-log-item-header">
                 Import completed at {{ import_log.imported_at|date:"M d, Y H:i" }}
             </div>
 
@@ -85,11 +85,11 @@
             </div>
 
             {% if import_log.errors_log %}
-            <div style="margin-top: var(--space-3);">
-                <button class="btn btn-secondary btn-sm" onclick="toggleImportLog()">
+            <div class="import-log-toggle-wrapper">
+                <button class="btn btn-secondary btn-sm" data-action="toggle-import-log">
                     📋 View Details
                 </button>
-                <div class="import-log" id="importLog" style="display: none; margin-top: var(--space-2);">
+                <div class="import-log import-log-content hidden" id="importLog">
                     {{ import_log.errors_log|linebreaks }}
                 </div>
             </div>

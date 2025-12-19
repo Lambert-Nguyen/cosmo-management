@@ -451,3 +451,50 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+/* ==================== Refactored Inline Styles ==================== */
+
+/* Upload Section Title & Description */
+.upload-section-title {
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+}
+
+.upload-section-description {
+    margin-bottom: var(--space-3);
+    color: var(--color-text-secondary);
+}
+
+/* Form Labels (Block Display) */
+.form-label-block {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Recent Imports Section */
+.recent-imports-title {
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+}
+
+/* Import Log Item Header */
+.import-log-item-header {
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-2);
+}
+
+/* Import Log Toggle Container */
+.import-log-toggle-wrapper {
+    margin-top: var(--space-3);
+}
+
+/* Import Log Content (Collapsible) */
+.import-log-content {
+    margin-top: var(--space-2);
+}
+
+/* Utility: Hidden */
+.hidden {
+    display: none !important;
+}

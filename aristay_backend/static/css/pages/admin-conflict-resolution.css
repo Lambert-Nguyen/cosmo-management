@@ -236,3 +236,31 @@
         align-items: flex-start;
     }
 }
+
+/* ==================== Refactored Inline Styles ==================== */
+
+/* Progress Section Title */
+.progress-section-title {
+    margin: 0 0 10px 0;
+    color: #495057;
+}
+
+/* Progress Text */
+.progress-text {
+    margin: 10px 0 0 0;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Bulk Actions Container */
+.bulk-actions {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* Progress Fill Initial State (used with data-progress attribute) */
+.progress-fill[data-progress="0"] {
+    width: 0%;
+}
