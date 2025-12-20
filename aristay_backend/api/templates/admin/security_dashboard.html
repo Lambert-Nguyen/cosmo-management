@@ -128,7 +128,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="security-dashboard">
+<div class="security-dashboard" data-refresh-interval="{{ refresh_interval }}">
     <h1>Security Monitoring Dashboard</h1>
     <p>Real-time security events and system monitoring</p>
     
@@ -169,7 +169,7 @@
             <h2>Recent Security Events</h2>
             <div>
                 <span class="auto-refresh">Auto-refresh: {{ refresh_interval }}s</span>
-                <button class="refresh-btn" onclick="refreshData()">Refresh Now</button>
+                <button class="refresh-btn">Refresh Now</button>
             </div>
         </div>
         
@@ -212,90 +212,5 @@
     </div>
 </div>
 
-<script>
-    let refreshInterval;
-    
-    function refreshData() {
-        const dashboard = document.querySelector('.security-dashboard');
-        dashboard.classList.add('loading');
-        
-        fetch('{{ request.path }}', {
-            headers: {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            updateStats(data);
-            updateEvents(data.recent_events);
-            dashboard.classList.remove('loading');
-        })
-        .catch(error => {
-            console.error('Failed to refresh data:', error);
-            dashboard.classList.remove('loading');
-        });
-    }
-    
-    function updateStats(data) {
-        document.getElementById('successful-logins').textContent = data.login_stats.successful_logins_24h;
-        document.getElementById('failed-logins').textContent = data.login_stats.failed_logins_24h;
-        document.getElementById('active-sessions').textContent = data.session_stats.active_sessions;
-        document.getElementById('unique-users').textContent = data.session_stats.unique_users_24h;
-        document.getElementById('suspicious-ips').textContent = data.threat_stats.suspicious_ips;
-        document.getElementById('blocked-ips').textContent = data.threat_stats.blocked_ips;
-        document.getElementById('high-severity').textContent = data.threat_stats.high_severity_events;
-    }
-    
-    function updateEvents(events) {
-        const tbody = document.getElementById('events-tbody');
-        tbody.innerHTML = '';
-        
-        if (events.length === 0) {
-            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="6">No recent security events</td></tr>';
-            return;
-        }
-        
-        events.forEach(event => {
-            const row = document.createElement('tr');
-            const timestamp = new Date(event.created_at).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            
-            let details = '';
-            if (event.details && typeof event.details === 'object') {
-                for (const [key, value] of Object.entries(event.details)) {
-                    details += `<strong>${key}:</strong> ${value}<br>`;
-                }
-            }
-            
-            row.innerHTML = `
-                <td>${timestamp}</td>
-                <td><span class="event-type">${event.event_type}</span></td>
-                <td><span class="severity ${event.severity}">${event.severity}</span></td>
-                <td>${event.user || 'Anonymous'}</td>
-                <td>${event.ip_address}</td>
-                <td>${details}</td>
-            `;
-            
-            tbody.appendChild(row);
-        });
-    }
-    
-    // Set up auto-refresh
-    document.addEventListener('DOMContentLoaded', function() {
-        refreshInterval = setInterval(refreshData, {{ refresh_interval }}000);
-    });
-    
-    // Clear interval when leaving the page
-    window.addEventListener('beforeunload', function() {
-        if (refreshInterval) {
-            clearInterval(refreshInterval);
-        }
-    });
-</script>
+<script src="{% static 'js/pages/admin-security-dashboard.js' %}"></script>
 {% endblock %}
