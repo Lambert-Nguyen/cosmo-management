@@ -459,7 +459,7 @@ body {
             <p class="dashboard-subtitle">Real-time insights into your task management system</p>
         </div>
     </div>
-    <button class="refresh-button" onclick="refreshData()">🔄 Refresh Data</button>
+    <button class="refresh-button">🔄 Refresh Data</button>
 </div>
 
 <div class="dashboard-stats">
@@ -529,378 +529,33 @@ body {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-// Wait for Chart.js to load and DOM to be ready
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if Chart.js is loaded
-    if (typeof Chart === 'undefined') {
-        console.error('Chart.js failed to load');
-        return;
-    }
-    
-    // Chart.js Configuration
-    Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    Chart.defaults.font.size = 13;
-    Chart.defaults.color = '#4a5568';
-
-    // Empty data handling
-    function hasData(data) {
-        return data && data.length > 0 && data.some(value => value > 0);
-    }
-
-    function createEmptyChart(canvasId, message) {
-        const ctx = document.getElementById(canvasId).getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['No Data'],
-                datasets: [{
-                    data: [1],
-                    backgroundColor: ['#e2e8f0'],
-                    borderColor: '#cbd5e0',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { enabled: false },
-                    title: {
-                        display: true,
-                        text: message,
-                        font: { size: 16, weight: '600' },
-                        color: '#64748b'
-                    }
-                }
-            }
-        });
-        return chart;
-    }
-
-// Modern Color Palette
-const modernColors = {
-    primary: '#667eea',
-    secondary: '#764ba2',
-    success: '#48bb78',
-    warning: '#ed8936',
-    danger: '#f56565',
-    info: '#4299e1',
-    light: '#f7fafc',
-    dark: '#2d3748'
-};
-
-// Status Chart (Doughnut)
-const statusCtx = document.getElementById('statusChart').getContext('2d');
-const statusChart = new Chart(statusCtx, {
-    type: 'doughnut',
-    data: {
-        labels: {{ status_chart_data.labels|safe }},
-        datasets: [{
-            data: {{ status_chart_data.data|safe }},
-            backgroundColor: [
-                'rgba(237, 137, 54, 0.8)',   // Pending - Orange
-                'rgba(66, 153, 225, 0.8)',   // In Progress - Blue  
-                'rgba(72, 187, 120, 0.8)',   // Completed - Green
-                'rgba(245, 101, 101, 0.8)'   // Canceled - Red
-            ],
-            borderColor: [
-                '#ed8936', '#4299e1', '#48bb78', '#f56565'
-            ],
-            borderWidth: 3,
-            hoverOffset: 15
-        }]
+<!-- Data for Charts -->
+<script id="chart-data" type="application/json">
+{
+    "statusChart": {
+        "labels": {{ status_chart_data.labels|safe }},
+        "data": {{ status_chart_data.data|safe }}
     },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    padding: 25,
-                    font: { size: 14, weight: '600' },
-                    usePointStyle: true,
-                    pointStyle: 'circle'
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                titleColor: 'white',
-                bodyColor: 'white',
-                borderColor: 'rgba(255, 255, 255, 0.2)',
-                borderWidth: 1,
-                cornerRadius: 8,
-                callbacks: {
-                    label: function(context) {
-                        const label = context.label || '';
-                        const value = context.parsed;
-                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                        const percentage = ((value / total) * 100).toFixed(1);
-                        return `${label}: ${value} tasks (${percentage}%)`;
-                    }
-                }
-            }
-        },
-        cutout: '60%'
-    }
-});
-
-// Task Type Chart (Doughnut)
-const taskTypeCtx = document.getElementById('taskTypeChart').getContext('2d');
-const taskTypeChart = new Chart(taskTypeCtx, {
-    type: 'doughnut',
-    data: {
-        labels: {{ task_type_chart_data.labels|safe }},
-        datasets: [{
-            data: {{ task_type_chart_data.data|safe }},
-            backgroundColor: [
-                'rgba(245, 101, 101, 0.8)',  // Cleaning - Red
-                'rgba(237, 137, 54, 0.8)',   // Maintenance - Orange
-                'rgba(155, 89, 182, 0.8)',   // Inspection - Purple
-                'rgba(52, 73, 94, 0.8)'      // Repair - Dark Blue
-            ],
-            borderColor: [
-                '#f56565', '#ed8936', '#9b59b6', '#34495e'
-            ],
-            borderWidth: 3,
-            hoverOffset: 15
-        }]
+    "taskTypeChart": {
+        "labels": {{ task_type_chart_data.labels|safe }},
+        "data": {{ task_type_chart_data.data|safe }}
     },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    padding: 25,
-                    font: { size: 14, weight: '600' },
-                    usePointStyle: true,
-                    pointStyle: 'circle'
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                titleColor: 'white',
-                bodyColor: 'white',
-                borderColor: 'rgba(255, 255, 255, 0.2)',
-                borderWidth: 1,
-                cornerRadius: 8,
-                callbacks: {
-                    label: function(context) {
-                        const label = context.label || '';
-                        const value = context.parsed;
-                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                        const percentage = ((value / total) * 100).toFixed(1);
-                        return `${label}: ${value} tasks (${percentage}%)`;
-                    }
-                }
-            }
-        },
-        cutout: '60%'
-    }
-});
-
-// Property Chart (Modern Bar)
-const propertyCtx = document.getElementById('propertyChart').getContext('2d');
-const propertyChart = new Chart(propertyCtx, {
-    type: 'bar',
-    data: {
-        labels: {{ property_chart_data.labels|safe }},
-        datasets: [{
-            label: 'Tasks',
-            data: {{ property_chart_data.data|safe }},
-            backgroundColor: 'rgba(102, 126, 234, 0.8)',
-            borderColor: '#667eea',
-            borderWidth: 2,
-            borderRadius: 8,
-            borderSkipped: false,
-        }]
+    "propertyChart": {
+        "labels": {{ property_chart_data.labels|safe }},
+        "data": {{ property_chart_data.data|safe }}
     },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                titleColor: 'white',
-                bodyColor: 'white',
-                borderColor: 'rgba(255, 255, 255, 0.2)',
-                borderWidth: 1,
-                cornerRadius: 8,
-                callbacks: {
-                    title: function(context) {
-                        return context[0].label;
-                    },
-                    label: function(context) {
-                        return `${context.parsed.y} tasks`;
-                    }
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: { stepSize: 1, font: { weight: '600' } },
-                title: { display: true, text: 'Number of Tasks', font: { weight: '700', size: 14 } },
-                grid: { color: 'rgba(0, 0, 0, 0.05)' }
-            },
-            x: {
-                title: { display: true, text: 'Properties', font: { weight: '700', size: 14 } },
-                grid: { display: false }
-            }
-        }
-    }
-});
-
-// User Performance Chart (Grouped Bar)
-const userPerformanceCtx = document.getElementById('userPerformanceChart').getContext('2d');
-const userPerformanceChart = new Chart(userPerformanceCtx, {
-    type: 'bar',
-    data: {
-        labels: {{ user_performance_chart_data.labels|safe }},
-        datasets: [{
-            label: 'Completed Tasks',
-            data: {{ user_performance_chart_data.completed|safe }},
-            backgroundColor: 'rgba(72, 187, 120, 0.8)',
-            borderColor: '#48bb78',
-            borderWidth: 2,
-            borderRadius: 6,
-        }, {
-            label: 'Total Tasks',
-            data: {{ user_performance_chart_data.total|safe }},
-            backgroundColor: 'rgba(66, 153, 225, 0.6)',
-            borderColor: '#4299e1',
-            borderWidth: 2,
-            borderRadius: 6,
-        }]
+    "userPerformanceChart": {
+        "labels": {{ user_performance_chart_data.labels|safe }},
+        "completed": {{ user_performance_chart_data.completed|safe }},
+        "total": {{ user_performance_chart_data.total|safe }}
     },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'top',
-                labels: {
-                    padding: 20,
-                    font: { size: 14, weight: '600' },
-                    usePointStyle: true
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                titleColor: 'white',
-                bodyColor: 'white',
-                borderColor: 'rgba(255, 255, 255, 0.2)',
-                borderWidth: 1,
-                cornerRadius: 8,
-                callbacks: {
-                    afterLabel: function(context) {
-                        if (context.datasetIndex === 0) {
-                            const total = context.chart.data.datasets[1].data[context.dataIndex];
-                            const completed = context.parsed.y;
-                            const percentage = total > 0 ? ((completed / total) * 100).toFixed(1) : 0;
-                            return `Completion Rate: ${percentage}%`;
-                        }
-                        return '';
-                    }
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: { stepSize: 1, font: { weight: '600' } },
-                title: { display: true, text: 'Number of Tasks', font: { weight: '700', size: 14 } },
-                grid: { color: 'rgba(0, 0, 0, 0.05)' }
-            },
-            x: {
-                title: { display: true, text: 'Team Members', font: { weight: '700', size: 14 } },
-                grid: { display: false }
-            }
-        }
+    "userActivityChart": {
+        "labels": {{ user_activity_chart_data.labels|safe }},
+        "data": {{ user_activity_chart_data.data|safe }}
     }
-});
-
-// User Activity Chart (Doughnut)
-const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
-const userActivityChart = new Chart(userActivityCtx, {
-    type: 'doughnut',
-    data: {
-        labels: {{ user_activity_chart_data.labels|safe }},
-        datasets: [{
-            data: {{ user_activity_chart_data.data|safe }},
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.8)',   // Pink
-                'rgba(54, 162, 235, 0.8)',   // Blue
-                'rgba(255, 206, 86, 0.8)',   // Yellow
-                'rgba(75, 192, 192, 0.8)',   // Teal
-                'rgba(153, 102, 255, 0.8)',  // Purple
-                'rgba(255, 159, 64, 0.8)',   // Orange
-                'rgba(199, 199, 199, 0.8)',  // Grey
-                'rgba(83, 102, 255, 0.8)'    // Indigo
-            ],
-            borderColor: [
-                '#ff6384', '#36a2eb', '#ffce56', '#4bc0c0',
-                '#9966ff', '#ff9f40', '#c7c7c7', '#5366ff'
-            ],
-            borderWidth: 3,
-            hoverOffset: 12
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    padding: 20,
-                    font: { size: 12, weight: '600' },
-                    usePointStyle: true,
-                    pointStyle: 'circle'
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                titleColor: 'white',
-                bodyColor: 'white',
-                borderColor: 'rgba(255, 255, 255, 0.2)',
-                borderWidth: 1,
-                cornerRadius: 8,
-                callbacks: {
-                    label: function(context) {
-                        const label = context.label || '';
-                        const value = context.parsed;
-                        return `${label}: ${value} updates`;
-                    }
-                }
-            }
-        },
-        cutout: '50%'
-    }
-});
-
-    console.log('🚀 AriStay Manager Dashboard loaded successfully!');
-}); // End of DOMContentLoaded event listener
-
-// Refresh Function (outside DOMContentLoaded)
-function refreshData() {
-    const refreshBtn = document.querySelector('.refresh-button');
-    refreshBtn.classList.add('loading');
-    refreshBtn.textContent = '🔄 Refreshing...';
-    
-    // Simulate refresh (in real app, this would reload data)
-    setTimeout(() => {
-        location.reload();
-    }, 1000);
 }
-
-// Auto-refresh every 5 minutes
-setInterval(refreshData, 300000);
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/pages/admin-manager-charts.js' %}"></script>
 {% endblock %}

@@ -1,6 +1,6 @@
-# Django UI Refactor — Status & Plan (2025-12-18)
+# Django UI Refactor — Status & Plan (2025-12-20)
 
-**Date**: December 18, 2025
+**Date**: December 20, 2025
 **Scope**: Django templates + static assets refactor across all UI surfaces (Staff, Portal, Admin, Manager), removing inline JS/event handlers and inline CSS while keeping the test suite green.
 **UI Consistency Goal**: Ensure consistent design language across all pages using the established design system (design-system.css, components.css).
 
@@ -15,18 +15,17 @@
 - Maintain **green tests** as the non‑negotiable quality gate.
 
 ### 1.1.1 Overall Progress
-**Completion Status: ~75%** (Staff & Portal: 100%, Admin/Manager: ~40%)
+**Completion Status: ~95%** (Staff, Portal, Admin, Manager assets created. Some inline handlers remain in templates.)
 
-**Current Baseline (as of 2025-12-18):**
-- ✅ **31 CSS page files created** in `static/css/pages/`
-- ✅ **18 JS page modules created** in `static/js/pages/`
+**Current Baseline (as of 2025-12-20):**
+- ✅ **All CSS page files created** in `static/css/pages/` (Admin, Manager, Shared included)
+- ✅ **All JS page modules created** in `static/js/pages/` (Admin, Manager, Shared included)
 - ✅ **Design system established** with consistent tokens and components
-- 📊 **Remaining work**: 67 inline event handlers, 202 inline style attributes, 35 inline `<style>` blocks
+- 📊 **Remaining work**: ~35 inline event handlers (mostly in `calendar_view.html`, `permission_management.html`, `chatbox.html`), ~27 inline style attributes.
 
 ### 1.2 Quality gate confirmation
-- Pytest ran successfully after the most recent refactor chunks (staff shell/pages/dashboards/checklists/components/task detail), using:
-  - `pytest -q`
-- Result: **100% pass** (warnings only).
+- **Test Environment Issue**: Local Postgres connection refused. Tests cannot be run to verify quality.
+- **Manual Inspection**: Completed files (`task_detail`, `photo_upload`) show high quality code structure (ES modules, CSS extraction).
 
 ### 1.3 Recent commits (this refactor stream)
 
@@ -180,522 +179,145 @@ This backlog list is based on repository scans for:
 
 ### 3.1 Remaining Work: Admin System Management (Priority 1 - High Impact)
 
-**Total**: 36 + 24 + 11 = 71 inline styles, 5 + 1 = 6 handlers
+**Status**: Mostly Complete. Assets created.
 
-| File | Inline Styles | Inline Handlers | Priority | Notes |
-|------|--------------|-----------------|----------|--------|
-| `admin/system_recovery.html` | 36 | 2 | HIGH | System recovery interface |
-| `admin/system_metrics.html` | 24 | 1 | HIGH | Metrics dashboard |
-| `admin/system_logs.html` | 11 | 5 | HIGH | Log viewer |
+| File | Status | Notes |
+|------|--------|-------|
+| `admin/system_recovery.html` | ✅ DONE | Refactored. |
+| `admin/system_metrics.html` | 🟡 PARTIAL | 3 dynamic inline styles remain (progress bars). |
+| `admin/system_logs.html` | ✅ DONE | Refactored. |
 
 **Target Assets:**
-- CSS: `static/css/pages/admin-system-recovery.css`, `admin-system-metrics.css`, `admin-system-logs.css`
-- JS: `static/js/pages/admin-system-recovery.js`, `admin-system-metrics.js`, `admin-system-logs.js`
+- CSS: `static/css/pages/admin-system-recovery.css`, `admin-system-metrics.css`, `admin-system-logs.css` (Created)
+- JS: `static/js/pages/admin-system-recovery.js`, `admin-system-metrics.js`, `admin-system-logs.js` (Created)
 
 ---
 
 ### 3.2 Remaining Work: Photo Management (Priority 2 - Critical Shared Feature)
 
-**Total**: 12 + 6 = 18 inline styles, 10 + 3 + 2 = 15 handlers
+**Status**: Complete.
 
-| File | Inline Styles | Inline Handlers | Priority | Notes |
-|------|--------------|-----------------|----------|--------|
-| `photo_upload.html` | 12 | 10 | HIGH | Highest handler count remaining |
-| `photo_management.html` | 6 | 3 | MEDIUM | Photo management UI |
-| `photo_comparison.html` | 0 | 2 | MEDIUM | Photo comparison tool |
+| File | Status | Notes |
+|------|--------|-------|
+| `photo_upload.html` | ✅ DONE | Refactored. |
+| `photo_management.html` | ✅ DONE | Refactored. |
+| `photo_comparison.html` | ✅ DONE | Refactored. |
 
 **Target Assets:**
-- CSS: `static/css/pages/photo-upload.css`, `photo-management.css`, `photo-comparison.css`
-- JS: `static/js/pages/photo-upload.js`, `photo-management.js`, `photo-comparison.js`
+- CSS: `static/css/pages/photo-upload.css`, `photo-management.css`, `photo-comparison.css` (Created)
+- JS: `static/js/pages/photo-upload.js`, `photo-management.js`, `photo-comparison.js` (Created)
 
 ---
 
 ### 3.3 Remaining Work: Invite Code System (Priority 3)
 
-**Total**: 22 + 16 + 8 = 46 inline styles, 4 + 1 + 3 = 8 handlers
+**Status**: Complete.
 
-| File | Inline Styles | Inline Handlers | Priority | Notes |
-|------|--------------|-----------------|----------|--------|
-| `invite_codes/list.html` | 22 | 4 | MEDIUM | Invite code listing |
-| `invite_codes/create.html` | 16 | 1 | MEDIUM | Create new invite codes |
-| `admin/invite_code_detail.html` | 8 | 3 | MEDIUM | Detail/edit view |
-| `admin/invite_code_list.html` | 3 | 2 | LOW | Alternative list view |
-| `admin/create_invite_code.html` | 0 | 3 | LOW | Admin create view |
-| `admin/edit_invite_code.html` | 5 | 0 | LOW | Admin edit view |
-| `admin/invite_codes.html` | 0 | 2 | LOW | Admin index |
+| File | Status | Notes |
+|------|--------|-------|
+| `invite_codes/list.html` | ✅ DONE | Refactored. |
+| `invite_codes/create.html` | ✅ DONE | Refactored. |
+| `admin/invite_code_detail.html` | ✅ DONE | Refactored. |
+| `admin/invite_code_list.html` | ✅ DONE | Refactored. |
+| `admin/create_invite_code.html` | ✅ DONE | Refactored. |
+| `admin/edit_invite_code.html` | ✅ DONE | Refactored. |
+| `admin/invite_codes.html` | ✅ DONE | Refactored. |
 
 **Target Assets:**
-- CSS: `static/css/pages/invite-codes-list.css`, `invite-codes-create.css`, `admin-invite-code-detail.css`
-- JS: `static/js/pages/invite-codes-list.js`, `invite-codes-create.js`, `admin-invite-code-detail.js`
+- CSS: `static/css/pages/invite-codes-list.css`, etc. (Created)
+- JS: `static/js/pages/invite-codes-list.js`, etc. (Created)
 
 ---
 
 ### 3.4 Remaining Work: Admin Access Control (Priority 4)
 
-**Total**: 5 inline styles, 7 + 4 + 3 = 14 handlers
+**Status**: Mostly Complete.
 
-| File | Inline Styles | Inline Handlers | Priority | Notes |
-|------|--------------|-----------------|----------|--------|
-| `admin/conflict_resolution.html` | 5 | 7 | MEDIUM | Data conflict resolution |
-| `admin/permission_management.html` | 0 | 4 | MEDIUM | Permission editor |
-| `admin/property_approval.html` | 0 | 3 | MEDIUM | Property approval workflow |
+| File | Status | Notes |
+|------|--------|-------|
+| `admin/conflict_resolution.html` | ✅ DONE | Refactored. |
+| `admin/permission_management.html` | 🔴 PARTIAL | 4 inline handlers in JS template strings. |
+| `admin/property_approval.html` | ✅ DONE | Refactored. |
 
 **Target Assets:**
-- CSS: `static/css/pages/admin-conflict-resolution.css`, `admin-permission-management.css`, `admin-property-approval.css`
-- JS: `static/js/pages/admin-conflict-resolution.js`, `admin-permission-management.js`, `admin-property-approval.js`
+- CSS: `static/css/pages/admin-conflict-resolution.css`, etc. (Created)
+- JS: `static/js/pages/admin-conflict-resolution.js`, etc. (Created)
 
 ---
 
 ### 3.5 Remaining Work: Communication Tools (Priority 5)
 
-**Total**: 4 inline styles, 4 + 4 = 8 handlers
+**Status**: Partial.
 
-| File | Inline Styles | Inline Handlers | Priority | Notes |
-|------|--------------|-----------------|----------|--------|
-| `chat/chatbox.html` | 4 | 4 | MEDIUM | Chat interface |
-| `calendar/calendar_view.html` | 0 | 4 | MEDIUM | Calendar view |
+| File | Status | Notes |
+|------|--------|-------|
+| `chat/chatbox.html` | 🔴 PARTIAL | 4 inline handlers remain. |
+| `calendar/calendar_view.html` | 🔴 PARTIAL | 4 inline handlers remain. |
 
 **Target Assets:**
-- CSS: `static/css/pages/chat-chatbox.css`, `calendar-view.css`
-- JS: `static/js/pages/chat-chatbox.js`, `calendar-view.js`
+- CSS: `static/css/pages/chat-chatbox.css`, `calendar-view.css` (Created)
+- JS: `static/js/pages/chat-chatbox.js`, `calendar-view.js` (Created)
 
 ---
 
 ### 3.6 Remaining Work: Manager Admin & Other (Priority 6)
 
-**Total**: 9 + 9 + 5 + 5 + 4 = 32 inline styles, 2 + 1 = 3 handlers
+**Status**: Mostly Complete.
 
-| File | Inline Styles | Inline Handlers | Priority | Notes |
-|------|--------------|-----------------|----------|--------|
-| `manager_admin/base_site.html` | 9 | 0 | MEDIUM | Manager base layout |
-| `admin/excel_import.html` | 9 | 2 | LOW | Excel import tool |
-| `auth/unified_login.html` | 5 | 0 | LOW | Login page |
-| `admin/notification_management.html` | 5 | 0 | LOW | Notification settings |
-| `admin/digest_management.html` | 4 | 0 | LOW | Digest settings |
-| `admin/security_dashboard.html` | 0 | 1 | LOW | Security dashboard |
+| File | Status | Notes |
+|------|--------|-------|
+| `manager_admin/base_site.html` | ✅ DONE | Refactored. |
+| `admin/excel_import.html` | ✅ DONE | Refactored. |
+| `auth/unified_login.html` | ✅ DONE | Refactored. |
+| `admin/notification_management.html` | ✅ DONE | Refactored. |
+| `admin/digest_management.html` | ✅ DONE | Refactored. |
+| `admin/security_dashboard.html` | 🟡 PARTIAL | 1 inline handler remains. |
 
 **Target Assets:**
-- CSS: `static/css/pages/manager-admin-base-site.css`, `admin-excel-import.css`, etc.
-- JS: `static/js/pages/manager-admin-base-site.js`, `admin-excel-import.js`, etc.
+- CSS: `static/css/pages/manager-admin-base-site.css`, etc. (Created)
+- JS: `static/js/pages/manager-admin-base-site.js`, etc. (Created)
 
 ---
 
-## 4) Actionable Refactor Plan (2025-12-18 Forward)
-
-**Note**: Staff & Portal templates are 100% complete. Focus is now on Admin, Manager, and shared features.
-
-### Phase 5A — Admin System Management (Week 1)
-**Impact**: Highest inline style concentration (71 styles), critical admin tools
-**Estimated Effort**: 3-4 days
-
-#### 5A.1: System Recovery (Day 1)
-**File**: `admin/system_recovery.html` (36 inline styles, 2 handlers)
-
-**Tasks**:
-1. Read template and identify inline style patterns
-2. Extract to `static/css/pages/admin-system-recovery.css`:
-   - Replace color values with design system tokens (e.g., `#f0f0f0` → `var(--color-gray-100)`)
-   - Replace spacing with utility classes (e.g., `padding: 15px` → `p-4`)
-   - Create semantic classes for recovery status indicators
-3. Replace inline handlers with `data-action` delegation
-4. Create `static/js/pages/admin-system-recovery.js` for behavior
-5. Update template to reference external assets
-6. Run `pytest -q` to verify
-
-**Acceptance Criteria**:
-- Zero inline styles, zero inline handlers
-- Design system colors and spacing used throughout
-- Tests pass
-
-#### 5A.2: System Metrics (Day 2)
-**File**: `admin/system_metrics.html` (24 inline styles, 1 handler)
-
-**Tasks**:
-1. Read template and identify chart/metric styling patterns
-2. Extract to `static/css/pages/admin-system-metrics.css`:
-   - Standardize metric card styles using `.card` component
-   - Use design system status colors for metric indicators
-   - Create reusable classes for metric layouts
-3. Replace inline handler with `data-action` delegation
-4. Create `static/js/pages/admin-system-metrics.js` for dynamic updates
-5. Update template to reference external assets
-6. Run `pytest -q` to verify
-
-**Acceptance Criteria**:
-- Zero inline styles, zero inline handlers
-- Consistent metric card appearance
-- Tests pass
-
-#### 5A.3: System Logs (Days 3-4)
-**File**: `admin/system_logs.html` (11 inline styles, 5 handlers)
-
-**Tasks**:
-1. Read template and identify log viewer patterns
-2. Extract to `static/css/pages/admin-system-logs.css`:
-   - Standardize log entry styles
-   - Use design system for log level colors (info/warning/error)
-   - Create filter panel styling
-3. Replace 5 inline handlers with event delegation pattern
-4. Create `static/js/pages/admin-system-logs.js`:
-   - Log filtering logic
-   - Log level toggling
-   - Export functionality
-5. Update template to reference external assets
-6. Run `pytest -q` to verify
-
-**Acceptance Criteria**:
-- Zero inline styles, zero inline handlers
-- Consistent log viewer appearance
-- All filtering/export functionality works
-- Tests pass
-
----
-
-### Phase 5B — Photo Management System (Week 2)
-**Impact**: Critical shared feature, highest handler count (15 handlers)
-**Estimated Effort**: 3-4 days
-
-#### 5B.1: Photo Upload (Days 1-2)
-**File**: `photo_upload.html` (12 inline styles, **10 handlers**)
-
-**Tasks**:
-1. Read template and identify upload flow patterns
-2. Extract to `static/css/pages/photo-upload.css`:
-   - Standardize upload dropzone styling
-   - Use design system for progress indicators
-   - Create preview card styles
-3. Replace 10 inline handlers with unified event delegation
-4. Create `static/js/pages/photo-upload.js`:
-   - Drag-and-drop handler
-   - File validation logic
-   - Upload progress tracking
-   - Preview generation
-5. Update template to reference external assets
-6. Run `pytest -q` to verify
-
-**Acceptance Criteria**:
-- Zero inline styles, zero inline handlers
-- Drag-and-drop works correctly
-- Upload progress displays consistently
-- Tests pass
-
-#### 5B.2: Photo Management (Day 3)
-**File**: `photo_management.html` (6 inline styles, 3 handlers)
-
-**Tasks**:
-1. Read template and identify photo grid patterns
-2. Extract to `static/css/pages/photo-management.css`:
-   - Standardize photo grid layout
-   - Use design system for action buttons
-   - Create lightbox/modal styles
-3. Replace 3 inline handlers with event delegation
-4. Create `static/js/pages/photo-management.js`:
-   - Photo selection logic
-   - Bulk actions
-   - Lightbox functionality
-5. Update template to reference external assets
-6. Run `pytest -q` to verify
-
-**Acceptance Criteria**:
-- Zero inline styles, zero inline handlers
-- Photo grid displays consistently
-- Lightbox works correctly
-- Tests pass
-
-#### 5B.3: Photo Comparison (Day 4)
-**File**: `photo_comparison.html` (0 inline styles, 2 handlers)
-
-**Tasks**:
-1. Read template and identify comparison patterns
-2. Extract to `static/css/pages/photo-comparison.css`:
-   - Standardize side-by-side comparison layout
-   - Use design system for comparison controls
-3. Replace 2 inline handlers with event delegation
-4. Create `static/js/pages/photo-comparison.js`:
-   - Comparison slider logic
-   - Zoom controls
-5. Update template to reference external assets
-6. Run `pytest -q` to verify
-
-**Acceptance Criteria**:
-- Zero inline styles, zero inline handlers
-- Comparison view works correctly
-- Tests pass
-
----
-
-### Phase 5C — Invite Code System (Week 3)
-**Impact**: Moderate (46 inline styles, 8 handlers), admin feature
-**Estimated Effort**: 3-4 days
-
-#### 5C.1: Invite Codes List (Day 1)
-**File**: `invite_codes/list.html` (22 inline styles, 4 handlers)
-
-**Tasks**:
-1. Extract to `static/css/pages/invite-codes-list.css`
-2. Replace 4 inline handlers with event delegation
-3. Create `static/js/pages/invite-codes-list.js`
-4. Run `pytest -q` to verify
-
-#### 5C.2: Invite Codes Create (Day 2)
-**File**: `invite_codes/create.html` (16 inline styles, 1 handler)
-
-**Tasks**:
-1. Extract to `static/css/pages/invite-codes-create.css`
-2. Replace inline handler with event delegation
-3. Create `static/js/pages/invite-codes-create.js`
-4. Run `pytest -q` to verify
-
-#### 5C.3: Admin Invite Code Pages (Days 3-4)
-**Files**:
-- `admin/invite_code_detail.html` (8 styles, 3 handlers)
-- `admin/invite_code_list.html` (3 styles, 2 handlers)
-- `admin/create_invite_code.html` (0 styles, 3 handlers)
-- `admin/edit_invite_code.html` (5 styles, 0 handlers)
-- `admin/invite_codes.html` (0 styles, 2 handlers)
-
-**Tasks**:
-1. Extract CSS for each page
-2. Replace all handlers with event delegation
-3. Create JS modules as needed
-4. Run `pytest -q` after each file
-
----
-
-### Phase 5D — Admin Access Control (Week 4)
-**Impact**: Moderate (5 inline styles, 14 handlers), admin feature
-**Estimated Effort**: 3 days
-
-#### 5D.1: Conflict Resolution (Day 1)
-**File**: `admin/conflict_resolution.html` (5 inline styles, 7 handlers)
-
-**Tasks**:
-1. Extract to `static/css/pages/admin-conflict-resolution.css`
-2. Replace 7 inline handlers with event delegation
-3. Create `static/js/pages/admin-conflict-resolution.js`
-4. Run `pytest -q` to verify
-
-#### 5D.2: Permission Management (Day 2)
-**File**: `admin/permission_management.html` (0 inline styles, 4 handlers)
-
-**Tasks**:
-1. Extract to `static/css/pages/admin-permission-management.css`
-2. Replace 4 inline handlers with event delegation
-3. Create `static/js/pages/admin-permission-management.js`
-4. Run `pytest -q` to verify
-
-#### 5D.3: Property Approval (Day 3)
-**File**: `admin/property_approval.html` (0 inline styles, 3 handlers)
-
-**Tasks**:
-1. Extract to `static/css/pages/admin-property-approval.css`
-2. Replace 3 inline handlers with event delegation
-3. Create `static/js/pages/admin-property-approval.js`
-4. Run `pytest -q` to verify
-
----
-
-### Phase 5E — Communication & Remaining (Week 5)
-**Impact**: Low-medium, final cleanup
-**Estimated Effort**: 3-5 days
-
-#### 5E.1: Chat & Calendar (Days 1-2)
-**Files**:
-- `chat/chatbox.html` (4 inline styles, 4 handlers)
-- `calendar/calendar_view.html` (0 inline styles, 4 handlers)
-
-**Tasks**: Extract CSS/JS, replace handlers, verify tests
-
-#### 5E.2: Manager & Misc (Days 3-5)
-**Files**:
-- `manager_admin/base_site.html` (9 styles)
-- `admin/excel_import.html` (9 styles, 2 handlers)
-- `auth/unified_login.html` (5 styles)
-- `admin/notification_management.html` (5 styles)
-- `admin/digest_management.html` (4 styles)
-- Other low-priority files
-
-**Tasks**: Extract CSS/JS, replace handlers, verify tests
-
----
-
-### Quality Gates for Every Phase
-
-After each file refactor:
-1. ✅ Run `pytest -q` — must pass (warnings OK)
-2. ✅ Verify zero inline handlers: `rg -n -P -g'*.html' '\son[a-zA-Z]+=' <file>`
-3. ✅ Verify minimal inline styles: `rg -n -g'*.html' 'style="' <file>`
-4. ✅ Verify design system usage: Check for design tokens in CSS
-5. ✅ Manual smoke test: Load page in browser, verify functionality
-6. ✅ Commit with clear message
-
----
-
-### UI Consistency Checklist
-
-For each refactored page, ensure:
-- [ ] Colors use design system tokens (`var(--color-primary)`, etc.)
-- [ ] Spacing uses design system scale (`var(--space-4)`, `.p-4`, etc.)
-- [ ] Buttons use `.btn`, `.btn-primary`, `.btn-secondary` classes
-- [ ] Forms use `.form-group`, `.form-input`, `.form-label` classes
-- [ ] Cards use `.card`, `.card-header`, `.card-body` classes
-- [ ] Status indicators use `.badge-success`, `.badge-warning`, `.badge-danger`
-- [ ] Typography uses design system font sizes and weights
-- [ ] No arbitrary inline colors (e.g., `#f0f0f0`, `red`, `blue`)
-- [ ] No arbitrary inline spacing (e.g., `padding: 15px`, `margin: 10px`)
-
----
-
-### Progress Tracking Commands
-
-Run these to track remaining work:
-
-```bash
-# Count inline handlers
-rg -n -P -g'*.html' '\son[a-zA-Z]+=' aristay_backend/api/templates | wc -l
-
-# Count inline style attributes
-rg -n -g'*.html' 'style="' aristay_backend/api/templates | wc -l
-
-# Count inline <style> blocks
-rg -n -g'*.html' '<style>' aristay_backend/api/templates | wc -l
-
-# List top offenders
-rg -n -P -g'*.html' '\son[a-zA-Z]+=' aristay_backend/api/templates | cut -d: -f1 | sort | uniq -c | sort -rn | head -10
-```
-
-## 5) Summary: What's Next?
-
-**Current State (2025-12-19)**:
-- ✅ Staff templates: 100% complete
-- ✅ Portal templates: 100% complete
-- ✅ Layout templates: 100% complete
-- ✅ Admin templates: ~90% complete
-- ✅ Manager templates: ~90% complete
-- 📊 Overall: ~95% complete
-
-**Remaining Work**: 51 inline styles across 15 files, 0 inline handlers
-
-**Next Priority**: Start Phase 6 — Final Cleanup (see Section 6 below)
-
-**Key Success Factors**:
-1. Follow established conventions (Section 2)
-2. Use design system tokens consistently
-3. Run `pytest -q` after every change
-4. Commit frequently with clear messages
-5. Track progress using the commands in Section 4
-
----
-
-## 6) Phase 6 — Final Cleanup (2025-12-19)
-
-**Goal**: Eliminate remaining 51 inline styles across 15 files to achieve 100% compliance.
-
-**Note**: Email templates (`emails/digest.html`) are excluded as inline styles are required for email client compatibility.
-
-### Phase 6A — Admin Excel Import (Highest Priority)
-**File**: `admin/excel_import.html` (9 inline styles)
-**Target CSS**: `static/css/pages/admin-excel-import.css` (already exists, needs updates)
-
-**Tasks**:
-1. Read template and identify inline style patterns
-2. Extract styles to existing CSS file or create semantic classes
-3. Replace inline styles with design system classes
-4. Verify functionality and run tests
-
----
-
-### Phase 6B — Auth & Admin Settings
-**Files** (14 inline styles total):
-- `auth/unified_login.html` (5 styles) → `static/css/pages/auth-unified-login.css`
-- `admin/notification_management.html` (5 styles) → `static/css/pages/admin-notification-management.css`
-- `admin/digest_management.html` (4 styles) → `static/css/pages/admin-digest-management.css`
-
-**Tasks**:
-1. Extract login page styles using design system tokens
-2. Extract notification management styles
-3. Extract digest management styles
-4. Verify functionality and run tests
-
----
-
-### Phase 6C — Admin Core Pages
-**Files** (13 inline styles total):
-- `admin/conflict_resolution.html` (4 styles) → CSS already exists
-- `admin/system_metrics.html` (3 styles) → CSS already exists
-- `admin/login.html` (3 styles) → `static/css/pages/admin-login.css`
-- `admin/index.html` (3 styles) → `static/css/pages/admin-index.css`
-
-**Tasks**:
-1. Update existing CSS files with remaining styles
-2. Create new CSS files where needed
-3. Replace inline styles with semantic classes
-4. Verify functionality and run tests
-
----
-
-### Phase 6D — Communication & Misc
-**Files** (11 inline styles total):
-- `chat/chatbox.html` (4 styles) → CSS already exists
-- `admin/security_dashboard.html` (2 styles) → `static/css/pages/admin-security-dashboard.css`
-- `admin/invite_codes.html` (2 styles) → CSS already exists
-- `manager_admin/auth/user/change_form.html` (1 style)
-- `admin/invite_code_detail.html` (1 style) → CSS already exists
-- `admin/create_invite_code_new.html` (1 style)
-
-**Tasks**:
-1. Update existing CSS files
-2. Create minimal CSS files for single-style files
-3. Replace all inline styles
-4. Verify functionality and run tests
-
----
-
-### Phase 6 Completion Criteria
-- [x] 0 inline event handlers (100% achieved)
-- [x] 11 inline styles remaining (95% reduction - all acceptable, see below)
-- [x] All pages use design system tokens
-- [ ] `pytest -q` passes (pending - run manually)
-- [ ] Manual smoke test of affected pages
-
----
-
-## 7) Final Status (2025-12-19 - Phase 6 Complete)
-
-**Refactoring Complete!**
-
-### Results Summary:
-| Metric | Original | Final | Reduction |
-|--------|----------|-------|-----------|
-| Inline event handlers | 67 | **0** | 100% |
-| Inline styles | 202 | **11** | 95% |
-| Page CSS files | 31 | **54+** | +74% |
-
-### Remaining Inline Styles (11 - All Acceptable):
-1. **Dynamic Progress Bars (7)**: `system_metrics.html`, `invite_codes.html`, `invite_code_detail.html`
-   - These use `style="width: {{ value }}%"` for server-rendered progress bars
-   - Data-driven values that must be computed at render time
-   - **Status**: Acceptable, standard practice
-
-2. **Email Templates (2)**: `emails/digest.html`
-   - Inline styles required for email client compatibility
-   - **Status**: Required, industry standard
-
-3. **Django Admin Overrides (2)**: `auth/user/change_form.html` (admin + manager)
-   - Password reset button styling in rarely-modified Django admin templates
-   - **Status**: Low priority, acceptable
-
-### Files Modified in Phase 6:
-- `admin/excel_import.html` + `admin-excel-import.css` + `admin-excel-import.js`
-- `auth/unified_login.html` + `auth-unified-login.css`
-- `admin/notification_management.html` + `admin-notification-management.css`
-- `admin/digest_management.html` + `admin-digest-management.css`
-- `admin/conflict_resolution.html` + `admin-conflict-resolution.css`
-- `admin/login.html` (inline style block updated)
-- `admin/index.html` (inline style block updated)
-- `chat/chatbox.html` + `chat-chatbox.css`
-- `admin/security_dashboard.html` (inline style block updated)
-- `admin/create_invite_code_new.html` (inline style block + JS updated)
+## 4) Actionable Refactor Plan (2025-12-20 Forward)
+
+**Note**: Most assets are created. The focus is now on removing the last few inline handlers and styles.
+
+### Phase 6 — Final Cleanup (Week 1)
+**Impact**: Completing the refactor to 100%.
+**Estimated Effort**: 2-3 days.
+
+#### 6.1: Calendar View (Day 1)
+**File**: `calendar/calendar_view.html` (4 handlers)
+**Task**: Remove `onclick="refreshCalendar()"`, `exportCalendar()`, etc. Use `data-action` delegation in `calendar-calendar-view.js`.
+
+#### 6.2: Permission Management (Day 1)
+**File**: `admin/permission_management.html` (4 handlers)
+**Task**: The handlers are inside JS template strings (`onclick="revokePermission..."`).
+**Fix**:
+- Change buttons to use `data-action="revoke"` and `data-user-id="..."`.
+- Update `admin-permission-management.js` to handle clicks on the container using event delegation.
+
+#### 6.3: Chatbox (Day 2)
+**File**: `chat/chatbox.html` (4 handlers)
+**Task**: Remove `onclick="selectRoom..."`, `toggleRoomList()`, `sendMessage()`.
+**Fix**: Use event delegation in `chat-chatbox.js`.
+
+#### 6.4: Security Dashboard & Charts (Day 2)
+**Files**: `admin/security_dashboard.html`, `admin/manager_charts.html`
+**Task**: Remove remaining `onclick="refreshData()"`.
+
+#### 6.5: Dynamic Styles Cleanup (Day 3)
+**Files**: `admin/system_metrics.html`, `admin/invite_codes.html`
+**Task**:
+- `style="width: {{ ... }}%"` is acceptable for dynamic progress bars, but can be improved by using `data-width` and a small JS observer if strict CSP is required.
+- For now, verify if these are the ONLY inline styles left.
+
+### Phase 7 — Quality Assurance (Week 2)
+**Task**: Fix Test Environment
+1. Configure `settings_test.py` to use SQLite properly or fix local Postgres connection.
+2. Run full test suite.
+3. Verify no regressions in refactored pages.
 
 ---
 
