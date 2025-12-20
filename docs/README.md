@@ -2,11 +2,17 @@
 
 This directory contains comprehensive documentation for the AriStay property management application.
 
+**Last Updated:** December 20, 2025
+
 ## 📁 Documentation Structure
 
-### 🧪 **Testing Documentation** 
+### 🧪 **Testing Documentation**
 - **[TESTING_MANUAL.md](TESTING_MANUAL.md)** - Complete user guide for running all tests
 - **[SYSTEM_TESTING_GUIDE.md](SYSTEM_TESTING_GUIDE.md)** - System-level and end-to-end testing guide
+
+### 🎨 **UI/UX Refactoring** ⭐ NEW
+- **[refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md](refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md)** - Complete UI refactoring status (Phase 6 complete)
+- **[refactoring/README.md](refactoring/README.md)** - Refactoring guide and overview
 
 ### Backend Documentation (`backend/`)
 - **[DYNAMIC_PERMISSIONS_ROBUST_IMPLEMENTATION.md](backend/DYNAMIC_PERMISSIONS_ROBUST_IMPLEMENTATION.md)** - Complete guide to the dynamic permission system
@@ -46,9 +52,10 @@ This directory contains comprehensive documentation for the AriStay property man
 ## 🚀 Quick Start
 
 ### For Developers
-1. Start with **[PROJECT_README.md](PROJECT_README.md)** for project overview
-2. Read **[backend/DYNAMIC_PERMISSIONS_ROBUST_IMPLEMENTATION.md](backend/DYNAMIC_PERMISSIONS_ROBUST_IMPLEMENTATION.md)** for permission system
-3. Check **[backend/DOCUMENTATION.md](backend/DOCUMENTATION.md)** for backend details
+1. Start with **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** for complete documentation catalog
+2. Read **[development/PROJECT_STRUCTURE.md](development/PROJECT_STRUCTURE.md)** for project architecture
+3. Check **[refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md](refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md)** for UI/UX patterns
+4. Review **[backend/DYNAMIC_PERMISSIONS_ROBUST_IMPLEMENTATION.md](backend/DYNAMIC_PERMISSIONS_ROBUST_IMPLEMENTATION.md)** for permission system
 
 ### For System Administrators
 1. Review **[backend/LOGGING.md](backend/LOGGING.md)** for logging configuration
@@ -133,6 +140,6 @@ For questions or issues:
 
 ---
 
-**Last Updated**: September 1, 2025  
-**Version**: 1.0  
-**Status**: ✅ Production Ready
+**Last Updated**: December 20, 2025
+**Version**: 2.0
+**Status**: ✅ Production Ready - Modern UI/UX Complete

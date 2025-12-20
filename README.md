@@ -75,17 +75,16 @@ flutter run
 All project documentation is comprehensively organized in the [`docs/`](docs/) directory:
 
 ### 📋 Essential Documentation
-- **[CLEANUP_PLAN.md](CLEANUP_PLAN.md)** - Project organization and cleanup strategy
-- **[PROJECT_CLEANUP_SUMMARY.md](PROJECT_CLEANUP_SUMMARY.md)** - Recent reorganization summary
-- **[docs/CURRENT_DOCUMENTATION.md](docs/CURRENT_DOCUMENTATION.md)** - ⭐ Quick reference to active docs
-- **[docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)** - Complete documentation catalog
+- **[docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)** - ⭐ Complete documentation catalog
+- **[docs/CURRENT_DOCUMENTATION.md](docs/CURRENT_DOCUMENTATION.md)** - Quick reference to active docs
+- **[docs/refactoring/](docs/refactoring/)** - UI refactoring documentation (Phase 6 complete)
 
 ### 🔗 Quick Links
-- **Setup**: [Deployment Guide](docs/setup/DEPLOYMENT_GUIDE.md) | [Environment Config](docs/backend/ENVIRONMENT_CONFIGURATION.md)
+- **Development**: [Local Setup](docs/development/LOCAL_DEVELOPMENT_SETUP.md) | [Project Structure](docs/development/PROJECT_STRUCTURE.md)
 - **Features**: [Chat System](docs/features/chat/CHAT_SYSTEM_QUICKSTART.md) | [Calendar](docs/features/calendar_user_guide.md) | [Photo Management](docs/features/BEFORE_AFTER_PHOTO_QUICK_REFERENCE.md)
 - **Security**: [JWT Authentication](docs/security/JWT_AUTHENTICATION_GUIDE.md) | [Security Guide](docs/security/ENHANCED_SECURITY_IMPLEMENTATION.md)
 - **Testing**: [Testing Strategy](docs/testing/TESTING_STRATEGY.md) | [Test Organization](docs/testing/TEST_ORGANIZATION.md)
-- **Development**: [Local Setup](docs/development/LOCAL_DEVELOPMENT_SETUP.md) | [Project Structure](docs/development/PROJECT_STRUCTURE.md)
+- **UI/UX**: [Refactoring Status](docs/refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md) - Modern ES modules & design system
 
 ## 🧪 Testing
 
@@ -145,8 +144,6 @@ For detailed security information, see the [Security Documentation](docs/securit
 ```
 aristay_app/
 ├── README.md                      # This file
-├── CLEANUP_PLAN.md                # Project organization strategy
-├── PROJECT_CLEANUP_SUMMARY.md     # Reorganization summary
 ├── conftest.py                    # Global pytest configuration
 ├── pytest.ini                     # Test configuration
 ├── requirements.txt               # Python dependencies
@@ -167,7 +164,9 @@ aristay_app/
 │   ├── archive/                   # Archived legacy tests
 │   └── utils/                     # Test utilities
 ├── docs/                          # Complete documentation
-│   ├── CURRENT_DOCUMENTATION.md   # ⭐ Quick reference
+│   ├── DOCUMENTATION_INDEX.md     # ⭐ Complete catalog
+│   ├── CURRENT_DOCUMENTATION.md   # Quick reference
+│   ├── refactoring/               # UI refactoring docs
 │   ├── features/chat/             # Chat documentation
 │   ├── archive/                   # Historical docs
 │   └── reports/archive/           # Old reports
@@ -177,7 +176,7 @@ aristay_app/
     └── secret-hygiene/            # Security scanning
 ```
 
-See [CLEANUP_PLAN.md](CLEANUP_PLAN.md) for the complete reorganization details.
+See [docs/archive/CLEANUP_PLAN.md](docs/archive/CLEANUP_PLAN.md) for historical reorganization details.
 
 ## 📊 Project Status
 
@@ -185,18 +184,23 @@ See [CLEANUP_PLAN.md](CLEANUP_PLAN.md) for the complete reorganization details.
 ✅ **Security Hardened** - Comprehensive security implementation
 ✅ **Well Documented** - Complete documentation and guides
 ✅ **Fully Tested** - Comprehensive test coverage
-✅ **Organized Structure** - Professional project organization (Nov 2025)
+✅ **Modern UI/UX** - Phase 6 UI refactoring complete (Dec 2025)
 ✅ **Chat System** - Real-time messaging with WebSocket support
-✅ **Clean Codebase** - 60+ files reorganized for maintainability
+✅ **Clean Codebase** - Professional project organization
 
-### Recent Updates (November 2025)
+### Recent Updates (December 2025)
+- 🎨 **UI Refactoring Complete** - 100% inline handlers removed, 95% inline styles eliminated
+- ⚡ **Modern Architecture** - ES modules + design system across all pages
+- 🎯 **Design System** - Consistent tokens, components, and patterns
+- 📦 **54+ CSS Files** - Organized page-specific styling
+- 🔧 **18+ JS Modules** - Clean, maintainable JavaScript architecture
+
+### Previous Updates (November 2025)
 - ✨ Fixed chat UI authentication and error handling
 - 🗂️ Major project reorganization (60 files)
 - 📚 Improved documentation structure
-- 🧪 Centralized all tests
-- 🔧 Fixed .gitignore configuration
 
-For detailed status information, see [PROJECT_CLEANUP_SUMMARY.md](PROJECT_CLEANUP_SUMMARY.md).
+For detailed refactoring information, see [docs/refactoring/](docs/refactoring/).
 
 ## 🤝 Development Workflow
 
@@ -253,4 +257,4 @@ Copyright (c) 2025 Nguyen, Phuong Duy Lam. All rights reserved.
 ---
 
 **Aristay Property Management System** - Professional, Secure, Scalable
-*Last Updated: November 23, 2025 - Chat fixes and project reorganization*
+*Last Updated: December 20, 2025 - UI refactoring complete, modern architecture*

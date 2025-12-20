@@ -3,7 +3,17 @@
     "allow": [
       "Bash(rg:*)",
       "Bash(pytest:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(ls:*)",
+      "Bash(if [ -d \".venv\" ])",
+      "Bash(then .venv/bin/python -m pytest -q)",
+      "Bash(elif [ -d \"venv\" ])",
+      "Bash(then venv/bin/python -m pytest -q)",
+      "Bash(else echo \"No venv found\")",
+      "Bash(fi)",
+      "Bash(find:*)",
+      "Bash(git mv:*)"
     ]
   }
 }
