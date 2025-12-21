@@ -16,22 +16,9 @@ from django.contrib.auth.models import User
 from .soft_delete import SoftDeleteMixin, SoftDeleteManager
 
 # Postgres-specific features
-try:
-    from django.contrib.postgres.constraints import ExclusionConstraint
-    from django.contrib.postgres.fields import DateTimeRangeField
-    from django.contrib.postgres.indexes import GistIndex
-    POSTGRES = True
-except ImportError:
-    POSTGRES = False
-
-# Disable PostgreSQL features when not using a Postgres engine (e.g., tests)
-import os
-from django.conf import settings as django_settings  # alias to avoid confusion
-if (
-    os.environ.get('DJANGO_SETTINGS_MODULE') == 'backend.settings_test'
-    or 'postgresql' not in django_settings.DATABASES.get('default', {}).get('ENGINE', '')
-):
-    POSTGRES = False
+from django.contrib.postgres.constraints import ExclusionConstraint
+from django.contrib.postgres.fields import DateTimeRangeField
+from django.contrib.postgres.indexes import GistIndex
 
 class Property(SoftDeleteMixin, models.Model):
     name       = models.CharField(max_length=100)
@@ -190,7 +177,7 @@ class Booking(SoftDeleteMixin, models.Model):
                 condition=Q(external_code__gt='') & Q(is_deleted=False),
                 name='uniq_booking_external_code_per_property_source'
             ),
-        ] + ([
+        ] + [
             # Prevent overlaps for active bookings on same property (Postgres)
             ExclusionConstraint(
                 name='booking_no_overlap_active',
@@ -209,7 +196,7 @@ class Booking(SoftDeleteMixin, models.Model):
                 condition=~Q(status__in=['cancelled', 'completed']),
                 # Remove index_type='gist' to use default index type
             ),
-        ] if POSTGRES else [])
+        ]
 
     def clean(self):
         if self.check_in_date and self.check_out_date and self.check_in_date >= self.check_out_date:
