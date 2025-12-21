@@ -46,7 +46,7 @@ This phase focused on removing technical debt by extracting inline JavaScript an
     - Removed inline `onclick` for refresh button.
 
 ## Testing
-- **Environment**: Configured `settings_test.py` to use SQLite3 for local testing, bypassing Postgres connection issues.
+- **Environment**: Configured `settings_test.py` to use PostgreSQL, aligning with production environment.
 - **Results**: Core tests passed (21 passed).
 
 ## Next Steps

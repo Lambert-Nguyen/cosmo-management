@@ -69,11 +69,15 @@ if _db_url:
         'default': dj_database_url.parse(_db_url, conn_max_age=0, ssl_require=False),
     }
 else:
-    # Use SQLite for local testing to avoid Postgres dependency
+    # Default to local PostgreSQL for testing
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db_test.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'aristay_test',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 
