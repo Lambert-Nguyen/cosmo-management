@@ -1,8 +1,8 @@
 # AriStay UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 1.0
+**Document Version:** 1.1
 **Created:** 2025-12-21
-**Last Updated:** 2025-12-21
+**Last Updated:** 2025-12-22
 **Status:** Planning Phase
 
 ---
@@ -177,13 +177,24 @@ This plan outlines the complete redesign of the AriStay property management syst
 |----------|--------|---------|----------------|
 | `/api/staff/inventory/` | GET | Inventory lookup | `InventoryLookupScreen` |
 | `/api/staff/inventory/transaction/` | POST | Log transaction | `InventoryTransactionScreen` |
+| `/api/staff/inventory/low-stock/` | GET | Low stock alerts | `InventoryAlertsScreen` |
+| `/api/staff/inventory/shortage/` | POST | Report shortage (auto-creates task) | `InventoryTransactionScreen` |
 
 **Transaction Types:**
-- `stock_in` - Add inventory
-- `stock_out` - Remove inventory
-- `adjustment` - Adjust count
-- `damage` - Report damaged
+- `stock_in` - Add inventory (receiving supplies)
+- `stock_out` - Remove inventory (consuming supplies)
+- `adjustment` - Adjust count (corrections)
+- `damage` - Report damaged items
 - `transfer` - Transfer between properties
+- `shortage` - Report shortage (auto-creates restocking task)
+
+**Inventory Features:**
+- Property-specific inventory profiles with par levels (min/max thresholds)
+- Low-stock alerts when below minimum
+- Automatic task creation when shortage reported
+- Photo documentation of restocked items
+- Complete transaction history with user attribution
+- Supply categorization (consumables, linens, chemicals, maintenance)
 
 ### 7. Lost & Found (Flutter - Staff)
 
@@ -191,12 +202,24 @@ This plan outlines the complete redesign of the AriStay property management syst
 |----------|--------|---------|----------------|
 | `/api/staff/lost-found/` | GET | List items | `LostFoundScreen` |
 | `/api/staff/lost-found/` | POST | Create item | `LostFoundFormScreen` |
+| `/api/staff/lost-found/{id}/` | GET | Item detail | `LostFoundDetailScreen` |
+| `/api/staff/lost-found/{id}/` | PATCH | Update item | `LostFoundFormScreen` |
+| `/api/staff/lost-found/{id}/status/` | POST | Update status | `LostFoundDetailScreen` |
 
 **Item Status:**
-- `found` - Item found
+- `found` - Item found (initial state)
 - `claimed` - Item claimed by owner
-- `disposed` - Item disposed
-- `donated` - Item donated
+- `disposed` - Item disposed after retention period
+- `donated` - Item donated to charity
+
+**Lost & Found Features:**
+- Photo documentation with multiple images
+- Condition logging (new, used, damaged)
+- Location tracking (property, room, area)
+- Guest/owner notification integration
+- Retention period tracking
+- Status history with timestamps
+- Search by description, location, date
 
 ### 8. Chat System (Flutter)
 
@@ -232,7 +255,23 @@ This plan outlines the complete redesign of the AriStay property management syst
 | `/api/notifications/{id}/read/` | POST | Mark as read | `NotificationListScreen` |
 | `/api/notifications/mark-all-read/` | POST | Mark all read | `NotificationListScreen` |
 | `/api/notifications/settings/` | GET | User preferences | `NotificationSettingsScreen` |
+| `/api/notifications/settings/` | POST | Update preferences | `NotificationSettingsScreen` |
+| `/api/notifications/stats/` | GET | Notification statistics | `NotificationListScreen` |
 | `/api/devices/` | POST | Register device | Background (Firebase) |
+| `/api/devices/` | DELETE | Unregister device | Logout action |
+
+**Notification Types (10+):**
+1. `task_assigned` - Task assignment notification
+2. `task_status_change` - Task status update
+3. `task_due_soon` - Due in 24h/2h reminder
+4. `task_overdue` - Overdue alert
+5. `low_stock` - Inventory below minimum
+6. `shortage_reported` - Inventory shortage
+7. `chat_message` - New chat message
+8. `permission_change` - Permission granted/revoked
+9. `photo_approval` - Photo approved/rejected
+10. `booking_change` - Booking modified
+11. `system_alert` - System notifications
 
 ### 10. Calendar System (Flutter)
 
@@ -251,12 +290,25 @@ This plan outlines the complete redesign of the AriStay property management syst
 | Endpoint | Method | Purpose | Flutter Screen |
 |----------|--------|---------|----------------|
 | `/api/manager/overview/` | GET | Dashboard data | `ManagerDashboardScreen` |
+| `/api/manager/dashboard/` | GET | Dashboard (alias) | `ManagerDashboardScreen` |
 | `/api/manager/users/` | GET | Team members | `ManagerUserListScreen` |
 | `/api/manager/users/{id}/` | GET | User detail | `ManagerUserDetailScreen` |
+| `/api/manager/users/{id}/` | PATCH | Update user | `ManagerUserDetailScreen` |
+| `/api/manager/users/{id}/reset-password/` | POST | Reset user password | `ManagerUserDetailScreen` |
 | `/api/manager/invite-codes/` | GET | List invites | `ManagerInviteCodesScreen` |
 | `/api/manager/create-invite-code/` | POST | Create invite | `InviteCodeFormScreen` |
+| `/api/manager/invite-codes/{id}/` | GET | Invite detail | `InviteCodeDetailScreen` |
+| `/api/manager/invite-codes/{id}/edit/` | PUT | Edit invite | `InviteCodeFormScreen` |
 | `/api/manager/invite-codes/{id}/revoke/` | POST | Revoke invite | `ManagerInviteCodesScreen` |
 | `/api/manager/invite-codes/{id}/reactivate/` | POST | Reactivate | `ManagerInviteCodesScreen` |
+| `/api/manager/invite-codes/{id}/delete/` | DELETE | Delete invite | `ManagerInviteCodesScreen` |
+
+**Manager Features:**
+- Permission delegation: Grant/revoke permissions to staff members
+- Team analytics: Task completion rates, performance metrics
+- Audit log viewing: Read-only access to team activity
+- User profile management: Update staff details (limited fields)
+- Invite code management with expiration and usage tracking
 
 ### 12. Email Digest (Flutter)
 
@@ -279,9 +331,54 @@ This plan outlines the complete redesign of the AriStay property management syst
 | Endpoint | Method | Purpose | Flutter Screen |
 |----------|--------|---------|----------------|
 | `/api/users/me/` | GET | Current user | `ProfileScreen` |
+| `/api/users/me/` | PATCH | Update profile | `ProfileScreen` |
 | `/api/permissions/user/` | GET | My permissions | `ProfileScreen` |
 
-### 15. Health & Monitoring (Background)
+### 15. Permission Management (Flutter - Manager)
+
+| Endpoint | Method | Purpose | Flutter Screen |
+|----------|--------|---------|----------------|
+| `/api/permissions/available/` | GET | List available permissions | `ManagerPermissionsScreen` |
+| `/api/permissions/grant/` | POST | Grant permission to user | `ManagerUserDetailScreen` |
+| `/api/permissions/revoke/` | POST | Revoke permission | `ManagerUserDetailScreen` |
+| `/api/permissions/remove-override/` | POST | Remove permission override | `ManagerUserDetailScreen` |
+
+**Permission Features:**
+- 38+ custom permissions for fine-grained access control
+- Role-based permission assignments
+- User-specific permission overrides with expiration dates
+- Permission delegation from managers to staff
+
+### 16. Audit Events (Flutter - Manager/Portal Read-Only)
+
+| Endpoint | Method | Purpose | Flutter Screen |
+|----------|--------|---------|----------------|
+| `/api/audit-events/` | GET | List audit events | `AuditLogScreen` |
+
+**Audit Event Types:**
+- User login/logout events
+- Task modifications (create, update, status change)
+- Photo uploads and approvals
+- Permission changes
+- Inventory transactions
+- Booking modifications
+
+### 17. Photo Management Dashboard (Flutter)
+
+| Endpoint | Method | Purpose | Flutter Screen |
+|----------|--------|---------|----------------|
+| `/api/staff/photos/management/` | GET | Staff photo dashboard | `StaffPhotoManagementScreen` |
+| `/api/staff/photos/comparison/{id}/` | GET | Before/after comparison | `PhotoComparisonScreen` |
+| `/api/portal/photos/` | GET | Portal photo gallery | `PortalPhotoGalleryScreen` |
+
+**Photo System Details:**
+- 7 photo types: `before`, `after`, `during`, `reference`, `damage`, `general`, `checklist`
+- 4 status states: `pending`, `approved`, `rejected`, `archived`
+- Photo approval workflow with role-based access
+- Sequence numbering for organization
+- Primary photo designation per task
+
+### 18. Health & Monitoring (Background)
 
 | Endpoint | Method | Purpose | Usage |
 |----------|--------|---------|-------|
@@ -418,7 +515,7 @@ lib/
 ### Phase 3: Portal Module (Property Owners)
 **Objective:** Property management interface for owners
 
-#### Screens to Build (10):
+#### Screens to Build (11):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
 | `PortalHomeScreen` | Dashboard with quick access | `GET /api/mobile/dashboard/` |
@@ -430,6 +527,7 @@ lib/
 | `CalendarScreen` | Unified calendar | `GET /api/calendar/*` |
 | `PortalTaskDetailScreen` | Task details (read-only) | `GET /api/tasks/{id}/` |
 | `PhotoManagementScreen` | Review/approve photos | `GET /api/tasks/{id}/images/` |
+| `PortalPhotoGalleryScreen` | Browse all property photos | `GET /api/portal/photos/` |
 | `PortalSettingsScreen` | Notification & digest prefs | `GET /api/notifications/settings/` |
 
 #### Features:
@@ -437,6 +535,7 @@ lib/
 - Booking status tracking
 - Task assignment visibility
 - Photo approval workflow (approve/reject)
+- Photo gallery with filtering by property, type, date
 - Calendar with multiple views (month/week/day)
 - Calendar filtering by property, user, event type
 - Push notification preferences
@@ -504,27 +603,32 @@ lib/
 ### Phase 6: Staff Module - Auxiliary Features
 **Objective:** Supporting staff features
 
-#### Screens to Build (8):
+#### Screens to Build (10):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
 | `InventoryLookupScreen` | Property inventory search | `GET /api/staff/inventory/` |
 | `InventoryTransactionScreen` | Log inventory changes | `POST /api/staff/inventory/transaction/` |
+| `InventoryAlertsScreen` | Low stock alerts | `GET /api/staff/inventory/low-stock/` |
 | `LostFoundScreen` | Lost & found list | `GET /api/staff/lost-found/` |
 | `LostFoundFormScreen` | Create/edit lost items | `POST /api/staff/lost-found/` |
 | `LostFoundDetailScreen` | Item detail with photos | `GET /api/staff/lost-found/{id}/` |
 | `ChecklistTemplatesScreen` | View templates | `GET /api/checklists/` |
 | `PhotoUploadScreen` | Batch photo upload | `POST /api/staff/checklist/photo/upload/` |
-| `PhotoComparisonScreen` | Before/after slider | Local comparison |
+| `PhotoComparisonScreen` | Before/after slider | `GET /api/staff/photos/comparison/{id}/` |
+| `StaffPhotoManagementScreen` | Photo dashboard | `GET /api/staff/photos/management/` |
 
 #### Features:
 - Inventory search by property with par levels
-- Inventory transaction logging with types
-- Low stock alerts display
-- Lost item reporting with photos
+- Inventory transaction logging with all 6 transaction types
+- Low stock alerts display with threshold indicators
+- Shortage reporting with automatic task creation
+- Lost item reporting with multiple photos
 - Item status tracking (found → claimed/disposed/donated)
+- Condition logging for lost items
 - Checklist template viewing
-- Multi-photo upload with progress
+- Multi-photo upload with progress indicator
 - Before/after photo comparison slider
+- Staff photo management dashboard
 
 ---
 
@@ -562,23 +666,30 @@ lib/
 ### Phase 8: Manager Module
 **Objective:** Team management interface
 
-#### Screens to Build (5):
+#### Screens to Build (8):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
 | `ManagerDashboardScreen` | Team overview | `GET /api/manager/overview/` |
 | `ManagerUserListScreen` | Team members | `GET /api/manager/users/` |
 | `ManagerUserDetailScreen` | User detail/edit | `GET /api/manager/users/{id}/` |
+| `ManagerPermissionsScreen` | Permission management | `GET /api/permissions/available/` |
 | `ManagerInviteCodesScreen` | Manage invites | `GET /api/manager/invite-codes/` |
 | `InviteCodeFormScreen` | Create/edit invite | `POST /api/manager/create-invite-code/` |
+| `InviteCodeDetailScreen` | Invite code detail | `GET /api/manager/invite-codes/{id}/` |
+| `AuditLogScreen` | View team activity | `GET /api/audit-events/` |
 
 #### Features:
-- Team task overview with statistics
-- User list with role filtering
-- User detail view (read-only for most fields)
-- Invite code creation with role assignment
-- Invite code revocation/reactivation
+- Team task overview with statistics and analytics
+- User list with role filtering and search
+- User detail view with editable fields (limited by role)
+- Permission delegation (grant/revoke to staff)
+- Permission override management with expiration
+- Invite code creation with role and department assignment
+- Invite code expiration and usage tracking
+- Invite code revocation/reactivation/deletion
 - Task assignment to team members
-- Basic team analytics
+- Audit log viewing (read-only)
+- Team performance metrics
 
 ---
 
@@ -709,15 +820,20 @@ lib/
 | Module | Screens | Priority |
 |--------|---------|----------|
 | Authentication | 5 | P0 - Critical |
-| Portal | 10 | P1 - High |
+| Portal | 11 | P1 - High |
 | Staff Core | 5 | P0 - Critical |
 | Staff Dashboards | 4 | P1 - High |
-| Staff Auxiliary | 8 | P2 - Medium |
+| Staff Auxiliary | 10 | P2 - Medium |
 | Chat | 5 | P2 - Medium |
-| Manager | 5 | P2 - Medium |
+| Manager | 8 | P2 - Medium |
 | Notifications | 2 | P1 - High |
 | Profile/Settings | 3 | P3 - Low |
-| **Total** | **47** | |
+| **Total** | **53** | |
+
+**Changes in v1.1:**
+- Portal: +1 (PortalPhotoGalleryScreen)
+- Staff Auxiliary: +2 (InventoryAlertsScreen, StaffPhotoManagementScreen)
+- Manager: +3 (ManagerPermissionsScreen, InviteCodeDetailScreen, AuditLogScreen)
 
 ---
 
@@ -869,7 +985,7 @@ aristay_flutter_frontend/
 
 ## Success Criteria
 
-1. ✅ All 47 user-facing screens functional in Flutter
+1. ✅ All 53 user-facing screens functional in Flutter
 2. ✅ Performance parity or better than Django templates
 3. ✅ Offline support for critical workflows (task completion, photos)
 4. ✅ Consistent UX across mobile and web
@@ -901,6 +1017,30 @@ aristay_flutter_frontend/
 | Date | Version | Changes |
 |------|---------|---------|
 | 2025-12-21 | 1.0 | Initial plan created with comprehensive feature mapping |
+| 2025-12-22 | 1.1 | Added missing features after full codebase review (see below) |
+
+### Version 1.1 Additions
+
+**New API Endpoint Sections:**
+- Section 15: Permission Management (Flutter - Manager) - 4 endpoints
+- Section 16: Audit Events (Flutter - Manager/Portal Read-Only) - 1 endpoint
+- Section 17: Photo Management Dashboard (Flutter) - 3 endpoints
+
+**Enhanced Existing Sections:**
+- Section 6: Inventory Management - Added low-stock alerts, shortage reporting with auto-task creation
+- Section 7: Lost & Found - Added detail/update endpoints, condition logging, retention tracking
+- Section 9: Notifications - Added stats, device unregister, 11 notification types documented
+- Section 11: Manager Module - Added password reset, user editing, invite detail/edit/delete endpoints
+
+**New Screens Added (6 total):**
+- `PortalPhotoGalleryScreen` - Browse all property photos
+- `InventoryAlertsScreen` - Low stock alerts dashboard
+- `StaffPhotoManagementScreen` - Staff photo management dashboard
+- `ManagerPermissionsScreen` - Permission delegation interface
+- `InviteCodeDetailScreen` - Invite code detail view
+- `AuditLogScreen` - Team activity audit log
+
+**Updated Screen Count:** 47 → 53 screens
 
 ---
 
