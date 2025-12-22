@@ -31,11 +31,47 @@
 
 ### Prerequisites
 - Python 3.13+ with virtual environment
+- **PostgreSQL 12+** (REQUIRED - SQLite is not supported)
 - Node.js and Flutter SDK (for mobile app)
-- PostgreSQL database
 - Git
+- Redis (optional, for caching and WebSocket support)
 
 ### Installation
+
+#### 1. Install PostgreSQL
+
+**On Ubuntu/Debian/Raspberry Pi:**
+```bash
+sudo apt update
+sudo apt install -y postgresql postgresql-contrib
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+```
+
+**On macOS:**
+```bash
+brew install postgresql@15
+brew services start postgresql@15
+```
+
+**On Windows:**
+Download and install from [postgresql.org](https://www.postgresql.org/download/windows/)
+
+#### 2. Create Database and User
+
+```bash
+# Switch to postgres user and create database
+sudo -u postgres psql -c "CREATE DATABASE aristay_local;"
+sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD 'postgres';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE aristay_local TO postgres;"
+sudo -u postgres psql -c "ALTER DATABASE aristay_local OWNER TO postgres;"
+
+# For PostgreSQL 15+ (if needed):
+sudo -u postgres psql -d aristay_local -c "GRANT ALL ON SCHEMA public TO postgres;"
+```
+
+#### 3. Set Up Backend
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -48,8 +84,11 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 # Set up environment variables
-cp ../env.production.example .env
-# Edit .env with your configuration
+cp backend/env.example .env
+# Edit .env with your PostgreSQL configuration (default should work for local setup)
+
+# Create logs directory
+mkdir -p logs
 
 # Run database migrations
 python manage.py migrate --settings=backend.settings_local
@@ -65,6 +104,11 @@ python manage.py runserver --settings=backend.settings_local
 ```
 
 Visit `http://127.0.0.1:8000` to access the application.
+
+**Important Notes:**
+- **PostgreSQL is REQUIRED** - This project does not support SQLite
+- Default local credentials: `postgres:postgres@localhost:5432/aristay_local`
+- Update `DATABASE_URL` in `.env` if using different credentials
 
 ### Flutter Mobile App Setup
 ```bash

@@ -17,7 +17,11 @@
       "Bash(python manage.py:*)",
       "Bash([ -f .env ])",
       "Bash(systemctl status:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(sudo -u postgres psql:*)"
     ]
   }
 }
