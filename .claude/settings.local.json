@@ -21,7 +21,8 @@
       "Bash(mkdir:*)",
       "Bash(touch:*)",
       "Bash(.venv/bin/python:*)",
-      "Bash(sudo -u postgres psql:*)"
+      "Bash(sudo -u postgres psql:*)",
+      "Bash(xargs ls:*)"
     ]
   }
 }
