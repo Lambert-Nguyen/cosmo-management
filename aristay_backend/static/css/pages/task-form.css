@@ -107,7 +107,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #0E4B8F;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -192,14 +192,14 @@
 }
 
 .btn-primary {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
-    border-color: #667eea;
+    border-color: #0E4B8F;
 }
 
 .btn-primary:hover {
-    background: #5a67d8;
-    border-color: #5a67d8;
+    background: #0B3D75;
+    border-color: #0B3D75;
     transform: translateY(-1px);
 }
 
@@ -216,12 +216,12 @@
 
 .btn-outline {
     background: white;
-    color: #667eea;
-    border-color: #667eea;
+    color: #0E4B8F;
+    border-color: #0E4B8F;
 }
 
 .btn-outline:hover {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
 }
 
@@ -292,12 +292,12 @@
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid #0E4B8F;
     outline-offset: 2px;
 }
 
 .btn:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid #0E4B8F;
     outline-offset: 2px;
 }
 

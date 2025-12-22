@@ -14,7 +14,7 @@
 .sticky-header {
     position: sticky;
     top: 0;
-    background: linear-gradient(135deg, var(--color-purple-500, #667eea) 0%, var(--color-purple-700, #764ba2) 100%);
+    background: linear-gradient(135deg, var(--color-purple-500, #0E4B8F) 0%, var(--color-purple-700, #0B3D75) 100%);
     color: var(--color-white, white);
     padding: var(--space-4, 15px) var(--space-5, 20px);
     z-index: 1000;

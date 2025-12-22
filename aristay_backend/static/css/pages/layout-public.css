@@ -4,7 +4,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
 }
 
 .public-header {
@@ -29,7 +29,7 @@
 .public-header .brand-name {
     font-size: 1.75rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -118,7 +118,7 @@
 .public-content .btn-primary {
     width: 100%;
     padding: 0.875rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
     color: white;
     border: none;
     border-radius: var(--radius);

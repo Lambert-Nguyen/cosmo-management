@@ -9,7 +9,7 @@
 
 /* Enhanced Task Header */
 .task-header-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
     color: white;
     margin: -1rem -1rem 1.5rem -1rem;
 }
@@ -125,9 +125,9 @@
 }
 
 .crud-actions .btn-action:hover {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
-    border-color: #667eea;
+    border-color: #0E4B8F;
     transform: translateY(-1px);
 }
 
@@ -676,7 +676,7 @@
 .progress-percentage {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #667eea;
+    color: #0E4B8F;
 }
 
 .progress-fraction {
@@ -700,7 +700,7 @@
 .progress-fill {
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(90deg, #0E4B8F 0%, #0B3D75 100%);
     border-radius: 6px;
     transition: width 0.3s ease;
 }
@@ -832,7 +832,7 @@
 .checklist-checkbox {
     width: 20px;
     height: 20px;
-    accent-color: #667eea;
+    accent-color: #0E4B8F;
     cursor: pointer;
 }
 
@@ -916,9 +916,9 @@
 }
 
 .btn-photo:hover, .btn-notes:hover {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
-    border-color: #667eea;
+    border-color: #0E4B8F;
 }
 
 /* Item Form */
@@ -951,7 +951,7 @@
 
 .form-control:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #0E4B8F;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -1123,9 +1123,9 @@
 }
 
 .btn-upload:hover {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
-    border-color: #667eea;
+    border-color: #0E4B8F;
 }
 
 /* Notes Section */
@@ -1178,7 +1178,7 @@
 .completion-message.info {
     background: #eff6ff;
     color: #1e40af;
-    border: 1px solid #3b82f6;
+    border: 1px solid #0E4B8F;
 }
 
 .btn-lg {
@@ -1238,7 +1238,7 @@
 }
 
 .btn-add-note {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -1249,7 +1249,7 @@
 }
 
 .btn-add-note:hover {
-    background: #5a67d8;
+    background: #0B3D75;
 }
 
 .notes-list {
@@ -1471,12 +1471,12 @@
 
 /* Accessibility Improvements */
 .checklist-checkbox:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid #0E4B8F;
     outline-offset: 2px;
 }
 
 .btn:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid #0E4B8F;
     outline-offset: 2px;
 }
 
@@ -1517,7 +1517,7 @@
     height: 20px;
     margin: -10px 0 0 -10px;
     border: 2px solid #e2e8f0;
-    border-top: 2px solid #667eea;
+    border-top: 2px solid #0E4B8F;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }

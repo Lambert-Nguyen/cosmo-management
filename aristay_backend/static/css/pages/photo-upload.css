@@ -21,7 +21,7 @@
 }
 
 .upload-section.dragover {
-    border-color: var(--color-primary, #6366f1);
+    border-color: var(--color-primary, #0E4B8F);
     background: var(--color-primary-50, #f0f4ff);
 }
 
@@ -33,7 +33,7 @@
 
 .upload-icon {
     font-size: 48px;
-    color: var(--color-primary, #6366f1);
+    color: var(--color-primary, #0E4B8F);
     margin-bottom: var(--space-4, 16px);
 }
 
@@ -173,7 +173,7 @@
 
 .photo-type {
     display: inline-block;
-    background: var(--color-primary, #6366f1);
+    background: var(--color-primary, #0E4B8F);
     color: white;
     padding: 4px 8px;
     border-radius: var(--radius-sm, 4px);
@@ -219,7 +219,7 @@
 }
 
 .loading-photos {
-    color: var(--color-primary, #6366f1);
+    color: var(--color-primary, #0E4B8F);
 }
 
 .error-photos {
@@ -384,7 +384,7 @@
 
 .progress-fill {
     height: 100%;
-    background: var(--color-primary, #6366f1);
+    background: var(--color-primary, #0E4B8F);
     transition: width 0.3s ease;
 }
 

@@ -9,7 +9,7 @@
     text-align: center;
     margin-bottom: 30px;
     padding: 20px;
-    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #0E4B8F 0%, #1e40af 100%);
     color: white;
     border-radius: 12px;
 }
@@ -148,8 +148,8 @@
 .portal-digest-save-btn {
     font-weight: 600;
     min-width: 120px;
-    background: #3b82f6;
-    border-color: #3b82f6;
+    background: #0E4B8F;
+    border-color: #0E4B8F;
     color: white;
 }
 

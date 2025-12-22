@@ -6,7 +6,7 @@
 
 /* Override Django Admin Default Header Colors */
 #header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: var(--gradient-primary) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 }
@@ -48,7 +48,7 @@
 }
 
 #breadcrumbs {
-  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+  background: var(--gradient-primary-dark) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -165,14 +165,14 @@
 
 /* Modern Manager Dashboard Styles */
 :root {
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --primary-gradient: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
   --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
   --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
   --dark-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
 
-  --primary-color: #667eea;
+  --primary-color: #0E4B8F;
   --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   --card-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.15);
   --border-radius: 16px;
@@ -383,11 +383,11 @@ body {
   transform: translateY(-6px);
   text-decoration: none;
   color: #2d3748;
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 15px 30px rgba(14, 75, 143, 0.2);
 }
 
 .action-card:nth-child(1)::before { background: var(--primary-gradient); }
-.action-card:nth-child(1):hover { border-color: #667eea; }
+.action-card:nth-child(1):hover { border-color: #0E4B8F; }
 
 .action-card:nth-child(2)::before { background: var(--success-gradient); }
 .action-card:nth-child(2):hover { border-color: #4facfe; }
@@ -467,14 +467,14 @@ body {
 }
 
 .module a {
-  color: #667eea;
+  color: #0E4B8F;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .module a:hover {
-  color: #5a67d8;
+  color: #0B3D75;
   text-decoration: underline;
 }
 
@@ -503,13 +503,13 @@ body {
 }
 
 .changelink {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  background: rgba(14, 75, 143, 0.1);
+  color: #0E4B8F;
+  border: 1px solid rgba(14, 75, 143, 0.3);
 }
 
 .changelink:hover {
-  background: rgba(102, 126, 234, 0.2);
+  background: rgba(14, 75, 143, 0.2);
   text-decoration: none;
   transform: translateY(-1px);
 }
@@ -533,7 +533,7 @@ body {
   padding: var(--spacing-xl);
   margin: var(--spacing-xl) 0;
   box-shadow: var(--card-shadow);
-  border-left: 6px solid #667eea;
+  border-left: 6px solid #0E4B8F;
 }
 
 .admin-info h3 {
@@ -726,23 +726,23 @@ body {
 }
 
 [data-theme="dark"] .addlink {
-  background: rgba(99, 102, 241, 0.1) !important;
+  background: rgba(14, 75, 143, 0.1) !important;
   color: var(--accent-primary) !important;
-  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  border: 1px solid rgba(14, 75, 143, 0.3) !important;
 }
 
 [data-theme="dark"] .addlink:hover {
-  background: rgba(99, 102, 241, 0.2) !important;
+  background: rgba(14, 75, 143, 0.2) !important;
 }
 
 [data-theme="dark"] .changelink {
-  background: rgba(99, 102, 241, 0.1) !important;
+  background: rgba(14, 75, 143, 0.1) !important;
   color: var(--accent-primary) !important;
-  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  border: 1px solid rgba(14, 75, 143, 0.3) !important;
 }
 
 [data-theme="dark"] .changelink:hover {
-  background: rgba(99, 102, 241, 0.2) !important;
+  background: rgba(14, 75, 143, 0.2) !important;
 }
 
 [data-theme="dark"] .viewlink {
@@ -850,7 +850,7 @@ body {
   right: -350px;
   width: 350px;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
   z-index: 9999;
   transition: right 0.3s ease;
@@ -1026,7 +1026,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 2.5rem;
   border-radius: 25px;
@@ -1209,7 +1209,7 @@ body {
 }
 
 .ma-footer a {
-  color: #667eea;
+  color: #0E4B8F;
   text-decoration: none;
   font-weight: 600;
 }

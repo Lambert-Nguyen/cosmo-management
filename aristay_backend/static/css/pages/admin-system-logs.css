@@ -5,7 +5,7 @@
 
 /* Log Viewer Variables */
 :root {
-    --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    --primary-gradient: linear-gradient(135deg, #0B3D75 0%, #1e40af 100%);
     --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
     --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
@@ -13,7 +13,7 @@
     --success-color: #10b981;
     --warning-color: #f59e0b;
     --danger-color: #ef4444;
-    --info-color: #3b82f6;
+    --info-color: #0E4B8F;
     --debug-color: #6b7280;
     --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     --border-radius: 16px;
