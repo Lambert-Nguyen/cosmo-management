@@ -190,8 +190,8 @@ function initPropertyChart(data) {
             datasets: [{
                 label: 'Tasks',
                 data: data.data,
-                backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                borderColor: '#667eea',
+                backgroundColor: 'rgba(14, 75, 143, 0.8)',
+                borderColor: '#0E4B8F',
                 borderWidth: 2,
                 borderRadius: 8,
                 borderSkipped: false,

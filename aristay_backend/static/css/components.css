@@ -302,7 +302,7 @@
 }
 
 .stat-card.in-progress {
-  border-left: 4px solid #3b82f6;
+  border-left: 4px solid var(--color-primary);
 }
 
 .stat-card.completed {
@@ -344,7 +344,7 @@
 
 .stat-action {
   font-size: 0.75rem;
-  color: #667eea;
+  color: var(--color-primary);
   margin-top: 0.5rem;
   opacity: 0.8;
   transition: opacity 0.2s ease;
@@ -391,7 +391,7 @@
 }
 
 .btn-action {
-  background: #667eea;
+  background: var(--color-primary);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -410,7 +410,7 @@
 }
 
 .btn-action:hover:not(:disabled) {
-  background: #5a67d8;
+  background: var(--color-primary-dark);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -430,11 +430,11 @@
 }
 
 .btn-action.complete-task {
-  background: #3b82f6;
+  background: var(--color-primary);
 }
 
 .btn-action.complete-task:hover:not(:disabled) {
-  background: #2563eb;
+  background: var(--color-primary-dark);
 }
 
 .btn-action.view-task {
@@ -535,7 +535,7 @@
 }
 
 .notification-info {
-  background: #3b82f6;
+  background: var(--color-primary);
 }
 
 .notification-success {
@@ -1043,5 +1043,5 @@
 
 [data-theme="dark"] .property-autocomplete-item:hover,
 [data-theme="dark"] .property-autocomplete-item.highlighted {
-  background-color: rgba(59, 130, 246, 0.2);
+  background-color: rgba(14, 75, 143, 0.3);
 }

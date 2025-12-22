@@ -22,7 +22,7 @@
 .room-list-header {
     padding: var(--space-5, 20px);
     border-bottom: 1px solid var(--border-color, #e0e0e0);
-    background: var(--primary-color, #6366f1);
+    background: var(--primary-color, #0E4B8F);
     color: var(--color-white, white);
 }
 
@@ -66,9 +66,9 @@
 }
 
 .room-item.active {
-    background: var(--primary-color, #6366f1);
+    background: var(--primary-color, #0E4B8F);
     color: var(--color-white, white);
-    border-color: var(--primary-color, #6366f1);
+    border-color: var(--primary-color, #0E4B8F);
 }
 
 .room-item-header {
@@ -171,7 +171,7 @@
 }
 
 .message.own .message-content {
-    background: var(--primary-color, #6366f1);
+    background: var(--primary-color, #0E4B8F);
     color: var(--color-white, white);
 }
 
@@ -179,7 +179,7 @@
     font-weight: var(--font-weight-semibold, 600);
     font-size: var(--font-size-xs, 13px);
     margin-bottom: var(--space-1, 5px);
-    color: var(--primary-color, #6366f1);
+    color: var(--primary-color, #0E4B8F);
 }
 
 .message.own .message-sender {
@@ -227,7 +227,7 @@
 
 .message-input:focus {
     outline: none;
-    border-color: var(--primary-color, #6366f1);
+    border-color: var(--primary-color, #0E4B8F);
 }
 
 .send-button {
@@ -235,7 +235,7 @@
     height: 44px;
     border: none;
     border-radius: var(--radius-full, 50%);
-    background: var(--primary-color, #6366f1);
+    background: var(--primary-color, #0E4B8F);
     color: var(--color-white, white);
     font-size: var(--font-size-lg, 18px);
     cursor: pointer;

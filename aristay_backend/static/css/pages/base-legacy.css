@@ -1,8 +1,8 @@
 /* Extracted from api/templates/base.html */
 
 :root {
-    --primary-color: #3b82f6;
-    --primary-dark: #2563eb;
+    --primary-color: #0E4B8F;
+    --primary-dark: #0B3D75;
     --primary-light: #dbeafe;
     --secondary-color: #8b5cf6;
     --success-color: #10b981;
@@ -17,7 +17,7 @@
 
 body {
     font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
     min-height: 100vh;
     margin: 0;
     padding: 0;

@@ -5,14 +5,31 @@
  */
 
 :root {
-  /* ==================== Colors - Primary ==================== */
-  --color-primary: #3b82f6;        /* Blue 500 */
-  --color-primary-dark: #2563eb;   /* Blue 600 */
-  --color-primary-darker: #1d4ed8; /* Blue 700 */
-  --color-primary-light: #60a5fa;  /* Blue 400 */
-  --color-primary-lighter: #93c5fd;/* Blue 300 */
-  --color-primary-50: #eff6ff;     /* Blue 50 */
-  --color-primary-100: #dbeafe;    /* Blue 100 */
+  /* ==================== Colors - Primary (Navy) ==================== */
+  --color-primary: #0E4B8F;        /* Navy 500 */
+  --color-primary-dark: #0B3D75;   /* Navy 600 */
+  --color-primary-darker: #082F5B; /* Navy 700 */
+  --color-primary-light: #3F7ABF;  /* Navy 400 */
+  --color-primary-lighter: #6B9BD0;/* Navy 300 */
+  --color-primary-50: #E8F0F8;     /* Navy 50 */
+  --color-primary-100: #C5D9EE;    /* Navy 100 */
+
+  /* ==================== Colors - Navy Scale ==================== */
+  --color-navy-50: #E8F0F8;
+  --color-navy-100: #C5D9EE;
+  --color-navy-200: #9DBDE1;
+  --color-navy-300: #6B9BD0;
+  --color-navy-400: #3F7ABF;
+  --color-navy-500: #0E4B8F;
+  --color-navy-600: #0B3D75;
+  --color-navy-700: #082F5B;
+  --color-navy-800: #052141;
+  --color-navy-900: #031427;
+
+  /* ==================== Gradients ==================== */
+  --gradient-primary: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
+  --gradient-primary-dark: linear-gradient(135deg, #082F5B 0%, #052141 100%);
+  --gradient-corporate: linear-gradient(135deg, #0E4B8F 0%, #475569 100%);
   
   /* ==================== Colors - Status ==================== */
   --color-success: #10b981;        /* Green 500 */
@@ -33,9 +50,9 @@
   --color-danger-50: #fef2f2;      /* Red 50 */
   --color-danger-100: #fee2e2;     /* Red 100 */
   
-  --color-info: #3b82f6;           /* Blue 500 - same as primary */
-  --color-info-dark: #2563eb;      /* Blue 600 */
-  --color-info-light: #60a5fa;     /* Blue 400 */
+  --color-info: #0E4B8F;           /* Navy 500 - same as primary */
+  --color-info-dark: #0B3D75;      /* Navy 600 */
+  --color-info-light: #3F7ABF;     /* Navy 400 */
   
   /* ==================== Colors - Neutral/Gray ==================== */
   --color-gray-50: #f9fafb;
@@ -170,12 +187,12 @@
 
 /* ==================== Dark Mode ==================== */
 [data-theme="dark"] {
-  /* Colors - Primary (slightly lighter in dark mode) */
-  --color-primary: #60a5fa;
-  --color-primary-dark: #3b82f6;
-  --color-primary-darker: #2563eb;
-  --color-primary-light: #93c5fd;
-  --color-primary-lighter: #bfdbfe;
+  /* Colors - Primary (Navy - lighter shades in dark mode) */
+  --color-primary: #6B9BD0;        /* Navy 300 - lighter for visibility */
+  --color-primary-dark: #0E4B8F;   /* Navy 500 */
+  --color-primary-darker: #0B3D75; /* Navy 600 */
+  --color-primary-light: #9DBDE1;  /* Navy 200 */
+  --color-primary-lighter: #C5D9EE;/* Navy 100 */
   
   /* Colors - Neutral (inverted) */
   --color-gray-50: #111827;

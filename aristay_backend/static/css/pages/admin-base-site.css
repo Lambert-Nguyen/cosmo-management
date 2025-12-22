@@ -6,7 +6,7 @@
 
 /* Header */
 .aa-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 0;
@@ -98,7 +98,7 @@
 
 /* Override Django Admin Default Header Colors */
 #header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    background: var(--gradient-primary) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 }
@@ -143,7 +143,7 @@
 
 /* Override breadcrumb bar colors */
 #breadcrumbs {
-    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+    background: var(--gradient-primary-dark) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -257,23 +257,23 @@
 }
 
 [data-theme="dark"] .addlink {
-    background: rgba(99, 102, 241, 0.1) !important;
+    background: rgba(14, 75, 143, 0.1) !important;
     color: var(--accent-primary) !important;
-    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    border: 1px solid rgba(14, 75, 143, 0.3) !important;
 }
 
 [data-theme="dark"] .addlink:hover {
-    background: rgba(99, 102, 241, 0.2) !important;
+    background: rgba(14, 75, 143, 0.2) !important;
 }
 
 [data-theme="dark"] .changelink {
-    background: rgba(99, 102, 241, 0.1) !important;
+    background: rgba(14, 75, 143, 0.1) !important;
     color: var(--accent-primary) !important;
-    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    border: 1px solid rgba(14, 75, 143, 0.3) !important;
 }
 
 [data-theme="dark"] .changelink:hover {
-    background: rgba(99, 102, 241, 0.2) !important;
+    background: rgba(14, 75, 143, 0.2) !important;
 }
 
 [data-theme="dark"] .viewlink {
@@ -326,7 +326,7 @@
     right: -350px;
     width: 350px;
     height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
     z-index: 9999;
     transition: right 0.3s ease;
@@ -499,7 +499,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     color: white;
     padding: 2rem;
     border-radius: 20px;

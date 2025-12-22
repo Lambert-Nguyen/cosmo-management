@@ -15,7 +15,7 @@
 
     /* Header Section */
     .calendar-header-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
         color: white;
         padding: 2rem 0;
         margin-bottom: 2rem;
@@ -108,7 +108,7 @@
     }
 
     .filters-title i {
-        color: #667eea;
+        color: #0E4B8F;
     }
 
     .filter-actions {
@@ -129,12 +129,12 @@
     }
 
     .btn-apply {
-        background: #667eea;
+        background: #0E4B8F;
         color: white;
     }
 
     .btn-apply:hover {
-        background: #5a67d8;
+        background: #0B3D75;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
@@ -171,7 +171,7 @@
     }
 
     .filter-label i {
-        color: #667eea;
+        color: #0E4B8F;
         width: 16px;
     }
 
@@ -187,7 +187,7 @@
 
     .filter-select:focus {
         outline: none;
-        border-color: #667eea;
+        border-color: #0E4B8F;
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
 
@@ -219,7 +219,7 @@
         width: 24px;
         height: 24px;
         border: 3px solid #e0e7ff;
-        border-top: 3px solid #667eea;
+        border-top: 3px solid #0E4B8F;
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }
@@ -251,10 +251,10 @@
     .fc {
         --fc-border-color: #e2e8f0;
         --fc-today-bg-color: #f0f9ff;
-        --fc-button-bg-color: #667eea;
-        --fc-button-border-color: #667eea;
-        --fc-button-hover-bg-color: #5a67d8;
-        --fc-button-hover-border-color: #5a67d8;
+        --fc-button-bg-color: #0E4B8F;
+        --fc-button-border-color: #0E4B8F;
+        --fc-button-hover-bg-color: #0B3D75;
+        --fc-button-hover-border-color: #0B3D75;
         --fc-button-active-bg-color: #4c51bf;
         --fc-button-active-border-color: #4c51bf;
     }
@@ -474,12 +474,12 @@
     }
 
     .btn-primary {
-        background: #667eea;
+        background: #0E4B8F;
         color: white;
     }
 
     .btn-primary:hover {
-        background: #5a67d8;
+        background: #0B3D75;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }

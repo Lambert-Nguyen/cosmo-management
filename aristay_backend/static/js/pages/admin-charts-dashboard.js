@@ -41,11 +41,11 @@ function initAdminChartsDashboard() {
               data: statusChartData.data,
               backgroundColor: [
                 'rgba(245, 158, 11, 0.8)',
-                'rgba(59, 130, 246, 0.8)',
+                'rgba(14, 75, 143, 0.8)',
                 'rgba(16, 185, 129, 0.8)',
                 'rgba(239, 68, 68, 0.8)',
               ],
-              borderColor: ['#f59e0b', '#3b82f6', '#10b981', '#ef4444'],
+              borderColor: ['#f59e0b', '#0E4B8F', '#10b981', '#ef4444'],
               borderWidth: 3,
               hoverOffset: 15,
             },
@@ -221,8 +221,8 @@ function initAdminChartsDashboard() {
             {
               label: 'Total Tasks',
               data: userPerformanceChartData.total,
-              backgroundColor: 'rgba(59, 130, 246, 0.6)',
-              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(14, 75, 143, 0.6)',
+              borderColor: '#0E4B8F',
               borderWidth: 2,
               borderRadius: 6,
             },
@@ -288,15 +288,15 @@ function initAdminChartsDashboard() {
               data: userActivityChartData.data,
               backgroundColor: [
                 'rgba(239, 68, 68, 0.8)',
-                'rgba(59, 130, 246, 0.8)',
+                'rgba(14, 75, 143, 0.8)',
                 'rgba(245, 158, 11, 0.8)',
                 'rgba(16, 185, 129, 0.8)',
                 'rgba(139, 92, 246, 0.8)',
                 'rgba(245, 101, 101, 0.8)',
                 'rgba(156, 163, 175, 0.8)',
-                'rgba(99, 102, 241, 0.8)',
+                'rgba(14, 75, 143, 0.8)',
               ],
-              borderColor: ['#ef4444', '#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#f56565', '#9ca3af', '#6366f1'],
+              borderColor: ['#ef4444', '#0E4B8F', '#f59e0b', '#10b981', '#8b5cf6', '#f56565', '#9ca3af', '#0E4B8F'],
               borderWidth: 3,
               hoverOffset: 12,
             },
@@ -375,7 +375,7 @@ function initAdminChartsDashboard() {
         if (data.success) {
           const stats = data.stats;
           content.innerHTML = `
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <div style="background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
               <h3 style="margin: 0 0 15px 0;">📊 File Storage Overview</h3>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div>

@@ -21,7 +21,7 @@
 
 /* Bulk Actions Panel */
 .bulk-actions-panel {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
     border-radius: 8px;
     margin-top: 1rem;
     overflow: hidden;
@@ -87,7 +87,7 @@
 
 .filter-input:focus, .filter-select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #0E4B8F;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -100,12 +100,12 @@
 
 .btn-outline {
     background: white;
-    color: #667eea;
-    border: 1px solid #667eea;
+    color: #0E4B8F;
+    border: 1px solid #0E4B8F;
 }
 
 .btn-outline:hover {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .task-card.selected {
-    border-color: #667eea;
+    border-color: #0E4B8F;
     box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
 }
 
@@ -157,7 +157,7 @@
 .task-checkbox {
     width: 18px;
     height: 18px;
-    accent-color: #667eea;
+    accent-color: #0E4B8F;
 }
 
 .task-title-section {
@@ -179,7 +179,7 @@
 }
 
 .task-link:hover {
-    color: #667eea;
+    color: #0E4B8F;
 }
 
 .task-badges {
@@ -240,9 +240,9 @@
 }
 
 .btn-action:hover {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
-    border-color: #667eea;
+    border-color: #0E4B8F;
 }
 
 .btn-action.btn-danger {
@@ -289,7 +289,7 @@
 }
 
 .read-more {
-    color: #667eea;
+    color: #0E4B8F;
     text-decoration: none;
     font-weight: 500;
 }
@@ -317,7 +317,7 @@
 }
 
 .progress-percentage {
-    color: #667eea;
+    color: #0E4B8F;
     font-weight: 600;
 }
 
@@ -332,7 +332,7 @@
 .progress-fill {
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(90deg, #0E4B8F 0%, #0B3D75 100%);
     border-radius: 4px;
     transition: width 0.3s ease;
 }
@@ -412,7 +412,7 @@
 }
 
 .pagination-current {
-    background: #667eea;
+    background: #0E4B8F;
     color: white;
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
@@ -422,7 +422,7 @@
 
 .pagination-link {
     padding: 0.5rem 0.75rem;
-    color: #667eea;
+    color: #0E4B8F;
     text-decoration: none;
     border-radius: 6px;
     font-size: 0.875rem;
@@ -579,7 +579,7 @@
     height: 20px;
     margin: -10px 0 0 -10px;
     border: 2px solid #e2e8f0;
-    border-top: 2px solid #667eea;
+    border-top: 2px solid #0E4B8F;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -591,12 +591,12 @@
 
 /* Accessibility Improvements */
 .task-checkbox:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid #0E4B8F;
     outline-offset: 2px;
 }
 
 .btn:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid #0E4B8F;
     outline-offset: 2px;
 }
 
@@ -643,7 +643,7 @@
     gap: 1rem;
 }
 
-.notification-info { background: #3b82f6; }
+.notification-info { background: #0E4B8F; }
 .notification-success { background: #10b981; }
 .notification-error { background: #ef4444; }
 .notification-warning { background: #f59e0b; }
