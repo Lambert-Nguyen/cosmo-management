@@ -1,28 +1,32 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 1.6
+**Document Version:** 1.7
 **Created:** 2025-12-21
-**Last Updated:** 2025-12-22
-**Status:** Planning Phase
+**Last Updated:** 2025-12-23
+**Status:** Ready for Implementation
 **Platform Name:** Cosmo Management (formerly AriStay)
 
 ---
 
 ## Executive Summary
 
-This plan outlines the complete redesign of the **Cosmo Management** platform's user interface from Django templates to Flutter for web. Django will be retained exclusively for admin/superuser operations. The platform is designed as a **multi-tenant SaaS template** that can serve multiple property/operations management businesses.
+This plan outlines the complete redesign of the **Cosmo Management** platform's user interface from Django templates to Flutter for web. Django will be retained exclusively for admin/superuser operations.
+
+### Implementation Approach: Single-Tenant MVP First
+The initial release (v1.0) will focus on **Phases 0-13** as a single-tenant application (53 screens). Multi-tenant SaaS capabilities (Phases 14-19) are documented for future expansion but **deferred** to v2.0+.
 
 ### Current State
 - **90+ Django HTML templates** with 100% refactored modern CSS/JS
 - **150+ API endpoints** (REST + Django views)
 - **38 database models** with comprehensive relationships
-- **Flutter mobile app** already exists with Firebase integration
+- **Flutter mobile app** (partial implementation) with Firebase integration
 - **PostgreSQL database** with soft-delete, audit trails, and history tracking
 
-### Target State
+### Target State (v1.0 MVP)
 - **Flutter Web** for all user-facing interfaces (Portal, Staff, Manager, Public)
 - **Django Admin** for superuser/admin operations only
-- **Unified Flutter codebase** for mobile + web (extend existing `aristay_flutter_frontend/`)
+- **Unified Flutter codebase** for mobile + web (extend existing Flutter app)
+- **Single-tenant deployment** with future multi-tenant readiness
 
 ---
 
@@ -30,14 +34,88 @@ This plan outlines the complete redesign of the **Cosmo Management** platform's 
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| **Flutter Base** | Extend existing `aristay_flutter_frontend/` | Leverage existing Firebase setup and mobile infrastructure |
+| **Flutter Base** | Extend existing `aristay_flutter_frontend/` → `cosmo_app/` | Leverage existing Firebase setup and mobile infrastructure |
 | **Manager Module** | Move to Flutter Web | Unified experience for managers alongside Portal/Staff |
 | **Chat Implementation** | HTTP Polling first | Simpler implementation, add WebSocket later |
-| **Phase Priority** | All modules equally important | Balanced development across Staff, Portal, Chat |
-| **Multi-Tenancy** | Build as SaaS template | Serve multiple businesses with same codebase |
-| **Tenant Isolation** | Logical isolation (tenant_id) | Shared database with row-level isolation |
-| **Billing Integration** | Stripe | Industry standard, comprehensive API |
-| **Feature Flags** | Per-tenant configuration | Allow feature customization per business |
+| **Phase Priority** | Staff Module first | Core task management is primary value proposition |
+| **Multi-Tenancy** | Defer to v2.0+ | Build single-tenant MVP first (Phases 0-13) |
+| **Git Strategy** | New branch `refactor/cosmo-rename` | Isolate renaming changes, merge when stable |
+| **Database Strategy** | Create new `cosmo_db` | Fresh database, migrate data as needed |
+| **Repository Rename** | Manual via GitHub UI | User handles remote rename separately |
+
+---
+
+## Implementation Strategy (Confirmed)
+
+### Phase Execution Order
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        v1.0 MVP IMPLEMENTATION                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Phase 0: Platform Renaming (AriStay → Cosmo Management)                    │
+│     ├── Create branch: refactor/cosmo-rename                                │
+│     ├── Rename directories and files                                        │
+│     ├── Create new database: cosmo_db                                       │
+│     ├── Update all code references                                          │
+│     ├── GitHub repo rename (manual by user)                                 │
+│     └── Verify and merge                                                    │
+│                                                                              │
+│  Phase 1: Foundation & Core Setup                                           │
+│     └── Design system, services, state management                           │
+│                                                                              │
+│  Phase 2: Authentication Module                                             │
+│     └── Login, register, password reset (5 screens)                         │
+│                                                                              │
+│  Phase 3: Portal Module ────────────────────────────┐                       │
+│     └── Property owners interface (11 screens)      │                       │
+│                                                     │ Can parallelize       │
+│  Phase 4-6: Staff Module ───────────────────────────┤ after Phase 2         │
+│     └── Core tasks + dashboards + auxiliary         │                       │
+│         (5 + 4 + 10 = 19 screens)                   │                       │
+│                                                     │                       │
+│  Phase 7: Chat Module ──────────────────────────────┘                       │
+│     └── Team communication (5 screens)                                      │
+│                                                                              │
+│  Phase 8: Manager Module                                                    │
+│     └── Team management (8 screens)                                         │
+│                                                                              │
+│  Phase 9-10: Notifications & Profile                                        │
+│     └── System notifications, user settings (5 screens)                     │
+│                                                                              │
+│  Phase 11-13: Polish & Deploy                                               │
+│     └── Offline support, testing, deployment                                │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  TOTAL v1.0: 53 screens (Single-tenant)                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     v2.0+ FUTURE (Multi-Tenant SaaS)                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Phase 14: Multi-Tenancy Foundation                                         │
+│  Phase 15: Super-Admin Panel (9 screens)                                    │
+│  Phase 16: Billing & Subscription                                           │
+│  Phase 17: Tenant Onboarding (6 screens)                                    │
+│  Phase 18-19: Integrations & Advanced Features                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  TOTAL v2.0+: +15 screens (68 total)                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Module Priority After Foundation
+
+| Priority | Module | Screens | Rationale |
+|----------|--------|---------|-----------|
+| 1 | Authentication | 5 | Required for all other modules |
+| 2 | Staff Module (Core) | 5 | Primary value - task management |
+| 3 | Staff Module (Dashboards) | 4 | Task type specific views |
+| 4 | Portal Module | 11 | Property owner visibility |
+| 5 | Staff Module (Auxiliary) | 10 | Supporting features |
+| 6 | Chat Module | 5 | Team communication |
+| 7 | Manager Module | 8 | Team management |
+| 8 | Notifications & Profile | 5 | System features |
 
 ---
 
@@ -1186,7 +1264,7 @@ class TenantLifecycleEvent(models.Model):
 │                                                                          │
 │  OPTION 1: Single Branded App (Recommended for most plans)              │
 │  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │  • One app: "PropFlow" (or platform name)                        │   │
+│  │  • One app: "CosmoApp" (or platform name)                        │   │
 │  │  • Tenant selection at login                                     │   │
 │  │  • Dynamic branding after login (colors, logo)                   │   │
 │  │  • Available: Free, Starter, Pro                                 │   │
@@ -1697,19 +1775,30 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 **Objective:** Rename all project files, directories, and references from AriStay to Cosmo Management
 
 **Priority:** Must complete before any new development
+**Status:** Ready to execute
+**Git Branch:** `refactor/cosmo-rename` (create from `refactor_01`)
+
+#### Pre-Requisites
+```bash
+# 1. Create and checkout new branch
+git checkout -b refactor/cosmo-rename
+
+# 2. Ensure clean working directory
+git status  # Should show no uncommitted changes
+```
 
 #### Task 0.1: Backend Renaming
 ```bash
-# Directory renames
-aristay_app/                    → cosmo_management/
-aristay_app/aristay/            → cosmo_management/cosmo_backend/
+# Directory renames (from project root)
+aristay_backend/               → cosmo_backend/
 
 # Files to update
-├── manage.py                   → Update DJANGO_SETTINGS_MODULE
-├── cosmo_backend/settings.py   → Update APP_NAME, ALLOWED_HOSTS
-├── cosmo_backend/urls.py       → Update module imports
-├── cosmo_backend/wsgi.py       → Update application reference
-├── cosmo_backend/asgi.py       → Update application reference
+├── manage.py                   → Update DJANGO_SETTINGS_MODULE to 'backend.settings'
+├── cosmo_backend/backend/settings.py      → Update APP_NAME
+├── cosmo_backend/backend/settings_base.py → Update APP_NAME, references
+├── cosmo_backend/backend/urls.py          → Update module imports
+├── cosmo_backend/backend/wsgi.py          → Update application reference
+├── cosmo_backend/backend/asgi.py          → Update application reference
 └── requirements.txt            → No changes needed
 ```
 
@@ -1753,14 +1842,23 @@ aristay_flutter_frontend/       → cosmo_app/
     └── "short_name": "Cosmo"
 ```
 
-#### Task 0.3: Database
+#### Task 0.3: Database (Create New)
 ```sql
--- Option A: Rename existing database
-ALTER DATABASE aristay_db RENAME TO cosmo_db;
-
--- Option B: Create new database and migrate
+-- Create fresh database (recommended approach)
 CREATE DATABASE cosmo_db;
--- Then update settings and run migrations
+
+-- Grant permissions (adjust user as needed)
+GRANT ALL PRIVILEGES ON DATABASE cosmo_db TO postgres;
+```
+
+```bash
+# After database creation, run migrations
+cd cosmo_backend
+python manage.py migrate
+
+# (Optional) Copy data from old database if needed
+# pg_dump aristay_local > backup.sql
+# psql cosmo_db < backup.sql
 ```
 
 #### Task 0.4: Environment & Configuration
@@ -1798,13 +1896,28 @@ CREATE DATABASE cosmo_db;
 
 #### Task 0.6: Git Repository
 ```bash
-# Update remote (if renaming on GitHub/GitLab)
-git remote set-url origin git@github.com:yourorg/cosmo-management.git
-
-# Create migration commit
+# Commit all renaming changes
 git add -A
-git commit -m "Rename platform from AriStay to Cosmo Management"
+git commit -m "Rename platform from AriStay to Cosmo Management
+
+- Rename aristay_backend/ to cosmo_backend/
+- Rename aristay_flutter_frontend/ to cosmo_app/
+- Update all code references
+- Configure cosmo_db database connection
+- Update package names and app identifiers"
+
+# Push branch for review
+git push -u origin refactor/cosmo-rename
 ```
+
+**GitHub Repository Rename (Manual Step):**
+> The repository rename from `aristay_app` to `cosmo-management` (or similar)
+> should be done manually via GitHub Settings → General → Repository name.
+>
+> After GitHub rename, update local remote:
+> ```bash
+> git remote set-url origin git@github.com:yourorg/cosmo-management.git
+> ```
 
 #### Task 0.7: Verification Checklist
 - [ ] Django server starts without errors
@@ -1818,11 +1931,13 @@ git commit -m "Rename platform from AriStay to Cosmo Management"
 #### Deliverables:
 | Item | Before | After |
 |------|--------|-------|
-| Root directory | `aristay_app/` | `cosmo_management/` |
-| Django project | `aristay/` | `cosmo_backend/` |
+| Root directory | `aristay_app/` | `cosmo_management/` (after GitHub rename) |
+| Django backend | `aristay_backend/` | `cosmo_backend/` |
 | Flutter app | `aristay_flutter_frontend/` | `cosmo_app/` |
-| Database | `aristay_db` | `cosmo_db` |
-| Package ID | `com.aristay.app` | `com.cosmomgmt.app` |
+| Database | `aristay_local` | `cosmo_db` (new database) |
+| Android Package | `com.example.aristay_flutter_frontend` | `com.cosmomgmt.app` |
+| iOS Bundle ID | `com.example.aristayFlutterFrontend` | `com.cosmomgmt.app` |
+| Git Branch | `refactor_01` | `refactor/cosmo-rename` → merge to `main` |
 
 ---
 
@@ -2600,6 +2715,34 @@ aristay_flutter_frontend/
 | 2025-12-22 | 1.4 | **MAJOR** - Enterprise SaaS features: billing, compliance, partner program, lifecycle management |
 | 2025-12-22 | 1.5 | **NAMING** - Confirmed platform name: Cosmo Management with complete renaming strategy |
 | 2025-12-22 | 1.6 | **PHASE 0** - Added detailed Phase 0: Platform Renaming with step-by-step migration tasks |
+| 2025-12-23 | 1.7 | **IMPLEMENTATION** - Finalized implementation strategy with confirmed decisions |
+
+### Version 1.7 - Implementation Strategy Finalized
+
+**Key Decisions Confirmed:**
+- Single-tenant MVP first (v1.0 = Phases 0-13, 53 screens)
+- Multi-tenancy deferred to v2.0+
+- Staff Module priority after foundation
+- Git branch: `refactor/cosmo-rename`
+- Database: Create new `cosmo_db` (not rename existing)
+- GitHub repo rename: Manual by user via GitHub UI
+
+**New Sections Added:**
+- Implementation Strategy section with phase execution order diagram
+- Module priority table with rationale
+- v1.0 vs v2.0+ scope separation
+
+**Phase 0 Updates:**
+- Added pre-requisites (branch creation)
+- Updated database task to "Create New" approach
+- Added GitHub manual rename instructions
+- Updated deliverables table with actual directory names
+- Added commit message template
+
+**Status Changed:**
+- Document status: "Planning Phase" → "Ready for Implementation"
+
+---
 
 ### Version 1.6 - Phase 0 Added
 
