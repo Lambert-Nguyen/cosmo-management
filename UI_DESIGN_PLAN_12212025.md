@@ -1,6 +1,6 @@
 # AriStay UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 1.1
+**Document Version:** 1.3
 **Created:** 2025-12-21
 **Last Updated:** 2025-12-22
 **Status:** Planning Phase
@@ -33,6 +33,10 @@ This plan outlines the complete redesign of the AriStay property management syst
 | **Manager Module** | Move to Flutter Web | Unified experience for managers alongside Portal/Staff |
 | **Chat Implementation** | HTTP Polling first | Simpler implementation, add WebSocket later |
 | **Phase Priority** | All modules equally important | Balanced development across Staff, Portal, Chat |
+| **Multi-Tenancy** | Build as SaaS template | Serve multiple businesses with same codebase |
+| **Tenant Isolation** | Logical isolation (tenant_id) | Shared database with row-level isolation |
+| **Billing Integration** | Stripe | Industry standard, comprehensive API |
+| **Feature Flags** | Per-tenant configuration | Allow feature customization per business |
 
 ---
 
@@ -68,6 +72,318 @@ This plan outlines the complete redesign of the AriStay property management syst
 ├─────────────────────────────────────────────────────────────┤
 │                    PostgreSQL (38 models)                    │
 └─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Multi-Tenant SaaS Architecture
+
+### Vision
+Transform this platform into a **white-label SaaS template** that can serve multiple businesses with similar property/task management needs, not just AriStay.
+
+### Multi-Tenant Target Architecture
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                      SaaS Platform Layer                            │
+├─────────────────────────────────────────────────────────────────────┤
+│  Super-Admin Panel │ Billing Dashboard │ Tenant Management         │
+├─────────────────────────────────────────────────────────────────────┤
+│                      Tenant Isolation Layer                         │
+├──────────────┬──────────────┬──────────────┬───────────────────────┤
+│   Tenant A   │   Tenant B   │   Tenant C   │   Tenant N...         │
+│ (AriStay)    │ (Hotel Corp) │ (Cleaning Co)│                       │
+├──────────────┴──────────────┴──────────────┴───────────────────────┤
+│           Flutter Web/Mobile (Tenant-Aware, White-Label)            │
+├─────────────────────────────────────────────────────────────────────┤
+│       Django REST API (Multi-Tenant with Feature Flags)             │
+├─────────────────────────────────────────────────────────────────────┤
+│     PostgreSQL (Logical Isolation via tenant_id on all models)      │
+├─────────────────────────────────────────────────────────────────────┤
+│ Stripe Billing │ Firebase │ Cloudinary │ SendGrid │ Redis Cache    │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### New Models Required for Multi-Tenancy
+
+#### 1. Tenant Model (NEW)
+```python
+class Tenant(models.Model):
+    """Organization/workspace/business"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)  # For subdomain routing
+
+    # Branding (White-Label)
+    logo = models.ImageField(upload_to='tenant_logos/', null=True)
+    primary_color = models.CharField(max_length=7, default='#3B82F6')
+    secondary_color = models.CharField(max_length=7, default='#1E40AF')
+    favicon = models.ImageField(upload_to='tenant_favicons/', null=True)
+    custom_domain = models.CharField(max_length=255, null=True, unique=True)
+
+    # Settings
+    timezone = models.CharField(max_length=32, default='UTC')
+    language = models.CharField(max_length=5, default='en')
+    date_format = models.CharField(max_length=20, default='YYYY-MM-DD')
+
+    # Status
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+```
+
+#### 2. TenantSettings Model (NEW)
+```python
+class TenantSettings(models.Model):
+    """Per-tenant feature configuration"""
+    tenant = models.OneToOneField(Tenant, on_delete=models.CASCADE)
+
+    # Feature Toggles
+    enable_chat = models.BooleanField(default=True)
+    enable_photos = models.BooleanField(default=True)
+    enable_inventory = models.BooleanField(default=False)
+    enable_lost_found = models.BooleanField(default=False)
+    enable_calendar = models.BooleanField(default=True)
+    enable_checklists = models.BooleanField(default=True)
+    enable_email_digest = models.BooleanField(default=True)
+
+    # Customization
+    custom_task_types = models.JSONField(default=list)  # Override default types
+    custom_booking_statuses = models.JSONField(default=list)
+    photo_approval_required = models.BooleanField(default=True)
+
+    # Limits
+    max_users = models.IntegerField(default=10)
+    max_properties = models.IntegerField(default=50)
+    max_storage_gb = models.IntegerField(default=10)
+```
+
+#### 3. Subscription Model (NEW)
+```python
+class Subscription(models.Model):
+    """Billing and subscription management"""
+    tenant = models.OneToOneField(Tenant, on_delete=models.CASCADE)
+
+    plan = models.CharField(choices=[
+        ('free', 'Free'),
+        ('starter', 'Starter - $29/mo'),
+        ('professional', 'Professional - $99/mo'),
+        ('enterprise', 'Enterprise - Custom')
+    ], default='free')
+
+    stripe_customer_id = models.CharField(max_length=100, null=True)
+    stripe_subscription_id = models.CharField(max_length=100, null=True)
+
+    status = models.CharField(choices=[
+        ('active', 'Active'),
+        ('trialing', 'Trialing'),
+        ('past_due', 'Past Due'),
+        ('canceled', 'Canceled'),
+        ('suspended', 'Suspended')
+    ], default='trialing')
+
+    trial_ends_at = models.DateTimeField(null=True)
+    current_period_start = models.DateTimeField(null=True)
+    current_period_end = models.DateTimeField(null=True)
+
+    billing_email = models.EmailField()
+```
+
+#### 4. Plan Model (NEW)
+```python
+class Plan(models.Model):
+    """Subscription plans and pricing"""
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    stripe_price_id = models.CharField(max_length=100)
+
+    # Limits
+    max_users = models.IntegerField()
+    max_properties = models.IntegerField()
+    max_storage_gb = models.IntegerField()
+
+    # Features included
+    features = models.JSONField(default=list)
+    # ['chat', 'photos', 'inventory', 'lost_found', 'api_access', 'priority_support']
+
+    price_monthly = models.DecimalField(max_digits=10, decimal_places=2)
+    price_yearly = models.DecimalField(max_digits=10, decimal_places=2)
+
+    is_active = models.BooleanField(default=True)
+```
+
+### Feature Categorization
+
+#### CORE Features (All tenants, always enabled)
+| Feature | Description | Required |
+|---------|-------------|----------|
+| Task Management | Create, assign, track, complete tasks | Yes |
+| Property Management | Property CRUD, ownership | Yes |
+| User Management | Users, roles, permissions | Yes |
+| Notifications | Push, email, in-app | Yes |
+| Mobile Access | Flutter app access | Yes |
+| Basic Reporting | Task completion stats | Yes |
+| Audit Logging | Activity tracking | Yes |
+
+#### OPTIONAL Features (Toggle per tenant)
+| Feature | Description | Default | Plans |
+|---------|-------------|---------|-------|
+| Chat System | Real-time messaging | ON | All |
+| Photo Management | Before/after photos | ON | All |
+| Inventory System | Supply tracking | OFF | Pro+ |
+| Lost & Found | Item tracking | OFF | Pro+ |
+| Calendar System | Visual scheduling | ON | All |
+| Checklists | Task checklists | ON | All |
+| Email Digest | Summary emails | ON | All |
+| Excel Import | Booking imports | OFF | Pro+ |
+| API Access | Public API | OFF | Enterprise |
+| Custom Domain | White-label URL | OFF | Enterprise |
+| SSO Integration | SAML/OAuth login | OFF | Enterprise |
+
+#### CUSTOMIZABLE Features (Per-tenant configuration)
+| Feature | Customization Options |
+|---------|----------------------|
+| Task Types | Custom names, icons, colors |
+| Booking Statuses | Custom status values |
+| Photo Workflow | Approval required (yes/no), who approves |
+| Notification Rules | When to notify, channels |
+| Branding | Logo, colors, app name |
+| Timezone | Business timezone |
+| Language | Interface language |
+| Date/Time Format | Localization |
+
+### API Changes for Multi-Tenancy
+
+#### Option 1: Header-Based Tenant (Recommended)
+```
+GET /api/tasks/
+Headers:
+  Authorization: Bearer <jwt_with_tenant_id>
+  X-Tenant-ID: abc-123-def (optional override)
+```
+
+#### Option 2: Path-Based Tenant (Alternative)
+```
+GET /api/tenants/{tenant_id}/tasks/
+```
+
+#### JWT Token Structure (Enhanced)
+```json
+{
+  "user_id": 123,
+  "tenant_id": "abc-123-def",
+  "tenant_slug": "aristay",
+  "role": "manager",
+  "permissions": ["task.create", "task.edit", ...],
+  "features": ["chat", "photos", "inventory"],
+  "exp": 1234567890
+}
+```
+
+### Flutter Multi-Tenant Support
+
+#### Tenant Selection Flow
+```
+1. User visits: app.saas.com OR tenant.saas.com
+2. If subdomain → auto-detect tenant
+3. If main domain → show tenant selector OR login with tenant code
+4. Store tenant context in local storage
+5. Include tenant in all API calls
+```
+
+#### Dynamic Theming
+```dart
+class TenantThemeProvider {
+  final String primaryColor;
+  final String secondaryColor;
+  final String? logoUrl;
+  final String appName;
+
+  ThemeData buildTheme() {
+    return ThemeData(
+      primaryColor: Color(int.parse(primaryColor.replaceFirst('#', '0xFF'))),
+      // ... dynamic theme based on tenant settings
+    );
+  }
+}
+```
+
+#### Feature Flag Checking
+```dart
+class FeatureService {
+  bool isEnabled(String feature) {
+    return currentTenant.enabledFeatures.contains(feature);
+  }
+
+  Widget buildIfEnabled(String feature, Widget child) {
+    return isEnabled(feature) ? child : SizedBox.shrink();
+  }
+}
+```
+
+### Super-Admin Panel (NEW)
+
+#### Screens to Build
+| Screen | Purpose |
+|--------|---------|
+| `SuperAdminDashboardScreen` | Platform overview, metrics |
+| `TenantListScreen` | List all tenants |
+| `TenantDetailScreen` | View/edit tenant |
+| `TenantCreateScreen` | Onboard new tenant |
+| `SubscriptionListScreen` | All subscriptions |
+| `BillingDashboardScreen` | Revenue, payments |
+| `PlanManagementScreen` | Manage pricing plans |
+| `UsageMonitoringScreen` | Resource usage per tenant |
+| `SystemHealthScreen` | Platform health |
+
+#### Super-Admin API Endpoints (NEW)
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/superadmin/tenants/` | GET/POST | List/create tenants |
+| `/api/superadmin/tenants/{id}/` | GET/PATCH/DELETE | Manage tenant |
+| `/api/superadmin/tenants/{id}/suspend/` | POST | Suspend tenant |
+| `/api/superadmin/tenants/{id}/impersonate/` | POST | Login as tenant admin |
+| `/api/superadmin/subscriptions/` | GET | List all subscriptions |
+| `/api/superadmin/subscriptions/{id}/` | PATCH | Adjust subscription |
+| `/api/superadmin/plans/` | GET/POST | Manage plans |
+| `/api/superadmin/usage/` | GET | Platform usage stats |
+| `/api/superadmin/revenue/` | GET | Revenue analytics |
+
+### Tenant Onboarding Flow (NEW)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    New Business Signup                          │
+├─────────────────────────────────────────────────────────────────┤
+│ Step 1: Business Info                                           │
+│   - Business name                                               │
+│   - Industry type (property mgmt, cleaning, hospitality)        │
+│   - Expected users, properties                                  │
+├─────────────────────────────────────────────────────────────────┤
+│ Step 2: Admin Account                                           │
+│   - Admin name, email, password                                 │
+│   - Email verification                                          │
+├─────────────────────────────────────────────────────────────────┤
+│ Step 3: Plan Selection                                          │
+│   - Free trial (14 days)                                        │
+│   - Starter / Professional / Enterprise                         │
+│   - Payment info (Stripe)                                       │
+├─────────────────────────────────────────────────────────────────┤
+│ Step 4: Initial Setup Wizard                                    │
+│   - Upload logo, set colors                                     │
+│   - Enable/disable features                                     │
+│   - Configure task types                                        │
+│   - Set timezone, language                                      │
+├─────────────────────────────────────────────────────────────────┤
+│ Step 5: Team Invitation                                         │
+│   - Invite first team members                                   │
+│   - Assign roles                                                │
+├─────────────────────────────────────────────────────────────────┤
+│ Step 6: Data Import (Optional)                                  │
+│   - Import properties from CSV                                  │
+│   - Import existing bookings                                    │
+│   - Import team members                                         │
+├─────────────────────────────────────────────────────────────────┤
+│                     → Redirect to Tenant Dashboard              │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -123,9 +439,21 @@ This plan outlines the complete redesign of the AriStay property management syst
 | `/api/tasks/{id}/unmute/` | POST | Unmute notifications | `TaskDetailScreen` |
 | `/api/tasks/{id}/assign_to_me/` | POST | Self-assign | `TaskDetailScreen` |
 | `/api/tasks/count_by_status/` | GET | Task counts | `StaffDashboardScreen` |
+| `/api/tasks/{id}/lock/` | POST | Lock task from auto-updates | `TaskDetailScreen` |
+| `/api/tasks/{id}/unlock/` | POST | Unlock task | `TaskDetailScreen` |
+| `/api/tasks/{id}/dependencies/` | GET | Get task dependencies | `TaskDetailScreen` |
 | `/api/staff/tasks/{id}/duplicate/` | POST | Duplicate task | `TaskDetailScreen` |
 | `/api/staff/tasks/{id}/progress/` | GET | Task progress % | `TaskDetailScreen` |
 | `/api/staff/task-counts/` | GET | Task statistics | `StaffDashboardScreen` |
+
+**Task Status Workflow:**
+- `pending` → `in_progress` → `completed` / `canceled`
+- `waiting_dependency` - Blocked until prerequisite tasks complete
+
+**Task Features:**
+- Task dependencies (depends_on field) - Block tasks until prerequisites complete
+- Task locking - Prevent auto-updates from Excel imports on manually-edited tasks
+- Task types: `cleaning`, `maintenance`, `laundry`, `lawn_pool`, `inspection`, `preparation`, `administration`, `other`
 
 ### 3. Task Images (Flutter)
 
@@ -150,13 +478,15 @@ This plan outlines the complete redesign of the AriStay property management syst
 | `/api/staff/checklist/photo/upload/` | POST | Upload photo | `TaskDetailScreen` |
 | `/api/staff/checklist/photo/remove/` | POST | Remove photo | `TaskDetailScreen` |
 
-**Checklist Item Types:**
+**Checklist Item Types (8 total):**
 - `check` - Simple checkbox
 - `photo_required` - Must upload photo
 - `photo_optional` - Optional photo
 - `text_input` - Text response
 - `number_input` - Numeric response
-- `blocking` - Must complete before proceeding
+- `date_input` - Date picker response
+- `time_input` - Time picker response
+- `blocking` - Must complete before proceeding (blocks task progress)
 
 ### 5. Property & Booking Management (Flutter)
 
@@ -169,7 +499,22 @@ This plan outlines the complete redesign of the AriStay property management syst
 | `/api/properties/search/` | GET | Autocomplete search | `PropertySearchWidget` |
 | `/api/bookings/` | GET | List bookings | `BookingListScreen` |
 | `/api/bookings/{id}/` | GET | Booking detail | `BookingDetailScreen` |
+| `/api/bookings/{id}/conflicts/` | GET | Check booking conflicts | `BookingDetailScreen` |
 | `/api/ownerships/` | GET | Ownership list | `PropertyDetailScreen` |
+
+**Booking Status Workflow:**
+- `booked` → `confirmed` → `currently_hosting` / `owner_staying` → `completed` / `cancelled`
+
+**Booking Conflict Detection:**
+- Same-day check-out/check-in conflicts (turnaround detection)
+- Overlapping bookings on same property
+- Cross-property staff conflicts (multiple properties same day)
+- Conflict flags displayed in booking list and detail views
+
+**Booking Provenance Tracking:**
+- `created_via`: `manual` | `excel_import` | `api` | `system`
+- `modified_via`: Same choices for tracking modifications
+- Import history with raw Excel row data preserved
 
 ### 6. Inventory Management (Flutter - Staff)
 
@@ -227,11 +572,16 @@ This plan outlines the complete redesign of the AriStay property management syst
 |----------|--------|---------|----------------|
 | `/api/chat/rooms/` | GET | List rooms | `ChatRoomListScreen` |
 | `/api/chat/rooms/` | POST | Create room | `NewChatScreen` |
+| `/api/chat/rooms/{id}/` | GET | Room detail | `ChatScreen` |
 | `/api/chat/rooms/{id}/` | PATCH | Update room | `ChatSettingsScreen` |
 | `/api/chat/rooms/{id}/archive/` | POST | Archive room | `ChatSettingsScreen` |
+| `/api/chat/rooms/{id}/unarchive/` | POST | Unarchive room | `ChatSettingsScreen` |
 | `/api/chat/rooms/{id}/mark_read/` | POST | Mark as read | Background |
+| `/api/chat/rooms/{id}/mute/` | POST | Mute room notifications | `ChatSettingsScreen` |
+| `/api/chat/rooms/{id}/unmute/` | POST | Unmute room | `ChatSettingsScreen` |
 | `/api/chat/messages/` | GET | List messages | `ChatScreen` |
 | `/api/chat/messages/` | POST | Send message | `ChatScreen` |
+| `/api/chat/messages/{id}/` | GET | Message detail | `ChatScreen` |
 | `/api/chat/messages/{id}/` | PATCH | Edit message | `ChatScreen` |
 | `/api/chat/messages/{id}/` | DELETE | Delete message | `ChatScreen` |
 | `/api/chat/messages/search/` | GET | Search messages | `MessageSearchScreen` |
@@ -239,12 +589,27 @@ This plan outlines the complete redesign of the AriStay property management syst
 | `/api/chat/participants/` | POST | Add participant | `ChatParticipantsScreen` |
 | `/api/chat/participants/{id}/` | DELETE | Remove participant | `ChatParticipantsScreen` |
 | `/api/chat/typing/` | POST | Typing indicator | `ChatScreen` |
+| `/api/chat/typing/` | GET | Get typing users | `ChatScreen` |
 
 **Chat Room Types:**
 - `direct` - 1:1 messaging
 - `group` - Group chat
-- `task` - Task-specific chat
-- `property` - Property-specific chat
+- `task` - Task-specific chat (linked to specific task)
+- `property` - Property-specific chat (linked to property)
+
+**Typing Indicator Implementation:**
+- ChatTypingIndicator model tracks active typing users per room
+- `POST /api/chat/typing/` - Send typing status (is_typing: true/false)
+- `GET /api/chat/typing/` - Poll for typing users in room
+- Auto-expires after 5 seconds of inactivity
+- Display "User is typing..." in chat UI
+
+**Message Features:**
+- Read receipts (track who has read messages)
+- Message threading/replies (reply_to field)
+- File/photo attachments (attachment_url field)
+- Message editing with edit history
+- Soft delete with "message deleted" placeholder
 
 ### 9. Notifications (Flutter)
 
@@ -342,12 +707,28 @@ This plan outlines the complete redesign of the AriStay property management syst
 | `/api/permissions/grant/` | POST | Grant permission to user | `ManagerUserDetailScreen` |
 | `/api/permissions/revoke/` | POST | Revoke permission | `ManagerUserDetailScreen` |
 | `/api/permissions/remove-override/` | POST | Remove permission override | `ManagerUserDetailScreen` |
+| `/api/permissions/user/{id}/` | GET | Get user's permissions | `ManagerUserDetailScreen` |
 
 **Permission Features:**
 - 38+ custom permissions for fine-grained access control
-- Role-based permission assignments
-- User-specific permission overrides with expiration dates
+- Role-based permission assignments (RolePermission model)
+- User-specific permission overrides (UserPermissionOverride model)
 - Permission delegation from managers to staff
+
+**Permission Override with Expiration:**
+- Grant temporary permissions with expiration dates
+- `expires_at` field on UserPermissionOverride
+- Automatic permission revocation when expired
+- UI displays expiration countdown
+- Use cases: temporary access, vacation coverage, trial periods
+
+**Permission Categories:**
+- Task permissions (create, edit, delete, assign, complete)
+- Property permissions (view, edit, manage inventory)
+- Booking permissions (view, edit, import)
+- User permissions (view, create, edit, manage permissions)
+- Chat permissions (create rooms, manage participants)
+- Report permissions (view, export)
 
 ### 16. Audit Events (Flutter - Manager/Portal Read-Only)
 
@@ -393,34 +774,56 @@ This plan outlines the complete redesign of the AriStay property management syst
 These features remain in Django Admin and are NOT migrated to Flutter:
 
 ### System Administration
-- Charts Dashboard (`/api/admin/charts/`)
-- System Metrics (`/api/admin/metrics/`)
-- System Logs (`/api/admin/logs/`)
-- System Recovery (`/api/admin/recovery/`)
-- File Cleanup (`/api/admin/file-cleanup/`)
+- Charts Dashboard (`/api/admin/charts/`) - Chart.js analytics visualizations
+- System Metrics (`/api/admin/metrics/`) - Performance monitoring
+- System Logs (`/api/admin/logs/`) - Log viewer with filtering and download
+- System Recovery (`/api/admin/recovery/`) - Crash recovery and diagnostics
+- File Cleanup (`/api/admin/file-cleanup/`) - Media storage management
 
 ### Security Management
-- Security Dashboard (`/api/admin/security/`)
-- Security Events (`/api/admin/security/events/`)
-- Active Sessions (`/api/admin/security/sessions/`)
-- Session Termination
+- Security Dashboard (`/api/admin/security/`) - Security overview
+- Security Events (`/api/admin/security/events/`) - Event log viewer (login, token, password reset, suspicious activity)
+- Active Sessions (`/api/admin/security/sessions/`) - Session management by device/IP/location
+- Session Termination - Force logout users
+- Suspicious Activity Detection - Pattern-based threat detection
+- Account Lockout Management - Unlock accounts after failed attempts
 
 ### Data Import
-- Excel Import (`/excel-import/`)
-- Enhanced Excel Import (`/enhanced-excel-import/`)
-- Conflict Resolution (`/conflict-review/`)
-- Property Approval (`/property-approval/`)
+- Excel Import (`/excel-import/`) - Basic Excel/CSV import
+- Enhanced Excel Import (`/enhanced-excel-import/`) - Smart import with conflict detection
+- Conflict Resolution (`/conflict-review/`) - Review and resolve import conflicts
+- Conflict Preview (`/preview-conflict/`) - Preview conflict resolution before committing
+- Quick Resolve (`/quick-resolve/`) - Batch conflict resolution
+- Property Approval (`/property-approval/`) - Approve new properties from import
 
 ### Configuration
-- Permission Management (`/api/admin/permissions/`)
-- Digest Management (`/api/admin/digest-management/`)
-- Notification Management (`/api/admin/notification-management/`)
-- Invite Code Management (`/admin/invite-codes/`)
+- Permission Management (`/api/admin/permissions/`) - 38+ custom permissions
+- Digest Management (`/api/admin/digest-management/`) - Email digest configuration
+- Notification Management (`/api/admin/notification-management/`) - Notification settings
+- Invite Code Management (`/admin/invite-codes/`) - Full invite code CRUD
 
-### Scheduling (Backend Only)
+### Template Management (Backend Only)
+**Schedule Templates:**
 - ScheduleTemplate - Recurring task automation
-- AutoTaskTemplate - Booking-triggered tasks
-- BookingImportTemplate - Import configurations
+- Frequency options: `daily`, `weekly`, `biweekly`, `monthly`
+- Time-based triggers with property/task type assignments
+- GeneratedTask - Track auto-generated tasks
+
+**Auto-Task Templates:**
+- AutoTaskTemplate - Booking-triggered task creation
+- Trigger conditions: check-in, check-out, turnaround
+- Task type and assignment rules
+
+**Booking Import Templates:**
+- BookingImportTemplate - Excel import configurations
+- Field mapping customization
+- Conflict detection rules
+- BookingImportLog - Import audit trail
+
+**Checklist Templates:**
+- ChecklistTemplate - Reusable checklist definitions
+- ChecklistItem - 8 item types with conditions and dependencies
+- TaskTemplateTracking - Track template usage
 
 ---
 
@@ -815,8 +1218,176 @@ lib/
 
 ---
 
+### Phase 14: Multi-Tenancy Foundation
+**Objective:** Transform to multi-tenant SaaS platform
+
+#### Tasks:
+1. **Database Schema Changes**
+   - Create Tenant, TenantSettings, Subscription, Plan models
+   - Add `tenant_id` foreign key to ALL existing models (40+ migrations)
+   - Create tenant-aware indexes and constraints
+   - Data migration for existing AriStay data as first tenant
+
+2. **Middleware & Authentication**
+   - Implement TenantMiddleware for request context
+   - Update JWT tokens to include tenant_id
+   - Create TenantAwareManager for automatic filtering
+   - Update all ViewSets for tenant isolation
+
+3. **Feature Flag System**
+   - Implement per-tenant feature toggles
+   - Create feature checking utilities
+   - Update views to check feature availability
+
+4. **API Restructuring**
+   - Add tenant context to all endpoints
+   - Update serializers for tenant-awareness
+   - Create tenant management endpoints
+
+---
+
+### Phase 15: Super-Admin Panel
+**Objective:** Platform management for SaaS operators
+
+#### Screens to Build (9):
+| Screen | Purpose |
+|--------|---------|
+| `SuperAdminDashboardScreen` | Platform metrics, health |
+| `TenantListScreen` | All tenants with search/filter |
+| `TenantDetailScreen` | Tenant info, settings, usage |
+| `TenantCreateScreen` | Onboard new business |
+| `SubscriptionListScreen` | All subscriptions |
+| `BillingDashboardScreen` | Revenue analytics |
+| `PlanManagementScreen` | Pricing plans CRUD |
+| `UsageMonitoringScreen` | Resource usage per tenant |
+| `SystemHealthScreen` | Platform health monitoring |
+
+#### Features:
+- Tenant CRUD with suspend/reactivate
+- Impersonate tenant admin for support
+- Subscription management
+- Usage limit enforcement
+- Revenue tracking and analytics
+- Platform health monitoring
+
+---
+
+### Phase 16: Billing & Subscription
+**Objective:** Stripe integration for SaaS billing
+
+#### Tasks:
+1. **Stripe Integration**
+   - Set up Stripe account and API keys
+   - Implement Stripe Customer creation
+   - Implement Stripe Subscription management
+   - Handle Stripe webhooks (payment success, failure, cancellation)
+
+2. **Plan Management**
+   - Create pricing plans in Stripe
+   - Sync plans with database
+   - Plan feature mapping
+
+3. **Billing UI**
+   - Subscription selection during signup
+   - Billing portal for plan changes
+   - Payment method management
+   - Invoice history
+
+4. **Usage Enforcement**
+   - Track user count per tenant
+   - Track property count per tenant
+   - Track storage usage per tenant
+   - Enforce limits with graceful degradation
+
+---
+
+### Phase 17: Tenant Onboarding
+**Objective:** Self-service tenant signup and setup
+
+#### Screens to Build (6):
+| Screen | Purpose |
+|--------|---------|
+| `TenantSignupScreen` | Business registration |
+| `TenantSetupWizardScreen` | Multi-step initial setup |
+| `BrandingSetupScreen` | Logo, colors, app name |
+| `FeatureConfigScreen` | Enable/disable features |
+| `TeamInviteScreen` | Invite first team members |
+| `DataImportScreen` | Import existing data |
+
+#### Features:
+- 14-day free trial
+- Email verification flow
+- Setup wizard (5-6 steps)
+- White-label branding configuration
+- Feature selection based on plan
+- Bulk team invitation
+- CSV/Excel data import
+
+---
+
+### Phase 18: External Integrations (Future)
+**Objective:** Third-party platform integrations
+
+#### Planned Integrations:
+| Integration | Purpose | Priority |
+|-------------|---------|----------|
+| **Airbnb API** | Two-way booking sync | High |
+| **VRBO/Booking.com** | Booking import | High |
+| **Google Calendar** | Staff scheduling sync | Medium |
+| **Slack** | Team notifications | Medium |
+| **QuickBooks** | Accounting integration | Medium |
+| **Stripe Connect** | Payment processing | Medium |
+| **Twilio** | SMS notifications | Low |
+| **WhatsApp Business** | Guest communication | Low |
+| **Zapier** | Custom automations | Low |
+
+#### Integration Architecture:
+- OAuth2 authentication for each platform
+- Webhook receivers for real-time updates
+- Background sync workers (Celery)
+- Conflict resolution for two-way sync
+
+---
+
+### Phase 19: Advanced Features (Future)
+**Objective:** Enhanced capabilities for enterprise customers
+
+#### Features:
+1. **Business Intelligence**
+   - Advanced analytics dashboard
+   - Predictive task scheduling (ML)
+   - Staff performance insights
+   - Property utilization reports
+   - Revenue forecasting
+
+2. **Advanced Workflows**
+   - Custom workflow builder
+   - Multi-step approval processes
+   - Automated escalation rules
+   - SLA monitoring and alerts
+
+3. **Guest Portal (Optional Module)**
+   - Guest check-in portal
+   - Service requests from guests
+   - Review collection
+   - Guest communication
+
+4. **Compliance & Safety**
+   - GDPR compliance tools
+   - Data retention policies
+   - Incident reporting
+   - Safety audit checklists
+
+5. **Single Sign-On (SSO)**
+   - SAML 2.0 support
+   - OAuth2/OIDC integration
+   - Azure AD / Okta / Google Workspace
+
+---
+
 ## Screen Count Summary
 
+### Core Application Screens (Single-Tenant)
 | Module | Screens | Priority |
 |--------|---------|----------|
 | Authentication | 5 | P0 - Critical |
@@ -828,12 +1399,21 @@ lib/
 | Manager | 8 | P2 - Medium |
 | Notifications | 2 | P1 - High |
 | Profile/Settings | 3 | P3 - Low |
-| **Total** | **53** | |
+| **Subtotal** | **53** | |
 
-**Changes in v1.1:**
-- Portal: +1 (PortalPhotoGalleryScreen)
-- Staff Auxiliary: +2 (InventoryAlertsScreen, StaffPhotoManagementScreen)
-- Manager: +3 (ManagerPermissionsScreen, InviteCodeDetailScreen, AuditLogScreen)
+### Multi-Tenant SaaS Screens (NEW)
+| Module | Screens | Priority |
+|--------|---------|----------|
+| Super-Admin Panel | 9 | P2 - Medium |
+| Tenant Onboarding | 6 | P2 - Medium |
+| **Subtotal** | **15** | |
+
+### **Grand Total: 68 Screens**
+
+**Screen Breakdown by Version:**
+- v1.0: 47 screens (initial plan)
+- v1.1: +6 screens (missing features)
+- v1.3: +15 screens (multi-tenant SaaS)
 
 ---
 
@@ -1017,7 +1597,78 @@ aristay_flutter_frontend/
 | Date | Version | Changes |
 |------|---------|---------|
 | 2025-12-21 | 1.0 | Initial plan created with comprehensive feature mapping |
-| 2025-12-22 | 1.1 | Added missing features after full codebase review (see below) |
+| 2025-12-22 | 1.1 | Added missing features after full codebase review |
+| 2025-12-22 | 1.2 | Deep codebase review - added task/booking/chat/permission features |
+| 2025-12-22 | 1.3 | **MAJOR** - Multi-tenant SaaS architecture for serving multiple businesses |
+
+### Version 1.3 Additions (Multi-Tenant SaaS)
+
+**New Architecture Section:**
+- Complete multi-tenant SaaS architecture design
+- Tenant isolation via logical database partitioning (tenant_id on all models)
+- White-label branding support (logo, colors, custom domain)
+
+**New Models (4):**
+- `Tenant` - Organization/business entity
+- `TenantSettings` - Per-tenant feature configuration
+- `Subscription` - Billing and plan management
+- `Plan` - Pricing tiers and feature limits
+
+**Feature Categorization:**
+- CORE features (always enabled): Task, Property, User, Notifications
+- OPTIONAL features (toggle per tenant): Chat, Photos, Inventory, Lost & Found
+- CUSTOMIZABLE features: Task types, booking statuses, branding, workflows
+
+**New Phases (6):**
+- Phase 14: Multi-Tenancy Foundation
+- Phase 15: Super-Admin Panel (9 screens)
+- Phase 16: Billing & Subscription (Stripe)
+- Phase 17: Tenant Onboarding (6 screens)
+- Phase 18: External Integrations (Airbnb, VRBO, Slack, etc.)
+- Phase 19: Advanced Features (BI, Workflows, Guest Portal, SSO)
+
+**New Endpoints:**
+- Super-Admin API (9 endpoints for tenant/subscription management)
+- Tenant configuration and branding endpoints
+- Billing/subscription management endpoints
+
+**Updated Screen Count:** 53 → 68 screens (+15 for SaaS)
+
+---
+
+### Version 1.2 Additions
+
+**Task Management Enhancements:**
+- Task dependencies (depends_on field) with `waiting_dependency` status
+- Task locking mechanism to prevent auto-updates from imports
+- Lock/unlock endpoints added to API mapping
+- Task status workflow documented
+
+**Booking Management Enhancements:**
+- Booking conflict detection (same-day, overlapping, cross-property)
+- Booking status workflow: `booked` → `confirmed` → `currently_hosting` → `completed`
+- Provenance tracking (`created_via`, `modified_via` fields)
+- Conflict check endpoint added
+
+**Checklist System:**
+- Added 2 missing item types: `date_input`, `time_input` (now 8 total)
+
+**Chat System Enhancements:**
+- Typing indicator implementation details (ChatTypingIndicator model)
+- Room mute/unmute and archive/unarchive endpoints
+- Message features: read receipts, threading, attachments, edit history
+
+**Permission System Enhancements:**
+- Permission override with expiration dates
+- Permission categories documented
+- Additional endpoint for getting user's permissions
+
+**Admin-Only Features (Enhanced Documentation):**
+- Security management: Suspicious activity detection, account lockout
+- Data import: Conflict preview, quick resolve endpoints
+- Template management: Full documentation of all 4 template types
+
+---
 
 ### Version 1.1 Additions
 
