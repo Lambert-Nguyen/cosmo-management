@@ -1,15 +1,16 @@
-# AriStay UI Redesign Plan: Django Templates → Flutter Web
+# Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 1.3
+**Document Version:** 1.6
 **Created:** 2025-12-21
 **Last Updated:** 2025-12-22
 **Status:** Planning Phase
+**Platform Name:** Cosmo Management (formerly AriStay)
 
 ---
 
 ## Executive Summary
 
-This plan outlines the complete redesign of the AriStay property management system's user interface from Django templates to Flutter for web. Django will be retained exclusively for admin/superuser operations.
+This plan outlines the complete redesign of the **Cosmo Management** platform's user interface from Django templates to Flutter for web. Django will be retained exclusively for admin/superuser operations. The platform is designed as a **multi-tenant SaaS template** that can serve multiple property/operations management businesses.
 
 ### Current State
 - **90+ Django HTML templates** with 100% refactored modern CSS/JS
@@ -384,6 +385,869 @@ class FeatureService {
 ├─────────────────────────────────────────────────────────────────┤
 │                     → Redirect to Tenant Dashboard              │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+### Platform Rebranding Strategy
+
+#### Confirmed Platform Name: **Cosmo Management**
+
+| Attribute | Value |
+|-----------|-------|
+| **Full Name** | Cosmo Management |
+| **Short Form** | CosmoMgmt / Cosmo |
+| **Tagline** | "Universal property & operations management" |
+| **Package Name** | `cosmo_management` or `cosmomgmt` |
+| **Database** | `cosmo_db` |
+| **URL Slug** | `cosmo-management` or `cosmomgmt` |
+| **Flutter App** | `cosmo_app` |
+| **Django Project** | `cosmo_backend` |
+
+#### Why "Cosmo Management"?
+- **Universal**: "Cosmo" (cosmos/cosmopolitan) suggests broad, worldwide scope
+- **Professional**: Enterprise-ready and trustworthy
+- **Industry-neutral**: Works for any property/task management business
+- **International**: Easy to pronounce across languages
+- **Scalable**: Fits a multi-tenant platform serving diverse businesses
+
+#### Complete Renaming Checklist
+
+**Phase 1: Repository & Project Structure**
+```
+Current                              → Target
+────────────────────────────────────────────────────────────
+aristay_app/                         → cosmo_management/
+├── aristay/                         → cosmo_backend/
+│   ├── settings.py                  → Update APP_NAME, DB_NAME
+│   ├── urls.py                      → Update URL patterns
+│   └── wsgi.py / asgi.py            → Update module references
+├── api/                             → api/ (no change)
+├── core/                            → core/ (no change)
+└── manage.py                        → Update settings reference
+
+aristay_flutter_frontend/            → cosmo_app/
+├── lib/
+│   ├── core/constants/app.dart      → Update app name, package ID
+│   └── main.dart                    → Update app title
+├── pubspec.yaml                     → name: cosmo_app
+├── android/app/build.gradle         → applicationId: com.cosmomgmt.app
+├── ios/Runner.xcodeproj/            → Bundle ID: com.cosmomgmt.app
+└── web/index.html                   → Update title, meta tags
+```
+
+**Phase 2: Code References**
+```bash
+# Files to update (grep for 'aristay'):
+- settings_base.py          → APP_NAME = 'Cosmo Management'
+- email templates           → Replace branding
+- API responses             → Update platform references
+- Error messages            → Update app name
+- Documentation             → Replace all references
+- Environment files         → DATABASE_URL, etc.
+```
+
+**Phase 3: Database**
+```sql
+-- Rename database (or create new)
+ALTER DATABASE aristay_db RENAME TO cosmo_db;
+
+-- Or in settings.py:
+DATABASES = {
+    'default': {
+        'NAME': 'cosmo_db',
+        ...
+    }
+}
+```
+
+**Phase 4: Git Repository**
+```bash
+# Option A: Rename remote repository
+# GitHub/GitLab settings → Rename repository
+
+# Option B: Create fresh repository
+git remote set-url origin git@github.com:yourorg/cosmo-management.git
+```
+
+#### Brand Assets Needed
+| Asset | Specifications | Status |
+|-------|---------------|--------|
+| Logo (Primary) | SVG, PNG (transparent), 512x512 min | ⬜ Pending |
+| Logo (Icon) | Square, 64x64, 128x128, 256x256 | ⬜ Pending |
+| Favicon | .ico, 16x16, 32x32, 48x48 | ⬜ Pending |
+| App Icon (iOS) | 1024x1024 PNG | ⬜ Pending |
+| App Icon (Android) | 512x512 PNG | ⬜ Pending |
+| Email Header | 600px wide, PNG | ⬜ Pending |
+| Social Preview | 1200x630 (Open Graph) | ⬜ Pending |
+
+#### Domain Strategy
+```
+Platform Domains:
+├── cosmomgmt.com               → Marketing site
+├── app.cosmomgmt.com           → Main application
+├── api.cosmomgmt.com           → API endpoint
+├── docs.cosmomgmt.com          → Documentation
+└── status.cosmomgmt.com        → Status page
+
+Tenant Subdomains:
+├── {tenant}.cosmomgmt.com      → Tenant application (e.g., aristay.cosmomgmt.com)
+└── {custom-domain}.com         → Enterprise white-label option
+```
+
+#### Migration Strategy
+```
+Recommended approach: Gradual migration
+
+Week 1: Preparation
+├── Create new repository structure
+├── Set up cosmo_db database
+└── Prepare environment configurations
+
+Week 2: Code Migration
+├── Rename directories and packages
+├── Update all code references
+├── Run full test suite
+└── Fix any broken imports
+
+Week 3: Deployment
+├── Deploy to staging environment
+├── Verify all functionality
+├── Update DNS records
+└── Deploy to production
+
+Week 4: Cleanup
+├── Archive old repository
+├── Update documentation
+├── Notify stakeholders
+└── Monitor for issues
+```
+
+### Multi-Tenant User Scenarios
+
+#### Scenario 1: User in Multiple Organizations
+A consultant or contractor may work for multiple property management companies.
+
+```python
+class TenantMembership(models.Model):
+    """User can belong to multiple tenants"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='memberships')
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='members')
+
+    role = models.CharField(max_length=50)  # 'owner', 'manager', 'staff', 'viewer'
+    is_primary = models.BooleanField(default=False)  # Default tenant on login
+
+    # Permissions within this tenant
+    custom_permissions = models.JSONField(default=list)
+
+    joined_at = models.DateTimeField(auto_now_add=True)
+    invited_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        unique_together = ['user', 'tenant']
+```
+
+#### Scenario 2: Franchise/Corporate Model
+Parent company manages multiple franchisee tenants.
+
+```python
+class TenantHierarchy(models.Model):
+    """Parent-child tenant relationships"""
+    parent = models.ForeignKey(Tenant, related_name='children', on_delete=models.CASCADE)
+    child = models.ForeignKey(Tenant, related_name='parents', on_delete=models.CASCADE)
+
+    relationship = models.CharField(choices=[
+        ('franchise', 'Franchise'),
+        ('subsidiary', 'Subsidiary'),
+        ('partner', 'Partner'),
+        ('reseller', 'Reseller'),
+    ])
+
+    # What can parent see/do?
+    can_view_reports = models.BooleanField(default=True)
+    can_manage_users = models.BooleanField(default=False)
+    can_manage_billing = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ['parent', 'child']
+```
+
+#### Flutter: Organization Switcher
+```dart
+// Add to app header/drawer
+class OrganizationSwitcher extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return PopupMenuButton<Tenant>(
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(currentTenant.logoUrl)),
+          Icon(Icons.arrow_drop_down),
+        ],
+      ),
+      itemBuilder: (context) => userTenants.map((tenant) =>
+        PopupMenuItem(
+          value: tenant,
+          child: ListTile(
+            leading: CircleAvatar(backgroundImage: NetworkImage(tenant.logoUrl)),
+            title: Text(tenant.name),
+            trailing: tenant.id == currentTenant.id ? Icon(Icons.check) : null,
+          ),
+        ),
+      ).toList(),
+      onSelected: (tenant) => switchTenant(tenant),
+    );
+  }
+}
+```
+
+### Data Residency & Compliance
+
+#### Data Regions
+```python
+class Tenant(models.Model):
+    # ... existing fields ...
+
+    # Data Residency (required for GDPR, data sovereignty)
+    data_region = models.CharField(max_length=20, choices=[
+        ('us-east-1', 'US East (Virginia)'),
+        ('us-west-2', 'US West (Oregon)'),
+        ('eu-west-1', 'EU West (Ireland)'),
+        ('eu-central-1', 'EU Central (Frankfurt)'),
+        ('ap-southeast-1', 'Asia Pacific (Singapore)'),
+        ('ap-northeast-1', 'Asia Pacific (Tokyo)'),
+    ], default='us-east-1')
+
+    # Compliance Flags
+    gdpr_enabled = models.BooleanField(default=False)
+    hipaa_enabled = models.BooleanField(default=False)
+    soc2_enabled = models.BooleanField(default=False)
+
+    # Data Retention
+    data_retention_days = models.IntegerField(default=365)
+    auto_delete_inactive_users_days = models.IntegerField(default=0)  # 0 = disabled
+
+    # Legal
+    dpa_signed_at = models.DateTimeField(null=True)  # Data Processing Agreement
+    terms_accepted_at = models.DateTimeField(null=True)
+    terms_version = models.CharField(max_length=10, default='1.0')
+```
+
+#### GDPR Compliance Endpoints
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/tenant/gdpr/data-export/` | POST | Request full data export |
+| `/api/tenant/gdpr/data-export/{id}/` | GET | Download export when ready |
+| `/api/tenant/gdpr/delete-request/` | POST | Right to be forgotten |
+| `/api/tenant/gdpr/consent-log/` | GET | View consent history |
+| `/api/users/{id}/anonymize/` | POST | Anonymize user data |
+
+#### Compliance Features by Plan
+| Feature | Free | Starter | Pro | Enterprise |
+|---------|------|---------|-----|------------|
+| Data Export | Manual | Self-service | Self-service | API + Automated |
+| Data Region | US only | US only | US/EU | Any region |
+| GDPR Tools | Basic | Basic | Full | Full + DPA |
+| Audit Log Retention | 30 days | 90 days | 1 year | Custom |
+| SOC2 Report | No | No | No | Yes |
+
+### Usage-Based Billing
+
+#### Billing Models
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         PRICING STRUCTURE                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  BASE PLANS (Monthly)                                                    │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │
+│  │    FREE     │  │   STARTER   │  │     PRO     │  │ ENTERPRISE  │    │
+│  │    $0/mo    │  │   $29/mo    │  │   $99/mo    │  │   Custom    │    │
+│  ├─────────────┤  ├─────────────┤  ├─────────────┤  ├─────────────┤    │
+│  │ 3 users     │  │ 10 users    │  │ 50 users    │  │ Unlimited   │    │
+│  │ 5 properties│  │ 25 properties│ │ 100 props   │  │ Unlimited   │    │
+│  │ 1GB storage │  │ 10GB storage│  │ 50GB storage│  │ Custom      │    │
+│  │ Basic feat. │  │ + Chat      │  │ + All feat. │  │ + SLA       │    │
+│  │ Email only  │  │ + Inventory │  │ + API access│  │ + SSO       │    │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    │
+│                                                                          │
+│  OVERAGE PRICING (when exceeding plan limits)                           │
+│  • Additional users: $5/user/month                                      │
+│  • Additional properties: $2/property/month                             │
+│  • Additional storage: $0.50/GB/month                                   │
+│  • API calls over limit: $0.001/call                                    │
+│                                                                          │
+│  ADD-ONS (Available for any plan)                                       │
+│  • Advanced Analytics: +$20/month                                       │
+│  • Priority Support: +$50/month                                         │
+│  • White-label Mobile App: +$200/month                                  │
+│  • Custom Domain: +$10/month                                            │
+│  • SSO/SAML: +$100/month                                                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Usage Tracking Models
+```python
+class UsageRecord(models.Model):
+    """Daily usage tracking for billing"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    date = models.DateField()
+
+    # Counts (snapshot at end of day)
+    active_users = models.IntegerField(default=0)
+    total_users = models.IntegerField(default=0)
+    total_properties = models.IntegerField(default=0)
+
+    # Activity (cumulative for the day)
+    tasks_created = models.IntegerField(default=0)
+    tasks_completed = models.IntegerField(default=0)
+    photos_uploaded = models.IntegerField(default=0)
+    messages_sent = models.IntegerField(default=0)
+    api_calls = models.IntegerField(default=0)
+
+    # Storage
+    storage_used_bytes = models.BigIntegerField(default=0)
+
+    class Meta:
+        unique_together = ['tenant', 'date']
+
+class Invoice(models.Model):
+    """Monthly invoices"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+
+    period_start = models.DateField()
+    period_end = models.DateField()
+
+    # Amounts
+    base_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    overage_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    addon_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # Line items detail
+    line_items = models.JSONField(default=list)
+
+    # Status
+    status = models.CharField(choices=[
+        ('draft', 'Draft'),
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ])
+
+    stripe_invoice_id = models.CharField(max_length=100, null=True)
+    paid_at = models.DateTimeField(null=True)
+
+class AddOn(models.Model):
+    """Available add-ons"""
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    description = models.TextField()
+
+    price_monthly = models.DecimalField(max_digits=10, decimal_places=2)
+    price_yearly = models.DecimalField(max_digits=10, decimal_places=2)
+
+    feature_key = models.CharField(max_length=50)  # For feature flag
+    stripe_price_id = models.CharField(max_length=100)
+
+    is_active = models.BooleanField(default=True)
+
+class TenantAddOn(models.Model):
+    """Add-ons purchased by tenant"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    add_on = models.ForeignKey(AddOn, on_delete=models.CASCADE)
+
+    activated_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(null=True)
+
+    class Meta:
+        unique_together = ['tenant', 'add_on']
+```
+
+### Backup & Disaster Recovery
+
+#### Backup Strategy
+```python
+class TenantBackup(models.Model):
+    """Backup records per tenant"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+
+    backup_type = models.CharField(choices=[
+        ('scheduled', 'Scheduled (Automatic)'),
+        ('manual', 'Manual'),
+        ('pre_migration', 'Pre-Migration'),
+        ('pre_delete', 'Pre-Deletion'),
+    ])
+
+    status = models.CharField(choices=[
+        ('pending', 'Pending'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ])
+
+    # What's included
+    includes_database = models.BooleanField(default=True)
+    includes_media = models.BooleanField(default=True)
+    includes_audit_logs = models.BooleanField(default=True)
+
+    # Storage
+    storage_path = models.CharField(max_length=500)
+    size_bytes = models.BigIntegerField(default=0)
+    checksum = models.CharField(max_length=64)  # SHA-256
+
+    # Timing
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True)
+    expires_at = models.DateTimeField()
+
+    # Restore tracking
+    last_restored_at = models.DateTimeField(null=True)
+    restore_count = models.IntegerField(default=0)
+
+class RestoreRequest(models.Model):
+    """Tenant data restore requests"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    backup = models.ForeignKey(TenantBackup, on_delete=models.CASCADE)
+
+    requested_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    requested_at = models.DateTimeField(auto_now_add=True)
+
+    status = models.CharField(choices=[
+        ('pending_approval', 'Pending Approval'),
+        ('approved', 'Approved'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+        ('cancelled', 'Cancelled'),
+    ])
+
+    # What to restore
+    restore_database = models.BooleanField(default=True)
+    restore_media = models.BooleanField(default=True)
+
+    completed_at = models.DateTimeField(null=True)
+    notes = models.TextField(blank=True)
+```
+
+#### Backup Schedule by Plan
+| Plan | Frequency | Retention | Self-Restore | Download |
+|------|-----------|-----------|--------------|----------|
+| Free | Weekly | 7 days | No | No |
+| Starter | Daily | 14 days | No | Request |
+| Pro | Daily | 30 days | Yes | Yes |
+| Enterprise | Hourly | 90+ days | Yes | Yes + API |
+
+### Customer Success & Support
+
+#### Support Infrastructure
+```python
+class SupportTicket(models.Model):
+    """Support tickets"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    # Ticket details
+    ticket_number = models.CharField(max_length=20, unique=True)  # SUP-00001
+    subject = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.CharField(choices=[
+        ('bug', 'Bug Report'),
+        ('feature', 'Feature Request'),
+        ('billing', 'Billing'),
+        ('how_to', 'How To'),
+        ('integration', 'Integration'),
+        ('other', 'Other'),
+    ])
+
+    priority = models.CharField(choices=[
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+        ('critical', 'Critical'),
+    ])
+
+    status = models.CharField(choices=[
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('waiting_customer', 'Waiting on Customer'),
+        ('waiting_internal', 'Waiting Internal'),
+        ('resolved', 'Resolved'),
+        ('closed', 'Closed'),
+    ])
+
+    # Assignment
+    assigned_to = models.ForeignKey(User, null=True, related_name='assigned_tickets')
+
+    # SLA
+    sla_response_due = models.DateTimeField(null=True)
+    sla_resolution_due = models.DateTimeField(null=True)
+    first_response_at = models.DateTimeField(null=True)
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    resolved_at = models.DateTimeField(null=True)
+
+class SupportMessage(models.Model):
+    """Messages within a support ticket"""
+    ticket = models.ForeignKey(SupportTicket, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    message = models.TextField()
+    is_internal = models.BooleanField(default=False)  # Internal notes
+
+    attachments = models.JSONField(default=list)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class TenantHealthScore(models.Model):
+    """Customer health scoring for churn prediction"""
+    tenant = models.OneToOneField(Tenant, on_delete=models.CASCADE)
+
+    # Overall score (0-100)
+    score = models.IntegerField(default=100)
+    score_updated_at = models.DateTimeField(auto_now=True)
+
+    # Engagement metrics
+    dau_mau_ratio = models.FloatField(default=0)  # Daily/Monthly active users
+    feature_adoption_rate = models.FloatField(default=0)
+    tasks_per_user_per_week = models.FloatField(default=0)
+
+    # Activity
+    last_admin_login = models.DateTimeField(null=True)
+    last_user_activity = models.DateTimeField(null=True)
+    days_since_last_login = models.IntegerField(default=0)
+
+    # Risk indicators
+    is_at_risk = models.BooleanField(default=False)
+    risk_reasons = models.JSONField(default=list)
+
+    # NPS (Net Promoter Score)
+    last_nps_score = models.IntegerField(null=True)  # -100 to 100
+    last_nps_at = models.DateTimeField(null=True)
+    nps_response_count = models.IntegerField(default=0)
+```
+
+#### SLA by Plan
+| Plan | First Response | Resolution Target | Channels |
+|------|---------------|-------------------|----------|
+| Free | 5 business days | Best effort | Email |
+| Starter | 48 hours | 7 days | Email |
+| Pro | 24 hours | 3 days | Email, Chat |
+| Enterprise | 4 hours | 24 hours | Email, Chat, Phone, Slack |
+
+### Partner & Reseller Program
+
+```python
+class Partner(models.Model):
+    """Reseller and referral partners"""
+    name = models.CharField(max_length=255)
+    company = models.CharField(max_length=255)
+    email = models.EmailField()
+
+    partner_type = models.CharField(choices=[
+        ('referral', 'Referral Partner'),      # Sends leads
+        ('reseller', 'Reseller'),              # Sells and supports
+        ('agency', 'Agency'),                  # Implements for clients
+        ('integration', 'Integration Partner'), # Builds integrations
+    ])
+
+    status = models.CharField(choices=[
+        ('pending', 'Pending Approval'),
+        ('active', 'Active'),
+        ('suspended', 'Suspended'),
+        ('terminated', 'Terminated'),
+    ])
+
+    # Commission structure
+    commission_type = models.CharField(choices=[
+        ('percentage', 'Percentage of Revenue'),
+        ('flat', 'Flat Fee per Signup'),
+    ])
+    commission_rate = models.DecimalField(max_digits=5, decimal_places=2)  # e.g., 20.00%
+    commission_duration_months = models.IntegerField(default=12)  # How long they earn
+
+    # Partner portal
+    partner_code = models.CharField(max_length=50, unique=True)  # PARTNER-ABC
+    signup_url = models.SlugField(unique=True)  # /p/partner-name
+
+    # Branding (for co-branded landing pages)
+    logo = models.ImageField(null=True)
+
+    # Stats
+    total_referrals = models.IntegerField(default=0)
+    active_customers = models.IntegerField(default=0)
+    total_revenue_generated = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total_commission_paid = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class PartnerReferral(models.Model):
+    """Track partner referrals"""
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
+    tenant = models.OneToOneField(Tenant, on_delete=models.CASCADE)
+
+    referral_code = models.CharField(max_length=50)
+    referred_at = models.DateTimeField(auto_now_add=True)
+
+    # Commission tracking
+    commission_rate = models.DecimalField(max_digits=5, decimal_places=2)
+    commission_ends_at = models.DateTimeField()
+    total_commission_earned = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    is_active = models.BooleanField(default=True)
+
+class PartnerPayout(models.Model):
+    """Commission payouts to partners"""
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
+
+    period_start = models.DateField()
+    period_end = models.DateField()
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    status = models.CharField(choices=[
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+    ])
+
+    payment_method = models.CharField(max_length=50)  # 'stripe', 'paypal', 'wire'
+    payment_reference = models.CharField(max_length=100, null=True)
+
+    paid_at = models.DateTimeField(null=True)
+```
+
+### Localization (i18n)
+
+```python
+class TenantLocalization(models.Model):
+    """Per-tenant localization settings"""
+    tenant = models.OneToOneField(Tenant, on_delete=models.CASCADE)
+
+    # Language
+    default_language = models.CharField(max_length=5, default='en')
+    supported_languages = models.JSONField(default=['en'])
+
+    # Date & Time
+    date_format = models.CharField(max_length=20, default='YYYY-MM-DD')
+    time_format = models.CharField(choices=[
+        ('12h', '12 Hour (AM/PM)'),
+        ('24h', '24 Hour'),
+    ], default='12h')
+    first_day_of_week = models.IntegerField(default=0)  # 0=Sunday, 1=Monday
+
+    # Numbers & Currency
+    currency_code = models.CharField(max_length=3, default='USD')
+    currency_symbol = models.CharField(max_length=5, default='$')
+    currency_position = models.CharField(choices=[
+        ('before', 'Before ($100)'),
+        ('after', 'After (100$)'),
+    ], default='before')
+    decimal_separator = models.CharField(max_length=1, default='.')
+    thousands_separator = models.CharField(max_length=1, default=',')
+
+    # Units
+    distance_unit = models.CharField(choices=[
+        ('mi', 'Miles'),
+        ('km', 'Kilometers'),
+    ], default='mi')
+    temperature_unit = models.CharField(choices=[
+        ('f', 'Fahrenheit'),
+        ('c', 'Celsius'),
+    ], default='f')
+
+    # Localized Content
+    custom_terminology = models.JSONField(default=dict)
+    # e.g., {"property": "unit", "task": "job", "booking": "reservation"}
+```
+
+#### Supported Languages (Initial)
+| Language | Code | Status |
+|----------|------|--------|
+| English | en | ✅ Default |
+| Spanish | es | Phase 1 |
+| French | fr | Phase 1 |
+| German | de | Phase 2 |
+| Portuguese | pt | Phase 2 |
+| Italian | it | Phase 3 |
+| Dutch | nl | Phase 3 |
+| Japanese | ja | Phase 3 |
+
+### Tenant Lifecycle Management
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                       TENANT LIFECYCLE STATES                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│        ┌──────────┐                                                      │
+│        │ PROSPECT │ (Visited pricing page, not signed up)               │
+│        └────┬─────┘                                                      │
+│             │                                                            │
+│             ▼                                                            │
+│        ┌──────────┐     ┌──────────┐                                    │
+│        │ TRIALING │────►│  ACTIVE  │◄────────────────┐                  │
+│        └────┬─────┘     └────┬─────┘                 │                  │
+│             │                │                        │                  │
+│    (trial   │     (payment   │              (payment  │                  │
+│    expired) │      failed)   │               success) │                  │
+│             ▼                ▼                        │                  │
+│        ┌──────────┐     ┌──────────┐           ┌─────┴────┐            │
+│        │ EXPIRED  │     │ PAST_DUE │──────────►│ SUSPENDED│            │
+│        └────┬─────┘     └──────────┘           └────┬─────┘            │
+│             │                                       │                   │
+│             │ (no conversion)     (30 days unpaid)  │                   │
+│             │                                       │                   │
+│             ▼                                       ▼                   │
+│        ┌──────────┐                           ┌──────────┐             │
+│        │ CHURNED  │◄──────────────────────────│ CANCELED │             │
+│        └────┬─────┘                           └────┬─────┘             │
+│             │                                      │                    │
+│             │ (user requested deletion)            │                    │
+│             ▼                                      ▼                    │
+│        ┌─────────────────────────────────────────────────┐             │
+│        │              DELETION_SCHEDULED                  │             │
+│        │         (30-day grace period for data)          │             │
+│        └───────────────────────┬─────────────────────────┘             │
+│                                │                                        │
+│                                ▼                                        │
+│        ┌─────────────────────────────────────────────────┐             │
+│        │                    DELETED                       │             │
+│        │            (Data permanently purged)             │             │
+│        └─────────────────────────────────────────────────┘             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+```python
+class TenantLifecycleEvent(models.Model):
+    """Audit trail of all tenant state changes"""
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+
+    event_type = models.CharField(choices=[
+        # Acquisition
+        ('created', 'Tenant Created'),
+        ('trial_started', 'Trial Started'),
+        ('trial_extended', 'Trial Extended'),
+        ('trial_expired', 'Trial Expired'),
+
+        # Conversion
+        ('converted', 'Converted to Paid'),
+        ('upgraded', 'Plan Upgraded'),
+        ('downgraded', 'Plan Downgraded'),
+        ('addon_added', 'Add-on Added'),
+        ('addon_removed', 'Add-on Removed'),
+
+        # Billing
+        ('payment_success', 'Payment Successful'),
+        ('payment_failed', 'Payment Failed'),
+        ('refund_issued', 'Refund Issued'),
+
+        # Status changes
+        ('suspended', 'Account Suspended'),
+        ('reactivated', 'Account Reactivated'),
+        ('cancel_requested', 'Cancellation Requested'),
+        ('canceled', 'Subscription Canceled'),
+
+        # Data management
+        ('data_export_requested', 'Data Export Requested'),
+        ('data_exported', 'Data Exported'),
+        ('deletion_scheduled', 'Deletion Scheduled'),
+        ('deletion_cancelled', 'Deletion Cancelled'),
+        ('deleted', 'Tenant Deleted'),
+
+        # Other
+        ('settings_changed', 'Settings Changed'),
+        ('owner_changed', 'Owner Changed'),
+    ])
+
+    # Change details
+    old_value = models.JSONField(null=True)
+    new_value = models.JSONField(null=True)
+    reason = models.TextField(null=True)
+
+    # Who/when
+    performed_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    ip_address = models.GenericIPAddressField(null=True)
+    user_agent = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+```
+
+### Mobile App Distribution Strategy
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    MOBILE APP DISTRIBUTION OPTIONS                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  OPTION 1: Single Branded App (Recommended for most plans)              │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │  • One app: "PropFlow" (or platform name)                        │   │
+│  │  • Tenant selection at login                                     │   │
+│  │  • Dynamic branding after login (colors, logo)                   │   │
+│  │  • Available: Free, Starter, Pro                                 │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+│  OPTION 2: White-Label App Build (Enterprise add-on: $200/month)        │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │  • Separate app per tenant                                       │   │
+│  │  • Custom app name, icon, bundle ID                              │   │
+│  │  • Published to tenant's own app store accounts                  │   │
+│  │  • Full white-label (no platform branding)                       │   │
+│  │  • Build pipeline: ~2 weeks for new builds                       │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+│  OPTION 3: PWA (Progressive Web App)                                    │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │  • Install from browser                                          │   │
+│  │  • No app store approval needed                                  │   │
+│  │  • Instant updates                                               │   │
+│  │  • Fully white-labeled via subdomain                             │   │
+│  │  • Available: All plans                                          │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+```python
+class TenantMobileApp(models.Model):
+    """White-label mobile app configuration"""
+    tenant = models.OneToOneField(Tenant, on_delete=models.CASCADE)
+
+    # App Identity
+    app_name = models.CharField(max_length=100)
+    bundle_id_ios = models.CharField(max_length=100, null=True)  # com.tenant.app
+    package_name_android = models.CharField(max_length=100, null=True)
+
+    # App Store URLs (after publishing)
+    app_store_url = models.URLField(null=True)
+    play_store_url = models.URLField(null=True)
+
+    # Assets
+    app_icon_1024 = models.ImageField(upload_to='app_icons/')
+    splash_screen = models.ImageField(upload_to='splash_screens/', null=True)
+
+    # Build Configuration
+    is_white_label = models.BooleanField(default=False)
+    build_status = models.CharField(choices=[
+        ('not_requested', 'Not Requested'),
+        ('pending', 'Build Pending'),
+        ('building', 'Building'),
+        ('review', 'In Review'),
+        ('published', 'Published'),
+        ('failed', 'Build Failed'),
+    ], default='not_requested')
+
+    last_build_at = models.DateTimeField(null=True)
+    last_build_version = models.CharField(max_length=20, null=True)
+
+    # Push Notification Config
+    firebase_project_id = models.CharField(max_length=100, null=True)
+    apns_key_id = models.CharField(max_length=20, null=True)
 ```
 
 ---
@@ -829,12 +1693,145 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 
 ## Phase Breakdown
 
+### Phase 0: Platform Renaming (AriStay → Cosmo Management)
+**Objective:** Rename all project files, directories, and references from AriStay to Cosmo Management
+
+**Priority:** Must complete before any new development
+
+#### Task 0.1: Backend Renaming
+```bash
+# Directory renames
+aristay_app/                    → cosmo_management/
+aristay_app/aristay/            → cosmo_management/cosmo_backend/
+
+# Files to update
+├── manage.py                   → Update DJANGO_SETTINGS_MODULE
+├── cosmo_backend/settings.py   → Update APP_NAME, ALLOWED_HOSTS
+├── cosmo_backend/urls.py       → Update module imports
+├── cosmo_backend/wsgi.py       → Update application reference
+├── cosmo_backend/asgi.py       → Update application reference
+└── requirements.txt            → No changes needed
+```
+
+#### Task 0.2: Frontend Renaming
+```bash
+# Directory rename
+aristay_flutter_frontend/       → cosmo_app/
+
+# Files to update
+├── pubspec.yaml
+│   └── name: cosmo_app
+│   └── description: Cosmo Management - Property & Operations Platform
+│
+├── lib/main.dart
+│   └── Update app title to 'Cosmo Management'
+│
+├── lib/core/constants/app_constants.dart
+│   └── appName: 'Cosmo Management'
+│   └── appShortName: 'Cosmo'
+│
+├── android/app/build.gradle
+│   └── applicationId: 'com.cosmomgmt.app'
+│   └── namespace: 'com.cosmomgmt.app'
+│
+├── android/app/src/main/AndroidManifest.xml
+│   └── android:label="Cosmo Management"
+│
+├── ios/Runner.xcodeproj/project.pbxproj
+│   └── PRODUCT_BUNDLE_IDENTIFIER = com.cosmomgmt.app
+│
+├── ios/Runner/Info.plist
+│   └── CFBundleDisplayName: Cosmo Management
+│   └── CFBundleName: Cosmo
+│
+├── web/index.html
+│   └── <title>Cosmo Management</title>
+│   └── Update meta tags
+│
+└── web/manifest.json
+    └── "name": "Cosmo Management"
+    └── "short_name": "Cosmo"
+```
+
+#### Task 0.3: Database
+```sql
+-- Option A: Rename existing database
+ALTER DATABASE aristay_db RENAME TO cosmo_db;
+
+-- Option B: Create new database and migrate
+CREATE DATABASE cosmo_db;
+-- Then update settings and run migrations
+```
+
+#### Task 0.4: Environment & Configuration
+```bash
+# Files to update
+├── .env / .env.example
+│   └── DATABASE_URL=postgresql://user:pass@localhost/cosmo_db
+│   └── APP_NAME=Cosmo Management
+│
+├── docker-compose.yml (if exists)
+│   └── Update service names and database references
+│
+├── .github/workflows/*.yml (if exists)
+│   └── Update repository references
+│
+└── README.md
+    └── Update project name and description
+```
+
+#### Task 0.5: Code References (grep & replace)
+```bash
+# Search and replace patterns
+"aristay"       → "cosmo"           (lowercase)
+"AriStay"       → "Cosmo"           (title case)
+"ARISTAY"       → "COSMO"           (uppercase)
+"aristay_app"   → "cosmo_management"
+"aristay_flutter_frontend" → "cosmo_app"
+
+# Directories to scan
+├── cosmo_management/**/*.py
+├── cosmo_app/lib/**/*.dart
+├── docs/**/*.md
+└── *.md, *.yaml, *.json, *.xml
+```
+
+#### Task 0.6: Git Repository
+```bash
+# Update remote (if renaming on GitHub/GitLab)
+git remote set-url origin git@github.com:yourorg/cosmo-management.git
+
+# Create migration commit
+git add -A
+git commit -m "Rename platform from AriStay to Cosmo Management"
+```
+
+#### Task 0.7: Verification Checklist
+- [ ] Django server starts without errors
+- [ ] All migrations run successfully
+- [ ] Flutter app builds for web/iOS/Android
+- [ ] All tests pass
+- [ ] No "aristay" references remain (grep check)
+- [ ] API endpoints respond correctly
+- [ ] Firebase configuration still works
+
+#### Deliverables:
+| Item | Before | After |
+|------|--------|-------|
+| Root directory | `aristay_app/` | `cosmo_management/` |
+| Django project | `aristay/` | `cosmo_backend/` |
+| Flutter app | `aristay_flutter_frontend/` | `cosmo_app/` |
+| Database | `aristay_db` | `cosmo_db` |
+| Package ID | `com.aristay.app` | `com.cosmomgmt.app` |
+
+---
+
 ### Phase 1: Foundation & Core Setup
 **Objective:** Set up Flutter web project structure and shared infrastructure
 
 #### Tasks:
 1. **Project Structure Setup**
-   - Configure Flutter web build settings in existing `aristay_flutter_frontend/`
+   - Configure Flutter web build settings in `cosmo_app/` (renamed from aristay_flutter_frontend)
    - Set up shared codebase structure for mobile + web
    - Configure environment variables (dev/staging/prod)
    - Set up CI/CD for Flutter web deployment
@@ -1600,6 +2597,124 @@ aristay_flutter_frontend/
 | 2025-12-22 | 1.1 | Added missing features after full codebase review |
 | 2025-12-22 | 1.2 | Deep codebase review - added task/booking/chat/permission features |
 | 2025-12-22 | 1.3 | **MAJOR** - Multi-tenant SaaS architecture for serving multiple businesses |
+| 2025-12-22 | 1.4 | **MAJOR** - Enterprise SaaS features: billing, compliance, partner program, lifecycle management |
+| 2025-12-22 | 1.5 | **NAMING** - Confirmed platform name: Cosmo Management with complete renaming strategy |
+| 2025-12-22 | 1.6 | **PHASE 0** - Added detailed Phase 0: Platform Renaming with step-by-step migration tasks |
+
+### Version 1.6 - Phase 0 Added
+
+**New Phase 0: Platform Renaming**
+- Task 0.1: Backend directory and file renaming
+- Task 0.2: Frontend (Flutter) renaming with all config files
+- Task 0.3: Database rename options
+- Task 0.4: Environment and configuration updates
+- Task 0.5: Code reference search & replace patterns
+- Task 0.6: Git repository migration
+- Task 0.7: Verification checklist
+
+**Deliverables Table:**
+- Clear before/after mapping for all components
+- `aristay_app/` → `cosmo_management/`
+- `aristay_flutter_frontend/` → `cosmo_app/`
+- `aristay_db` → `cosmo_db`
+
+**Updated Phase 1:**
+- Updated Flutter project path reference to `cosmo_app/`
+
+---
+
+### Version 1.5 - Platform Naming Confirmed
+
+**Platform Name Confirmed:** Cosmo Management
+- Full Name: Cosmo Management
+- Short Form: CosmoMgmt / Cosmo
+- Package: `cosmo_management` / `cosmomgmt`
+- Flutter App: `cosmo_app`
+- Django Project: `cosmo_backend`
+- Database: `cosmo_db`
+
+**Complete Renaming Checklist Added:**
+- Phase 1: Repository & project structure migration
+- Phase 2: Code references update
+- Phase 3: Database rename
+- Phase 4: Git repository rename
+
+**Domain Strategy Defined:**
+- `cosmomgmt.com` as primary platform domain
+- Tenant subdomains: `{tenant}.cosmomgmt.com`
+- Enterprise white-label custom domains
+
+**Migration Strategy:**
+- 4-week gradual migration plan outlined
+
+---
+
+### Version 1.4 Additions (Enterprise SaaS Expansion)
+
+**Platform Rebranding Strategy:**
+- Recommendations for neutral platform name (PropFlow, OpsNest, Stayflow, CrewBase, NestOps)
+- Brand abstraction layer for white-label deployment
+- Code renaming strategy (package names, database, APIs)
+
+**Multi-Tenant User Scenarios:**
+- `TenantMembership` model - Users can belong to multiple tenants with different roles
+- `TenantHierarchy` model - Franchise/parent-child tenant relationships
+- Organization switching in Flutter (UI mockups provided)
+
+**Data Residency & Compliance:**
+- GDPR compliance features (data regions, retention policies, right to erasure)
+- Data region options: US, EU, APAC
+- New endpoints: `/consent`, `/data-export`, `/erasure-request`
+
+**Usage-Based Billing:**
+- `UsageRecord` model - Track per-tenant resource consumption
+- `Invoice` model - Billing and payment history
+- `AddOn` and `TenantAddOn` models - À la carte feature purchases
+- Overage pricing structure
+- Stripe webhook integration design
+
+**Backup & Disaster Recovery:**
+- `TenantBackup` model - Automated and on-demand backups
+- `RestoreRequest` model - Self-service data restoration
+- Backup retention policies per plan tier
+- Disaster recovery endpoints
+
+**Customer Success & Support:**
+- `SupportTicket` and `SupportMessage` models - In-app support system
+- `TenantHealthScore` model - Churn prediction and engagement tracking
+- Health metrics: login frequency, feature adoption, support ticket volume
+
+**Partner & Reseller Program:**
+- `Partner` model - Reseller/referral partner management
+- `PartnerReferral` and `PartnerPayout` models - Commission tracking
+- Partner tiers: Referral (10%), Silver (15%), Gold (20%), Platinum (25%)
+- Partner dashboard design
+
+**Localization (i18n):**
+- `TenantLocalization` model - Per-tenant language settings
+- Language roadmap: EN → ES → FR → DE → PT → ZH → JA → AR
+- Localization infrastructure requirements
+
+**Tenant Lifecycle Management:**
+- Complete lifecycle state machine: `pending` → `trial` → `active` → `suspended` → `churned`/`cancelled`
+- `TenantLifecycleEvent` model - Audit trail for state transitions
+- Grace periods and data retention policies
+- Lifecycle endpoints for suspend/reactivate/delete
+
+**Mobile App Distribution Strategy:**
+- `TenantMobileApp` model - Track white-label app deployments
+- Hybrid approach: Single branded app + Enterprise white-label option
+- App store submission automation considerations
+
+**New Models (15):**
+- TenantMembership, TenantHierarchy
+- UsageRecord, Invoice, AddOn, TenantAddOn
+- TenantBackup, RestoreRequest
+- SupportTicket, SupportMessage, TenantHealthScore
+- Partner, PartnerReferral, PartnerPayout
+- TenantLocalization, TenantLifecycleEvent, TenantMobileApp
+
+---
 
 ### Version 1.3 Additions (Multi-Tenant SaaS)
 
