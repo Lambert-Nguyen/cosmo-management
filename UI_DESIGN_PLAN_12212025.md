@@ -1,6 +1,6 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 1.7
+**Document Version:** 2.0
 **Created:** 2025-12-21
 **Last Updated:** 2025-12-23
 **Status:** Ready for Implementation
@@ -47,6 +47,54 @@ The initial release (v1.0) will focus on **Phases 0-13** as a single-tenant appl
 
 ## Implementation Strategy (Confirmed)
 
+### Technology Stack (Finalized)
+
+| Layer | Technology | Rationale |
+|-------|------------|-----------|
+| **State Management** | Riverpod 2.x | Type-safe, testable, recommended for Flutter |
+| **HTTP Client** | Dio | Interceptors for JWT, retry logic, logging |
+| **Routing** | GoRouter | Deep linking support for web, declarative |
+| **Local Storage** | Hive | Fast NoSQL, good for offline caching |
+| **Secure Storage** | flutter_secure_storage | For JWT tokens, sensitive data |
+| **API Models** | Freezed + json_serializable | Immutable models, JSON serialization |
+| **Image Caching** | cached_network_image | Memory + disk caching |
+| **Forms** | flutter_form_builder | Validation, complex forms |
+| **Date/Time** | intl + timezone | Localization, timezone handling |
+
+### Non-Functional Requirements
+
+| Requirement | Target | Measurement |
+|-------------|--------|-------------|
+| **Initial Load (Web)** | < 3 seconds | Lighthouse, 3G throttled |
+| **Page Navigation** | < 500ms | Time to interactive |
+| **API Response** | < 1 second | 95th percentile |
+| **Offline Support** | Core task workflows | Task view, status update, photo queue |
+| **Browser Support** | Chrome 90+, Safari 14+, Firefox 90+, Edge 90+ | Manual testing |
+| **Mobile Support** | Android 8+, iOS 13+ | Device lab testing |
+| **Accessibility** | WCAG 2.1 AA | axe-core audit |
+| **Bundle Size (Web)** | < 2MB initial, < 500KB per route | Build analysis |
+
+### Error Handling Strategy
+
+```dart
+// Global error handling pattern
+class ApiException implements Exception {
+  final int statusCode;
+  final String message;
+  final String? errorCode;
+}
+
+// Retry logic for transient failures
+// - 401: Refresh token, retry once
+// - 408/429/5xx: Exponential backoff (3 retries)
+// - 400/403/404: No retry, show user message
+
+// Offline queue for mutations
+// - Queue failed POST/PUT/DELETE requests
+// - Retry on connectivity restore
+// - Show sync status indicator
+```
+
 ### Phase Execution Order
 
 ```
@@ -54,68 +102,75 @@ The initial release (v1.0) will focus on **Phases 0-13** as a single-tenant appl
 │                        v1.0 MVP IMPLEMENTATION                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Phase 0: Platform Renaming (AriStay → Cosmo Management)                    │
-│     ├── Create branch: refactor/cosmo-rename                                │
-│     ├── Rename directories and files                                        │
-│     ├── Create new database: cosmo_db                                       │
-│     ├── Update all code references                                          │
-│     ├── GitHub repo rename (manual by user)                                 │
-│     └── Verify and merge                                                    │
+│  Phase 0: Platform Renaming ─────────────────────────────────────────────── │
+│     └── AriStay → Cosmo Management (all references)                         │
 │                                                                              │
-│  Phase 1: Foundation & Core Setup                                           │
-│     └── Design system, services, state management                           │
+│  Phase 1: Foundation ────────────────────────────────────────────────────── │
+│     └── Design system, services, offline architecture                       │
 │                                                                              │
-│  Phase 2: Authentication Module                                             │
-│     └── Login, register, password reset (5 screens)                         │
+│  Phase 2: Authentication (4 screens) ────────────────────────────────────── │
+│     └── Login, register, password reset                                     │
 │                                                                              │
-│  Phase 3: Portal Module ────────────────────────────┐                       │
-│     └── Property owners interface (11 screens)      │                       │
-│                                                     │ Can parallelize       │
-│  Phase 4-6: Staff Module ───────────────────────────┤ after Phase 2         │
-│     └── Core tasks + dashboards + auxiliary         │                       │
-│         (5 + 4 + 10 = 19 screens)                   │                       │
-│                                                     │                       │
-│  Phase 7: Chat Module ──────────────────────────────┘                       │
-│     └── Team communication (5 screens)                                      │
+│  Phase 3: Staff Core (4 screens) ◀── PRIMARY VALUE ──────────────────────── │
+│     └── Task list, detail, form, dashboard                                  │
 │                                                                              │
-│  Phase 8: Manager Module                                                    │
-│     └── Team management (8 screens)                                         │
+│  Phase 4: Staff Auxiliary (6 screens) ───────────────────────────────────── │
+│     └── Inventory, lost & found, photos                                     │
 │                                                                              │
-│  Phase 9-10: Notifications & Profile                                        │
-│     └── System notifications, user settings (5 screens)                     │
+│  Phase 5: Portal (8 screens) ────────────────────────────────────────────── │
+│     └── Properties, bookings, calendar, photos                              │
 │                                                                              │
-│  Phase 11-13: Polish & Deploy                                               │
-│     └── Offline support, testing, deployment                                │
+│  Phase 6: Chat (4 screens) ──────────────────────────────────────────────── │
+│     └── Room list, messages, participants                                   │
+│                                                                              │
+│  Phase 7: Manager (6 screens) ───────────────────────────────────────────── │
+│     └── Users, permissions, invites, audit                                  │
+│                                                                              │
+│  Phase 8: Notifications & Settings (4 screens) ──────────────────────────── │
+│     └── Notification list, settings, profile                                │
+│                                                                              │
+│  Phase 9: Testing & QA ──────────────────────────────────────────────────── │
+│     └── Unit, widget, integration, E2E tests                                │
+│                                                                              │
+│  Phase 10: Deployment ───────────────────────────────────────────────────── │
+│     └── CI/CD, hosting, migration                                           │
 │                                                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  TOTAL v1.0: 53 screens (Single-tenant)                                     │
+│  TOTAL v1.0: 36 screens (consolidated from 53)                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                     v2.0+ FUTURE (Multi-Tenant SaaS)                         │
+│              v2.0+ DEFERRED (Multi-Tenant SaaS) - SEE BELOW                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Phase 14: Multi-Tenancy Foundation                                         │
-│  Phase 15: Super-Admin Panel (9 screens)                                    │
-│  Phase 16: Billing & Subscription                                           │
-│  Phase 17: Tenant Onboarding (6 screens)                                    │
-│  Phase 18-19: Integrations & Advanced Features                              │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  TOTAL v2.0+: +15 screens (68 total)                                        │
+│  Phase 11+: Multi-Tenancy, Billing, Super-Admin, Integrations               │
+│  Note: Detailed specs preserved below for future reference                  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Module Priority After Foundation
+### Module Priority (Corrected)
 
-| Priority | Module | Screens | Rationale |
-|----------|--------|---------|-----------|
-| 1 | Authentication | 5 | Required for all other modules |
-| 2 | Staff Module (Core) | 5 | Primary value - task management |
-| 3 | Staff Module (Dashboards) | 4 | Task type specific views |
-| 4 | Portal Module | 11 | Property owner visibility |
-| 5 | Staff Module (Auxiliary) | 10 | Supporting features |
-| 6 | Chat Module | 5 | Team communication |
-| 7 | Manager Module | 8 | Team management |
-| 8 | Notifications & Profile | 5 | System features |
+| Priority | Phase | Module | Screens | Rationale |
+|----------|-------|--------|---------|-----------|
+| 1 | 2 | Authentication | 4 | Required for all other modules |
+| 2 | 3 | Staff Core | 4 | **Primary value** - task management |
+| 3 | 4 | Staff Auxiliary | 6 | Supporting staff features |
+| 4 | 5 | Portal | 8 | Property owner visibility |
+| 5 | 6 | Chat | 4 | Team communication |
+| 6 | 7 | Manager | 6 | Team management |
+| 7 | 8 | Notifications | 4 | System features |
+| | | **TOTAL** | **36** | |
+
+### Screen Consolidation (53 → 36)
+
+| Original Plan | Consolidated | Reason |
+|---------------|--------------|--------|
+| 4 task-type dashboards | 1 dashboard with filter | Same screen, different query param |
+| TaskForm + TaskDuplicate | 1 TaskForm | Duplicate = pre-filled form |
+| PortalTaskDetail + TaskDetail | 1 TaskDetail | Role-based UI, not separate screens |
+| PropertySearch widget | Part of PropertyList | Not a standalone screen |
+| ChatSettings screen | Part of ChatRoom | Drawer or modal, not screen |
+| DigestSettings screen | Part of NotificationSettings | Combined settings |
+| ActiveSessions screen | Part of Profile | Tab or section |
 
 ---
 
@@ -152,6 +207,16 @@ The initial release (v1.0) will focus on **Phases 0-13** as a single-tenant appl
 │                    PostgreSQL (38 models)                    │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+---
+
+# ⏸️ DEFERRED TO v2.0+ - Multi-Tenant SaaS Features
+
+> **NOTE:** Everything below this line is deferred to v2.0+.
+> These specifications are preserved for future reference but are **NOT** part of the v1.0 MVP.
+> Focus on Phases 0-10 above for initial release.
 
 ---
 
@@ -1778,559 +1843,637 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 **Status:** Ready to execute
 **Git Branch:** `refactor/cosmo-rename` (create from `refactor_01`)
 
-#### Pre-Requisites
-```bash
-# 1. Create and checkout new branch
-git checkout -b refactor/cosmo-rename
+#### Execution Order (CRITICAL - Follow This Sequence)
+```
+Step 1: Git Setup           → Create branch, ensure clean state
+Step 2: Directory Renames   → Rename both backend and frontend directories
+Step 3: Dart Import Updates → Update all Flutter package imports (CRITICAL)
+Step 4: Code References     → Search/replace all string references
+Step 5: Config Updates      → Update settings, .env files
+Step 6: Database Setup      → Create new cosmo_db, run migrations
+Step 7: Verification        → Test everything works
+Step 8: Git Commit & Push   → Commit changes, push branch
+Step 9: GitHub Rename       → Manual: rename repo on GitHub website
+```
 
-# 2. Ensure clean working directory
+#### Step 1: Git Setup
+```bash
+# Ensure clean working directory
 git status  # Should show no uncommitted changes
+
+# Create and checkout new branch
+git checkout -b refactor/cosmo-rename
 ```
 
-#### Task 0.1: Backend Renaming
+#### Step 2: Directory Renames
 ```bash
-# Directory renames (from project root)
-aristay_backend/               → cosmo_backend/
+# From project root: /home/duylam1407/WorkSpace/aristay_app/
 
-# Files to update
-├── manage.py                   → Update DJANGO_SETTINGS_MODULE to 'backend.settings'
-├── cosmo_backend/backend/settings.py      → Update APP_NAME
-├── cosmo_backend/backend/settings_base.py → Update APP_NAME, references
-├── cosmo_backend/backend/urls.py          → Update module imports
-├── cosmo_backend/backend/wsgi.py          → Update application reference
-├── cosmo_backend/backend/asgi.py          → Update application reference
-└── requirements.txt            → No changes needed
+# Rename backend directory (preserves git history)
+git mv aristay_backend cosmo_backend
+
+# Rename frontend directory
+git mv aristay_flutter_frontend cosmo_app
 ```
 
-#### Task 0.2: Frontend Renaming
-```bash
-# Directory rename
-aristay_flutter_frontend/       → cosmo_app/
-
-# Files to update
-├── pubspec.yaml
-│   └── name: cosmo_app
-│   └── description: Cosmo Management - Property & Operations Platform
-│
-├── lib/main.dart
-│   └── Update app title to 'Cosmo Management'
-│
-├── lib/core/constants/app_constants.dart
-│   └── appName: 'Cosmo Management'
-│   └── appShortName: 'Cosmo'
-│
-├── android/app/build.gradle
-│   └── applicationId: 'com.cosmomgmt.app'
-│   └── namespace: 'com.cosmomgmt.app'
-│
-├── android/app/src/main/AndroidManifest.xml
-│   └── android:label="Cosmo Management"
-│
-├── ios/Runner.xcodeproj/project.pbxproj
-│   └── PRODUCT_BUNDLE_IDENTIFIER = com.cosmomgmt.app
-│
-├── ios/Runner/Info.plist
-│   └── CFBundleDisplayName: Cosmo Management
-│   └── CFBundleName: Cosmo
-│
-├── web/index.html
-│   └── <title>Cosmo Management</title>
-│   └── Update meta tags
-│
-└── web/manifest.json
-    └── "name": "Cosmo Management"
-    └── "short_name": "Cosmo"
-```
-
-#### Task 0.3: Database (Create New)
-```sql
--- Create fresh database (recommended approach)
-CREATE DATABASE cosmo_db;
-
--- Grant permissions (adjust user as needed)
-GRANT ALL PRIVILEGES ON DATABASE cosmo_db TO postgres;
-```
+#### Step 3: Dart Import Updates (CRITICAL)
+**This step is CRITICAL** - renaming `pubspec.yaml` name requires updating ALL Dart imports.
 
 ```bash
-# After database creation, run migrations
+# Update pubspec.yaml first
+# Change: name: aristay_flutter_frontend
+# To:     name: cosmo_app
+
+# Then update ALL Dart import statements:
+# FROM: import 'package:aristay_flutter_frontend/...
+# TO:   import 'package:cosmo_app/...
+
+# Find all files needing update:
+grep -r "package:aristay_flutter_frontend" cosmo_app/lib/ --include="*.dart"
+
+# Use IDE "Find and Replace in Files" or sed:
+find cosmo_app/lib -name "*.dart" -exec sed -i 's/package:aristay_flutter_frontend/package:cosmo_app/g' {} +
+```
+
+#### Step 4: Code References (Search & Replace)
+```bash
+# Replace in order (specific patterns first):
+"aristay_flutter_frontend" → "cosmo_app"
+"aristay_backend"          → "cosmo_backend"
+"aristay_local"            → "cosmo_db"
+"AriStay"                  → "Cosmo Management"  (brand name in UI)
+"aristay"                  → "cosmo"              (lowercase references)
+
+# Files to update:
+cosmo_backend/backend/settings_base.py   → APP_NAME, DEFAULT_FROM_EMAIL
+cosmo_backend/api/templates/**/*.html    → Any "AriStay" text
+cosmo_app/lib/main.dart                  → App title
+cosmo_app/android/app/build.gradle       → applicationId, namespace
+cosmo_app/android/app/src/main/AndroidManifest.xml → android:label
+cosmo_app/ios/Runner/Info.plist          → CFBundleDisplayName, CFBundleName
+cosmo_app/web/index.html                 → <title>, meta tags
+cosmo_app/web/manifest.json              → name, short_name
+docs/**/*.md                             → All documentation
+README.md                                → Project description
+.env.example                             → DATABASE_URL, email settings
+```
+
+#### Step 5: Platform-Specific Config Updates
+
+**Android** (`cosmo_app/android/app/build.gradle`):
+```gradle
+android {
+    namespace "com.cosmomgmt.app"
+    defaultConfig {
+        applicationId "com.cosmomgmt.app"
+    }
+}
+```
+
+**iOS** (`cosmo_app/ios/Runner/Info.plist`):
+```xml
+<key>CFBundleDisplayName</key>
+<string>Cosmo Management</string>
+<key>CFBundleName</key>
+<string>Cosmo</string>
+```
+
+**iOS** (`cosmo_app/ios/Runner.xcodeproj/project.pbxproj`):
+```
+PRODUCT_BUNDLE_IDENTIFIER = com.cosmomgmt.app;
+```
+
+**Web** (`cosmo_app/web/index.html`):
+```html
+<title>Cosmo Management</title>
+<meta name="description" content="Cosmo Management - Property & Operations Platform">
+```
+
+#### Step 6: Database Setup
+```bash
+# Create new database
+sudo -u postgres psql -c "CREATE DATABASE cosmo_db;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE cosmo_db TO postgres;"
+
+# Update .env file
+# DATABASE_URL=postgresql://postgres:postgres@localhost:5432/cosmo_db
+
+# Run migrations
 cd cosmo_backend
 python manage.py migrate
-
-# (Optional) Copy data from old database if needed
-# pg_dump aristay_local > backup.sql
-# psql cosmo_db < backup.sql
+python manage.py createsuperuser  # For testing
 ```
 
-#### Task 0.4: Environment & Configuration
+#### Step 7: Verification Checklist
 ```bash
-# Files to update
-├── .env / .env.example
-│   └── DATABASE_URL=postgresql://user:pass@localhost/cosmo_db
-│   └── APP_NAME=Cosmo Management
-│
-├── docker-compose.yml (if exists)
-│   └── Update service names and database references
-│
-├── .github/workflows/*.yml (if exists)
-│   └── Update repository references
-│
-└── README.md
-    └── Update project name and description
+# Backend
+cd cosmo_backend
+python manage.py check              # ✓ System check passes
+python manage.py runserver          # ✓ Server starts
+
+# Frontend
+cd cosmo_app
+flutter pub get                     # ✓ Dependencies resolve
+flutter analyze                     # ✓ No errors
+flutter build web                   # ✓ Web builds
+
+# Code check - should return NOTHING
+grep -ri "aristay" --include="*.py" --include="*.dart" --include="*.yaml" \
+  --exclude-dir=.git --exclude-dir=build --exclude-dir=.dart_tool
 ```
 
-#### Task 0.5: Code References (grep & replace)
-```bash
-# Search and replace patterns
-"aristay"       → "cosmo"           (lowercase)
-"AriStay"       → "Cosmo"           (title case)
-"ARISTAY"       → "COSMO"           (uppercase)
-"aristay_app"   → "cosmo_management"
-"aristay_flutter_frontend" → "cosmo_app"
+**Verification Checklist:**
+- [ ] `python manage.py check` passes
+- [ ] Django server starts without errors
+- [ ] Django admin loads at /admin/
+- [ ] `flutter pub get` succeeds
+- [ ] `flutter analyze` shows no errors
+- [ ] `flutter build web` succeeds
+- [ ] No "aristay" references remain (grep check)
+- [ ] All tests pass
 
-# Directories to scan
-├── cosmo_management/**/*.py
-├── cosmo_app/lib/**/*.dart
-├── docs/**/*.md
-└── *.md, *.yaml, *.json, *.xml
-```
-
-#### Task 0.6: Git Repository
+#### Step 8: Git Commit & Push
 ```bash
-# Commit all renaming changes
 git add -A
+git status  # Review all changes
+
 git commit -m "Rename platform from AriStay to Cosmo Management
 
-- Rename aristay_backend/ to cosmo_backend/
-- Rename aristay_flutter_frontend/ to cosmo_app/
-- Update all code references
-- Configure cosmo_db database connection
-- Update package names and app identifiers"
+- Rename aristay_backend/ → cosmo_backend/
+- Rename aristay_flutter_frontend/ → cosmo_app/
+- Update all Dart package imports
+- Update Android/iOS bundle identifiers
+- Update web manifest and HTML
+- Configure cosmo_db database
+- Update all code references and documentation"
 
-# Push branch for review
 git push -u origin refactor/cosmo-rename
 ```
 
-**GitHub Repository Rename (Manual Step):**
-> The repository rename from `aristay_app` to `cosmo-management` (or similar)
-> should be done manually via GitHub Settings → General → Repository name.
+#### Step 9: GitHub Repository Rename (Manual)
+> **Done manually by user via GitHub website:**
+> 1. Go to repository **Settings** → **General**
+> 2. Change "Repository name" to `cosmo-management`
+> 3. Click "Rename"
 >
-> After GitHub rename, update local remote:
+> After rename, update local remote:
 > ```bash
-> git remote set-url origin git@github.com:yourorg/cosmo-management.git
+> git remote set-url origin git@github.com:YOUR_USERNAME/cosmo-management.git
+> git fetch origin
 > ```
 
-#### Task 0.7: Verification Checklist
-- [ ] Django server starts without errors
-- [ ] All migrations run successfully
-- [ ] Flutter app builds for web/iOS/Android
-- [ ] All tests pass
-- [ ] No "aristay" references remain (grep check)
-- [ ] API endpoints respond correctly
-- [ ] Firebase configuration still works
-
-#### Deliverables:
+#### Deliverables Summary
 | Item | Before | After |
 |------|--------|-------|
-| Root directory | `aristay_app/` | `cosmo_management/` (after GitHub rename) |
 | Django backend | `aristay_backend/` | `cosmo_backend/` |
 | Flutter app | `aristay_flutter_frontend/` | `cosmo_app/` |
-| Database | `aristay_local` | `cosmo_db` (new database) |
-| Android Package | `com.example.aristay_flutter_frontend` | `com.cosmomgmt.app` |
-| iOS Bundle ID | `com.example.aristayFlutterFrontend` | `com.cosmomgmt.app` |
-| Git Branch | `refactor_01` | `refactor/cosmo-rename` → merge to `main` |
+| Dart package | `package:aristay_flutter_frontend` | `package:cosmo_app` |
+| Database | `aristay_local` | `cosmo_db` |
+| Android ID | `com.example.aristay_flutter_frontend` | `com.cosmomgmt.app` |
+| iOS Bundle | `com.example.aristayFlutterFrontend` | `com.cosmomgmt.app` |
+| Git Repo | `aristay_app` | `cosmo-management` (manual) |
+
+#### Definition of Done - Phase 0
+- [ ] All directories renamed
+- [ ] All Dart imports updated
+- [ ] All code references updated
+- [ ] Database created and migrations run
+- [ ] Django server starts and passes checks
+- [ ] Flutter builds for web without errors
+- [ ] No "aristay" string found in codebase
+- [ ] Changes committed and pushed
+- [ ] GitHub repository renamed
 
 ---
 
 ### Phase 1: Foundation & Core Setup
-**Objective:** Set up Flutter web project structure and shared infrastructure
+**Objective:** Set up Flutter web project structure, shared infrastructure, and offline-first architecture
 
 #### Tasks:
 1. **Project Structure Setup**
-   - Configure Flutter web build settings in `cosmo_app/` (renamed from aristay_flutter_frontend)
-   - Set up shared codebase structure for mobile + web
+   - Configure Flutter web build settings in `cosmo_app/`
+   - Set up feature-based folder structure
    - Configure environment variables (dev/staging/prod)
-   - Set up CI/CD for Flutter web deployment
+   - Set up basic CI/CD pipeline
 
 2. **Design System & Theme**
-   - Create unified design tokens (colors, typography, spacing)
-   - Build reusable widget library
-   - Implement responsive layout system (mobile/tablet/desktop)
-   - Dark mode support
+   - Create design tokens (colors, typography, spacing)
+   - Build core widget library (buttons, cards, inputs, loading states)
+   - Implement responsive layout system (mobile/tablet/desktop breakpoints)
+   - Dark mode support (theme switching)
 
-3. **Core Services**
-   - API client service (HTTP + JWT handling)
-   - Authentication service (token storage, refresh, logout)
-   - Navigation service (GoRouter for web + mobile)
-   - Local storage service (SharedPreferences/Hive)
-   - Push notification service (Firebase)
-   - Error logging service (client error reporting)
+3. **Core Services (with offline support built-in)**
+   - **ApiService**: Dio-based HTTP client with JWT interceptor, retry logic, request queuing
+   - **AuthService**: Token storage (secure storage), refresh flow, logout
+   - **StorageService**: Hive-based local cache for offline data
+   - **SyncService**: Offline mutation queue, conflict detection, sync status
+   - **ConnectivityService**: Network state monitoring, online/offline events
+   - **NotificationService**: Firebase push notification handling
+   - **ErrorService**: Crash reporting, client error logging to API
 
 4. **State Management**
-   - Set up Riverpod provider structure
-   - Implement user session management
-   - Implement connectivity monitoring
+   - Set up Riverpod with code generation (riverpod_generator)
+   - User session provider
+   - Connectivity provider
+   - Sync status provider
 
 #### Files to Create:
 ```
 lib/
 ├── core/
+│   ├── config/
+│   │   ├── env_config.dart          # Environment variables
+│   │   └── api_config.dart          # API base URLs
 │   ├── constants/
-│   │   ├── api_constants.dart
 │   │   ├── app_constants.dart
-│   │   └── route_constants.dart
+│   │   └── route_paths.dart
 │   ├── theme/
 │   │   ├── app_theme.dart
 │   │   ├── app_colors.dart
-│   │   ├── app_typography.dart
-│   │   └── app_spacing.dart
+│   │   └── app_typography.dart
 │   ├── services/
-│   │   ├── api_service.dart
-│   │   ├── auth_service.dart
-│   │   ├── navigation_service.dart
-│   │   ├── storage_service.dart
-│   │   ├── notification_service.dart
-│   │   └── error_logging_service.dart
+│   │   ├── api_service.dart         # Dio + interceptors
+│   │   ├── auth_service.dart        # JWT management
+│   │   ├── storage_service.dart     # Hive local storage
+│   │   ├── sync_service.dart        # Offline queue + sync
+│   │   ├── connectivity_service.dart
+│   │   └── error_service.dart
 │   ├── providers/
 │   │   ├── auth_provider.dart
 │   │   ├── user_provider.dart
-│   │   └── connectivity_provider.dart
-│   └── widgets/
-│       ├── app_button.dart
-│       ├── app_card.dart
-│       ├── app_text_field.dart
-│       ├── loading_indicator.dart
-│       └── responsive_layout.dart
+│   │   ├── connectivity_provider.dart
+│   │   └── sync_status_provider.dart
+│   ├── widgets/
+│   │   ├── buttons/
+│   │   ├── cards/
+│   │   ├── inputs/
+│   │   ├── loading/
+│   │   └── layout/
+│   └── utils/
+│       ├── date_utils.dart
+│       ├── validators.dart
+│       └── extensions.dart
+├── data/
+│   ├── models/                      # Freezed models
+│   └── repositories/                # Data access layer
+└── router/
+    └── app_router.dart              # GoRouter configuration
 ```
+
+#### Definition of Done - Phase 1
+- [ ] Flutter project builds for web, Android, and iOS
+- [ ] Environment config works (dev/staging/prod API URLs)
+- [ ] Theme system implemented with light/dark mode toggle
+- [ ] ApiService can make authenticated requests
+- [ ] Offline detection works (shows indicator when offline)
+- [ ] At least 5 reusable widgets built and documented
+- [ ] GoRouter navigation working with deep links
+- [ ] Unit tests for all services (>80% coverage)
 
 ---
 
 ### Phase 2: Authentication Module
 **Objective:** Complete authentication flow with JWT support
 
-#### Screens to Build (5):
+#### Screens to Build (4):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
 | `LoginScreen` | Email/password login | `POST /api/token/` |
 | `RegisterScreen` | Registration with invite code | `POST /api/register/`, `POST /api/validate-invite/` |
 | `PasswordResetScreen` | Request password reset | `POST /api/auth/password_reset/` |
 | `PasswordResetConfirmScreen` | Set new password | `POST /api/auth/reset/{uid}/{token}/` |
-| `AccountLockedScreen` | Display lockout message | N/A |
+
+*Note: Account locked state is a dialog/banner on LoginScreen, not a separate screen*
 
 #### Features:
-- JWT token management (access + refresh)
-- Biometric authentication (mobile)
-- Remember me functionality
-- Session persistence
-- Role-based navigation after login
-- Revoke all sessions option
+- JWT token management (access + refresh tokens)
+- Biometric authentication (mobile only)
+- Remember me / session persistence
+- Role-based navigation after login (Staff → tasks, Portal → properties)
 - Device registration for push notifications
+- Logout from all devices option
+
+#### Definition of Done - Phase 2
+- [ ] User can login with email/password
+- [ ] User can register with valid invite code
+- [ ] User can request password reset email
+- [ ] User can set new password from reset link
+- [ ] JWT tokens stored securely
+- [ ] Token refresh happens automatically before expiry
+- [ ] Login redirects to correct dashboard based on role
+- [ ] Firebase device token registered on login
+- [ ] Error states shown (invalid credentials, locked account, invalid invite)
 
 ---
 
-### Phase 3: Portal Module (Property Owners)
-**Objective:** Property management interface for owners
-
-#### Screens to Build (11):
-| Screen | Purpose | API Endpoints |
-|--------|---------|---------------|
-| `PortalHomeScreen` | Dashboard with quick access | `GET /api/mobile/dashboard/` |
-| `PropertyListScreen` | Browse all properties | `GET /api/properties/` |
-| `PropertyDetailScreen` | Property info, bookings, tasks | `GET /api/properties/{id}/` |
-| `PropertySearchWidget` | Property autocomplete | `GET /api/properties/search/` |
-| `BookingListScreen` | All bookings | `GET /api/bookings/` |
-| `BookingDetailScreen` | Booking information | `GET /api/bookings/{id}/` |
-| `CalendarScreen` | Unified calendar | `GET /api/calendar/*` |
-| `PortalTaskDetailScreen` | Task details (read-only) | `GET /api/tasks/{id}/` |
-| `PhotoManagementScreen` | Review/approve photos | `GET /api/tasks/{id}/images/` |
-| `PortalPhotoGalleryScreen` | Browse all property photos | `GET /api/portal/photos/` |
-| `PortalSettingsScreen` | Notification & digest prefs | `GET /api/notifications/settings/` |
-
-#### Features:
-- Property quick search with autocomplete
-- Booking status tracking
-- Task assignment visibility
-- Photo approval workflow (approve/reject)
-- Photo gallery with filtering by property, type, date
-- Calendar with multiple views (month/week/day)
-- Calendar filtering by property, user, event type
-- Push notification preferences
-- Email digest preferences
-
----
-
-### Phase 4: Staff Module - Core Task Management
-**Objective:** Primary task management for staff workers
-
-#### Screens to Build (5):
-| Screen | Purpose | API Endpoints |
-|--------|---------|---------------|
-| `StaffDashboardScreen` | Task counts and quick actions | `GET /api/staff/task-counts/` |
-| `MyTasksScreen` | Filterable task list | `GET /api/tasks/` |
-| `TaskDetailScreen` | Full task with checklist | `GET /api/tasks/{id}/`, `GET /api/staff/tasks/{id}/progress/` |
-| `TaskFormScreen` | Create/edit tasks | `POST/PUT /api/tasks/` |
-| `TaskDuplicateScreen` | Duplicate existing task | `POST /api/staff/tasks/{id}/duplicate/` |
-
-#### Features:
-- Task list with filtering (status, type, property, date, assigned)
-- Bulk task actions (complete, reassign)
-- Task status workflow: `pending` → `in-progress` → `completed` / `canceled`
-- Task dependencies visualization (depends_on)
-- Task muting/unmuting for notifications
-- Self-assign functionality
-- Task timer functionality
-- Progress percentage display
-- Checklist interaction with all item types
-- Offline support with sync queue
-
-#### Task Types (8):
-1. `cleaning` - Cleaning tasks
-2. `maintenance` - Maintenance tasks
-3. `laundry` - Laundry tasks
-4. `lawn_pool` - Outdoor maintenance
-5. `inspection` - Property inspection
-6. `preparation` - Property preparation
-7. `administration` - Admin tasks
-8. `other` - Miscellaneous
-
----
-
-### Phase 5: Staff Module - Specialized Dashboards
-**Objective:** Task-type specific dashboards
+### Phase 3: Staff Module - Core Task Management
+**Objective:** Primary task management for staff workers (HIGHEST PRIORITY after auth)
 
 #### Screens to Build (4):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
-| `CleaningDashboardScreen` | Cleaning tasks | `GET /api/tasks/?task_type=cleaning` |
-| `MaintenanceDashboardScreen` | Maintenance tasks | `GET /api/tasks/?task_type=maintenance` |
-| `LaundryDashboardScreen` | Laundry tasks | `GET /api/tasks/?task_type=laundry` |
-| `LawnPoolDashboardScreen` | Outdoor tasks | `GET /api/tasks/?task_type=lawn_pool` |
+| `StaffDashboardScreen` | Task counts, quick actions, filters | `GET /api/staff/task-counts/` |
+| `TaskListScreen` | Filterable task list | `GET /api/tasks/` |
+| `TaskDetailScreen` | Full task view with checklist | `GET /api/tasks/{id}/`, `GET /api/staff/tasks/{id}/progress/` |
+| `TaskFormScreen` | Create/edit/duplicate tasks | `POST/PUT /api/tasks/`, `POST /api/staff/tasks/{id}/duplicate/` |
+
+*Note: Task-type dashboards (cleaning, maintenance, etc.) are filter presets on StaffDashboard, not separate screens*
 
 #### Features:
-- Task type filtering
-- Priority sorting
-- Property grouping
-- Quick status updates
-- Task count by status
-- Due date highlighting (overdue, due today, upcoming)
+- Task list with filtering (status, type, property, date, assigned user)
+- Task status workflow: `pending` → `in-progress` → `completed` / `canceled`
+- Bulk task actions (complete multiple, reassign)
+- Task duplication (pre-fills TaskFormScreen)
+- Self-assign functionality
+- Task timer start/stop
+- Progress percentage display
+- Checklist interaction (all 8 item types)
+- **Offline support**: View cached tasks, update status offline, sync when online
+
+#### Checklist Item Types (8):
+1. `checkbox` - Yes/no completion
+2. `text_input` - Free text entry
+3. `number_input` - Numeric value
+4. `photo` - Photo capture/upload
+5. `dropdown` - Select from options
+6. `signature` - Signature capture
+7. `date_input` - Date picker
+8. `time_input` - Time picker
+
+#### Definition of Done - Phase 3
+- [ ] Staff can view dashboard with task counts by status
+- [ ] Staff can filter tasks by type, status, property, date
+- [ ] Staff can view task details with checklist
+- [ ] Staff can complete checklist items (all 8 types)
+- [ ] Staff can change task status
+- [ ] Staff can create new tasks
+- [ ] Staff can duplicate existing tasks
+- [ ] Tasks viewable offline (cached)
+- [ ] Status updates queued offline and sync when online
 
 ---
 
-### Phase 6: Staff Module - Auxiliary Features
-**Objective:** Supporting staff features
+### Phase 4: Staff Module - Auxiliary Features
+**Objective:** Supporting staff features (inventory, lost & found, photos)
 
-#### Screens to Build (10):
+#### Screens to Build (6):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
-| `InventoryLookupScreen` | Property inventory search | `GET /api/staff/inventory/` |
-| `InventoryTransactionScreen` | Log inventory changes | `POST /api/staff/inventory/transaction/` |
+| `InventoryScreen` | Inventory lookup + transactions | `GET/POST /api/staff/inventory/` |
 | `InventoryAlertsScreen` | Low stock alerts | `GET /api/staff/inventory/low-stock/` |
-| `LostFoundScreen` | Lost & found list | `GET /api/staff/lost-found/` |
-| `LostFoundFormScreen` | Create/edit lost items | `POST /api/staff/lost-found/` |
-| `LostFoundDetailScreen` | Item detail with photos | `GET /api/staff/lost-found/{id}/` |
-| `ChecklistTemplatesScreen` | View templates | `GET /api/checklists/` |
+| `LostFoundListScreen` | Lost & found items | `GET /api/staff/lost-found/` |
+| `LostFoundFormScreen` | Create/edit/view item | `GET/POST/PUT /api/staff/lost-found/{id}/` |
 | `PhotoUploadScreen` | Batch photo upload | `POST /api/staff/checklist/photo/upload/` |
 | `PhotoComparisonScreen` | Before/after slider | `GET /api/staff/photos/comparison/{id}/` |
-| `StaffPhotoManagementScreen` | Photo dashboard | `GET /api/staff/photos/management/` |
+
+*Note: Inventory lookup and transaction are combined into one screen with tabs*
 
 #### Features:
 - Inventory search by property with par levels
-- Inventory transaction logging with all 6 transaction types
-- Low stock alerts display with threshold indicators
-- Shortage reporting with automatic task creation
-- Lost item reporting with multiple photos
+- Inventory transaction logging (6 transaction types)
+- Low stock alerts with threshold indicators
+- Lost item reporting with photos
 - Item status tracking (found → claimed/disposed/donated)
-- Condition logging for lost items
-- Checklist template viewing
-- Multi-photo upload with progress indicator
-- Before/after photo comparison slider
-- Staff photo management dashboard
+- Multi-photo upload with progress
+- Before/after photo comparison
+
+#### Definition of Done - Phase 4
+- [ ] Staff can search inventory by property
+- [ ] Staff can log inventory transactions
+- [ ] Low stock alerts display correctly
+- [ ] Staff can report lost/found items with photos
+- [ ] Staff can upload photos for tasks
+- [ ] Photo comparison slider works
 
 ---
 
-### Phase 7: Chat Module
-**Objective:** Real-time team communication
-
-#### Screens to Build (5):
-| Screen | Purpose | API Endpoints |
-|--------|---------|---------------|
-| `ChatRoomListScreen` | List of conversations | `GET /api/chat/rooms/` |
-| `ChatScreen` | Message thread view | `GET /api/chat/messages/` |
-| `NewChatScreen` | Create new chat | `POST /api/chat/rooms/` |
-| `ChatParticipantsScreen` | Manage participants | `GET/POST/DELETE /api/chat/participants/` |
-| `MessageSearchScreen` | Search messages | `GET /api/chat/messages/search/` |
-
-#### Features:
-- HTTP Polling for messages (5-10 second intervals)
-- Direct and group chats
-- Task-specific and property-specific chats
-- Message threading (replies)
-- Read receipts
-- Typing indicators
-- File/photo attachments
-- Message editing and deletion
-- Message search across rooms
-- Mute room notifications
-- Room archiving
-
-#### Implementation Approach:
-- **Phase 7a:** HTTP Polling (immediate)
-- **Phase 7b:** WebSocket upgrade (future enhancement)
-
----
-
-### Phase 8: Manager Module
-**Objective:** Team management interface
+### Phase 5: Portal Module (Property Owners)
+**Objective:** Property management interface for owners
 
 #### Screens to Build (8):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
-| `ManagerDashboardScreen` | Team overview | `GET /api/manager/overview/` |
-| `ManagerUserListScreen` | Team members | `GET /api/manager/users/` |
-| `ManagerUserDetailScreen` | User detail/edit | `GET /api/manager/users/{id}/` |
-| `ManagerPermissionsScreen` | Permission management | `GET /api/permissions/available/` |
-| `ManagerInviteCodesScreen` | Manage invites | `GET /api/manager/invite-codes/` |
-| `InviteCodeFormScreen` | Create/edit invite | `POST /api/manager/create-invite-code/` |
-| `InviteCodeDetailScreen` | Invite code detail | `GET /api/manager/invite-codes/{id}/` |
-| `AuditLogScreen` | View team activity | `GET /api/audit-events/` |
+| `PortalDashboardScreen` | Dashboard with stats | `GET /api/mobile/dashboard/` |
+| `PropertyListScreen` | Browse properties (with search) | `GET /api/properties/`, `GET /api/properties/search/` |
+| `PropertyDetailScreen` | Property info, bookings, tasks | `GET /api/properties/{id}/` |
+| `BookingListScreen` | All bookings | `GET /api/bookings/` |
+| `BookingDetailScreen` | Booking information | `GET /api/bookings/{id}/` |
+| `CalendarScreen` | Unified calendar view | `GET /api/calendar/*` |
+| `PhotoGalleryScreen` | Browse/approve photos | `GET /api/portal/photos/`, `POST /api/tasks/{id}/images/{id}/approve/` |
+| `TaskDetailScreen` | Task details (shared with Staff, role-based UI) | `GET /api/tasks/{id}/` |
+
+*Note: PropertySearch is integrated into PropertyListScreen, not separate*
 
 #### Features:
-- Team task overview with statistics and analytics
-- User list with role filtering and search
-- User detail view with editable fields (limited by role)
-- Permission delegation (grant/revoke to staff)
-- Permission override management with expiration
-- Invite code creation with role and department assignment
-- Invite code expiration and usage tracking
-- Invite code revocation/reactivation/deletion
-- Task assignment to team members
-- Audit log viewing (read-only)
-- Team performance metrics
+- Property list with search/filter
+- Booking status tracking
+- Task visibility (read-only for portal users)
+- Photo approval workflow (approve/reject)
+- Calendar with month/week/day views
+- Calendar filtering by property
+
+#### Definition of Done - Phase 5
+- [ ] Portal users can view their properties
+- [ ] Portal users can search properties
+- [ ] Portal users can view bookings
+- [ ] Portal users can view calendar
+- [ ] Portal users can approve/reject photos
+- [ ] Portal users can view task details (read-only)
 
 ---
 
-### Phase 9: Notification System
-**Objective:** Unified notification handling
+### Phase 6: Chat Module
+**Objective:** Team communication
 
-#### Screens to Build (2):
+#### Screens to Build (4):
+| Screen | Purpose | API Endpoints |
+|--------|---------|---------------|
+| `ChatRoomListScreen` | List of conversations | `GET /api/chat/rooms/` |
+| `ChatScreen` | Message thread (with participants modal) | `GET/POST /api/chat/messages/` |
+| `NewChatScreen` | Create new chat room | `POST /api/chat/rooms/` |
+| `MessageSearchScreen` | Search messages | `GET /api/chat/messages/search/` |
+
+*Note: Participants management is a modal/drawer in ChatScreen, not separate screen*
+
+#### Features:
+- Direct and group chats
+- Task-specific and property-specific chats
+- Message threading (replies)
+- Read receipts
+- File/photo attachments
+- Message editing and deletion
+- Mute/archive rooms
+
+#### Polling Strategy (NOT WebSocket for v1.0):
+- Active chat room: Poll every 3 seconds
+- Chat list: Poll every 15 seconds
+- Background/inactive: Poll every 60 seconds
+- Stop polling when app backgrounded (mobile)
+
+*Note: Typing indicators removed for v1.0 - unreliable with polling*
+
+#### Definition of Done - Phase 6
+- [ ] Users can view chat room list
+- [ ] Users can send/receive messages
+- [ ] Users can create new chat rooms
+- [ ] Users can search messages
+- [ ] Read receipts display correctly
+- [ ] File attachments work
+- [ ] Polling resumes correctly after app foregrounded
+
+---
+
+### Phase 7: Manager Module
+**Objective:** Team management interface
+
+#### Screens to Build (6):
+| Screen | Purpose | API Endpoints |
+|--------|---------|---------------|
+| `ManagerDashboardScreen` | Team overview stats | `GET /api/manager/overview/` |
+| `UserListScreen` | Team members list | `GET /api/manager/users/` |
+| `UserDetailScreen` | User detail/edit | `GET/PUT /api/manager/users/{id}/` |
+| `InviteCodeListScreen` | Manage invite codes | `GET /api/manager/invite-codes/` |
+| `InviteCodeFormScreen` | Create/edit invite | `POST/PUT /api/manager/invite-codes/` |
+| `AuditLogScreen` | View activity log | `GET /api/audit-events/` |
+
+*Note: Permissions management is a section within UserDetailScreen*
+
+#### Features:
+- Team task overview with statistics
+- User list with role filtering
+- User detail with editable fields (based on permissions)
+- Permission delegation (grant/revoke)
+- Invite code management (create, expire, revoke)
+- Audit log viewing (read-only)
+
+#### Definition of Done - Phase 7
+- [ ] Managers can view team dashboard
+- [ ] Managers can view/edit team members
+- [ ] Managers can grant/revoke permissions
+- [ ] Managers can create invite codes
+- [ ] Managers can view audit logs
+
+---
+
+### Phase 8: Notifications & Settings
+**Objective:** Notification system and user settings
+
+#### Screens to Build (4):
 | Screen | Purpose | API Endpoints |
 |--------|---------|---------------|
 | `NotificationListScreen` | All notifications | `GET /api/notifications/` |
-| `NotificationSettingsScreen` | Preferences | `GET /api/notifications/settings/` |
+| `SettingsScreen` | App settings + notification prefs | `GET /api/notifications/settings/`, `GET /api/users/me/` |
+| `ProfileScreen` | User profile (with sessions tab) | `GET /api/users/me/`, `PUT /api/users/me/` |
+| `PasswordChangeScreen` | Change password | `POST /api/auth/password_change/` |
+
+*Note: Notification settings and email digest prefs are tabs within SettingsScreen*
+*Note: Active sessions is a tab within ProfileScreen*
 
 #### Features:
 - Push notification handling (Firebase)
-- In-app notification list
-- Unread count badge in header
+- In-app notification list with unread badge
 - Mark as read (single/all)
 - Notification preferences by type
-- Deep linking from notifications to relevant screens
-- Email digest preferences integration
-
----
-
-### Phase 10: User Profile & Settings
-**Objective:** User account management
-
-#### Screens to Build (3):
-| Screen | Purpose | API Endpoints |
-|--------|---------|---------------|
-| `ProfileScreen` | User profile | `GET /api/users/me/` |
-| `SettingsScreen` | App settings | Various |
-| `ActiveSessionsScreen` | Device sessions | Future endpoint |
-
-#### Features:
+- Deep linking from notifications
 - View/edit profile information
 - Timezone selection
 - Password change
-- View permissions
-- Logout from current device
-- Logout from all devices
 - Dark mode toggle
-- Notification sound settings
+- Logout (current device / all devices)
 - App version info
 
----
-
-### Phase 11: Offline Support & Optimization
-**Objective:** Robust offline experience
-
-#### Features:
-1. **Offline Data Storage**
-   - Cache tasks, properties, bookings locally (Hive/SQLite)
-   - Queue actions while offline
-   - Conflict detection
-
-2. **Sync Mechanism**
-   - Background sync when online
-   - Conflict resolution UI
-   - Sync status indicators
-   - `POST /api/mobile/offline-sync/` integration
-
-3. **Performance Optimization**
-   - Image caching with size limits
-   - Lazy loading for lists
-   - Pagination (20 items default)
-   - Memory management
-   - Code splitting for web
+#### Definition of Done - Phase 8
+- [ ] Users can view notification list
+- [ ] Users can mark notifications as read
+- [ ] Users can configure notification preferences
+- [ ] Users can view/edit their profile
+- [ ] Users can change password
+- [ ] Users can toggle dark mode
+- [ ] Users can logout
+- [ ] Deep links from push notifications work
 
 ---
 
-### Phase 12: Testing & Quality Assurance
-**Objective:** Comprehensive testing
+### Phase 9: Testing & Quality Assurance
+**Objective:** Comprehensive testing (CONTINUOUS - not just end of project)
 
-#### Tasks:
-1. **Unit Tests**
-   - Service tests
-   - Provider tests
-   - Utility tests
-   - Model tests
+#### Testing Requirements (per phase):
+- **Unit tests**: >80% coverage for services, providers, utilities
+- **Widget tests**: All screens and reusable components
+- **Integration tests**: Critical user flows
 
-2. **Widget Tests**
-   - Screen tests
-   - Component tests
-   - Form validation tests
+#### Final QA Tasks:
+1. **Cross-Platform Testing**
+   - Web: Chrome, Safari, Firefox, Edge
+   - Mobile: Android 8+, iOS 13+
+   - Tablet: iPad, Android tablets
 
-3. **Integration Tests**
-   - User flow tests
-   - API integration tests
-   - Offline sync tests
+2. **Performance Testing**
+   - Initial load < 3 seconds (3G throttled)
+   - Page navigation < 500ms
+   - Memory profiling (no leaks)
 
-4. **E2E Tests**
-   - Critical path tests (login → task complete)
-   - Cross-platform tests (mobile/web)
-   - Accessibility tests
+3. **Accessibility Audit**
+   - Screen reader compatibility
+   - Keyboard navigation
+   - Color contrast (WCAG AA)
+
+4. **Security Testing**
+   - JWT token handling
+   - XSS prevention
+   - Input validation
+
+#### Definition of Done - Phase 9
+- [ ] All unit tests passing (>80% coverage)
+- [ ] All widget tests passing
+- [ ] Critical flows have integration tests
+- [ ] No accessibility violations (axe-core)
+- [ ] Performance targets met
+- [ ] Security audit complete
 
 ---
 
-### Phase 13: Deployment & Migration
-**Objective:** Production deployment and migration
+### Phase 10: Deployment & Migration
+**Objective:** Production deployment
 
 #### Tasks:
 1. **Backend Preparation**
    - CORS configuration for Flutter web domain
-   - Optimize API endpoints for mobile payloads
-   - Add any missing endpoints identified during development
+   - Optimize API response payloads
+   - Verify all endpoints used by Flutter
 
 2. **Flutter Web Deployment**
-   - Configure hosting (Firebase Hosting recommended)
-   - Set up CDN for static assets
-   - SSL/HTTPS configuration
+   - Firebase Hosting setup
+   - CDN for static assets
    - Service worker for PWA
+   - SSL/HTTPS configuration
 
-3. **Migration Strategy**
-   - Gradual rollout by user role (Staff first, then Portal, then Manager)
-   - Feature flags for A/B testing
-   - Rollback plan with Django templates as fallback
+3. **CI/CD Pipeline**
+   - Automated builds on push
+   - Automated testing
+   - Automated deployment to staging
+   - Manual promotion to production
+
+4. **Migration Strategy**
+   - Gradual rollout: Staff → Portal → Manager
+   - Django templates as fallback (feature flag)
    - User communication plan
+   - Rollback procedure documented
 
-4. **Django Admin Preservation**
-   - Keep all admin routes unchanged
-   - Admin-only authentication path
-   - Separate session handling
+#### Definition of Done - Phase 10
+- [ ] Flutter web deployed to production URL
+- [ ] CI/CD pipeline working
+- [ ] All users migrated successfully
+- [ ] Rollback tested and documented
+- [ ] Monitoring and alerting configured
 
 ---
 
-### Phase 14: Multi-Tenancy Foundation
+---
+
+# ⏸️ v2.0+ PHASES START HERE
+
+### Phase 11+: Multi-Tenancy Foundation
 **Objective:** Transform to multi-tenant SaaS platform
 
 #### Tasks:
@@ -2716,6 +2859,43 @@ aristay_flutter_frontend/
 | 2025-12-22 | 1.5 | **NAMING** - Confirmed platform name: Cosmo Management with complete renaming strategy |
 | 2025-12-22 | 1.6 | **PHASE 0** - Added detailed Phase 0: Platform Renaming with step-by-step migration tasks |
 | 2025-12-23 | 1.7 | **IMPLEMENTATION** - Finalized implementation strategy with confirmed decisions |
+| 2025-12-23 | 2.0 | **MAJOR REVISION** - Critical review and plan consolidation |
+
+### Version 2.0 - Major Revision (Critical Review)
+
+**Issues Addressed:**
+- Fixed Phase 0 errors (directory paths, execution order, missing Dart import updates)
+- Resolved Staff vs Portal priority contradiction (Staff is now Phase 3)
+- Consolidated redundant screens (53 → 36 screens)
+- Moved offline support to Phase 1 (architecture, not afterthought)
+- Added Definition of Done for each phase
+- Marked v2.0+ sections clearly as deferred
+
+**New Sections Added:**
+- Technology Stack (finalized): Riverpod, Dio, GoRouter, Hive, Freezed
+- Non-Functional Requirements: load times, browser support, accessibility
+- Error Handling Strategy: retry logic, offline queue
+- Screen Consolidation table (what was merged and why)
+
+**Phase Restructuring:**
+- Phases reduced from 13 to 10 for v1.0
+- Phase 3 = Staff Core (was Phase 4)
+- Phase 4 = Staff Auxiliary (was Phase 6)
+- Phase 5 = Portal (was Phase 3)
+- Phases 11-13 merged into Phases 9-10
+- Old Phases 14+ renumbered to 11+
+
+**Screen Consolidation (53 → 36):**
+- 4 task-type dashboards → 1 dashboard with filters
+- TaskForm + TaskDuplicate → 1 TaskFormScreen
+- Multiple settings screens → Combined SettingsScreen
+- Removed screens that are modals/drawers, not pages
+
+**Chat Module Fix:**
+- Adjusted polling intervals (3s active, 15s list, 60s background)
+- Removed typing indicators (unreliable with polling)
+
+---
 
 ### Version 1.7 - Implementation Strategy Finalized
 
@@ -2726,21 +2906,6 @@ aristay_flutter_frontend/
 - Git branch: `refactor/cosmo-rename`
 - Database: Create new `cosmo_db` (not rename existing)
 - GitHub repo rename: Manual by user via GitHub UI
-
-**New Sections Added:**
-- Implementation Strategy section with phase execution order diagram
-- Module priority table with rationale
-- v1.0 vs v2.0+ scope separation
-
-**Phase 0 Updates:**
-- Added pre-requisites (branch creation)
-- Updated database task to "Create New" approach
-- Added GitHub manual rename instructions
-- Updated deliverables table with actual directory names
-- Added commit message template
-
-**Status Changed:**
-- Document status: "Planning Phase" → "Ready for Implementation"
 
 ---
 
