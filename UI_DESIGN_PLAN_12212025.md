@@ -1,8 +1,8 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 3.0
+**Document Version:** 3.1
 **Created:** 2025-12-21
-**Last Updated:** 2025-12-23
+**Last Updated:** 2025-12-24
 **Status:** Requires Architectural Decisions Before Implementation
 **Platform Name:** Cosmo Management (formerly AriStay)
 
@@ -39,9 +39,9 @@
 |---|----------|---------|----------------|
 | 1 | **Existing code strategy?** | A) Refactor incrementally B) Complete rewrite C) Hybrid | **B) Complete rewrite** - Technology changes are too fundamental |
 | 2 | **JWT vs Token auth?** | A) Migrate backend to JWT B) Keep Token, add refresh | **A) Migrate to JWT** - Better security, standard practice |
-| 3 | **Phase 0 timing?** | A) Rename first B) Rename during rewrite | **B) During rewrite** - Less risk, single migration |
+| 3 | **Phase 0 timing?** | A) Rename first B) Rename during rewrite | **A) Rename first** - Clean start with new identity, all new code uses correct naming |
 | 4 | **MVP scope?** | A) All 36 screens B) Core 18 screens C) Mobile-only first | **C) Mobile-only first** - Validate architecture |
-| 5 | **Backend readiness?** | Audit JWT endpoints, CORS, offline sync | **Required before Phase 1** |
+| 5 | **Backend readiness?** | Audit JWT endpoints, CORS, offline sync | **Required before Phase 2** (after renaming) |
 
 ---
 
@@ -98,14 +98,15 @@ Multi-tenant SaaS capabilities are **completely deferred** to a separate v2.0 pl
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
+| **Phase 0** | GitHub Repo & Project Renaming | Clean start with new identity before any development |
 | **Flutter Base** | Extend existing `aristay_flutter_frontend/` → `cosmo_app/` | Leverage existing Firebase setup and mobile infrastructure |
 | **Manager Module** | Move to Flutter Web | Unified experience for managers alongside Portal/Staff |
 | **Chat Implementation** | HTTP Polling first | Simpler implementation, add WebSocket later |
-| **Phase Priority** | Staff Module first | Core task management is primary value proposition |
-| **Multi-Tenancy** | Defer to v2.0+ | Build single-tenant MVP first (Phases 0-13) |
-| **Git Strategy** | New branch `refactor/cosmo-rename` | Isolate renaming changes, merge when stable |
+| **Phase Priority** | Renaming first, then Staff Module | Rename first for clean slate, then focus on core task management |
+| **Multi-Tenancy** | Defer to v2.0+ | Build single-tenant MVP first (Phases 0-12) |
+| **Git Strategy** | Create new repository `cosmo-management` | Fresh start, archive old aristay_app repo |
 | **Database Strategy** | Create new `cosmo_db` | Fresh database, migrate data as needed |
-| **Repository Rename** | Manual via GitHub UI | User handles remote rename separately |
+| **Repository Rename** | Phase 0 via GitHub UI | Rename first before any development work |
 
 ---
 
@@ -170,25 +171,32 @@ class ApiException implements Exception {
 │                    Deliverable: Working mobile app with auth + tasks         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Phase 0: Backend Preparation ◀── PREREQUISITE ─────────────────────────── │
+│  Phase 0: GitHub Repo & Project Renaming ◀── FIRST STEP ────────────────── │
+│     ├── Rename GitHub repository (aristay_app → cosmo-management)           │
+│     ├── Rename project directories (aristay → cosmo_backend)                │
+│     ├── Update all code references (package names, imports)                 │
+│     ├── Update database name (aristay_db → cosmo_db)                        │
+│     └── Update bundle identifiers and app metadata                          │
+│                                                                              │
+│  Phase 1: Backend Preparation ◀── PREREQUISITE ─────────────────────────── │
 │     ├── Implement JWT authentication endpoints                              │
 │     ├── Configure CORS for Flutter development                              │
 │     ├── Document all API endpoints Flutter will use                         │
 │     └── Set up staging environment                                          │
 │                                                                              │
-│  Phase 1: New Project Setup ────────────────────────────────────────────── │
+│  Phase 2: New Project Setup ────────────────────────────────────────────── │
 │     ├── Create new `cosmo_app/` project (parallel to existing)              │
 │     ├── Configure Riverpod, Dio, GoRouter, Hive                             │
 │     ├── Set up Freezed code generation                                      │
 │     ├── Implement core services (API, Auth, Storage)                        │
 │     └── Create design system (theme, widgets)                               │
 │                                                                              │
-│  Phase 2: Authentication (3 screens) ───────────────────────────────────── │
+│  Phase 3: Authentication (3 screens) ───────────────────────────────────── │
 │     ├── LoginScreen                                                         │
 │     ├── RegisterScreen (with invite code)                                   │
 │     └── PasswordResetScreen                                                 │
 │                                                                              │
-│  Phase 3: Staff Core (4 screens) ◀── PRIMARY VALUE ─────────────────────── │
+│  Phase 4: Staff Core (4 screens) ◀── PRIMARY VALUE ─────────────────────── │
 │     ├── StaffDashboardScreen                                                │
 │     ├── TaskListScreen (with filters)                                       │
 │     ├── TaskDetailScreen (with checklist)                                   │
@@ -206,14 +214,14 @@ class ApiException implements Exception {
 │                    Deliverable: All modules functional on both platforms     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Phase 4: Staff Auxiliary (5 screens) ──────────────────────────────────── │
+│  Phase 5: Staff Auxiliary (5 screens) ──────────────────────────────────── │
 │     ├── InventoryScreen (lookup + transactions)                             │
 │     ├── InventoryAlertsScreen                                               │
 │     ├── LostFoundListScreen                                                 │
 │     ├── LostFoundFormScreen                                                 │
 │     └── PhotoUploadScreen                                                   │
 │                                                                              │
-│  Phase 5: Portal (6 screens) ───────────────────────────────────────────── │
+│  Phase 6: Portal (6 screens) ───────────────────────────────────────────── │
 │     ├── PortalDashboardScreen                                               │
 │     ├── PropertyListScreen (with search)                                    │
 │     ├── PropertyDetailScreen                                                │
@@ -221,7 +229,7 @@ class ApiException implements Exception {
 │     ├── BookingDetailScreen                                                 │
 │     └── CalendarScreen                                                      │
 │                                                                              │
-│  Phase 6: Web Platform ─────────────────────────────────────────────────── │
+│  Phase 7: Web Platform ─────────────────────────────────────────────────── │
 │     ├── Configure Flutter web build                                         │
 │     ├── Implement responsive layouts                                        │
 │     ├── Test all screens on web                                             │
@@ -239,27 +247,22 @@ class ApiException implements Exception {
 │                    Deliverable: Replace Django templates                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Phase 7: Manager Module (5 screens) ───────────────────────────────────── │
+│  Phase 8: Manager Module (5 screens) ───────────────────────────────────── │
 │     ├── ManagerDashboardScreen                                              │
 │     ├── UserListScreen                                                      │
 │     ├── UserDetailScreen (with permissions)                                 │
 │     ├── InviteCodeListScreen                                                │
 │     └── AuditLogScreen                                                      │
 │                                                                              │
-│  Phase 8: Chat Module (3 screens) ──────────────────────────────────────── │
+│  Phase 9: Chat Module (3 screens) ──────────────────────────────────────── │
 │     ├── ChatRoomListScreen                                                  │
 │     ├── ChatScreen (with participants drawer)                               │
 │     └── NewChatScreen                                                       │
 │                                                                              │
-│  Phase 9: Settings & Notifications (3 screens) ─────────────────────────── │
+│  Phase 10: Settings & Notifications (3 screens) ────────────────────────── │
 │     ├── NotificationListScreen                                              │
 │     ├── SettingsScreen (with notification prefs)                            │
 │     └── ProfileScreen (with sessions)                                       │
-│                                                                              │
-│  Phase 10: Platform Renaming ───────────────────────────────────────────── │
-│     ├── Rename repository and directories                                   │
-│     ├── Update all branding                                                 │
-│     └── Update bundle identifiers                                           │
 │                                                                              │
 │  Phase 11: Testing & QA ────────────────────────────────────────────────── │
 │     ├── Integration tests for critical flows                                │
@@ -277,9 +280,9 @@ class ApiException implements Exception {
 │                                                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  TOTAL v1.0: 29 screens                                                     │
-│  ├── Stage 1: 7 screens (Auth + Staff Core)                                │
-│  ├── Stage 2: 11 screens (Staff Aux + Portal)                              │
-│  └── Stage 3: 11 screens (Manager + Chat + Settings)                       │
+│  ├── Stage 1: 7 screens (Auth + Staff Core) + Renaming + Backend Prep      │
+│  ├── Stage 2: 11 screens (Staff Aux + Portal + Web Platform)               │
+│  └── Stage 3: 11 screens (Manager + Chat + Settings + Testing + Deploy)    │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -296,17 +299,17 @@ class ApiException implements Exception {
 
 | Stage | Phase | Module | Screens | Rationale |
 |-------|-------|--------|---------|-----------|
-| **1** | 0 | Backend Preparation | - | **PREREQUISITE** - JWT, CORS, API docs |
-| **1** | 1 | Project Setup | - | New project with production architecture |
-| **1** | 2 | Authentication | 3 | Required for all other modules |
-| **1** | 3 | Staff Core | 4 | **PRIMARY VALUE** - task management |
-| **2** | 4 | Staff Auxiliary | 5 | Supporting staff features |
-| **2** | 5 | Portal | 6 | Property owner visibility |
-| **2** | 6 | Web Platform | - | Enable web deployment |
-| **3** | 7 | Manager | 5 | Team management |
-| **3** | 8 | Chat | 3 | Team communication |
-| **3** | 9 | Settings | 3 | Notifications, profile |
-| **3** | 10 | Renaming | - | AriStay → Cosmo Management |
+| **1** | 0 | GitHub Repo & Project Renaming | - | **FIRST STEP** - Clean start with new identity |
+| **1** | 1 | Backend Preparation | - | **PREREQUISITE** - JWT, CORS, API docs |
+| **1** | 2 | Project Setup | - | New project with production architecture |
+| **1** | 3 | Authentication | 3 | Required for all other modules |
+| **1** | 4 | Staff Core | 4 | **PRIMARY VALUE** - task management |
+| **2** | 5 | Staff Auxiliary | 5 | Supporting staff features |
+| **2** | 6 | Portal | 6 | Property owner visibility |
+| **2** | 7 | Web Platform | - | Enable web deployment |
+| **3** | 8 | Manager | 5 | Team management |
+| **3** | 9 | Chat | 3 | Team communication |
+| **3** | 10 | Settings | 3 | Notifications, profile |
 | **3** | 11 | Testing | - | QA and accessibility |
 | **3** | 12 | Deployment | - | Production release |
 | | | **TOTAL** | **29** | |
@@ -331,11 +334,11 @@ class ApiException implements Exception {
 | Aspect | Previous Plan | Revised Plan |
 |--------|--------------|--------------|
 | **Total Screens** | 36 (claimed) / 53 (actual) | 29 (accurate) |
-| **Phase 0** | Platform Renaming | Backend Preparation |
-| **Renaming** | First step | Phase 10 (near end) |
+| **Phase 0** | Backend Preparation | **GitHub Repo & Project Renaming** |
+| **Renaming** | Phase 10 (near end) | **Phase 0 (first step)** |
 | **Architecture** | Extend existing code | Complete rewrite |
 | **Stages** | None | 3 Stages with gates |
-| **Web** | Bundled with mobile | Separate Phase 6 |
+| **Web** | Bundled with mobile | Separate Phase 7 |
 | **v2.0 Content** | 60% of document | Deferred to separate doc |
 
 ---
@@ -2012,7 +2015,125 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 
 ---
 
-### Phase 0: Backend Preparation (PREREQUISITE)
+### Phase 0: GitHub Repo & Project Renaming (FIRST STEP)
+**Objective:** Rename entire project from AriStay to Cosmo Management before any development
+
+**Priority:** Must complete FIRST - Clean start with new identity
+**Status:** Ready to begin
+
+#### Why Rename First?
+- All new code will use correct naming from day one
+- Git history stays clean without late-stage rename commits
+- New GitHub repository avoids mixed identity
+- Psychological fresh start for the rewrite
+
+#### Tasks
+
+##### 0.1 GitHub Repository Rename
+```bash
+# Option A: Rename existing repo via GitHub UI
+# Go to: GitHub → Settings → Repository name → "cosmo-management"
+
+# Option B: Create fresh repository (recommended)
+# 1. Create new repo "cosmo-management" on GitHub
+# 2. Clone locally, copy relevant files
+# 3. Archive old "aristay_app" repo
+```
+
+##### 0.2 Project Directory Renaming
+```bash
+Current                              → Target
+────────────────────────────────────────────────────────────
+aristay_app/                         → cosmo_management/ (or cosmo-management/)
+├── aristay/                         → cosmo_backend/
+│   ├── settings.py                  → Update APP_NAME, DB_NAME
+│   ├── urls.py                      → Update URL patterns
+│   └── wsgi.py / asgi.py            → Update module references
+├── api/                             → api/ (no change)
+├── core/                            → core/ (no change)
+└── manage.py                        → Update settings reference
+
+aristay_flutter_frontend/            → cosmo_app/
+├── lib/
+│   ├── core/constants/app.dart      → Update app name, package ID
+│   └── main.dart                    → Update app title
+├── pubspec.yaml                     → name: cosmo_app
+├── android/app/build.gradle         → applicationId: com.cosmomgmt.app
+├── ios/Runner.xcodeproj/            → Bundle ID: com.cosmomgmt.app
+└── web/index.html                   → Update title, meta tags
+```
+
+##### 0.3 Code Reference Updates
+```bash
+# Files to update (grep for 'aristay'):
+- settings_base.py          → APP_NAME = 'Cosmo Management'
+- email templates           → Replace branding
+- API responses             → Update platform references
+- Error messages            → Update app name
+- Documentation             → Replace all references
+- Environment files         → DATABASE_URL, etc.
+
+# Run search:
+grep -r "aristay" --include="*.py" --include="*.dart" --include="*.yaml" --include="*.html"
+```
+
+##### 0.4 Database Rename
+```sql
+-- Option A: Rename existing database
+ALTER DATABASE aristay_db RENAME TO cosmo_db;
+
+-- Option B: Create new database (recommended for clean start)
+CREATE DATABASE cosmo_db;
+-- Then run migrations and optionally migrate data
+```
+
+##### 0.5 Bundle Identifiers & App Metadata
+```yaml
+# Android (android/app/build.gradle)
+applicationId: "com.cosmomgmt.app"
+
+# iOS (ios/Runner.xcodeproj/project.pbxproj)
+PRODUCT_BUNDLE_IDENTIFIER: com.cosmomgmt.app
+
+# pubspec.yaml
+name: cosmo_app
+description: Cosmo Management - Universal property & operations management
+
+# Firebase (if applicable)
+# Update Firebase project or create new one for Cosmo
+```
+
+##### 0.6 Git Setup for New Repository
+```bash
+# Initialize new repo with clean history
+cd cosmo-management
+git init
+git add .
+git commit -m "Initial commit: Cosmo Management project structure
+
+Renamed from AriStay to Cosmo Management.
+- Django backend: cosmo_backend/
+- Flutter app: cosmo_app/
+- Database: cosmo_db"
+
+git remote add origin git@github.com:yourorg/cosmo-management.git
+git push -u origin main
+```
+
+#### Definition of Done - Phase 0
+- [ ] New GitHub repository "cosmo-management" created
+- [ ] All directories renamed (aristay → cosmo)
+- [ ] All code references updated (grep returns no "aristay")
+- [ ] Database renamed or recreated as cosmo_db
+- [ ] Bundle identifiers updated for iOS/Android
+- [ ] pubspec.yaml updated with new name
+- [ ] Django settings updated with new names
+- [ ] Project runs successfully with new naming
+- [ ] Old repository archived (if keeping separate)
+
+---
+
+### Phase 1: Backend Preparation (PREREQUISITE)
 **Objective:** Prepare Django backend for new Flutter architecture
 
 **Priority:** Must complete BEFORE any Flutter development
@@ -2020,7 +2141,7 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 
 #### Tasks
 
-##### 0.1 JWT Authentication Setup
+##### 1.1 JWT Authentication Setup
 Current backend uses Token authentication. JWT required for:
 - Access token + Refresh token pattern
 - Token expiration and refresh
@@ -2034,7 +2155,7 @@ POST /api/token/verify/    # Verify token validity
 POST /api/token/revoke/    # Logout (invalidate tokens)
 ```
 
-##### 0.2 CORS Configuration
+##### 1.2 CORS Configuration
 ```python
 # In settings.py - add Flutter development origins
 CORS_ALLOWED_ORIGINS = [
@@ -2045,19 +2166,19 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 ```
 
-##### 0.3 API Documentation
+##### 1.3 API Documentation
 Create or update API documentation covering:
 - All endpoints Flutter will consume
 - Request/response schemas
 - Authentication requirements
 - Error response formats
 
-##### 0.4 Staging Environment
+##### 1.4 Staging Environment
 - Set up staging server for Flutter development
 - Configure staging database
 - Set up staging API URL
 
-#### Definition of Done - Phase 0
+#### Definition of Done - Phase 1
 - [ ] JWT endpoints implemented and tested
 - [ ] CORS configured for Flutter development
 - [ ] API documentation complete
@@ -2066,22 +2187,22 @@ Create or update API documentation covering:
 
 ---
 
-### Phase 1: New Project Setup
+### Phase 2: New Project Setup
 **Objective:** Create new Flutter project with production-grade architecture
 
 **Priority:** Foundation for all other phases
 
 #### Tasks
 
-##### 1.1 Create New Project
+##### 2.1 Create New Project
 ```bash
 # Create new project parallel to existing
-cd /home/duylam1407/WorkSpace/aristay_app/
+cd /home/duylam1407/WorkSpace/cosmo-management/
 flutter create cosmo_app --org com.cosmomgmt
 cd cosmo_app
 ```
 
-##### 1.2 Configure Dependencies
+##### 2.2 Configure Dependencies
 ```yaml
 # pubspec.yaml
 dependencies:
@@ -2123,7 +2244,7 @@ dev_dependencies:
   retrofit_generator: ^8.0.0
 ```
 
-##### 1.3 Project Structure
+##### 2.3 Project Structure
 ```
 cosmo_app/lib/
 ├── main.dart
@@ -2167,7 +2288,7 @@ cosmo_app/lib/
     └── app_router.dart
 ```
 
-##### 1.4 Core Services Implementation
+##### 2.4 Core Services Implementation
 
 **ApiService (Dio-based)**
 ```dart
@@ -2210,13 +2331,13 @@ class StorageService {
 }
 ```
 
-##### 1.5 Design System
+##### 2.5 Design System
 - App colors (light/dark mode)
 - Typography scale
 - Spacing constants
 - Reusable widgets (buttons, cards, inputs, loading states)
 
-#### Definition of Done - Phase 1
+#### Definition of Done - Phase 2
 - [ ] New project created and builds successfully
 - [ ] All dependencies configured
 - [ ] Project structure established
@@ -2230,10 +2351,10 @@ class StorageService {
 
 ---
 
-### ⚠️ Legacy Phase 0 Content Moved
+### Additional Renaming Details
 
-The previous Phase 0 (Platform Renaming) has been moved to Phase 10.
-See "Phase 10: Platform Renaming" below for the detailed renaming steps.
+Phase 0 (GitHub Repo & Project Renaming) contains the high-level tasks.
+Below are detailed step-by-step instructions for the renaming process.
 
 #### Execution Order (CRITICAL - Follow This Sequence)
 ```
@@ -2524,7 +2645,7 @@ lib/
 
 ---
 
-### Phase 2: Authentication Module
+### Phase 3: Authentication Module
 **Objective:** Complete authentication flow with JWT support
 
 #### Screens to Build (4):
@@ -2558,7 +2679,7 @@ lib/
 
 ---
 
-### Phase 3: Staff Module - Core Task Management
+### Phase 4: Staff Module - Core Task Management
 **Objective:** Primary task management for staff workers (HIGHEST PRIORITY after auth)
 
 #### Screens to Build (4):
@@ -2605,7 +2726,7 @@ lib/
 
 ---
 
-### Phase 4: Staff Module - Auxiliary Features
+### Phase 5: Staff Module - Auxiliary Features
 **Objective:** Supporting staff features (inventory, lost & found, photos)
 
 #### Screens to Build (6):
@@ -2639,7 +2760,7 @@ lib/
 
 ---
 
-### Phase 5: Portal Module (Property Owners)
+### Phase 6: Portal Module (Property Owners)
 **Objective:** Property management interface for owners
 
 #### Screens to Build (8):
@@ -2674,7 +2795,7 @@ lib/
 
 ---
 
-### Phase 6: Chat Module
+### Phase 9: Chat Module
 **Objective:** Team communication
 
 #### Screens to Build (4):
@@ -2715,7 +2836,7 @@ lib/
 
 ---
 
-### Phase 7: Manager Module
+### Phase 8: Manager Module
 **Objective:** Team management interface
 
 #### Screens to Build (6):
@@ -2747,7 +2868,7 @@ lib/
 
 ---
 
-### Phase 8: Notifications & Settings
+### Phase 10: Notifications & Settings
 **Objective:** Notification system and user settings
 
 #### Screens to Build (4):
@@ -2786,7 +2907,7 @@ lib/
 
 ---
 
-### Phase 9: Testing & Quality Assurance
+### Phase 11: Testing & Quality Assurance
 **Objective:** Comprehensive testing (CONTINUOUS - not just end of project)
 
 #### Testing Requirements (per phase):
@@ -2825,7 +2946,7 @@ lib/
 
 ---
 
-### Phase 10: Deployment & Migration
+### Phase 12: Deployment & Migration
 **Objective:** Production deployment
 
 #### Tasks:
@@ -3253,6 +3374,37 @@ aristay_flutter_frontend/
 | 2025-12-23 | 1.7 | **IMPLEMENTATION** - Finalized implementation strategy with confirmed decisions |
 | 2025-12-23 | 2.0 | **MAJOR REVISION** - Critical review and plan consolidation |
 | 2025-12-23 | 3.0 | **CRITICAL REVIEW** - Complete codebase analysis, phases restructured into 3 stages |
+| 2025-12-24 | 3.1 | **PHASE 0 REVISION** - Moved GitHub repo & project renaming to Phase 0 (first step), shifted all phases by 1 |
+
+---
+
+### Version 3.1 - Phase 0 Revision: Renaming First
+
+**Change Request:** Move GitHub repo & project renaming to Phase 0 (first step before any development)
+
+**Rationale for Renaming First:**
+1. **Clean start** - All new code uses correct "Cosmo" naming from day one
+2. **Clean git history** - No late-stage rename commits cluttering history
+3. **Fresh repository** - New GitHub repo `cosmo-management` avoids mixed identity
+4. **Psychological benefit** - Fresh start for the rewrite project
+
+**Phase Restructuring (v3.1):**
+```
+v3.0:                              v3.1:
+Phase 0: Backend Prep        →     Phase 0: GitHub Repo & Project Renaming
+Phase 1: New Project Setup   →     Phase 1: Backend Preparation
+Phase 2: Auth                →     Phase 2: New Project Setup
+Phase 3: Staff Core          →     Phase 3: Authentication
+Phase 4: Staff Aux           →     Phase 4: Staff Core
+Phase 5: Portal              →     Phase 5: Staff Auxiliary
+Phase 6: Web Platform        →     Phase 6: Portal
+Phase 7: Manager             →     Phase 7: Web Platform
+Phase 8: Chat                →     Phase 8: Manager
+Phase 9: Settings            →     Phase 9: Chat
+Phase 10: Renaming (removed) →     Phase 10: Settings
+Phase 11: Testing            →     Phase 11: Testing
+Phase 12: Deployment         →     Phase 12: Deployment
+```
 
 ---
 
@@ -3260,7 +3412,7 @@ aristay_flutter_frontend/
 
 **Critical Findings:**
 1. **Current Flutter codebase requires complete rewrite** - Technology gaps (no state management, basic HTTP, Token auth) are too fundamental for incremental migration
-2. **Phase 0 was wrong** - Renaming before architecture work adds risk; moved to Phase 10
+2. ~~**Phase 0 was wrong** - Renaming before architecture work adds risk; moved to Phase 10~~ *(Revised in v3.1: Renaming moved back to Phase 0)*
 3. **Screen count was inflated** - Consolidated from 53 to 29 actual screens
 4. **Backend preparation missing** - JWT endpoints and CORS configuration required first
 5. **No staged milestones** - Added 3 stages with validation gates
@@ -3286,30 +3438,24 @@ aristay_flutter_frontend/
 - Phase 1: New Project Setup (detailed)
 - Stage gates with validation criteria
 
-**Phase Restructuring:**
+**Phase Restructuring (v2.0 → v3.0):**
+*(Note: v3.1 revised this further - see Version 3.1 notes above)*
 ```
-OLD (v2.0):                      NEW (v3.0):
+OLD (v2.0):                      v3.0 (superseded by v3.1):
 Phase 0: Renaming          →     Phase 0: Backend Prep
 Phase 1: Foundation        →     Phase 1: New Project Setup
 Phase 2: Auth              →     Phase 2: Auth (3 screens)
-Phase 3: Staff Core        →     Phase 3: Staff Core (4 screens)
-Phase 4: Staff Aux         →     Phase 4: Staff Aux (5 screens)
-Phase 5: Portal            →     Phase 5: Portal (6 screens)
-Phase 6: Chat              →     Phase 6: Web Platform
-Phase 7: Manager           →     Phase 7: Manager (5 screens)
-Phase 8: Notifications     →     Phase 8: Chat (3 screens)
-Phase 9: Testing           →     Phase 9: Settings (3 screens)
-Phase 10: Deployment       →     Phase 10: Renaming
-                           →     Phase 11: Testing
-                           →     Phase 12: Deployment
+...
 ```
 
-**Recommendations:**
+**Recommendations (v3.0):**
+*(Updated in v3.1: Phase 0 is now Renaming, Phase 1 is Backend Prep)*
 1. Answer the 5 critical questions before proceeding
-2. Complete Phase 0 (Backend Prep) first
-3. Build new project in parallel, don't modify existing
-4. Validate architecture at Stage 1 gate before continuing
-5. Move v2.0+ multi-tenant content to separate document
+2. Complete Phase 0 (Renaming) first for clean start
+3. Complete Phase 1 (Backend Prep) before Flutter development
+4. Build new project in parallel, don't modify existing
+5. Validate architecture at Stage 1 gate before continuing
+6. Move v2.0+ multi-tenant content to separate document
 
 ---
 
