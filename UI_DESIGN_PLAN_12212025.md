@@ -1,10 +1,18 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 3.1
+**Document Version:** 3.2
 **Created:** 2025-12-21
 **Last Updated:** 2025-12-24
 **Status:** Requires Architectural Decisions Before Implementation
 **Platform Name:** Cosmo Management (formerly AriStay)
+
+### 📋 Revision History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 3.2 | 2025-12-24 | **Backend audit corrections:** JWT already implemented (not pending), fixed directory paths (`aristay_backend/` not `aristay/`), updated Phase 1 status, added endpoint verification requirements |
+| 3.1 | 2025-12-24 | Added Critical Review section |
+| 3.0 | 2025-12-23 | Reorganized into 3 Stages |
 
 ---
 
@@ -18,13 +26,22 @@
 |--------|--------------|-----------------|----------------|
 | **State Management** | None (StatefulWidget + setState) | Riverpod 2.x | 🔴 **CRITICAL** - Complete rewrite |
 | **HTTP Client** | `http` package (basic) | Dio with interceptors | 🔴 **HIGH** - All 600+ lines of ApiService rewrite |
-| **Authentication** | Token-based (`Token xxx`) | JWT (access + refresh) | 🔴 **HIGH** - Backend + frontend changes |
+| **Authentication** | Token-based (`Token xxx`) in Flutter | JWT (access + refresh) | 🟢 **RESOLVED** - Backend JWT already implemented, Flutter update only |
 | **Routing** | Named routes (basic) | GoRouter (declarative) | 🟡 **MEDIUM** - Full routing rewrite |
 | **Local Storage** | SharedPreferences only | Hive (offline-first) | 🟡 **MEDIUM** - New architecture |
 | **Models** | Plain Dart classes | Freezed + json_serializable | 🔴 **HIGH** - All models regenerated |
 | **Offline Support** | None | Offline-first architecture | 🔴 **CRITICAL** - New capability |
 | **Test Coverage** | 0% | 80%+ target | 🔴 **CRITICAL** - From zero |
-| **API URL** | Hardcoded `192.168.1.40:8000` | Environment-based config | 🟡 **MEDIUM** |
+| **API URL** | Hardcoded `192.168.1.40:8000` | Environment-based config | 🟡 **MEDIUM** - Flutter-side only |
+
+> **✅ UPDATE (2025-12-24):** Backend JWT authentication is **ALREADY IMPLEMENTED** with full endpoints:
+> - `POST /api/token/` - Obtain access + refresh tokens
+> - `POST /api/token/refresh/` - Refresh expired access token
+> - `POST /api/token/verify/` - Verify token validity
+> - `POST /api/token/revoke/` - Revoke single token (logout)
+> - `POST /api/token/revoke-all/` - Revoke all user tokens
+>
+> The Flutter app just needs to switch from Token auth to JWT auth - no backend changes required.
 
 ### Current Flutter Codebase Statistics
 - **35 Dart files** with ~7,760 lines of code
@@ -38,10 +55,10 @@
 | # | Question | Options | Recommendation |
 |---|----------|---------|----------------|
 | 1 | **Existing code strategy?** | A) Refactor incrementally B) Complete rewrite C) Hybrid | **B) Complete rewrite** - Technology changes are too fundamental |
-| 2 | **JWT vs Token auth?** | A) Migrate backend to JWT B) Keep Token, add refresh | **A) Migrate to JWT** - Better security, standard practice |
+| 2 | **JWT vs Token auth?** | A) Migrate backend to JWT B) Keep Token, add refresh | ✅ **RESOLVED** - Backend JWT already implemented, Flutter needs update only |
 | 3 | **Phase 0 timing?** | A) Rename first B) Rename during rewrite | **A) Rename first** - Clean start with new identity, all new code uses correct naming |
 | 4 | **MVP scope?** | A) All 36 screens B) Core 18 screens C) Mobile-only first | **C) Mobile-only first** - Validate architecture |
-| 5 | **Backend readiness?** | Audit JWT endpoints, CORS, offline sync | **Required before Phase 2** (after renaming) |
+| 5 | **Backend readiness?** | Audit JWT endpoints, CORS, offline sync | **Partially ready** - JWT ✅, CORS ✅, offline sync needs implementation |
 
 ---
 
@@ -728,13 +745,13 @@ class FeatureService {
 Current                              → Target
 ────────────────────────────────────────────────────────────
 aristay_app/                         → cosmo_management/
-├── aristay/                         → cosmo_backend/
-│   ├── settings.py                  → Update APP_NAME, DB_NAME
-│   ├── urls.py                      → Update URL patterns
-│   └── wsgi.py / asgi.py            → Update module references
-├── api/                             → api/ (no change)
-├── core/                            → core/ (no change)
-└── manage.py                        → Update settings reference
+├── aristay_backend/                 → cosmo_backend/
+│   ├── backend/                     → backend/ (Django project config)
+│   │   ├── settings.py              → Update APP_NAME, DB_NAME
+│   │   ├── urls.py                  → Update URL patterns
+│   │   └── wsgi.py / asgi.py        → Update module references
+│   ├── api/                         → api/ (DRF application - no change)
+│   └── manage.py                    → Update settings reference
 
 aristay_flutter_frontend/            → cosmo_app/
 ├── lib/
@@ -2004,7 +2021,7 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 
 ## Phase Breakdown (REVISED)
 
-> **IMPORTANT:** Phases have been reorganized into 3 Stages. Platform renaming moved to Phase 10.
+> **IMPORTANT:** Phases have been reorganized into 3 Stages. Platform renaming is **Phase 0** (FIRST STEP).
 
 ---
 
@@ -2045,13 +2062,14 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 Current                              → Target
 ────────────────────────────────────────────────────────────
 aristay_app/                         → cosmo_management/ (or cosmo-management/)
-├── aristay/                         → cosmo_backend/
-│   ├── settings.py                  → Update APP_NAME, DB_NAME
-│   ├── urls.py                      → Update URL patterns
-│   └── wsgi.py / asgi.py            → Update module references
-├── api/                             → api/ (no change)
-├── core/                            → core/ (no change)
-└── manage.py                        → Update settings reference
+├── aristay_backend/                 → cosmo_backend/
+│   ├── backend/                     → backend/ (Django project config)
+│   │   ├── settings.py              → Update APP_NAME, DB_NAME
+│   │   ├── settings_base.py         → Update APP_NAME, DEFAULT_FROM_EMAIL
+│   │   ├── urls.py                  → Update URL patterns
+│   │   └── wsgi.py / asgi.py        → Update module references
+│   ├── api/                         → api/ (DRF application - no change)
+│   └── manage.py                    → Update settings reference
 
 aristay_flutter_frontend/            → cosmo_app/
 ├── lib/
@@ -2134,30 +2152,43 @@ git push -u origin main
 ---
 
 ### Phase 1: Backend Preparation (PREREQUISITE)
-**Objective:** Prepare Django backend for new Flutter architecture
+**Objective:** Verify and document Django backend readiness for new Flutter architecture
 
 **Priority:** Must complete BEFORE any Flutter development
-**Status:** Required - Current backend may not support new requirements
+**Status:** Partially complete - JWT ✅, CORS ✅, some endpoints need verification
 
 #### Tasks
 
-##### 1.1 JWT Authentication Setup
-Current backend uses Token authentication. JWT required for:
-- Access token + Refresh token pattern
-- Token expiration and refresh
-- Multi-device session management
+##### 1.1 JWT Authentication Verification ✅ ALREADY IMPLEMENTED
+> **UPDATE (2025-12-24):** JWT is already fully implemented in the backend using `djangorestframework-simplejwt 5.5.1`.
 
+**Existing JWT Configuration (in settings_base.py):**
 ```python
-# Required endpoints (verify or create):
-POST /api/token/           # Login → access + refresh tokens
-POST /api/token/refresh/   # Refresh → new access token
-POST /api/token/verify/    # Verify token validity
-POST /api/token/revoke/    # Logout (invalidate tokens)
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    ...
+}
 ```
 
-##### 1.2 CORS Configuration
+**Existing JWT Endpoints (all working):**
 ```python
-# In settings.py - add Flutter development origins
+POST /api/token/           # ✅ Login → access + refresh tokens
+POST /api/token/refresh/   # ✅ Refresh → new access token
+POST /api/token/verify/    # ✅ Verify token validity
+POST /api/token/revoke/    # ✅ Logout (invalidate single token)
+POST /api/token/revoke-all/ # ✅ Logout all devices
+```
+
+**Action Required:** Test these endpoints, document response formats for Flutter team.
+
+##### 1.2 CORS Configuration ✅ ALREADY CONFIGURED
+> **UPDATE (2025-12-24):** CORS is already configured using `django-cors-headers`.
+
+```python
+# Already in settings - verify Flutter development origins are included:
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",    # Flutter web dev
     "http://localhost:8080",    # Alternative port
@@ -2165,6 +2196,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 ```
+
+**Action Required:** Verify Flutter dev URLs are in the allowed origins list.
 
 ##### 1.3 API Documentation
 Create or update API documentation covering:
@@ -2179,11 +2212,21 @@ Create or update API documentation covering:
 - Set up staging API URL
 
 #### Definition of Done - Phase 1
-- [ ] JWT endpoints implemented and tested
-- [ ] CORS configured for Flutter development
-- [ ] API documentation complete
+- [x] JWT endpoints implemented ✅ (already done)
+- [x] CORS configured ✅ (already done)
+- [ ] JWT endpoints tested with Flutter client
+- [ ] Verify Flutter dev URLs in CORS origins
+- [ ] API documentation complete (OpenAPI schema at /schema/)
 - [ ] Staging environment accessible
 - [ ] Current mobile app still works (no breaking changes)
+- [ ] Endpoint path audit complete (see note below)
+
+> **⚠️ ENDPOINT PATH VERIFICATION REQUIRED:**
+> Some endpoint paths in this plan may differ from actual backend routes.
+> Before Flutter development, audit these paths against `aristay_backend/api/urls.py`:
+> - `/api/staff/tasks/{id}/` vs `/api/tasks/{id}/`
+> - `/api/tasks/{id}/set_status/` vs `/api/staff/task/{id}/status/`
+> - `/api/mobile/offline-sync/` - may not exist yet
 
 ---
 
@@ -2387,6 +2430,10 @@ git mv aristay_backend cosmo_backend
 
 # Rename frontend directory
 git mv aristay_flutter_frontend cosmo_app
+
+# Note: The backend Django project config is in cosmo_backend/backend/
+# The API app is in cosmo_backend/api/
+# These internal directories do NOT need renaming
 ```
 
 #### Step 3: Dart Import Updates (CRITICAL)
@@ -2417,8 +2464,12 @@ find cosmo_app/lib -name "*.dart" -exec sed -i 's/package:aristay_flutter_fronte
 "AriStay"                  → "Cosmo Management"  (brand name in UI)
 "aristay"                  → "cosmo"              (lowercase references)
 
-# Files to update:
+# Files to update (after renaming aristay_backend → cosmo_backend):
 cosmo_backend/backend/settings_base.py   → APP_NAME, DEFAULT_FROM_EMAIL
+cosmo_backend/backend/settings.py        → DJANGO_SETTINGS_MODULE references
+cosmo_backend/backend/wsgi.py            → DJANGO_SETTINGS_MODULE
+cosmo_backend/backend/asgi.py            → DJANGO_SETTINGS_MODULE
+cosmo_backend/manage.py                  → DJANGO_SETTINGS_MODULE
 cosmo_backend/api/templates/**/*.html    → Any "AriStay" text
 cosmo_app/lib/main.dart                  → App title
 cosmo_app/android/app/build.gradle       → applicationId, namespace
@@ -2479,20 +2530,22 @@ python manage.py createsuperuser  # For testing
 
 #### Step 7: Verification Checklist
 ```bash
-# Backend
+# Backend (from project root after renaming)
 cd cosmo_backend
+source .venv/bin/activate           # If using virtual environment
 python manage.py check              # ✓ System check passes
-python manage.py runserver          # ✓ Server starts
+python manage.py runserver          # ✓ Server starts at localhost:8000
 
 # Frontend
-cd cosmo_app
+cd ../cosmo_app
 flutter pub get                     # ✓ Dependencies resolve
 flutter analyze                     # ✓ No errors
 flutter build web                   # ✓ Web builds
 
-# Code check - should return NOTHING
-grep -ri "aristay" --include="*.py" --include="*.dart" --include="*.yaml" \
-  --exclude-dir=.git --exclude-dir=build --exclude-dir=.dart_tool
+# Code check - should return NOTHING (excluding git history and build artifacts)
+grep -ri "aristay" --include="*.py" --include="*.dart" --include="*.yaml" --include="*.md" \
+  --exclude-dir=.git --exclude-dir=build --exclude-dir=.dart_tool --exclude-dir=__pycache__ \
+  --exclude-dir=staticfiles --exclude-dir=migrations
 ```
 
 **Verification Checklist:**
