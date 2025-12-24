@@ -1,10 +1,69 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 2.0
+**Document Version:** 3.0
 **Created:** 2025-12-21
 **Last Updated:** 2025-12-23
-**Status:** Ready for Implementation
+**Status:** Requires Architectural Decisions Before Implementation
 **Platform Name:** Cosmo Management (formerly AriStay)
+
+---
+
+## ⚠️ CRITICAL REVIEW (Added 2025-12-23)
+
+> **This section was added after a comprehensive codebase review. It identifies critical gaps between the current Flutter codebase and this plan's assumptions.**
+
+### Current Flutter Codebase Reality
+
+| Aspect | Current State | Plan Assumption | Gap Assessment |
+|--------|--------------|-----------------|----------------|
+| **State Management** | None (StatefulWidget + setState) | Riverpod 2.x | 🔴 **CRITICAL** - Complete rewrite |
+| **HTTP Client** | `http` package (basic) | Dio with interceptors | 🔴 **HIGH** - All 600+ lines of ApiService rewrite |
+| **Authentication** | Token-based (`Token xxx`) | JWT (access + refresh) | 🔴 **HIGH** - Backend + frontend changes |
+| **Routing** | Named routes (basic) | GoRouter (declarative) | 🟡 **MEDIUM** - Full routing rewrite |
+| **Local Storage** | SharedPreferences only | Hive (offline-first) | 🟡 **MEDIUM** - New architecture |
+| **Models** | Plain Dart classes | Freezed + json_serializable | 🔴 **HIGH** - All models regenerated |
+| **Offline Support** | None | Offline-first architecture | 🔴 **CRITICAL** - New capability |
+| **Test Coverage** | 0% | 80%+ target | 🔴 **CRITICAL** - From zero |
+| **API URL** | Hardcoded `192.168.1.40:8000` | Environment-based config | 🟡 **MEDIUM** |
+
+### Current Flutter Codebase Statistics
+- **35 Dart files** with ~7,760 lines of code
+- **15 screens already built** (LoginScreen, HomeScreen, TaskListScreen, TaskFormScreen, etc.)
+- **5 reusable widgets** (StatusPill, EmptyState, UnreadBadge, TaskFilterBar, TaskAdvancedFilterSheet)
+- **4 services** (ApiService, AuthService, NotificationService, NavigationService)
+- **4 models** (User, Task, Property, Notification)
+
+### Critical Questions to Answer Before Proceeding
+
+| # | Question | Options | Recommendation |
+|---|----------|---------|----------------|
+| 1 | **Existing code strategy?** | A) Refactor incrementally B) Complete rewrite C) Hybrid | **B) Complete rewrite** - Technology changes are too fundamental |
+| 2 | **JWT vs Token auth?** | A) Migrate backend to JWT B) Keep Token, add refresh | **A) Migrate to JWT** - Better security, standard practice |
+| 3 | **Phase 0 timing?** | A) Rename first B) Rename during rewrite | **B) During rewrite** - Less risk, single migration |
+| 4 | **MVP scope?** | A) All 36 screens B) Core 18 screens C) Mobile-only first | **C) Mobile-only first** - Validate architecture |
+| 5 | **Backend readiness?** | Audit JWT endpoints, CORS, offline sync | **Required before Phase 1** |
+
+---
+
+## Implementation Reality: This is a REWRITE, Not Evolution
+
+**Honest Assessment:** The technology stack changes (Riverpod, Dio, GoRouter, Hive, Freezed) are so fundamental that this constitutes a **complete application rewrite** rather than an incremental evolution of the existing codebase.
+
+### Implications:
+1. **Existing 15 screens cannot be refactored** - They must be rebuilt with new architecture
+2. **Existing services are reference only** - API patterns useful, but code not reusable
+3. **Timeline estimate should account for rewrite** - Not "extend existing app"
+4. **Risk is higher** - New architecture means new bugs
+
+### Revised Strategy Options
+
+| Option | Description | Pros | Cons |
+|--------|-------------|------|------|
+| **A) Parallel Build** | Build new `cosmo_app/` from scratch alongside existing `aristay_flutter_frontend/` | Clean slate, no legacy issues | More initial work, no code reuse |
+| **B) Incremental Refactor** | Gradually migrate existing code module by module | Some code reuse | Complex, broken intermediate states |
+| **C) Mobile-First MVP** | Rebuild mobile app first with new stack, then add web | Faster validation, smaller scope | Delayed web delivery |
+
+**Recommendation:** Option A (Parallel Build) or Option C (Mobile-First MVP)
 
 ---
 
@@ -12,21 +71,26 @@
 
 This plan outlines the complete redesign of the **Cosmo Management** platform's user interface from Django templates to Flutter for web. Django will be retained exclusively for admin/superuser operations.
 
-### Implementation Approach: Single-Tenant MVP First
-The initial release (v1.0) will focus on **Phases 0-13** as a single-tenant application (53 screens). Multi-tenant SaaS capabilities (Phases 14-19) are documented for future expansion but **deferred** to v2.0+.
+### Implementation Approach: Phased Rewrite with Mobile-First Validation
+The implementation is now structured into **3 Stages**:
+- **Stage 1 (Alpha):** Foundation + Core Auth + Staff Tasks (Mobile) - Validate new architecture
+- **Stage 2 (Beta):** Complete Staff + Portal modules (Mobile + Web)
+- **Stage 3 (v1.0):** Manager + Chat + Polish + Production deployment
+
+Multi-tenant SaaS capabilities are **completely deferred** to a separate v2.0 planning document.
 
 ### Current State
 - **90+ Django HTML templates** with 100% refactored modern CSS/JS
 - **150+ API endpoints** (REST + Django views)
 - **38 database models** with comprehensive relationships
-- **Flutter mobile app** (partial implementation) with Firebase integration
+- **Flutter mobile app** (partial - 15 screens, requires full rewrite for new architecture)
 - **PostgreSQL database** with soft-delete, audit trails, and history tracking
 
-### Target State (v1.0 MVP)
-- **Flutter Web** for all user-facing interfaces (Portal, Staff, Manager, Public)
+### Target State (v1.0)
+- **Flutter Web + Mobile** for all user-facing interfaces (Portal, Staff, Manager)
 - **Django Admin** for superuser/admin operations only
-- **Unified Flutter codebase** for mobile + web (extend existing Flutter app)
-- **Single-tenant deployment** with future multi-tenant readiness
+- **New unified codebase** built from scratch with production-grade architecture
+- **Single-tenant deployment** (multi-tenant deferred to separate v2.0 plan)
 
 ---
 
@@ -95,82 +159,184 @@ class ApiException implements Exception {
 // - Show sync status indicator
 ```
 
-### Phase Execution Order
+### Phase Execution Order (REVISED)
+
+> **Note:** Phases reorganized into 3 Stages with clear milestones and decision gates.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        v1.0 MVP IMPLEMENTATION                               │
+│                    STAGE 1: ALPHA (Foundation + Core)                        │
+│                    Goal: Validate new architecture                           │
+│                    Deliverable: Working mobile app with auth + tasks         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Phase 0: Platform Renaming ─────────────────────────────────────────────── │
-│     └── AriStay → Cosmo Management (all references)                         │
+│  Phase 0: Backend Preparation ◀── PREREQUISITE ─────────────────────────── │
+│     ├── Implement JWT authentication endpoints                              │
+│     ├── Configure CORS for Flutter development                              │
+│     ├── Document all API endpoints Flutter will use                         │
+│     └── Set up staging environment                                          │
 │                                                                              │
-│  Phase 1: Foundation ────────────────────────────────────────────────────── │
-│     └── Design system, services, offline architecture                       │
+│  Phase 1: New Project Setup ────────────────────────────────────────────── │
+│     ├── Create new `cosmo_app/` project (parallel to existing)              │
+│     ├── Configure Riverpod, Dio, GoRouter, Hive                             │
+│     ├── Set up Freezed code generation                                      │
+│     ├── Implement core services (API, Auth, Storage)                        │
+│     └── Create design system (theme, widgets)                               │
 │                                                                              │
-│  Phase 2: Authentication (4 screens) ────────────────────────────────────── │
-│     └── Login, register, password reset                                     │
+│  Phase 2: Authentication (3 screens) ───────────────────────────────────── │
+│     ├── LoginScreen                                                         │
+│     ├── RegisterScreen (with invite code)                                   │
+│     └── PasswordResetScreen                                                 │
 │                                                                              │
-│  Phase 3: Staff Core (4 screens) ◀── PRIMARY VALUE ──────────────────────── │
-│     └── Task list, detail, form, dashboard                                  │
+│  Phase 3: Staff Core (4 screens) ◀── PRIMARY VALUE ─────────────────────── │
+│     ├── StaffDashboardScreen                                                │
+│     ├── TaskListScreen (with filters)                                       │
+│     ├── TaskDetailScreen (with checklist)                                   │
+│     └── TaskFormScreen (create/edit)                                        │
 │                                                                              │
-│  Phase 4: Staff Auxiliary (6 screens) ───────────────────────────────────── │
-│     └── Inventory, lost & found, photos                                     │
-│                                                                              │
-│  Phase 5: Portal (8 screens) ────────────────────────────────────────────── │
-│     └── Properties, bookings, calendar, photos                              │
-│                                                                              │
-│  Phase 6: Chat (4 screens) ──────────────────────────────────────────────── │
-│     └── Room list, messages, participants                                   │
-│                                                                              │
-│  Phase 7: Manager (6 screens) ───────────────────────────────────────────── │
-│     └── Users, permissions, invites, audit                                  │
-│                                                                              │
-│  Phase 8: Notifications & Settings (4 screens) ──────────────────────────── │
-│     └── Notification list, settings, profile                                │
-│                                                                              │
-│  Phase 9: Testing & QA ──────────────────────────────────────────────────── │
-│     └── Unit, widget, integration, E2E tests                                │
-│                                                                              │
-│  Phase 10: Deployment ───────────────────────────────────────────────────── │
-│     └── CI/CD, hosting, migration                                           │
+│  ────────────────── STAGE 1 GATE: Architecture Validation ─────────────── │
+│  ✓ All services working correctly                                          │
+│  ✓ Offline mode tested and functional                                       │
+│  ✓ Core workflow (view → edit → complete task) working                     │
+│  ✓ Unit tests for services (80%+ coverage)                                 │
 │                                                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  TOTAL v1.0: 36 screens (consolidated from 53)                              │
+│                    STAGE 2: BETA (Complete Modules)                          │
+│                    Goal: Feature-complete mobile + web                       │
+│                    Deliverable: All modules functional on both platforms     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Phase 4: Staff Auxiliary (5 screens) ──────────────────────────────────── │
+│     ├── InventoryScreen (lookup + transactions)                             │
+│     ├── InventoryAlertsScreen                                               │
+│     ├── LostFoundListScreen                                                 │
+│     ├── LostFoundFormScreen                                                 │
+│     └── PhotoUploadScreen                                                   │
+│                                                                              │
+│  Phase 5: Portal (6 screens) ───────────────────────────────────────────── │
+│     ├── PortalDashboardScreen                                               │
+│     ├── PropertyListScreen (with search)                                    │
+│     ├── PropertyDetailScreen                                                │
+│     ├── BookingListScreen                                                   │
+│     ├── BookingDetailScreen                                                 │
+│     └── CalendarScreen                                                      │
+│                                                                              │
+│  Phase 6: Web Platform ─────────────────────────────────────────────────── │
+│     ├── Configure Flutter web build                                         │
+│     ├── Implement responsive layouts                                        │
+│     ├── Test all screens on web                                             │
+│     └── Optimize bundle size                                                │
+│                                                                              │
+│  ────────────────── STAGE 2 GATE: Beta Readiness ──────────────────────── │
+│  ✓ Staff module complete (9 screens)                                       │
+│  ✓ Portal module complete (6 screens)                                      │
+│  ✓ Web platform functional                                                 │
+│  ✓ Widget tests for all screens                                            │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                    STAGE 3: v1.0 (Production Ready)                          │
+│                    Goal: Production deployment                               │
+│                    Deliverable: Replace Django templates                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Phase 7: Manager Module (5 screens) ───────────────────────────────────── │
+│     ├── ManagerDashboardScreen                                              │
+│     ├── UserListScreen                                                      │
+│     ├── UserDetailScreen (with permissions)                                 │
+│     ├── InviteCodeListScreen                                                │
+│     └── AuditLogScreen                                                      │
+│                                                                              │
+│  Phase 8: Chat Module (3 screens) ──────────────────────────────────────── │
+│     ├── ChatRoomListScreen                                                  │
+│     ├── ChatScreen (with participants drawer)                               │
+│     └── NewChatScreen                                                       │
+│                                                                              │
+│  Phase 9: Settings & Notifications (3 screens) ─────────────────────────── │
+│     ├── NotificationListScreen                                              │
+│     ├── SettingsScreen (with notification prefs)                            │
+│     └── ProfileScreen (with sessions)                                       │
+│                                                                              │
+│  Phase 10: Platform Renaming ───────────────────────────────────────────── │
+│     ├── Rename repository and directories                                   │
+│     ├── Update all branding                                                 │
+│     └── Update bundle identifiers                                           │
+│                                                                              │
+│  Phase 11: Testing & QA ────────────────────────────────────────────────── │
+│     ├── Integration tests for critical flows                                │
+│     ├── Cross-platform testing (web + mobile)                               │
+│     ├── Accessibility audit                                                 │
+│     └── Performance testing                                                 │
+│                                                                              │
+│  Phase 12: Deployment ──────────────────────────────────────────────────── │
+│     ├── CI/CD pipeline setup                                                │
+│     ├── Production hosting configuration                                    │
+│     ├── Migration from Django templates                                     │
+│     └── User communication and training                                     │
+│                                                                              │
+│  ────────────────── v1.0 RELEASE ──────────────────────────────────────── │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  TOTAL v1.0: 29 screens                                                     │
+│  ├── Stage 1: 7 screens (Auth + Staff Core)                                │
+│  ├── Stage 2: 11 screens (Staff Aux + Portal)                              │
+│  └── Stage 3: 11 screens (Manager + Chat + Settings)                       │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│              v2.0+ DEFERRED (Multi-Tenant SaaS) - SEE BELOW                  │
+│              v2.0+ DEFERRED (Multi-Tenant SaaS)                              │
+│              MOVED TO SEPARATE DOCUMENT                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Phase 11+: Multi-Tenancy, Billing, Super-Admin, Integrations               │
-│  Note: Detailed specs preserved below for future reference                  │
+│  Multi-Tenant architecture, Billing, Super-Admin, and Integrations          │
+│  should be planned in a separate document after v1.0 is stable.             │
+│  The detailed specs below are preserved for reference only.                 │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Module Priority (Corrected)
+### Module Priority (REVISED)
 
-| Priority | Phase | Module | Screens | Rationale |
-|----------|-------|--------|---------|-----------|
-| 1 | 2 | Authentication | 4 | Required for all other modules |
-| 2 | 3 | Staff Core | 4 | **Primary value** - task management |
-| 3 | 4 | Staff Auxiliary | 6 | Supporting staff features |
-| 4 | 5 | Portal | 8 | Property owner visibility |
-| 5 | 6 | Chat | 4 | Team communication |
-| 6 | 7 | Manager | 6 | Team management |
-| 7 | 8 | Notifications | 4 | System features |
-| | | **TOTAL** | **36** | |
+| Stage | Phase | Module | Screens | Rationale |
+|-------|-------|--------|---------|-----------|
+| **1** | 0 | Backend Preparation | - | **PREREQUISITE** - JWT, CORS, API docs |
+| **1** | 1 | Project Setup | - | New project with production architecture |
+| **1** | 2 | Authentication | 3 | Required for all other modules |
+| **1** | 3 | Staff Core | 4 | **PRIMARY VALUE** - task management |
+| **2** | 4 | Staff Auxiliary | 5 | Supporting staff features |
+| **2** | 5 | Portal | 6 | Property owner visibility |
+| **2** | 6 | Web Platform | - | Enable web deployment |
+| **3** | 7 | Manager | 5 | Team management |
+| **3** | 8 | Chat | 3 | Team communication |
+| **3** | 9 | Settings | 3 | Notifications, profile |
+| **3** | 10 | Renaming | - | AriStay → Cosmo Management |
+| **3** | 11 | Testing | - | QA and accessibility |
+| **3** | 12 | Deployment | - | Production release |
+| | | **TOTAL** | **29** | |
 
-### Screen Consolidation (53 → 36)
+### Screen Consolidation (Original 53 → Now 29)
 
 | Original Plan | Consolidated | Reason |
 |---------------|--------------|--------|
-| 4 task-type dashboards | 1 dashboard with filter | Same screen, different query param |
-| TaskForm + TaskDuplicate | 1 TaskForm | Duplicate = pre-filled form |
-| PortalTaskDetail + TaskDetail | 1 TaskDetail | Role-based UI, not separate screens |
-| PropertySearch widget | Part of PropertyList | Not a standalone screen |
-| ChatSettings screen | Part of ChatRoom | Drawer or modal, not screen |
-| DigestSettings screen | Part of NotificationSettings | Combined settings |
-| ActiveSessions screen | Part of Profile | Tab or section |
+| 4 task-type dashboards | 1 StaffDashboard with filters | Same screen, different query param |
+| TaskForm + TaskDuplicate | 1 TaskFormScreen | Duplicate = pre-filled form |
+| PortalTaskDetail + TaskDetail | 1 TaskDetailScreen | Role-based UI, not separate screens |
+| PropertySearch widget | Part of PropertyListScreen | Not a standalone screen |
+| ChatSettings, ChatParticipants | Part of ChatScreen (drawer) | Modals, not separate screens |
+| DigestSettings + NotificationSettings | Part of SettingsScreen | Combined settings |
+| ActiveSessions | Part of ProfileScreen | Tab, not separate screen |
+| PasswordResetConfirm | Deep link to PasswordResetScreen | Same screen, different state |
+| PhotoComparison, PhotoGallery | Part of TaskDetailScreen | Inline components |
+| MessageSearch | Part of ChatScreen | Search within existing screen |
+
+### Key Differences from Previous Plan
+
+| Aspect | Previous Plan | Revised Plan |
+|--------|--------------|--------------|
+| **Total Screens** | 36 (claimed) / 53 (actual) | 29 (accurate) |
+| **Phase 0** | Platform Renaming | Backend Preparation |
+| **Renaming** | First step | Phase 10 (near end) |
+| **Architecture** | Extend existing code | Complete rewrite |
+| **Stages** | None | 3 Stages with gates |
+| **Web** | Bundled with mobile | Separate Phase 6 |
+| **v2.0 Content** | 60% of document | Deferred to separate doc |
 
 ---
 
@@ -1329,7 +1495,6 @@ class TenantLifecycleEvent(models.Model):
 │                                                                          │
 │  OPTION 1: Single Branded App (Recommended for most plans)              │
 │  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │  • One app: "CosmoApp" (or platform name)                        │   │
 │  │  • Tenant selection at login                                     │   │
 │  │  • Dynamic branding after login (colors, logo)                   │   │
 │  │  • Available: Free, Starter, Pro                                 │   │
@@ -1834,14 +1999,241 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 
 ---
 
-## Phase Breakdown
+## Phase Breakdown (REVISED)
 
-### Phase 0: Platform Renaming (AriStay → Cosmo Management)
-**Objective:** Rename all project files, directories, and references from AriStay to Cosmo Management
+> **IMPORTANT:** Phases have been reorganized into 3 Stages. Platform renaming moved to Phase 10.
 
-**Priority:** Must complete before any new development
-**Status:** Ready to execute
-**Git Branch:** `refactor/cosmo-rename` (create from `refactor_01`)
+---
+
+## STAGE 1: ALPHA (Foundation + Core)
+
+**Goal:** Validate new architecture with working mobile app
+**Deliverable:** Authentication + Staff Task Management on mobile
+
+---
+
+### Phase 0: Backend Preparation (PREREQUISITE)
+**Objective:** Prepare Django backend for new Flutter architecture
+
+**Priority:** Must complete BEFORE any Flutter development
+**Status:** Required - Current backend may not support new requirements
+
+#### Tasks
+
+##### 0.1 JWT Authentication Setup
+Current backend uses Token authentication. JWT required for:
+- Access token + Refresh token pattern
+- Token expiration and refresh
+- Multi-device session management
+
+```python
+# Required endpoints (verify or create):
+POST /api/token/           # Login → access + refresh tokens
+POST /api/token/refresh/   # Refresh → new access token
+POST /api/token/verify/    # Verify token validity
+POST /api/token/revoke/    # Logout (invalidate tokens)
+```
+
+##### 0.2 CORS Configuration
+```python
+# In settings.py - add Flutter development origins
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",    # Flutter web dev
+    "http://localhost:8080",    # Alternative port
+    "http://127.0.0.1:3000",
+]
+CORS_ALLOW_CREDENTIALS = True
+```
+
+##### 0.3 API Documentation
+Create or update API documentation covering:
+- All endpoints Flutter will consume
+- Request/response schemas
+- Authentication requirements
+- Error response formats
+
+##### 0.4 Staging Environment
+- Set up staging server for Flutter development
+- Configure staging database
+- Set up staging API URL
+
+#### Definition of Done - Phase 0
+- [ ] JWT endpoints implemented and tested
+- [ ] CORS configured for Flutter development
+- [ ] API documentation complete
+- [ ] Staging environment accessible
+- [ ] Current mobile app still works (no breaking changes)
+
+---
+
+### Phase 1: New Project Setup
+**Objective:** Create new Flutter project with production-grade architecture
+
+**Priority:** Foundation for all other phases
+
+#### Tasks
+
+##### 1.1 Create New Project
+```bash
+# Create new project parallel to existing
+cd /home/duylam1407/WorkSpace/aristay_app/
+flutter create cosmo_app --org com.cosmomgmt
+cd cosmo_app
+```
+
+##### 1.2 Configure Dependencies
+```yaml
+# pubspec.yaml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.4.0
+  riverpod_annotation: ^2.3.0
+
+  # HTTP & API
+  dio: ^5.4.0
+  retrofit: ^4.0.3
+
+  # Routing
+  go_router: ^13.0.0
+
+  # Storage
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.0.0
+
+  # Models
+  freezed_annotation: ^2.4.0
+  json_annotation: ^4.8.0
+
+  # UI
+  cached_network_image: ^3.3.0
+  flutter_form_builder: ^9.2.0
+
+  # Utilities
+  intl: ^0.19.0
+  connectivity_plus: ^5.0.0
+
+dev_dependencies:
+  build_runner: ^2.4.0
+  freezed: ^2.4.0
+  json_serializable: ^6.7.0
+  riverpod_generator: ^2.3.0
+  retrofit_generator: ^8.0.0
+```
+
+##### 1.3 Project Structure
+```
+cosmo_app/lib/
+├── main.dart
+├── app.dart
+├── core/
+│   ├── config/
+│   │   ├── env_config.dart
+│   │   └── api_config.dart
+│   ├── constants/
+│   ├── theme/
+│   │   ├── app_theme.dart
+│   │   ├── app_colors.dart
+│   │   └── app_typography.dart
+│   ├── services/
+│   │   ├── api_service.dart
+│   │   ├── auth_service.dart
+│   │   ├── storage_service.dart
+│   │   ├── connectivity_service.dart
+│   │   └── sync_service.dart
+│   ├── providers/
+│   │   ├── auth_provider.dart
+│   │   ├── connectivity_provider.dart
+│   │   └── sync_provider.dart
+│   ├── widgets/
+│   │   ├── buttons/
+│   │   ├── cards/
+│   │   ├── inputs/
+│   │   └── loading/
+│   └── utils/
+├── data/
+│   ├── models/
+│   └── repositories/
+├── features/
+│   ├── auth/
+│   ├── staff/
+│   ├── portal/
+│   ├── chat/
+│   ├── manager/
+│   └── settings/
+└── router/
+    └── app_router.dart
+```
+
+##### 1.4 Core Services Implementation
+
+**ApiService (Dio-based)**
+```dart
+class ApiService {
+  late final Dio _dio;
+
+  ApiService() {
+    _dio = Dio(BaseOptions(
+      baseUrl: EnvConfig.apiBaseUrl,
+      connectTimeout: Duration(seconds: 30),
+      receiveTimeout: Duration(seconds: 30),
+    ));
+
+    _dio.interceptors.addAll([
+      AuthInterceptor(),
+      RetryInterceptor(),
+      LogInterceptor(),
+    ]);
+  }
+}
+```
+
+**AuthService (JWT-based)**
+```dart
+class AuthService {
+  Future<void> login(String email, String password);
+  Future<void> refreshToken();
+  Future<void> logout();
+  Future<bool> isAuthenticated();
+  Stream<AuthState> get authStateChanges;
+}
+```
+
+**StorageService (Hive-based)**
+```dart
+class StorageService {
+  Future<void> cacheData<T>(String key, T data);
+  Future<T?> getCachedData<T>(String key);
+  Future<void> clearCache();
+}
+```
+
+##### 1.5 Design System
+- App colors (light/dark mode)
+- Typography scale
+- Spacing constants
+- Reusable widgets (buttons, cards, inputs, loading states)
+
+#### Definition of Done - Phase 1
+- [ ] New project created and builds successfully
+- [ ] All dependencies configured
+- [ ] Project structure established
+- [ ] ApiService with interceptors working
+- [ ] AuthService with JWT flow working
+- [ ] StorageService with Hive working
+- [ ] Theme system with light/dark mode
+- [ ] At least 5 reusable widgets created
+- [ ] GoRouter configured
+- [ ] Unit tests for services (80%+ coverage)
+
+---
+
+### ⚠️ Legacy Phase 0 Content Moved
+
+The previous Phase 0 (Platform Renaming) has been moved to Phase 10.
+See "Phase 10: Platform Renaming" below for the detailed renaming steps.
 
 #### Execution Order (CRITICAL - Follow This Sequence)
 ```
@@ -2860,6 +3252,66 @@ aristay_flutter_frontend/
 | 2025-12-22 | 1.6 | **PHASE 0** - Added detailed Phase 0: Platform Renaming with step-by-step migration tasks |
 | 2025-12-23 | 1.7 | **IMPLEMENTATION** - Finalized implementation strategy with confirmed decisions |
 | 2025-12-23 | 2.0 | **MAJOR REVISION** - Critical review and plan consolidation |
+| 2025-12-23 | 3.0 | **CRITICAL REVIEW** - Complete codebase analysis, phases restructured into 3 stages |
+
+---
+
+### Version 3.0 - Critical Review & Complete Restructuring
+
+**Critical Findings:**
+1. **Current Flutter codebase requires complete rewrite** - Technology gaps (no state management, basic HTTP, Token auth) are too fundamental for incremental migration
+2. **Phase 0 was wrong** - Renaming before architecture work adds risk; moved to Phase 10
+3. **Screen count was inflated** - Consolidated from 53 to 29 actual screens
+4. **Backend preparation missing** - JWT endpoints and CORS configuration required first
+5. **No staged milestones** - Added 3 stages with validation gates
+
+**Major Changes:**
+
+| Aspect | v2.0 | v3.0 |
+|--------|------|------|
+| **Status** | "Ready for Implementation" | "Requires Architectural Decisions" |
+| **Approach** | Extend existing code | Complete rewrite |
+| **Phase 0** | Platform Renaming | Backend Preparation |
+| **Renaming** | First | Phase 10 (near end) |
+| **Screen Count** | 36 | 29 |
+| **Stages** | None | 3 stages with gates |
+| **Web Platform** | Bundled | Separate Phase 6 |
+
+**New Sections Added:**
+- Critical Review section at document start
+- Codebase Reality table (current vs plan)
+- Critical Questions to Answer
+- Revised Strategy Options (A/B/C)
+- Phase 0: Backend Preparation (new)
+- Phase 1: New Project Setup (detailed)
+- Stage gates with validation criteria
+
+**Phase Restructuring:**
+```
+OLD (v2.0):                      NEW (v3.0):
+Phase 0: Renaming          →     Phase 0: Backend Prep
+Phase 1: Foundation        →     Phase 1: New Project Setup
+Phase 2: Auth              →     Phase 2: Auth (3 screens)
+Phase 3: Staff Core        →     Phase 3: Staff Core (4 screens)
+Phase 4: Staff Aux         →     Phase 4: Staff Aux (5 screens)
+Phase 5: Portal            →     Phase 5: Portal (6 screens)
+Phase 6: Chat              →     Phase 6: Web Platform
+Phase 7: Manager           →     Phase 7: Manager (5 screens)
+Phase 8: Notifications     →     Phase 8: Chat (3 screens)
+Phase 9: Testing           →     Phase 9: Settings (3 screens)
+Phase 10: Deployment       →     Phase 10: Renaming
+                           →     Phase 11: Testing
+                           →     Phase 12: Deployment
+```
+
+**Recommendations:**
+1. Answer the 5 critical questions before proceeding
+2. Complete Phase 0 (Backend Prep) first
+3. Build new project in parallel, don't modify existing
+4. Validate architecture at Stage 1 gate before continuing
+5. Move v2.0+ multi-tenant content to separate document
+
+---
 
 ### Version 2.0 - Major Revision (Critical Review)
 
