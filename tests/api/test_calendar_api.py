@@ -322,7 +322,8 @@ class CalendarHTMLViewTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Property Management Calendar')
-        self.assertContains(response, 'FullCalendar')
+        # FullCalendar is included via CDN; avoid brittle inline-JS string expectations
+        self.assertContains(response, 'fullcalendar')
     
     def test_calendar_view_unauthorized(self):
         """Test calendar view without authentication"""

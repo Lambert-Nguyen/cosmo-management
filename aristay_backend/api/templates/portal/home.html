@@ -1,12 +1,18 @@
 {% extends "portal/base.html" %}
 
+{% load static %}
+
 {% block title %}AriStay Portal Home{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/portal-home.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="card">
     <div class="section-title">Welcome to AriStay, {{ user.get_full_name|default:user.username }}! 👋</div>
     
-    <div style="margin-bottom: 2rem;">
+    <div class="portal-home-intro">
         <p>Your role: <strong>{% if user.profile %}{{ user.profile.get_role_display|default:"Staff" }}{% else %}Staff{% endif %}</strong></p>
         <p>Choose where you'd like to go:</p>
     </div>
@@ -14,57 +20,57 @@
     <!-- Mobile-Optimized Action Cards -->
     <div class="grid cols-1">
         <!-- Properties Portal -->
-        <div class="card" style="text-align: center; padding: 1.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏠</div>
-            <h3 style="margin-bottom: 0.5rem;">Properties</h3>
-            <p style="margin-bottom: 1rem; color: #64748b;">View and manage properties, bookings, and tasks</p>
-            <a href="/api/portal/properties/" class="button" style="width: 100%; display: block;">
+        <div class="card portal-home-action-card">
+            <div class="portal-home-card-icon">🏠</div>
+            <h3 class="portal-home-card-title">Properties</h3>
+            <p class="portal-home-card-desc">View and manage properties, bookings, and tasks</p>
+            <a href="/api/portal/properties/" class="button portal-home-card-link">
                 View Properties
             </a>
         </div>
         
         <!-- Staff Portal -->
         {% if user.profile and user.profile.role and user.profile.role != 'viewer' %}
-        <div class="card" style="text-align: center; padding: 1.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">📋</div>
-            <h3 style="margin-bottom: 0.5rem;">My Tasks</h3>
-            <p style="margin-bottom: 1rem; color: #64748b;">Access your assigned tasks and workflows</p>
-            <a href="/api/staff/" class="button" style="width: 100%; display: block;">
+        <div class="card portal-home-action-card">
+            <div class="portal-home-card-icon">📋</div>
+            <h3 class="portal-home-card-title">My Tasks</h3>
+            <p class="portal-home-card-desc">Access your assigned tasks and workflows</p>
+            <a href="/api/staff/" class="button portal-home-card-link">
                 Go to Tasks
             </a>
         </div>
         {% endif %}
         
         <!-- Calendar Portal -->
-        <div class="card" style="text-align: center; padding: 1.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">📅</div>
-            <h3 style="margin-bottom: 0.5rem;">Calendar View</h3>
-            <p style="margin-bottom: 1rem; color: #64748b;">View all bookings and tasks in a unified calendar</p>
-            <a href="/api/portal/calendar/" class="button" style="width: 100%; display: block;">
+        <div class="card portal-home-action-card">
+            <div class="portal-home-card-icon">📅</div>
+            <h3 class="portal-home-card-title">Calendar View</h3>
+            <p class="portal-home-card-desc">View all bookings and tasks in a unified calendar</p>
+            <a href="/api/portal/calendar/" class="button portal-home-card-link">
                 Open Calendar
             </a>
         </div>
         
         <!-- Chat Portal -->
-        <div class="card" style="text-align: center; padding: 1.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">💬</div>
-            <h3 style="margin-bottom: 0.5rem;">Team Chat</h3>
-            <p style="margin-bottom: 1rem; color: #64748b;">Real-time messaging with your team members</p>
-            <a href="/api/chat/" class="button" style="width: 100%; display: block;">
+        <div class="card portal-home-action-card">
+            <div class="portal-home-card-icon">💬</div>
+            <h3 class="portal-home-card-title">Team Chat</h3>
+            <p class="portal-home-card-desc">Real-time messaging with your team members</p>
+            <a href="/api/chat/" class="button portal-home-card-link">
                 Open Chat
             </a>
         </div>
         
         <!-- Photo Management Portal -->
         {% if user.is_staff or user.profile and user.profile.role == 'manager' or user.profile and user.profile.role == 'superuser' %}
-        <div class="card" style="text-align: center; padding: 1.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🖼️</div>
-            <h3 style="margin-bottom: 0.5rem;">Photo Management</h3>
-            <p style="margin-bottom: 1rem; color: #64748b;">Review, approve, and manage photos across all tasks</p>
-            <a href="/api/portal/photos/" class="button" style="width: 100%; display: block; margin-bottom: 0.5rem;">
+        <div class="card portal-home-action-card">
+            <div class="portal-home-card-icon">🖼️</div>
+            <h3 class="portal-home-card-title">Photo Management</h3>
+            <p class="portal-home-card-desc">Review, approve, and manage photos across all tasks</p>
+            <a href="/api/portal/photos/" class="button portal-home-card-link">
                 📸 Manage Photos
             </a>
-            <a href="/api/staff/photos/upload/" class="button" style="width: 100%; display: block; background-color: #059669; border-color: #059669;">
+            <a href="/api/staff/photos/upload/" class="button portal-home-card-link portal-home-card-link--success">
                 📤 Upload Photos
             </a>
         </div>
@@ -72,18 +78,18 @@
         
         <!-- Admin/Manager Portal -->
         {% if user.is_staff %}
-        <div class="card" style="text-align: center; padding: 1.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+        <div class="card portal-home-action-card">
+            <div class="portal-home-card-icon">
                 {% if user.is_superuser %}⚙️{% else %}👔{% endif %}
             </div>
-            <h3 style="margin-bottom: 0.5rem;">
+            <h3 class="portal-home-card-title">
                 {% if user.is_superuser %}Admin Panel{% else %}Manager Panel{% endif %}
             </h3>
-            <p style="margin-bottom: 1rem; color: #64748b;">Manage users, properties, and system settings</p>
-            <a href="{% if user.is_superuser %}/admin/{% else %}/manager/{% endif %}" class="button" style="width: 100%; display: block; margin-bottom: 0.5rem;">
+            <p class="portal-home-card-desc">Manage users, properties, and system settings</p>
+            <a href="{% if user.is_superuser %}/admin/{% else %}/manager/{% endif %}" class="button portal-home-card-link">
                 {% if user.is_superuser %}Admin Dashboard{% else %}Manager Dashboard{% endif %}
             </a>
-            <a href="{% if user.is_superuser %}/api/admin/enhanced-excel-import/{% else %}/api/manager/enhanced-excel-import/{% endif %}" class="button" style="width: 100%; display: block; background-color: #059669; border-color: #059669; margin-bottom: 0.5rem;">
+            <a href="{% if user.is_superuser %}/api/admin/enhanced-excel-import/{% else %}/api/manager/enhanced-excel-import/{% endif %}" class="button portal-home-card-link portal-home-card-link--success">
                 📊 Enhanced Excel Import
             </a>
         </div>
@@ -91,14 +97,14 @@
         
         <!-- Invite Code Management -->
         {% if user.is_superuser or user.profile and user.profile.role == 'manager' %}
-        <div class="card" style="text-align: center; padding: 1.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎫</div>
-            <h3 style="margin-bottom: 0.5rem;">Invite Code Management</h3>
-            <p style="margin-bottom: 1rem; color: #64748b;">Create and manage invite codes for new users</p>
-            <a href="{% if user.is_superuser %}/api/admin/invite-codes/{% else %}/manager/invite-codes/{% endif %}" class="button" style="width: 100%; display: block; margin-bottom: 0.5rem;">
+        <div class="card portal-home-action-card">
+            <div class="portal-home-card-icon">🎫</div>
+            <h3 class="portal-home-card-title">Invite Code Management</h3>
+            <p class="portal-home-card-desc">Create and manage invite codes for new users</p>
+            <a href="{% if user.is_superuser %}/api/admin/invite-codes/{% else %}/manager/invite-codes/{% endif %}" class="button portal-home-card-link">
                 📋 View All Invite Codes
             </a>
-            <a href="{% if user.is_superuser %}/api/admin/create-invite-code/{% else %}/manager/create-invite-code/{% endif %}" class="button" style="width: 100%; display: block; background-color: #7c3aed; border-color: #7c3aed;">
+            <a href="{% if user.is_superuser %}/api/admin/create-invite-code/{% else %}/manager/create-invite-code/{% endif %}" class="button portal-home-card-link portal-home-card-link--purple">
                 ➕ Create New Invite Code
             </a>
         </div>
@@ -107,9 +113,9 @@
     
     {% if user.profile and user.profile.role == 'viewer' %}
     <!-- Viewer-only content -->
-    <div style="margin-top: 2rem;">
+    <div class="portal-home-viewer">
         <div class="tag">Read-only access</div>
-        <p style="margin-top: 1rem; color: #64748b;">
+        <p class="portal-home-viewer-message">
             You have viewer access to property information and reports. 
             Contact your administrator if you need additional permissions.
         </p>
@@ -119,37 +125,37 @@
 
 <!-- Mobile-Optimized Quick Stats -->
 <div class="grid cols-1">
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 2rem; font-weight: bold; color: #6366f1; margin-bottom: 0.5rem;">
+    <div class="card portal-home-stat-card">
+        <div class="portal-home-stat-value">
             {{ accessible_properties_count|default:"0" }}
         </div>
         <div class="muted">Properties You Can Access</div>
     </div>
     
     {% if user.profile and user.profile.role and user.profile.role != 'viewer' %}
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 2rem; font-weight: bold; color: #6366f1; margin-bottom: 0.5rem;">
+    <div class="card portal-home-stat-card">
+        <div class="portal-home-stat-value">
             {{ assigned_tasks_count|default:"0" }}
         </div>
         <div class="muted">Your Assigned Tasks</div>
     </div>
     
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 2rem; font-weight: bold; color: #6366f1; margin-bottom: 0.5rem;">
+    <div class="card portal-home-stat-card">
+        <div class="portal-home-stat-value">
             {{ pending_tasks_count|default:"0" }}
         </div>
         <div class="muted">Pending Tasks</div>
     </div>
     {% else %}
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 2rem; font-weight: bold; color: #6366f1; margin-bottom: 0.5rem;">
+    <div class="card portal-home-stat-card">
+        <div class="portal-home-stat-value">
             {{ total_bookings_count|default:"0" }}
         </div>
         <div class="muted">Total Bookings</div>
     </div>
     
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 2rem; font-weight: bold; color: #6366f1; margin-bottom: 0.5rem;">
+    <div class="card portal-home-stat-card">
+        <div class="portal-home-stat-value">
             {{ recent_activity_count|default:"0" }}
         </div>
         <div class="muted">Recent Activities</div>
@@ -158,85 +164,34 @@
 </div>
 
 <!-- Mobile-First Quick Actions -->
-<div class="card" style="margin-top: 2rem;">
-    <h3 style="margin-bottom: 1rem; color: #374151;">Quick Actions</h3>
+<div class="card portal-home-quick-actions">
+    <h3 class="portal-home-quick-actions-title">Quick Actions</h3>
     <div class="grid cols-2">
-        <a href="/api/portal/properties/" class="button" style="text-align: center; padding: 1rem;">
+        <a href="/api/portal/properties/" class="button portal-home-quick-action-link">
             🏠 Browse Properties
         </a>
         {% if user.profile and user.profile.role and user.profile.role != 'viewer' %}
-        <a href="/api/staff/" class="button" style="text-align: center; padding: 1rem;">
+        <a href="/api/staff/" class="button portal-home-quick-action-link">
             📋 View Tasks
         </a>
         {% endif %}
-        <a href="/api/notifications/settings/" class="button" style="text-align: center; padding: 1rem;">
+        <a href="/api/notifications/settings/" class="button portal-home-quick-action-link">
             🔔 My Notifications
         </a>
-        <a href="/api/digest/settings/" class="button" style="text-align: center; padding: 1rem;">
+        <a href="/api/digest/settings/" class="button portal-home-quick-action-link">
             📧 Email Settings
         </a>
         {% if user.is_staff %}
-        <a href="{% if user.is_superuser %}/api/admin/enhanced-excel-import/{% else %}/api/manager/enhanced-excel-import/{% endif %}" class="button" style="text-align: center; padding: 1rem; background-color: #059669; border-color: #059669;">
+        <a href="{% if user.is_superuser %}/api/admin/enhanced-excel-import/{% else %}/api/manager/enhanced-excel-import/{% endif %}" class="button portal-home-quick-action-link portal-home-card-link--success">
             📊 Excel Import
         </a>
         {% endif %}
         {% if user.is_superuser or user.profile and user.profile.role == 'manager' %}
-        <a href="{% if user.is_superuser %}/api/admin/create-invite-code/{% else %}/manager/create-invite-code/{% endif %}" class="button" style="text-align: center; padding: 1rem; background-color: #7c3aed; border-color: #7c3aed;">
+        <a href="{% if user.is_superuser %}/api/admin/create-invite-code/{% else %}/manager/create-invite-code/{% endif %}" class="button portal-home-quick-action-link portal-home-card-link--purple">
             🎫 Create Invite Code
         </a>
         {% endif %}
     </div>
 </div>
-
-<!-- Mobile-Optimized CSS for this template -->
-<style>
-    /* Mobile-First Card Enhancements */
-    .card h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1f2937;
-    }
-    
-    /* Touch-Friendly Button Enhancements */
-    .button {
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-    }
-    
-    /* Mobile Typography */
-    @media (max-width: 767px) {
-        .section-title {
-            font-size: 1.5rem;
-            line-height: 1.4;
-        }
-        
-        .card {
-            margin-bottom: 1rem;
-        }
-        
-        .grid.cols-1 > .card {
-            margin-bottom: 1rem;
-        }
-    }
-    
-    /* Tablet and Desktop Enhancements */
-    @media (min-width: 768px) {
-        .grid.cols-1 {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .grid.cols-2 {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-    }
-    
-    /* Large Screen Optimizations */
-    @media (min-width: 1024px) {
-        .grid.cols-1 {
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        }
-    }
-</style>
 {% endblock %}
 

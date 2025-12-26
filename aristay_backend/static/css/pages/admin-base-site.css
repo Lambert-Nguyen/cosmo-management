@@ -1,0 +1,564 @@
+/* Admin base_site extracted styles (no inline CSS in templates) */
+
+.is-hidden {
+    display: none !important;
+}
+
+/* Header */
+.aa-header {
+    background: var(--gradient-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    margin: 0;
+}
+
+.aa-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 20px;
+}
+
+.aa-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.aa-brand-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.aa-header-site-name {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.aa-header-site-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.aa-header-subtitle {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.aa-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.aa-header-link {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255,255,255,0.25);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.aa-header-link-icon {
+    font-size: 1.1rem;
+}
+
+.aa-menu-toggle {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override Django Admin Default Header Colors */
+#header {
+    background: var(--gradient-primary) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+#header #branding {
+    background: transparent !important;
+}
+
+#header #branding h1 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+#header #branding h1 a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+#header #branding h1 a:hover {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+/* Override any Django default header elements */
+#header * {
+    color: #ffffff !important;
+}
+
+#header a {
+    color: #ffffff !important;
+}
+
+#header a:hover {
+    color: #ffffff !important;
+}
+
+/* Ensure our custom branding div takes full width */
+#header #branding > div {
+    width: 100% !important;
+    background: transparent !important;
+}
+
+/* Override breadcrumb bar colors */
+#breadcrumbs {
+    background: var(--gradient-primary-dark) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#breadcrumbs a {
+    color: #ffffff !important;
+}
+
+#breadcrumbs a:hover {
+    color: #ffffff !important;
+    text-decoration: underline !important;
+}
+
+/* Enhanced Header Styles */
+.branding a[href="/api/portal/"]:hover,
+.branding a[href="/manager/"]:hover {
+    background: rgba(255,255,255,0.3) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.4) !important;
+}
+
+/* Mobile Responsive Header */
+@media (max-width: 768px) {
+    .branding > div:first-child {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .branding > div:first-child img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .branding > div:first-child h1 {
+        font-size: 1.4rem !important;
+    }
+
+    .branding > div:first-child p {
+        font-size: 0.8rem !important;
+    }
+
+    .branding > div:last-child {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .branding > div:last-child a {
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .branding > div:last-child span:last-child {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .branding {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    .branding > div:first-child {
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    .branding > div:last-child {
+        justify-content: center !important;
+    }
+}
+
+/* Dark Mode Styles for Admin Dashboard */
+[data-theme="dark"] #content-main {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .module {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-primary) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+[data-theme="dark"] .module h2,
+[data-theme="dark"] .module caption,
+[data-theme="dark"] .inline-group h2 {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .module th,
+[data-theme="dark"] .module td {
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-primary) !important;
+}
+
+[data-theme="dark"] .module tbody tr:hover {
+    background-color: var(--card-bg-hover) !important;
+}
+
+[data-theme="dark"] .module a {
+    color: var(--accent-primary) !important;
+}
+
+[data-theme="dark"] .module a:hover {
+    color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .addlink {
+    background: rgba(14, 75, 143, 0.1) !important;
+    color: var(--accent-primary) !important;
+    border: 1px solid rgba(14, 75, 143, 0.3) !important;
+}
+
+[data-theme="dark"] .addlink:hover {
+    background: rgba(14, 75, 143, 0.2) !important;
+}
+
+[data-theme="dark"] .changelink {
+    background: rgba(14, 75, 143, 0.1) !important;
+    color: var(--accent-primary) !important;
+    border: 1px solid rgba(14, 75, 143, 0.3) !important;
+}
+
+[data-theme="dark"] .changelink:hover {
+    background: rgba(14, 75, 143, 0.2) !important;
+}
+
+[data-theme="dark"] .viewlink {
+    background: rgba(148, 163, 184, 0.1) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+}
+
+[data-theme="dark"] .viewlink:hover {
+    background: rgba(148, 163, 184, 0.2) !important;
+}
+
+[data-theme="dark"] .admin-info {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border-left: 6px solid var(--accent-primary) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+[data-theme="dark"] .admin-info h3 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .admin-info p {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .admin-info strong {
+    color: var(--text-primary) !important;
+}
+
+/* Dark mode footer styling */
+[data-theme="dark"] footer {
+    background: rgba(30, 41, 59, 0.95) !important;
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] footer p {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] footer a {
+    color: #818cf8 !important;
+}
+
+/* Side menu */
+.aa-side-menu {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100vh;
+    background: var(--gradient-primary);
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.aa-side-menu.is-open {
+    right: 0;
+}
+
+.aa-side-menu-inner {
+    padding: 20px;
+}
+
+.aa-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.aa-menu-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.aa-menu-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.aa-menu-title {
+    margin: 0;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.aa-menu-subtitle {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.aa-menu-close {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.aa-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.aa-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.aa-menu-link-label {
+    font-weight: 500;
+}
+
+.aa-menu-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.aa-menu-row-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.aa-menu-row-label {
+    font-weight: 500;
+    color: white;
+}
+
+.aa-theme-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+.aa-theme-switch-input {
+    appearance: none;
+    width: 44px;
+    height: 24px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.35);
+    position: relative;
+    outline: none;
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.aa-theme-switch-thumb {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    left: 3px;
+    top: 2px;
+    transition: transform .2s ease;
+}
+
+.aa-menu-logout {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,107,107,0.2);
+    color: #ff6b6b;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255,107,107,0.3);
+}
+
+/* Overlay */
+.aa-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.aa-menu-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Secret message */
+.aa-secret-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--gradient-primary);
+    color: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    z-index: 10000;
+    max-width: 600px;
+    text-align: center;
+    font-family: 'Georgia', serif;
+    line-height: 1.8;
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255,255,255,0.2);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.aa-secret-message.is-active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.aa-secret-title {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.aa-secret-body {
+    font-size: 1rem;
+    font-style: italic;
+    white-space: pre-line;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.aa-secret-close {
+    margin-top: 1.5rem;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.aa-secret-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.aa-secret-overlay.is-visible {
+    opacity: 1;
+}

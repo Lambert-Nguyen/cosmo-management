@@ -1,6 +1,7 @@
-{% extends "staff/base.html" %}
+{% extends "layouts/staff_layout.html" %}
+{% load static %}
 
-{% block title %}Cleaning Dashboard · AriStay{% endblock %}
+{% block page_title %}Cleaning Dashboard{% endblock %}
 
 {% block content %}
 <div class="stats-grid">
@@ -32,7 +33,7 @@
     {% for task in today_tasks %}
     <div class="task-item">
         <div class="task-title">
-            <a href="/api/staff/tasks/{{ task.id }}/" style="text-decoration: none; color: inherit;">
+            <a href="/api/staff/tasks/{{ task.id }}/" class="dashboard-task-link">
                 {{ task.title }}
             </a>
         </div>
@@ -52,9 +53,9 @@
         {% for task_progress in tasks_with_progress %}
             {% if task_progress.task.id == task.id %}
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ task_progress.progress }}%"></div>
+                    <div class="progress-fill" data-progress="{{ task_progress.progress }}"></div>
                 </div>
-                <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                <div class="progress-text">
                     Progress: {{ task_progress.progress }}%
                 </div>
             {% endif %}
@@ -73,7 +74,7 @@
             {% for task in upcoming_tasks|slice:":5" %}
             <div class="task-item">
                 <div class="task-title">
-                    <a href="/api/staff/tasks/{{ task.id }}/" style="text-decoration: none; color: inherit;">
+                    <a href="/api/staff/tasks/{{ task.id }}/" class="dashboard-task-link">
                         {{ task.title }}
                     </a>
                 </div>
@@ -87,9 +88,9 @@
                 {% for task_progress in tasks_with_progress %}
                     {% if task_progress.task.id == task.id %}
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: {{ task_progress.progress }}%"></div>
+                            <div class="progress-fill" data-progress="{{ task_progress.progress }}"></div>
                         </div>
-                        <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                        <div class="progress-text">
                             Progress: {{ task_progress.progress }}%
                         </div>
                     {% endif %}
@@ -98,7 +99,7 @@
             {% endfor %}
             
             {% if upcoming_tasks.count > 5 %}
-            <div style="text-align: center; margin-top: 1rem;">
+            <div class="center-actions">
                 <a href="/api/staff/tasks/?status=pending" class="btn btn-secondary btn-sm">
                     View All {{ upcoming_tasks.count }} Upcoming
                 </a>
@@ -106,7 +107,7 @@
             {% endif %}
         {% else %}
             <div class="empty-state">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                <div class="empty-emoji-md">🎉</div>
                 <h3>All caught up!</h3>
                 <p>No upcoming cleaning tasks in the next 7 days.</p>
             </div>
@@ -117,7 +118,7 @@
         <div class="card-header">
             🏆 Quick Actions
         </div>
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="quick-actions">
             <a href="/api/staff/tasks/" class="btn btn-primary">
                 📋 View All My Tasks
             </a>
@@ -145,7 +146,7 @@
         {% for task_progress in tasks_with_progress|slice:":8" %}
         <div class="task-item">
             <div class="task-title">
-                <a href="/api/staff/tasks/{{ task_progress.task.id }}/" style="text-decoration: none; color: inherit;">
+                <a href="/api/staff/tasks/{{ task_progress.task.id }}/" class="dashboard-task-link">
                     {{ task_progress.task.title }}
                 </a>
             </div>
@@ -156,9 +157,9 @@
                 </span>
             </div>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ task_progress.progress }}%"></div>
+                <div class="progress-fill" data-progress="{{ task_progress.progress }}"></div>
             </div>
-            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+            <div class="progress-text">
                 {% if task_progress.progress == 100 %}
                     ✅ Complete - Ready to submit
                 {% elif task_progress.progress > 50 %}
@@ -174,7 +175,7 @@
     </div>
     
     {% if tasks_with_progress|length > 8 %}
-    <div style="text-align: center; margin-top: 1rem;">
+        <div class="center-actions">
         <a href="/api/staff/tasks/" class="btn btn-secondary btn-sm">
             View All Tasks
         </a>
@@ -186,10 +187,10 @@
 {% if not total_assigned %}
 <div class="card">
     <div class="empty-state">
-        <div style="font-size: 4rem; margin-bottom: 1rem;">🧽</div>
+        <div class="empty-emoji-lg">🧽</div>
         <h2>Welcome to Cleaning Dashboard</h2>
         <p>No cleaning tasks assigned to you yet. Check back later or contact your manager if you're expecting assignments.</p>
-        <div style="margin-top: 2rem;">
+        <div class="welcome-actions">
             <a href="/api/staff/lost-found/" class="btn btn-primary">
                 🔍 Check Lost & Found
             </a>
@@ -200,24 +201,9 @@
 {% endblock %}
 
 {% block extra_css %}
-<style>
-    .cleaning-tips {
-        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-top: 1rem;
-    }
-    
-    .tip-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 0.75rem;
-        font-size: 0.875rem;
-    }
-    
-    .tip-item:last-child {
-        margin-bottom: 0;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/pages/cleaning-dashboard.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="{% static 'js/pages/cleaning-dashboard.js' %}"></script>
 {% endblock %}

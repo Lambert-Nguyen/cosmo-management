@@ -1,6 +1,11 @@
-{% extends 'staff/base.html' %}
+{% extends "layouts/staff_layout.html" %}
+{% load static %}
 
-{% block title %}Lawn/Pool Dashboard - AriStay Staff Portal{% endblock %}
+{% block page_title %}Lawn/Pool Dashboard - AriStay Staff Portal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/lawn-pool-dashboard.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="stats-grid">
@@ -30,7 +35,7 @@
     {% for task in assigned_tasks %}
     <div class="task-item">
         <div class="task-title">
-            <a href="/api/staff/tasks/{{ task.id }}/" style="text-decoration: none; color: inherit;">
+            <a href="/api/staff/tasks/{{ task.id }}/" class="dashboard-task-link">
                 {{ task.title }}
             </a>
         </div>
@@ -53,7 +58,7 @@
             🌿 Today's Tasks
         </div>
         <div class="empty-state">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+            <div class="dashboard-empty-icon">✅</div>
             <h3>No lawn/pool tasks due today!</h3>
         </div>
     </div>
@@ -63,7 +68,7 @@
             🏊 Pool & Spa Inventory
         </div>
         <div class="empty-state">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+            <div class="dashboard-empty-icon">📦</div>
             <h3>All pool supplies are healthy!</h3>
         </div>
     </div>
@@ -74,7 +79,7 @@
         🌿 All Lawn/Pool Tasks
     </div>
     <div class="empty-state">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">🌿</div>
+        <div class="dashboard-empty-icon">🌿</div>
         <h3>No lawn/pool tasks assigned</h3>
     </div>
 </div>

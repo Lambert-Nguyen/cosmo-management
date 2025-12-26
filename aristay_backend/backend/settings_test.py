@@ -4,8 +4,52 @@ Use this for running tests
 """
 
 import os
+import sys
 
 from .settings_base import *
+
+# -----------------------------------------------------------------------------
+# Compatibility shim: Django 5.1.x template Context copying on Python 3.13
+#
+# Django's BaseContext.__copy__ calls copy(super()), which can trigger a
+# RecursionError under Python 3.13 when the Django test client copies template
+# contexts via the template_rendered signal.
+#
+# Patch BaseContext.__copy__ in test settings only to preserve shallow-copy
+# semantics and keep template-rendering tests functional.
+# -----------------------------------------------------------------------------
+if sys.version_info >= (3, 13):
+    try:
+        from django.template.context import BaseContext
+        from django.test.utils import ContextList
+        from django.test import client as django_test_client
+
+        def _basecontext_copy_py313(self):
+            duplicate = self.__class__.__new__(self.__class__)
+            duplicate.__dict__.update(self.__dict__)
+            duplicate.dicts = self.dicts[:]
+            return duplicate
+
+        BaseContext.__copy__ = _basecontext_copy_py313
+
+        def _store_rendered_templates_py313(store, signal, sender, template, context, **kwargs):
+            """Avoid copy(context) recursion on Python 3.13.
+
+            Django's test client stores rendered template contexts using
+            copy.copy(context). Under Python 3.13 this can recurse. For tests,
+            store a flattened dict snapshot instead.
+            """
+
+            store.setdefault("templates", []).append(template)
+            if "context" not in store:
+                store["context"] = ContextList()
+            snapshot = context.flatten() if hasattr(context, "flatten") else context
+            store["context"].append(snapshot)
+
+        django_test_client.store_rendered_templates = _store_rendered_templates_py313
+    except Exception:
+        # Best-effort: tests that render templates may fail if this can't apply.
+        pass
 
 # Using Django's default User model
 # AUTH_USER_MODEL = 'auth.User'  # This is the default
@@ -25,16 +69,15 @@ if _db_url:
         'default': dj_database_url.parse(_db_url, conn_max_age=0, ssl_require=False),
     }
 else:
-    # Local Postgres default for tests
+    # Default to local PostgreSQL for testing
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('POSTGRES_DB', 'aristay_test'),
-            'USER': os.getenv('POSTGRES_USER', 'postgres'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-            'HOST': os.getenv('POSTGRES_HOST', '127.0.0.1'),
-            'PORT': os.getenv('POSTGRES_PORT', '5432'),
-            'CONN_MAX_AGE': 0,
+            'NAME': 'aristay_test',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 

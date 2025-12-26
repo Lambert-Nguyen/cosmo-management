@@ -5,304 +5,7 @@
 {% block title %}System Logs Viewer | AriStay Administration{% endblock %}
 
 {% block extrastyle %}
-<style>
-/* Log Viewer Styles */
-:root {
-    --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-    --success-color: #10b981;
-    --warning-color: #f59e0b;
-    --danger-color: #ef4444;
-    --info-color: #3b82f6;
-    --debug-color: #6b7280;
-    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    --border-radius: 16px;
-}
-
-body {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.logs-header {
-    background: var(--primary-gradient);
-    color: white;
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.logs-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-    z-index: 1;
-}
-
-.logs-header > * {
-    position: relative;
-    z-index: 2;
-}
-
-.logs-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.back-link {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    backdrop-filter: blur(10px);
-}
-
-.back-link:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.controls-panel {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: var(--card-shadow);
-    border: 1px solid #e5e7eb;
-}
-
-.controls-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    align-items: end;
-}
-
-.control-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.control-label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #374151;
-}
-
-.control-input {
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    transition: border-color 0.2s;
-}
-
-.control-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.apply-button {
-    background: var(--primary-gradient);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.apply-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
-
-.logs-container {
-    background: #1f2937;
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    margin-bottom: 2rem;
-    max-height: 600px;
-    overflow-y: auto;
-}
-
-.log-line {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 0.875rem;
-    line-height: 1.4;
-}
-
-.log-line:last-child {
-    border-bottom: none;
-}
-
-.line-number {
-    color: #6b7280;
-    font-weight: 600;
-    min-width: 60px;
-    text-align: right;
-    user-select: none;
-}
-
-.log-content {
-    flex: 1;
-    white-space: pre-wrap;
-    word-break: break-all;
-}
-
-.log-level-ERROR .log-content {
-    color: #fca5a5;
-}
-
-.log-level-WARNING .log-content {
-    color: #fcd34d;
-}
-
-.log-level-INFO .log-content {
-    color: #93c5fd;
-}
-
-.log-level-DEBUG .log-content {
-    color: #d1d5db;
-}
-
-.log-level-CRITICAL .log-content {
-    color: #f87171;
-    font-weight: 600;
-}
-
-.log-level-UNKNOWN .log-content {
-    color: #9ca3af;
-}
-
-.no-logs {
-    text-align: center;
-    color: #6b7280;
-    padding: 3rem;
-    font-size: 1.1rem;
-}
-
-.error-message {
-    background: #fef2f2;
-    border: 1px solid #fca5a5;
-    color: #dc2626;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.file-tabs {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
-
-.file-tab {
-    background: #374151;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 8px 8px 0 0;
-    text-decoration: none;
-    font-size: 0.875rem;
-    transition: background-color 0.2s;
-}
-
-.file-tab.active {
-    background: #1f2937;
-}
-
-.file-tab:hover {
-    background: #4b5563;
-}
-
-.stats-bar {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.75rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    font-size: 0.875rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .controls-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .logs-title {
-        font-size: 2rem;
-    }
-    
-    .logs-container {
-        max-height: 400px;
-    }
-    
-    .log-line {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .line-number {
-        min-width: auto;
-        text-align: left;
-    }
-}
-
-/* Auto-refresh indicator */
-.auto-refresh {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    backdrop-filter: blur(10px);
-}
-
-/* Scrollbar styling for logs container */
-.logs-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.logs-container::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-}
-
-.logs-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-}
-
-.logs-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
-}
-</style>
+<link rel="stylesheet" href="{% static 'css/pages/admin-system-logs.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -316,10 +19,10 @@ body {
             🔄 Auto-refresh: OFF
         </div>
         <h1 class="logs-title">📝 System Logs Viewer</h1>
-        <p style="opacity: 0.9; margin-top: 0.5rem;">
+        <p class="logs-subtitle">
             Real-time log monitoring and analysis
         </p>
-        <p style="opacity: 0.7; margin-top: 0.5rem; font-size: 0.875rem;">
+        <p class="logs-timezone">
             Log timestamps shown in Tampa, FL timezone
         </p>
     </div>
@@ -405,14 +108,14 @@ body {
                 {% if search_term %} (filtered by "{{ search_term }}"){% endif %}
                 {% if level_filter %} ({{ level_filter }} level){% endif %}
             </div>
-            <div>
-                <button onclick="downloadLogs()" style="background: rgba(139, 92, 246, 0.8); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; margin-right: 0.5rem;">
+            <div class="stats-bar-controls">
+                <button class="stats-button download" data-action="download-logs">
                     💾 Download
                 </button>
-                <button onclick="scrollToBottom()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer;">
+                <button class="stats-button" data-action="scroll-bottom">
                     ⬇️ Bottom
                 </button>
-                <button onclick="scrollToTop()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; margin-left: 0.5rem;">
+                <button class="stats-button" data-action="scroll-top">
                     ⬆️ Top
                 </button>
             </div>
@@ -431,7 +134,7 @@ body {
             {% if search_term or level_filter %}
                 🔍 No log entries found matching your filters
                 <br><br>
-                <a href="?file={{ current_file }}" style="color: #3b82f6;">Clear filters</a>
+                <a href="?file={{ current_file }}" class="no-logs-link">Clear filters</a>
             {% else %}
                 📝 No log entries found in {{ current_file }}
             {% endif %}
@@ -440,126 +143,27 @@ body {
     {% endif %}
 
     <!-- Quick Actions -->
-    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-        <a href="/api/admin/metrics/" class="apply-button" style="text-decoration: none; display: inline-block;">
+    <div class="quick-actions">
+        <a href="/api/admin/metrics/" class="apply-button">
             📊 Back to Metrics
         </a>
-        <a href="/api/admin/recovery/" class="apply-button" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <a href="/api/admin/recovery/" class="apply-button warning">
             🚨 Crash Recovery
         </a>
-        <button onclick="downloadLogs()" class="apply-button" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+        <button class="apply-button purple" data-action="download-logs">
             💾 Download Logs
         </button>
-        <button onclick="location.reload()" class="apply-button" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <button class="apply-button success" data-action="refresh-logs">
             🔄 Refresh Logs
         </button>
     </div>
 </div>
 
 <script>
-// Download logs function
-function downloadLogs() {
-    const currentFile = '{{ current_file }}';
-    const searchTerm = '{{ search_term }}';
-    const levelFilter = '{{ level_filter }}';
-    
-    // Build download URL with current filters
-    let downloadUrl = '/api/admin/logs/download/?file=' + encodeURIComponent(currentFile);
-    
-    if (searchTerm) {
-        downloadUrl += '&search=' + encodeURIComponent(searchTerm);
-    }
-    
-    if (levelFilter) {
-        downloadUrl += '&level=' + encodeURIComponent(levelFilter);
-    }
-    
-    // Create a temporary link and trigger download
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = ''; // Let the server set the filename
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Auto-scroll to bottom on load
-function scrollToBottom() {
-    const container = document.getElementById('logs-container');
-    if (container) {
-        container.scrollTop = container.scrollHeight;
-    }
-}
-
-function scrollToTop() {
-    const container = document.getElementById('logs-container');
-    if (container) {
-        container.scrollTop = 0;
-    }
-}
-
-// Auto-refresh functionality
-let refreshInterval;
-
-function startAutoRefresh() {
-    refreshInterval = setInterval(() => {
-        location.reload();
-    }, 10000); // Refresh every 10 seconds
-    document.getElementById('auto-refresh-status').textContent = '🔄 Auto-refresh: ON (10s)';
-}
-
-function stopAutoRefresh() {
-    if (refreshInterval) {
-        clearInterval(refreshInterval);
-        refreshInterval = null;
-    }
-    document.getElementById('auto-refresh-status').textContent = '⏸️ Auto-refresh: OFF';
-}
-
-// Toggle auto-refresh on click
-document.getElementById('auto-refresh-status').addEventListener('click', function() {
-    if (refreshInterval) {
-        stopAutoRefresh();
-    } else {
-        startAutoRefresh();
-    }
-});
-
-// Auto-submit form on file selection
-document.getElementById('file').addEventListener('change', function() {
-    document.getElementById('log-controls').submit();
-});
-
-// Keyboard shortcuts
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey || e.metaKey) {
-        switch(e.key) {
-            case 'r':
-                e.preventDefault();
-                location.reload();
-                break;
-            case 'f':
-                e.preventDefault();
-                document.getElementById('search').focus();
-                break;
-            case 'k':
-                e.preventDefault();
-                scrollToTop();
-                break;
-            case 'j':
-                e.preventDefault();
-                scrollToBottom();
-                break;
-        }
-    }
-});
-
-// Scroll to bottom on page load
-document.addEventListener('DOMContentLoaded', function() {
-    scrollToBottom();
-});
-
-console.log('📝 AriStay System Logs Viewer loaded successfully!');
-console.log('💡 Tips: Click auto-refresh to toggle, use Ctrl+F to search, Ctrl+K/J to scroll');
+// Configuration data for JS
+window.logsCurrentFile = '{{ current_file }}';
+window.logsSearchTerm = '{{ search_term }}';
+window.logsLevelFilter = '{{ level_filter }}';
 </script>
+<script src="{% static 'js/pages/admin-system-logs.js' %}"></script>
 {% endblock %}

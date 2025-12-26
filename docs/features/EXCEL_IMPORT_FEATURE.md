@@ -387,7 +387,7 @@ The system now automatically maps Excel booking statuses to appropriate task sta
 - **Django 5.1.7**: Latest stable Django version
 - **Pandas**: Excel processing capabilities
 - **OpenPyXL**: Backup Excel processing
-- **PostgreSQL**: Production database (SQLite for development)
+- **PostgreSQL**: Production and development database
 
 ### Production Considerations
 - **File Upload Limits**: Configure appropriate file size limits

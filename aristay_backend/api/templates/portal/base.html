@@ -13,294 +13,7 @@
     <meta name="theme-color" content="#6366f1">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <link rel="stylesheet" href="{% static 'css/theme-toggle.css' %}">
-    <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body { 
-            font-family: -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; 
-            background: #f8fafc; 
-            color: #0f172a;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Mobile-First Container */
-        .container { 
-            max-width: 1100px; 
-            margin: 0 auto; 
-            padding: 16px;
-        }
-
-        @media (min-width: 768px) {
-            .container {
-                padding: 24px;
-            }
-        }
-
-        /* Mobile-Optimized Header */
-        header { 
-            background: linear-gradient(135deg,#6366f1,#8b5cf6); 
-            color: white; 
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        @media (min-width: 768px) {
-            header {
-                padding: 16px 0;
-            }
-        }
-
-        /* Mobile Navigation */
-        .brand { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .brand-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand img { 
-            /* Inline styles applied directly to img tag for consistency */
-        }
-
-        .brand h1 { 
-            font-size: 18px; 
-            margin: 0;
-            white-space: nowrap;
-        }
-
-        @media (min-width: 768px) {
-            .brand h1 {
-                font-size: 20px;
-            }
-        }
-
-        /* Mobile Navigation Menu */
-        .mobile-nav-toggle {
-            display: block;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-        }
-
-        .mobile-nav-toggle:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        @media (min-width: 768px) {
-            .mobile-nav-toggle {
-                display: none;
-            }
-        }
-
-        .nav-menu {
-            display: none;
-            width: 100%;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .nav-menu.active {
-            display: block;
-        }
-
-        @media (min-width: 768px) {
-            .nav-menu {
-                display: flex;
-                width: auto;
-                margin-top: 0;
-                padding-top: 0;
-                border-top: none;
-                margin-left: auto;
-                gap: 12px;
-                align-items: center;
-            }
-        }
-
-        /* Mobile-Optimized Cards */
-        .card { 
-            background: white; 
-            border: 1px solid #e2e8f0; 
-            border-radius: 12px; 
-            padding: 16px; 
-            box-shadow: 0 6px 16px rgba(0,0,0,.04);
-            margin-bottom: 16px;
-        }
-
-        @media (min-width: 768px) {
-            .card {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
-        }
-
-        /* Mobile-First Grid System */
-        .grid { 
-            display: grid; 
-            gap: 16px;
-            grid-template-columns: 1fr;
-        }
-
-        .grid.cols-2 {
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        }
-
-        .grid.cols-3 { 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        }
-
-        @media (min-width: 768px) {
-            .grid.cols-3 {
-                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            }
-        }
-
-        /* Touch-Friendly Buttons */
-        a.button { 
-            display: inline-block; 
-            padding: 12px 16px; 
-            border-radius: 10px; 
-            border: 1px solid #c7d2fe; 
-            background: #eef2ff; 
-            color: #3730a3; 
-            text-decoration: none; 
-            font-weight: 600;
-            text-align: center;
-            min-height: 44px;
-            line-height: 1.2;
-            transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        a.button:hover, a.button:active { 
-            background: #e0e7ff;
-            transform: translateY(-1px);
-        }
-
-        @media (min-width: 768px) {
-            a.button {
-                padding: 10px 14px;
-                min-height: auto;
-            }
-        }
-
-        /* Mobile Typography */
-        .muted { 
-            color: #64748b; 
-            font-size: 14px; 
-        }
-
-        .tag { 
-            display: inline-block; 
-            padding: 4px 10px; 
-            border-radius: 999px; 
-            font-size: 12px; 
-            border: 1px solid #e2e8f0; 
-            background: #f1f5f9; 
-            color: #334155; 
-        }
-
-        .section-title { 
-            font-size: 20px; 
-            font-weight: 700; 
-            margin: 8px 0 16px;
-            line-height: 1.3;
-        }
-
-        @media (min-width: 768px) {
-            .section-title {
-                font-size: 18px;
-            }
-        }
-
-        /* Mobile-Specific Utilities */
-        .mobile-only {
-            display: block;
-        }
-
-        .desktop-only {
-            display: none;
-        }
-
-        @media (min-width: 768px) {
-            .mobile-only {
-                display: none;
-            }
-            .desktop-only {
-                display: block;
-            }
-        }
-
-        /* Touch-Friendly Form Elements */
-        input, select, textarea {
-            min-height: 44px;
-            font-size: 16px; /* Prevents zoom on iOS */
-        }
-
-        /* Mobile Navigation Overlay */
-        .mobile-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
-        }
-
-        .mobile-overlay.active {
-            display: block;
-        }
-
-        /* Responsive Images */
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Mobile-First Spacing */
-        .mb-1 { margin-bottom: 8px; }
-        .mb-2 { margin-bottom: 16px; }
-        .mb-3 { margin-bottom: 24px; }
-
-        .mt-1 { margin-top: 8px; }
-        .mt-2 { margin-top: 16px; }
-        .mt-3 { margin-top: 24px; }
-
-        @media (min-width: 768px) {
-            .mb-1 { margin-bottom: 12px; }
-            .mb-2 { margin-bottom: 20px; }
-            .mb-3 { margin-bottom: 32px; }
-
-            .mt-1 { margin-top: 12px; }
-            .mt-2 { margin-top: 20px; }
-            .mt-3 { margin-top: 32px; }
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/pages/portal-base.css' %}">
     {% block head %}{% endblock %}
     {% block extra_css %}{% endblock %}
 </head>
@@ -309,12 +22,12 @@
         <div class="container">
             <div class="brand">
                 <div class="brand-left">
-                    <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay" style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
+                    <img class="portal-brand-logo" src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay">
                     <h1>AriStay Portal</h1>
                 </div>
                 
                 <!-- Mobile Navigation Toggle -->
-                <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+                <button class="mobile-nav-toggle" type="button" data-action="portal-toggle-nav" aria-controls="navMenu" aria-expanded="false">
                     ☰
                 </button>
 
@@ -343,7 +56,7 @@
                         <a href="/api/portal/calendar/" class="button">📅 Calendar</a>
                         
                         <!-- Time display -->
-                        <div style="color: rgba(255,255,255,0.8); font-size: 0.875rem; margin: 0 1rem;">
+                        <div class="portal-current-time">
                             {% current_time_dual user %}
                         </div>
                         
@@ -359,8 +72,8 @@
                         </button>
                         
                         <!-- User info and logout -->
-                        <span style="color: rgba(255,255,255,0.8); white-space: nowrap;">{{ user.get_full_name|default:user.username }}</span>
-                        <a href="{% url 'unified_logout' %}" class="button" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">Logout</a>
+                        <span class="portal-user-name">{{ user.get_full_name|default:user.username }}</span>
+                        <a href="{% url 'unified_logout' %}" class="button portal-logout">Logout</a>
                     {% endif %}
                 </div>
             </div>
@@ -368,62 +81,22 @@
     </header>
 
     <!-- Mobile Navigation Overlay -->
-    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileNav()"></div>
+    <div class="mobile-overlay" id="mobileOverlay" data-action="portal-close-nav"></div>
 
     <main class="container">
         <div class="portal-container">
             {% block content %}{% endblock %}
         </div>
     </main>
-
-    <script>
-        // Mobile Navigation Toggle
-        function toggleMobileNav() {
-            const navMenu = document.getElementById('navMenu');
-            const overlay = document.getElementById('mobileOverlay');
-            
-            navMenu.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
-
-        function closeMobileNav() {
-            const navMenu = document.getElementById('navMenu');
-            const overlay = document.getElementById('mobileOverlay');
-            
-            navMenu.classList.remove('active');
-            overlay.classList.remove('active');
-        }
-
-        // Close mobile nav when clicking outside
-        document.addEventListener('click', function(event) {
-            const navMenu = document.getElementById('navMenu');
-            const mobileToggle = document.querySelector('.mobile-nav-toggle');
-            
-            if (!navMenu.contains(event.target) && !mobileToggle.contains(event.target)) {
-                closeMobileNav();
-            }
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                closeMobileNav();
-            }
-        });
-
-        // Add touch support for mobile devices
-        if ('ontouchstart' in window) {
-            document.body.classList.add('touch-device');
-        }
-    </script>
     <script src="{% static 'js/theme-toggle.js' %}"></script>
+    <script type="module" src="{% static 'js/pages/portal-base.js' %}"></script>
     
     <!-- Hidden Sarcastic Message - Portal Theme-Aware Edition -->
-    <div id="aristay-secret-message-portal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85); background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 2rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); z-index: 10000; max-width: 600px; text-align: center; font-family: 'Georgia', serif; line-height: 1.8; backdrop-filter: blur(20px); border: 2px solid rgba(255,255,255,0.3); opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
-        <div style="font-size: 1.3rem; margin-bottom: 1.8rem; font-weight: 700; text-shadow: 0 3px 6px rgba(0,0,0,0.4); background: linear-gradient(45deg, #fff, #f8fafc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+    <div id="aristay-secret-message-portal" class="portal-secret-message hidden">
+        <div class="portal-secret-message-title">
             🌟 A Portal Wanderer's Secret 🌟
         </div>
-        <div style="font-size: 1rem; font-style: italic; white-space: pre-line; text-shadow: 0 2px 4px rgba(0,0,0,0.3); letter-spacing: 0.3px;">Oh, have you no shame, dear friend of mine?
+        <div class="portal-secret-message-body">Oh, have you no shame, dear friend of mine?
 To strut about boldly, crossing the line?
 With cheek so divine and nerve so grand,
 You march unashamed through all the land.
@@ -437,185 +110,16 @@ You wear shameless acts like a badge of pride,
 As if decency has left your side.
 Oh, the gall, the nerve, the unabashed game—
 Pray tell, dear friend, have you no shame?</div>
-        <button onclick="hideSecretMessagePortal()" style="margin-top: 1.8rem; background: linear-gradient(45deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1)); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.875rem 1.75rem; border-radius: 12px; cursor: pointer; font-weight: 700; transition: all 0.3s ease; font-size: 1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">✨ Close This Portal Secret ✨</button>
+    <button class="portal-secret-message-close" type="button" data-action="portal-secret-close">✨ Close This Portal Secret ✨</button>
     </div>
 
     <!-- Secret Message Overlay -->
-    <div id="secret-message-overlay-portal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; backdrop-filter: blur(15px); opacity: 0; transition: opacity 0.4s ease;"></div>
-
-    <script>
-    // Theme-Aware Portal Secret Message System
-    let portalSecretClickCount = 0;
-    let portalSecretTimeout;
-    let portalSecretSequence = [];
-    let isDarkMode = false;
-
-    function updateTheme() {
-        const root = document.documentElement;
-        isDarkMode = root.getAttribute('data-theme') === 'dark';
-        
-        const message = document.getElementById('aristay-secret-message-portal');
-        if (message) {
-            if (isDarkMode) {
-                message.style.background = 'linear-gradient(135deg, #1e293b 0%, #334155 100%)';
-                message.style.border = '2px solid rgba(255,255,255,0.2)';
-                message.style.color = '#f1f5f9';
-            } else {
-                message.style.background = 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)';
-                message.style.border = '2px solid rgba(255,255,255,0.3)';
-                message.style.color = 'white';
-            }
-        }
-    }
-
-    function showSecretMessagePortal() {
-        const message = document.getElementById('aristay-secret-message-portal');
-        const overlay = document.getElementById('secret-message-overlay-portal');
-        
-        // Update theme before showing
-        updateTheme();
-        
-        message.style.display = 'block';
-        overlay.style.display = 'block';
-        
-        // Theme-aware entrance animation
-        setTimeout(() => {
-            message.style.opacity = '1';
-            message.style.transform = 'translate(-50%, -50%) scale(1)';
-            overlay.style.opacity = '1';
-            
-            // Add theme-appropriate particle effect
-            createThemeParticles();
-        }, 50);
-        
-        document.body.style.overflow = 'hidden';
-    }
-
-    function hideSecretMessagePortal() {
-        const message = document.getElementById('aristay-secret-message-portal');
-        const overlay = document.getElementById('secret-message-overlay-portal');
-        
-        message.style.opacity = '0';
-        message.style.transform = 'translate(-50%, -50%) scale(0.85)';
-        overlay.style.opacity = '0';
-        
-        setTimeout(() => {
-            message.style.display = 'none';
-            overlay.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }, 400);
-    }
-
-    function createThemeParticles() {
-        const particleCount = isDarkMode ? 15 : 25;
-        const particleColor = isDarkMode ? '#64748b' : '#ffffff';
-        
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.style.position = 'fixed';
-            particle.style.width = '3px';
-            particle.style.height = '3px';
-            particle.style.background = particleColor;
-            particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
-            particle.style.zIndex = '10001';
-            particle.style.left = Math.random() * window.innerWidth + 'px';
-            particle.style.top = Math.random() * window.innerHeight + 'px';
-            particle.style.animation = `particleFloat 3s ease-out forwards`;
-            particle.style.opacity = '0';
-            
-            document.body.appendChild(particle);
-            
-            setTimeout(() => {
-                if (particle.parentNode) {
-                    particle.parentNode.removeChild(particle);
-                }
-            }, 3000);
-        }
-    }
-
-    // Add particle animation
-    const particleStyle = document.createElement('style');
-    particleStyle.textContent = `
-        @keyframes particleFloat {
-            0% { opacity: 0; transform: scale(0) translateY(0); }
-            20% { opacity: 1; transform: scale(1) translateY(-10px); }
-            80% { opacity: 1; transform: scale(1) translateY(-30px); }
-            100% { opacity: 0; transform: scale(0) translateY(-50px); }
-        }
-    `;
-    document.head.appendChild(particleStyle);
-
-    // Portal-specific activation - click the brand logo 5 times
-    document.addEventListener('DOMContentLoaded', function() {
-        const brandLogo = document.querySelector('.brand img');
-        if (brandLogo) {
-            brandLogo.addEventListener('click', function(e) {
-                portalSecretClickCount++;
-                clearTimeout(portalSecretTimeout);
-                
-                if (portalSecretClickCount >= 5) {
-                    showSecretMessagePortal();
-                    portalSecretClickCount = 0;
-                } else {
-                    portalSecretTimeout = setTimeout(() => {
-                        portalSecretClickCount = 0;
-                    }, 2000);
-                }
-            });
-            
-            // Add theme-aware hover effect
-            brandLogo.addEventListener('mouseenter', function() {
-                this.style.cursor = 'pointer';
-                this.style.transform = 'scale(1.1) rotate(-5deg)';
-                this.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                this.style.filter = isDarkMode ? 'drop-shadow(0 8px 16px rgba(255,255,255,0.1))' : 'drop-shadow(0 8px 16px rgba(0,0,0,0.2))';
-            });
-            
-            brandLogo.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1) rotate(0deg)';
-                this.style.filter = 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))';
-            });
-        }
-    });
-
-    // Alternative activation - keyboard sequence
-    document.addEventListener('keydown', function(e) {
-        portalSecretSequence.push(e.key.toLowerCase());
-        if (portalSecretSequence.length > 8) {
-            portalSecretSequence.shift();
-        }
-        
-        // Check for "aristay" sequence
-        const targetSequence = ['a', 'r', 'i', 's', 't', 'a', 'y'];
-        if (portalSecretSequence.join('') === targetSequence.join('')) {
-            showSecretMessagePortal();
-            portalSecretSequence = [];
-        }
-    });
-
-    // Listen for theme changes
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-                updateTheme();
-            }
-        });
-    });
-    
-    observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['data-theme']
-    });
-
-    // Initialize theme
-    updateTheme();
-    </script>
+    <div id="secret-message-overlay-portal" class="portal-secret-overlay hidden"></div>
     
     <!-- Footer with Copyright -->
-    <footer style="text-align: center; padding: 20px; background: rgba(255,255,255,0.95); border-top: 1px solid rgba(0,0,0,0.1); margin-top: 40px; backdrop-filter: blur(10px);">
-        <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">&copy; 2025 Nguyen Phuong Duy Lam. All rights reserved. | <a href="https://lambertnguyen.cloud/company/products" target="_blank" style="color: #6366f1; text-decoration: none; font-weight: 600;">Visit Our Products</a></p>
-        <p style="margin: 0.5rem 0 0 0; color: #6c757d; font-size: 0.8rem; opacity: 0.8;">Built with ❤️ for learning.</p>
+    <footer class="portal-footer">
+        <p class="portal-footer-primary">&copy; 2025 Nguyen Phuong Duy Lam. All rights reserved. | <a class="portal-footer-link" href="https://lambertnguyen.cloud/company/products" target="_blank">Visit Our Products</a></p>
+        <p class="portal-footer-secondary">Built with ❤️ for learning.</p>
     </footer>
 </body>
 </html>

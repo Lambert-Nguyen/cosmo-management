@@ -51,7 +51,6 @@ aristay_backend/
 ├── 📁 __pycache__/            # Python cache
 ├── 📄 manage.py               # Django management
 ├── 📄 requirements.txt        # Python dependencies
-├── 📄 db.sqlite3             # Database
 └── 📄 firebase_credentials.json # Firebase config
 ```
 

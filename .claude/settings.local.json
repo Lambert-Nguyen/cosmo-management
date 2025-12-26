@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rg:*)",
+      "Bash(pytest:*)",
+      "Bash(cat:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(ls:*)",
+      "Bash(if [ -d \".venv\" ])",
+      "Bash(then .venv/bin/python -m pytest -q)",
+      "Bash(elif [ -d \"venv\" ])",
+      "Bash(then venv/bin/python -m pytest -q)",
+      "Bash(else echo \"No venv found\")",
+      "Bash(fi)",
+      "Bash(find:*)",
+      "Bash(git mv:*)",
+      "Bash(python manage.py:*)",
+      "Bash([ -f .env ])",
+      "Bash(systemctl status:*)",
+      "Bash(chmod:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(sudo -u postgres psql:*)",
+      "Bash(xargs ls:*)",
+      "Bash(grep:*)"
+    ]
+  }
+}

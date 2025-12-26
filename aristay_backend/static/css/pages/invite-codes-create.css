@@ -1,0 +1,55 @@
+/* Invite Codes Create Page Styles */
+
+.create-form {
+    max-width: 800px;
+}
+
+.form-section {
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.section-title {
+    margin-bottom: var(--space-4, 1rem);
+    color: var(--color-gray-700, #374151);
+}
+
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6, 1.5rem);
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.help-text {
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--color-gray-500, #64748b);
+    margin-top: var(--space-1, 0.25rem);
+}
+
+.role-description {
+    display: none;
+    margin-top: var(--space-2, 0.5rem);
+    padding: var(--space-3, 0.75rem);
+    background: var(--color-gray-100, #f1f5f9);
+    border-radius: var(--radius-md, 6px);
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-gray-700, #374151);
+}
+
+.role-description.visible {
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--space-4, 1rem);
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}

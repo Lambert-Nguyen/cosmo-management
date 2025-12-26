@@ -5,3 +5,16 @@ __pycache__/
 *.pyc
 logs/*.log
 scripts/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# SQLite databases (NOT SUPPORTED - PostgreSQL only)
+*.sqlite3
+*.db
+
+# Logs
+logs/
+*.log

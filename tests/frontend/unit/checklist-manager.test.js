@@ -1,0 +1,606 @@
+/**
+ * Unit Tests for ChecklistManager Module
+ * Tests checklist item management, photo uploads, notes, and progress tracking
+ */
+
+import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import { ChecklistManager } from '../../../aristay_backend/static/js/modules/checklist-manager.js';
+import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+
+describe('ChecklistManager', () => {
+  let postSpy;
+  let uploadSpy;
+  let checklistManager;
+  let mockContainer;
+  let mockTaskContainer;
+
+  beforeEach(() => {
+    // Reset DOM
+    document.body.innerHTML = '';
+    
+    // Create mock task container with task ID
+    mockTaskContainer = document.createElement('div');
+    mockTaskContainer.id = 'taskDetailContainer';
+    mockTaskContainer.dataset.taskId = '123';
+    document.body.appendChild(mockTaskContainer);
+
+    // Create mock checklist container
+    mockContainer = document.createElement('div');
+    mockContainer.className = 'checklist-container';
+    mockContainer.innerHTML = `
+      <div class="progress-overview">
+        <div class="progress-bar-container">
+          <div class="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-stats">
+          <span class="progress-percentage">0%</span>
+          <span class="progress-fraction">0/0 completed</span>
+        </div>
+      </div>
+      <div class="checklist-items">
+        <div class="checklist-item" data-response-id="1">
+          <input type="checkbox" class="checklist-checkbox" data-response-id="1">
+          <span class="checklist-label">Test Task 1</span>
+          <button class="btn-notes" data-response-id="1">Notes</button>
+          <input type="file" class="photo-upload-input" data-response-id="1" multiple accept="image/*">
+          <div class="photo-preview-grid" data-response-id="1"></div>
+        </div>
+        <div class="checklist-item" data-response-id="2">
+          <input type="checkbox" class="checklist-checkbox" data-response-id="2" checked>
+          <span class="checklist-label">Test Task 2</span>
+          <button class="btn-notes" data-response-id="2">Notes</button>
+          <input type="file" class="photo-upload-input" data-response-id="2" multiple accept="image/*">
+          <div class="photo-preview-grid" data-response-id="2"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(mockContainer);
+
+    // Create notes modal
+    const notesModal = document.createElement('div');
+    notesModal.id = 'noteModal';
+    notesModal.style.display = 'none';
+    notesModal.innerHTML = `
+      <textarea id="checklistNotes" class="notes-input"></textarea>
+      <button id="saveNotesBtn">Save</button>
+      <button id="closeNotesBtn">Close</button>
+    `;
+    notesModal.dataset.responseId = '';
+    document.body.appendChild(notesModal);
+
+    // Spy on APIClient methods  
+    postSpy = jest.spyOn(APIClient, 'post').mockResolvedValue({ success: true });
+    uploadSpy = jest.spyOn(APIClient, 'upload').mockResolvedValue({ success: true, photos: [] });
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+    jest.restoreAllMocks();
+  });
+
+  describe('Constructor', () => {
+    it('should initialize with default container', () => {
+      checklistManager = new ChecklistManager();
+      expect(checklistManager.container).toBe(mockContainer);
+      expect(checklistManager.taskId).toBe('123');
+    });
+
+    it('should initialize with custom container', () => {
+      const customContainer = document.createElement('div');
+      customContainer.className = 'custom-checklist';
+      document.body.appendChild(customContainer);
+
+      checklistManager = new ChecklistManager(customContainer);
+      expect(checklistManager.container).toBe(customContainer);
+    });
+
+    it('should handle missing container gracefully', () => {
+      document.body.innerHTML = '';
+      expect(() => {
+        checklistManager = new ChecklistManager();
+      }).not.toThrow();
+    });
+
+    it('should set up event listeners', () => {
+      const addEventListenerSpy = jest.spyOn(mockContainer, 'addEventListener');
+      checklistManager = new ChecklistManager();
+      
+      expect(addEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function));
+      expect(addEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function));
+    });
+  });
+
+  describe('updateChecklistItem()', () => {
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+    });
+
+    it('should update checklist item to completed', async () => {
+      postSpy.mockResolvedValue({
+        success: true,
+        id: 1,
+        is_completed: true
+      });
+
+      await checklistManager.updateChecklistItem('1', true);
+
+      expect(APIClient.post).toHaveBeenCalledWith(
+        '/api/staff/checklist/1/update/',
+        { completed: true }
+      );
+    });
+
+    it('should update checklist item to not completed', async () => {
+      postSpy.mockResolvedValue({
+        success: true,
+        id: 2,
+        is_completed: false
+      });
+
+      await checklistManager.updateChecklistItem('2', false);
+
+      expect(APIClient.post).toHaveBeenCalledWith(
+        '/api/staff/checklist/2/update/',
+        { completed: false }
+      );
+    });
+
+    it('should update progress overview after successful update', async () => {
+      postSpy.mockResolvedValue({ success: true });
+      const updateProgressSpy = jest.spyOn(checklistManager, 'updateProgressOverview');
+
+      await checklistManager.updateChecklistItem('1', true);
+
+      expect(updateProgressSpy).toHaveBeenCalled();
+    });
+
+    it('should show success notification', async () => {
+      postSpy.mockResolvedValue({ success: true });
+      const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
+
+      await checklistManager.updateChecklistItem('1', true);
+
+      expect(showNotificationSpy).toHaveBeenCalledWith(
+        'Checklist item updated!',
+        'success'
+      );
+    });
+
+    it('should handle API errors gracefully', async () => {
+      const error = new Error('Network error');
+      postSpy.mockRejectedValue(error);
+      const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
+
+      await checklistManager.updateChecklistItem('1', true);
+
+      expect(showNotificationSpy).toHaveBeenCalledWith(
+        'Failed to update: Network error',
+        'error'
+      );
+    });
+
+    it('should handle missing response ID', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      await checklistManager.updateChecklistItem(null, true);
+
+      expect(consoleSpy).toHaveBeenCalledWith('Response ID is required');
+      expect(APIClient.post).not.toHaveBeenCalled();
+      
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('handlePhotoUpload()', () => {
+    let checklistItem, fileInput;
+    
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+      
+      // Create proper DOM structure
+      checklistItem = document.createElement('div');
+      checklistItem.className = 'checklist-item';
+      checklistItem.dataset.responseId = '1';
+      
+      fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.className = 'photo-upload-input';
+      
+      checklistItem.appendChild(fileInput);
+      mockContainer.appendChild(checklistItem);
+    });
+
+    it('should upload single photo', async () => {
+      const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
+      
+      // Create real event with files
+      Object.defineProperty(fileInput, 'files', {
+        value: [mockFile],
+        writable: false
+      });
+      
+      const mockEvent = { target: fileInput };
+
+      uploadSpy.mockResolvedValue({
+        success: true,
+        id: 101,
+        image_url: '/media/photos/test.jpg',
+        photo_type: 'checklist'
+      });
+
+      await checklistManager.handlePhotoUpload(mockEvent);
+
+      expect(APIClient.upload).toHaveBeenCalledTimes(1);
+      expect(APIClient.upload).toHaveBeenCalledWith(
+        '/api/staff/checklist/photo/upload/',
+        expect.any(FormData)
+      );
+    });
+
+    it('should upload multiple photos', async () => {
+      const mockFiles = [
+        new File(['photo1'], 'test1.jpg', { type: 'image/jpeg' }),
+        new File(['photo2'], 'test2.jpg', { type: 'image/jpeg' }),
+        new File(['photo3'], 'test3.jpg', { type: 'image/jpeg' })
+      ];
+      
+      Object.defineProperty(fileInput, 'files', {
+        value: mockFiles,
+        writable: false
+      });
+      
+      const mockEvent = { target: fileInput };
+
+      uploadSpy.mockResolvedValue({
+        success: true,
+        id: 101,
+        image_url: '/media/photos/test.jpg'
+      });
+
+      await checklistManager.handlePhotoUpload(mockEvent);
+
+      expect(APIClient.upload).toHaveBeenCalledTimes(3);
+    });
+
+    it('should add photo to UI after successful upload', async () => {
+      const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
+      
+      Object.defineProperty(fileInput, 'files', {
+        value: [mockFile],
+        writable: false
+      });
+      
+      const mockEvent = { target: fileInput };
+
+      const photoData = {
+        success: true,
+        id: 101,
+        image_url: '/media/photos/test.jpg'
+      };
+      uploadSpy.mockResolvedValue(photoData);
+
+      const addPhotoSpy = jest.spyOn(checklistManager, 'addPhotoToChecklistItem');
+
+      await checklistManager.handlePhotoUpload(mockEvent);
+
+      expect(addPhotoSpy).toHaveBeenCalledWith('1', photoData);
+    });
+
+    it('should show success notification after upload', async () => {
+      const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
+      
+      Object.defineProperty(fileInput, 'files', {
+        value: [mockFile],
+        writable: false
+      });
+      
+      const mockEvent = { target: fileInput };
+
+      uploadSpy.mockResolvedValue({ success: true });
+      const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
+
+      await checklistManager.handlePhotoUpload(mockEvent);
+
+      expect(showNotificationSpy).toHaveBeenCalledWith(
+        'Photos uploaded successfully!',
+        'success'
+      );
+    });
+
+    it('should handle upload errors', async () => {
+      const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
+      
+      Object.defineProperty(fileInput, 'files', {
+        value: [mockFile],
+        writable: false
+      });
+      
+      const mockEvent = { target: fileInput };
+
+      const error = new Error('Upload failed');
+      uploadSpy.mockRejectedValue(error);
+      const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
+
+      await checklistManager.handlePhotoUpload(mockEvent);
+
+      expect(showNotificationSpy).toHaveBeenCalledWith(
+        'Upload failed: Upload failed',
+        'error'
+      );
+    });
+
+    it('should handle missing files', async () => {
+      Object.defineProperty(fileInput, 'files', {
+        value: [],
+        writable: false
+      });
+      
+      const mockEvent = { target: fileInput };
+
+      await checklistManager.handlePhotoUpload(mockEvent);
+
+      // Should return early without calling upload
+      expect(APIClient.upload).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('saveNotes()', () => {
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+    });
+
+    it('should save notes successfully', async () => {
+      postSpy.mockResolvedValue({
+        success: true,
+        notes: 'Test notes content'
+      });
+
+      await checklistManager.saveNotes('1', 'Test notes content');
+
+      expect(APIClient.post).toHaveBeenCalledWith(
+        '/api/staff/checklist/1/notes/',
+        { notes: 'Test notes content' }
+      );
+    });
+
+    it('should show success notification', async () => {
+      postSpy.mockResolvedValue({ success: true });
+      const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
+
+      await checklistManager.saveNotes('1', 'Test notes');
+
+      expect(showNotificationSpy).toHaveBeenCalledWith(
+        'Notes saved!',
+        'success'
+      );
+    });
+
+    it('should handle save errors', async () => {
+      const error = new Error('Save failed');
+      postSpy.mockRejectedValue(error);
+      const showNotificationSpy = jest.spyOn(checklistManager, 'showNotification');
+
+      await checklistManager.saveNotes('1', 'Test notes');
+
+      expect(showNotificationSpy).toHaveBeenCalledWith(
+        'Failed to save notes: Save failed',
+        'error'
+      );
+    });
+
+    it('should handle missing response ID', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      await checklistManager.saveNotes(null, 'Test notes');
+
+      expect(consoleSpy).toHaveBeenCalledWith('Response ID is required');
+      expect(APIClient.post).not.toHaveBeenCalled();
+      
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('updateProgressOverview()', () => {
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+    });
+
+    it('should calculate progress correctly - 0% complete', () => {
+      // All checkboxes unchecked
+      mockContainer.querySelectorAll('.checklist-checkbox').forEach(cb => cb.checked = false);
+
+      checklistManager.updateProgressOverview();
+
+      const progressBar = document.querySelector('.progress-fill');
+      const progressPercentage = document.querySelector('.progress-percentage');
+      const progressFraction = document.querySelector('.progress-fraction');
+
+      expect(progressBar.style.width).toBe('0%');
+      expect(progressPercentage.textContent).toBe('0%');
+      expect(progressFraction.textContent).toBe('0/2 completed');
+    });
+
+    it('should calculate progress correctly - 50% complete', () => {
+      // One checkbox checked, one unchecked
+      const checkboxes = mockContainer.querySelectorAll('.checklist-checkbox');
+      checkboxes[0].checked = true;
+      checkboxes[1].checked = false;
+
+      checklistManager.updateProgressOverview();
+
+      const progressBar = document.querySelector('.progress-fill');
+      const progressPercentage = document.querySelector('.progress-percentage');
+      const progressFraction = document.querySelector('.progress-fraction');
+
+      expect(progressBar.style.width).toBe('50%');
+      expect(progressPercentage.textContent).toBe('50%');
+      expect(progressFraction.textContent).toBe('1/2 completed');
+    });
+
+    it('should calculate progress correctly - 100% complete', () => {
+      // All checkboxes checked
+      mockContainer.querySelectorAll('.checklist-checkbox').forEach(cb => cb.checked = true);
+
+      checklistManager.updateProgressOverview();
+
+      const progressBar = document.querySelector('.progress-fill');
+      const progressPercentage = document.querySelector('.progress-percentage');
+      const progressFraction = document.querySelector('.progress-fraction');
+
+      expect(progressBar.style.width).toBe('100%');
+      expect(progressPercentage.textContent).toBe('100%');
+      expect(progressFraction.textContent).toBe('2/2 completed');
+    });
+
+    it('should handle no checkboxes gracefully', () => {
+      mockContainer.querySelector('.checklist-items').innerHTML = '';
+
+      checklistManager.updateProgressOverview();
+
+      const progressBar = document.querySelector('.progress-fill');
+      expect(progressBar.style.width).toBe('0%');
+    });
+  });
+
+  describe('addPhotoToChecklistItem()', () => {
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+    });
+
+    it('should add photo to photo grid', () => {
+      const photoData = {
+        id: 101,
+        image_url: '/media/photos/test.jpg',
+        photo_type: 'checklist'
+      };
+
+      checklistManager.addPhotoToChecklistItem('1', photoData);
+
+      const photoGrid = mockContainer.querySelector('[data-response-id="1"] .photo-preview-grid');
+      const photoImg = photoGrid?.querySelector('img');
+
+      expect(photoImg).not.toBeNull();
+      expect(photoImg.src).toContain('test.jpg');
+      expect(photoImg.dataset.photoId).toBe('101');
+    });
+
+    it('should handle missing photo grid', () => {
+      mockContainer.querySelector('.photo-preview-grid').remove();
+
+      const photoData = { id: 101, image_url: '/test.jpg' };
+      
+      // Should not throw when photo grid is missing
+      expect(() => {
+        checklistManager.addPhotoToChecklistItem('1', photoData);
+      }).not.toThrow();
+    });
+  });
+
+  describe('Event Delegation', () => {
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+    });
+
+    it('should handle checkbox change events', async () => {
+      postSpy.mockResolvedValue({ success: true });
+      const updateSpy = jest.spyOn(checklistManager, 'updateChecklistItem');
+
+      const checkbox = mockContainer.querySelector('[data-response-id="1"].checklist-checkbox');
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+
+      // Wait for async operation
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(updateSpy).toHaveBeenCalledWith('1', true);
+    });
+
+    it('should handle notes button clicks', () => {
+      const notesBtn = mockContainer.querySelector('[data-response-id="1"].btn-notes');
+      notesBtn.dispatchEvent(new Event('click', { bubbles: true }));
+
+      const notesModal = document.getElementById('noteModal');
+      expect(notesModal.style.display).toBe('block');
+    });
+
+    it('should handle file input changes', async () => {
+      const handlePhotoUploadSpy = jest.spyOn(checklistManager, 'handlePhotoUpload');
+      uploadSpy.mockResolvedValue({ success: true, id: 101, image_url: '/test.jpg' });
+
+      const fileInput = mockContainer.querySelector('[data-response-id="1"].photo-upload-input');
+      const mockFile = new File(['photo'], 'test.jpg', { type: 'image/jpeg' });
+      
+      Object.defineProperty(fileInput, 'files', {
+        value: [mockFile],
+        writable: false
+      });
+
+      fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(handlePhotoUploadSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('Global Bridge Functions', () => {
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+      window.checklistManagerInstance = checklistManager;
+    });
+
+    it('should expose updateChecklistItem globally', () => {
+      expect(window.updateChecklistItem).toBeDefined();
+      expect(typeof window.updateChecklistItem).toBe('function');
+    });
+
+    it('should call instance method through global bridge', async () => {
+      postSpy.mockResolvedValue({ success: true });
+      const updateSpy = jest.spyOn(checklistManager, 'updateChecklistItem');
+
+      await window.updateChecklistItem('1', true);
+
+      expect(updateSpy).toHaveBeenCalledWith('1', true);
+    });
+
+    it('should expose uploadPhotos globally', () => {
+      expect(window.uploadPhotos).toBeDefined();
+      expect(typeof window.uploadPhotos).toBe('function');
+    });
+  });
+
+  describe('Notification System', () => {
+    beforeEach(() => {
+      checklistManager = new ChecklistManager();
+    });
+
+    it('should show success notification', () => {
+      checklistManager.showNotification('Success message', 'success');
+
+      const notification = document.querySelector('.notification-success');
+      expect(notification).not.toBeNull();
+      expect(notification.textContent).toBe('Success message');
+    });
+
+    it('should show error notification', () => {
+      checklistManager.showNotification('Error message', 'error');
+
+      const notification = document.querySelector('.notification-error');
+      expect(notification).not.toBeNull();
+      expect(notification.textContent).toBe('Error message');
+    });
+
+    it('should auto-remove notification after 3 seconds', (done) => {
+      checklistManager.showNotification('Test message', 'info');
+
+      const notification = document.querySelector('.notification-info');
+      expect(notification).not.toBeNull();
+
+      setTimeout(() => {
+        const notificationGone = document.querySelector('.notification-info');
+        expect(notificationGone).toBeNull();
+        done();
+      }, 3500);
+    });
+  });
+});

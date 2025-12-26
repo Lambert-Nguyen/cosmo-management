@@ -1,0 +1,28 @@
+{% load static %}
+<!-- Common Page Header Component -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title-section">
+            <h1 class="page-title">{% block header_title %}{{ page_title }}{% endblock %}</h1>
+            {% if page_subtitle %}
+            <p class="page-subtitle">{{ page_subtitle }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="page-actions">
+            {% block header_actions %}
+            <!-- Page-specific actions go here -->
+            {% endblock %}
+        </div>
+    </div>
+    
+    {% if show_breadcrumbs %}
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+            {% block breadcrumbs %}
+            <li class="breadcrumb-item"><a href="{% url 'staff_dashboard' %}">Home</a></li>
+            {% endblock %}
+        </ol>
+    </nav>
+    {% endif %}
+</div>

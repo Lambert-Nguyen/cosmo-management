@@ -3,10 +3,14 @@ Calendar Portal Integration Tests
 Tests for calendar integration with portal templates
 """
 import pytest
+from pathlib import Path
 from django.test import TestCase, Client, override_settings
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PORTAL_HOME_CSS_PATH = PROJECT_ROOT / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-home.css'
 
 
 @override_settings(
@@ -72,9 +76,13 @@ class CalendarPortalIntegrationTestCase(TestCase):
         response = self.client.get('/api/portal/')
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'text-align: center')
-        self.assertContains(response, 'padding: 1.5rem')
-        self.assertContains(response, 'font-size: 2.5rem')
+        # Styles are extracted into an external stylesheet; validate it is linked
+        self.assertContains(response, 'href="/static/css/pages/portal-home.css"')
+        # Validate key style rules exist in the extracted CSS
+        css = PORTAL_HOME_CSS_PATH.read_text(encoding='utf-8')
+        self.assertIn('text-align: center', css)
+        self.assertIn('padding: 1.5rem', css)
+        self.assertIn('font-size: 2.5rem', css)
     
     def test_calendar_navigation_styling(self):
         """Test that calendar navigation has proper styling"""
@@ -103,8 +111,11 @@ class CalendarPortalIntegrationTestCase(TestCase):
         response = self.client.get('/api/portal/')
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'width: 100%')
-        self.assertContains(response, 'display: block')
+        # Responsive styles are in external CSS now
+        self.assertContains(response, 'href="/static/css/pages/portal-home.css"')
+        css = PORTAL_HOME_CSS_PATH.read_text(encoding='utf-8')
+        self.assertIn('width: 100%', css)
+        self.assertIn('display: block', css)
     
     def test_calendar_integration_consistency(self):
         """Test that calendar integration is consistent across portal"""

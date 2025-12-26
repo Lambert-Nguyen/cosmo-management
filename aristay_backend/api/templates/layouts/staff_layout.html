@@ -1,0 +1,143 @@
+{% extends "layouts/base_unified.html" %}
+{% load static %}
+{% load timezone_tags %}
+
+{% block title %}{% block page_title %}AriStay Staff Portal{% endblock %} · AriStay{% endblock %}
+
+{% block header %}
+<header class="header staff-header">
+    <div class="header-content container-fluid">
+        <div class="header-left">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
+                <span class="hamburger-icon">☰</span>
+            </button>
+            
+            <a href="{% url 'staff-dashboard' %}" class="logo">
+                <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay" height="32" class="logo-img">
+                <span class="logo-text">AriStay Staff</span>
+            </a>
+        </div>
+        
+        <div class="header-right">
+            {% block header_actions %}
+            <div class="user-info">
+                <div class="theme-toggle-container">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+                
+                <div class="user-profile">
+                    <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="user-role">{{ request.user.profile.get_role_display|default:"Staff" }}</span>
+                </div>
+                
+                <a href="{% url 'unified_logout' %}" class="btn btn-sm btn-outline-primary">
+                    Logout
+                </a>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block navigation %}
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-content">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Menu</h2>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">×</button>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="{% url 'staff-dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'staff-dashboard' %}active{% endif %}">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{% url 'staff-tasks' %}" class="nav-link {% if 'tasks' in request.path %}active{% endif %}">
+                    <span class="nav-icon">✓</span>
+                    <span class="nav-text">My Tasks</span>
+                    {% if unread_tasks_count %}
+                    <span class="nav-badge">{{ unread_tasks_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'bookings' in request.path %}active{% endif %}">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-text">Bookings</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'properties' in request.path %}active{% endif %}">
+                    <span class="nav-icon">🏢</span>
+                    <span class="nav-text">Properties</span>
+                </a>
+            </li>
+            
+            {% if request.user.is_staff or request.user.profile.is_manager %}
+            <li class="nav-divider"></li>
+            <li class="nav-section-title">Management</li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'team' in request.path %}active{% endif %}">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Team</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Reports</span>
+                </a>
+            </li>
+            {% endif %}
+            
+            <li class="nav-divider"></li>
+            
+            <li class="nav-item">
+                <a href="#" class="nav-link {% if 'profile' in request.path %}active{% endif %}">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer staff-footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="footer-text">
+                © {{ current_year|default:"2025" }} AriStay. All rights reserved.
+            </p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Help</a>
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Terms</a>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/staff-layout.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script type="module" src="{% static 'js/modules/staff-layout.js' %}"></script>
+{% endblock %}

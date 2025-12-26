@@ -1,0 +1,172 @@
+/* Admin Invite Code Detail Page Styles */
+
+.detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-5, 20px);
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-8, 30px);
+    padding-bottom: var(--space-5, 20px);
+    border-bottom: 2px solid var(--color-gray-300, #e0e0e0);
+}
+
+.page-title {
+    font-size: var(--font-size-2xl, 2rem);
+    color: var(--color-gray-900, #333);
+    margin: 0;
+}
+
+.code-display {
+    background: var(--color-gray-50, #f8f9fa);
+    padding: var(--space-5, 20px);
+    border-radius: var(--radius-lg, 8px);
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-xl, 1.5rem);
+    font-weight: var(--font-weight-bold, bold);
+    color: var(--color-primary, #007cba);
+    text-align: center;
+    margin-bottom: var(--space-8, 30px);
+    border: 2px solid var(--color-gray-300, #e0e0e0);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-5, 20px);
+    margin-bottom: var(--space-8, 30px);
+}
+
+.info-card {
+    background: var(--color-surface, white);
+    padding: var(--space-5, 20px);
+    border-radius: var(--radius-lg, 8px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h3 {
+    margin: 0 0 var(--space-4, 15px) 0;
+    color: var(--color-gray-900, #333);
+    font-size: var(--font-size-lg, 1.1rem);
+    border-bottom: 1px solid var(--color-gray-300, #e0e0e0);
+    padding-bottom: var(--space-3, 10px);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-3, 10px);
+    padding: var(--space-1, 5px) 0;
+}
+
+.info-label {
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--color-gray-600, #666);
+}
+
+.info-value {
+    color: var(--color-gray-900, #333);
+}
+
+.status-badge {
+    padding: var(--space-1, 4px) var(--space-2, 8px);
+    border-radius: var(--radius-lg, 12px);
+    font-size: var(--font-size-xs, 0.8rem);
+    font-weight: var(--font-weight-medium, 500);
+}
+
+.status-active {
+    background-color: var(--color-success-100, #d4edda);
+    color: var(--color-success-800, #155724);
+}
+
+.status-inactive {
+    background-color: var(--color-danger-100, #f8d7da);
+    color: var(--color-danger-800, #721c24);
+}
+
+.status-expired {
+    background-color: var(--color-warning-100, #fff3cd);
+    color: var(--color-warning-800, #856404);
+}
+
+.status-usable {
+    background-color: var(--color-info-100, #d1ecf1);
+    color: var(--color-info-800, #0c5460);
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--space-3, 10px);
+    justify-content: center;
+    margin-top: var(--space-8, 30px);
+}
+
+.usage-chart {
+    background: var(--color-gray-50, #f8f9fa);
+    padding: var(--space-4, 15px);
+    border-radius: var(--radius-sm, 4px);
+    margin: var(--space-3, 10px) 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: var(--color-gray-300, #e0e0e0);
+    border-radius: var(--radius-lg, 10px);
+    overflow: hidden;
+    margin: var(--space-3, 10px) 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--color-primary, #007cba);
+    transition: width 0.3s ease;
+}
+
+.usage-percentage {
+    text-align: center;
+    font-size: var(--font-size-sm, 0.9rem);
+    color: var(--color-gray-600, #666);
+}
+
+.notes-section {
+    background: var(--color-gray-50, #f8f9fa);
+    padding: var(--space-4, 15px);
+    border-radius: var(--radius-sm, 4px);
+    margin-top: var(--space-5, 20px);
+}
+
+.notes-section h4 {
+    margin: 0 0 var(--space-3, 10px) 0;
+    color: var(--color-gray-900, #333);
+}
+
+.notes-content {
+    color: var(--color-gray-600, #666);
+    font-style: italic;
+}
+
+.empty-notes {
+    color: var(--color-gray-400, #999);
+    font-style: italic;
+}
+
+.expired-text {
+    color: var(--color-danger, #e74c3c);
+}
+
+.users-list {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.revoke-form,
+.reactivate-form,
+.delete-form {
+    display: inline;
+}

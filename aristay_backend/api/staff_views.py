@@ -309,7 +309,10 @@ def task_detail(request, task_id):
                 ChecklistResponse.objects.bulk_create([
                     ChecklistResponse(checklist=checklist, item=item)
                 for item in items], ignore_conflicts=True)
-        responses = checklist.responses.select_related('item').prefetch_related('photos') if checklist else []
+        # Avoid prefetching legacy `photos` (ChecklistPhoto) here: prefetch caches can
+        # create cyclic object graphs (response -> photos -> photo.response -> response)
+        # which breaks Django's test template-context copying.
+        responses = checklist.responses.select_related('item') if checklist else []
     except Exception:
         checklist = None
         responses = []
@@ -336,14 +339,17 @@ def task_detail(request, task_id):
                         for item in items
                     ]
                     ChecklistResponse.objects.bulk_create(responses_to_create, ignore_conflicts=True)
-                    responses = checklist.responses.select_related('item').prefetch_related('photos')
+                    responses = checklist.responses.select_related('item')
     
-    # Attach unified photos (TaskImage) per checklist response
+    # Attach unified photos (TaskImage) per checklist response.
+    # IMPORTANT: avoid select_related('checklist_response') here; otherwise we can create
+    # a self-referential object graph (response -> unified_photos -> image -> checklist_response)
+    # that breaks Django's test template context copying.
     try:
-        task_images = TaskImage.objects.filter(task=task).select_related('checklist_response')
+        task_images = TaskImage.objects.filter(task=task)
         images_by_response = {}
         for img in task_images:
-            rid = getattr(img.checklist_response, 'id', None)
+            rid = getattr(img, 'checklist_response_id', None)
             if rid:
                 images_by_response.setdefault(rid, []).append(img)
     except Exception:
@@ -352,8 +358,6 @@ def task_detail(request, task_id):
     # Group responses by room type for better organization
     responses_by_room = {}
     for response in responses:
-        # Attach unified photos for template consumption
-        setattr(response, 'unified_photos', images_by_response.get(response.id, []))
         room = response.item.room_type or 'General'
         if room not in responses_by_room:
             responses_by_room[room] = {
@@ -378,6 +382,7 @@ def task_detail(request, task_id):
         'task': task,
         'checklist': checklist,
         'responses_by_room': responses_by_room,
+        'unified_photos_by_response': images_by_response,
         'can_edit': can_edit_task(request.user, task),
         'can_approve_photos': can_approve_photos,
         'user': request.user,  # Add user to context

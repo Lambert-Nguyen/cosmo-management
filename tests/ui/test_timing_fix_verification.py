@@ -3,22 +3,10 @@
 Verification script to confirm the timing fix is correctly applied.
 """
 
-import os
-import sys
-import django
 import pytest
-from django.test import TestCase
+from pathlib import Path
 
-# Add the backend directory to Python path
-backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aristay_backend')
-sys.path.append(backend_path)
-
-# Configure Django settings
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-django.setup()
-
-@pytest.mark.django_db
-class TestTimingFixVerification(TestCase):
+class TestTimingFixVerification:
     """Test suite for timing fix verification"""
     
     def test_verify_timing_fix(self):
@@ -27,28 +15,14 @@ class TestTimingFixVerification(TestCase):
         print("🔍 VERIFICATION: Timing Fix Application")
         print("=" * 50)
         
-        # Try to find the template file in common locations
-        possible_paths = [
-            'aristay_backend/api/templates/staff/task_detail.html',
-            'api/templates/staff/task_detail.html',
-            'templates/staff/task_detail.html'
-        ]
-        
-        template_path = None
-        for path in possible_paths:
-            if os.path.exists(path):
-                template_path = path
-                break
-        
-        if not template_path:
-            # If template file doesn't exist, skip the test but don't fail
-            print("   ⚠️  Template file not found, skipping file-based verification")
-            print("   ✅ Test passed (template file not required for CI)")
-            return
-        
         try:
-            with open(template_path, 'r') as f:
-                content = f.read()
+            repo_root = Path(__file__).resolve().parents[2]
+            task_detail_js = repo_root / 'aristay_backend' / 'static' / 'js' / 'pages' / 'task-detail.js'
+
+            if not task_detail_js.exists():
+                pytest.skip('task-detail.js not found; skipping timing verification')
+
+            content = task_detail_js.read_text(encoding='utf-8')
             
             # Check 1: DOM Ready Event
             print("\n✅ 1. DOM READY EVENT:")
@@ -57,34 +31,34 @@ class TestTimingFixVerification(TestCase):
                 print("   ✅ DOMContentLoaded event listener exists")
             else:
                 print("   ❌ DOMContentLoaded event listener missing")
-                self.fail("DOMContentLoaded event listener missing")
+                raise AssertionError("DOMContentLoaded event listener missing")
             
             # Check 2: Function Definition Order
             print("\n✅ 2. FUNCTION DEFINITION ORDER:")
             
-            if "function initializeTaskActions()" in content:
-                print("   ✅ initializeTaskActions function defined")
+            if "class TaskDetailPage" in content:
+                print("   ✅ TaskDetailPage class defined")
             else:
-                print("   ❌ initializeTaskActions function missing")
-                self.fail("initializeTaskActions function missing")
+                print("   ❌ TaskDetailPage class missing")
+                raise AssertionError("TaskDetailPage class missing")
             
             # Check 3: Event Listener Attachment
             print("\n✅ 3. EVENT LISTENER ATTACHMENT:")
             
-            if "addEventListener('click'" in content:
-                print("   ✅ Event listeners are properly attached")
+            if "document.addEventListener('DOMContentLoaded'" in content or "document.addEventListener(\"DOMContentLoaded\"" in content:
+                print("   ✅ Initialization is attached to DOMContentLoaded")
             else:
-                print("   ❌ Event listeners missing")
-                self.fail("Event listeners missing")
+                print("   ❌ DOMContentLoaded handler missing")
+                raise AssertionError("DOMContentLoaded handler missing")
             
             # Check 4: Proper Timing
             print("\n✅ 4. PROPER TIMING:")
             
-            if "initializeTaskActions();" in content:
-                print("   ✅ initializeTaskActions is called")
+            if "new TaskDetailPage()" in content:
+                print("   ✅ TaskDetailPage is instantiated")
             else:
-                print("   ❌ initializeTaskActions not called")
-                self.fail("initializeTaskActions not called")
+                print("   ❌ TaskDetailPage not instantiated")
+                raise AssertionError("TaskDetailPage not instantiated")
             
             print(f"\n🎉 TIMING FIX VERIFICATION SUCCESSFUL!")
             print("=" * 50)
@@ -95,7 +69,7 @@ class TestTimingFixVerification(TestCase):
             
         except Exception as e:
             print(f"   ❌ Error reading template file: {str(e)}")
-            self.fail(f"Error reading template file: {str(e)}")
+            raise
 
 def main():
     """Main function - kept for backward compatibility"""

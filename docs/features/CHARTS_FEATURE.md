@@ -126,7 +126,7 @@ Task.objects.create(title="Test 4", status="canceled", property=property2)
 ### Requirements
 - No additional Python packages needed
 - Chart.js loaded via CDN (internet connection required)
-- Works with existing PostgreSQL/SQLite database
+- Works with existing PostgreSQL database
 
 ### Production Considerations
 - Consider implementing caching for chart data queries

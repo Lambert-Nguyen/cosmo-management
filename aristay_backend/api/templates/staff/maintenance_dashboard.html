@@ -1,6 +1,7 @@
-{% extends "staff/base.html" %}
+{% extends "layouts/staff_layout.html" %}
+{% load static %}
 
-{% block title %}Maintenance Dashboard · AriStay{% endblock %}
+{% block page_title %}Maintenance Dashboard{% endblock %}
 
 {% block content %}
 <div class="stats-grid">
@@ -28,15 +29,15 @@
         🚨 Overdue Tasks
     </div>
     {% for task in overdue_tasks %}
-    <div class="task-item" style="border-left: 4px solid #f56565;">
+    <div class="task-item task-item--overdue">
         <div class="task-title">
-            <a href="/api/staff/tasks/{{ task.id }}/" style="text-decoration: none; color: inherit;">
+            <a href="/api/staff/tasks/{{ task.id }}/" class="dashboard-task-link">
                 {{ task.title }}
             </a>
         </div>
         <div class="task-meta">
             <span>🏠 {{ task.property_ref.name }}</span>
-            <span style="color: #c53030;">⏰ Due: {{ task.due_date|date:"M d, H:i" }}</span>
+            <span class="due-date-overdue">⏰ Due: {{ task.due_date|date:"M d, H:i" }}</span>
             <span class="status-badge status-{{ task.status|cut:'-' }}">{{ task.get_status_display }}</span>
             {% if task.assigned_to %}
             <span>👤 {% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}Not assigned{% endif %}</span>
@@ -56,7 +57,7 @@
             {% for task in today_tasks %}
             <div class="task-item">
                 <div class="task-title">
-                    <a href="/api/staff/tasks/{{ task.id }}/" style="text-decoration: none; color: inherit;">
+                    <a href="/api/staff/tasks/{{ task.id }}/" class="dashboard-task-link">
                         {{ task.title }}
                     </a>
                 </div>
@@ -74,7 +75,7 @@
             {% endfor %}
         {% else %}
             <div class="empty-state">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+                <div class="empty-emoji-sm">✅</div>
                 <p>No maintenance tasks due today!</p>
             </div>
         {% endif %}
@@ -86,32 +87,32 @@
         </div>
         {% if low_stock_items %}
             {% for item in low_stock_items %}
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 0.5rem;">
-                <div style="flex: 1;">
-                    <div style="font-weight: 500;">{{ item.item.name }}</div>
-                    <div style="font-size: 0.875rem; color: #666;">
+            <div class="stock-row">
+                <div class="stock-row-info">
+                    <div class="stock-row-title">{{ item.item.name }}</div>
+                    <div class="stock-row-subtitle">
                         🏠 {{ item.property_ref.name }} · 📦 {{ item.item.category.name }}
                     </div>
                 </div>
-                <div style="text-align: right;">
+                <div class="stock-row-right">
                     <div class="status-badge status-{{ item.stock_status|cut:'_' }}">
                         {{ item.current_stock }} {{ item.item.get_unit_display }}
                     </div>
-                    <div style="font-size: 0.75rem; color: #666;">
+                    <div class="stock-row-par">
                         Par: {{ item.par_level }}
                     </div>
                 </div>
             </div>
             {% endfor %}
             
-            <div style="text-align: center; margin-top: 1rem;">
+            <div class="center-actions">
                 <a href="/api/staff/inventory/" class="btn btn-primary btn-sm">
                     View All Inventory
                 </a>
             </div>
         {% else %}
             <div class="empty-state">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📦</div>
+                <div class="empty-emoji-sm">📦</div>
                 <p>All inventory levels are healthy!</p>
             </div>
         {% endif %}
@@ -127,7 +128,7 @@
             {% for task in assigned_tasks|slice:":10" %}
             <div class="task-item">
                 <div class="task-title">
-                    <a href="/api/staff/tasks/{{ task.id }}/" style="text-decoration: none; color: inherit;">
+                    <a href="/api/staff/tasks/{{ task.id }}/" class="dashboard-task-link">
                         {{ task.title }}
                     </a>
                 </div>
@@ -142,7 +143,7 @@
             {% endfor %}
             
             {% if assigned_tasks.count > 10 %}
-            <div style="text-align: center; margin-top: 1rem;">
+            <div class="center-actions">
                 <a href="/api/staff/tasks/?type=maintenance" class="btn btn-secondary btn-sm">
                     View All {{ assigned_tasks.count }} Tasks
                 </a>
@@ -150,7 +151,7 @@
             {% endif %}
         {% else %}
             <div class="empty-state">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🔧</div>
+                <div class="empty-emoji-md">🔧</div>
                 <h3>No maintenance tasks assigned</h3>
                 <p>Check back later or contact your manager.</p>
             </div>
@@ -163,32 +164,32 @@
         </div>
         {% if recent_transactions %}
             {% for transaction in recent_transactions %}
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; border-bottom: 1px solid #f1f5f9;">
-                <div style="flex: 1;">
-                    <div style="font-weight: 500;">{{ transaction.property_inventory.item.name }}</div>
-                    <div style="font-size: 0.875rem; color: #666;">
+            <div class="transaction-row">
+                <div class="transaction-row-info">
+                    <div class="transaction-row-title">{{ transaction.property_inventory.item.name }}</div>
+                    <div class="transaction-row-subtitle">
                         🏠 {{ transaction.property_inventory.property_ref.name }}
                     </div>
                 </div>
-                <div style="text-align: right;">
-                    <div style="font-weight: 500; color: {% if transaction.transaction_type == 'stock_in' %}#38a169{% elif transaction.transaction_type == 'stock_out' %}#e53e3e{% else %}#dd6b20{% endif %};">
+                <div class="transaction-row-right">
+                    <div class="transaction-qty {% if transaction.transaction_type == 'stock_in' %}transaction-qty--in{% elif transaction.transaction_type == 'stock_out' %}transaction-qty--out{% else %}transaction-qty--adjust{% endif %}">
                         {% if transaction.transaction_type == 'stock_in' %}+{% elif transaction.transaction_type == 'stock_out' %}-{% endif %}{{ transaction.quantity }} {{ transaction.property_inventory.item.get_unit_display }}
                     </div>
-                    <div style="font-size: 0.75rem; color: #666;">
+                    <div class="transaction-date">
                         {{ transaction.created_at|date:"M d, H:i" }}
                     </div>
                 </div>
             </div>
             {% endfor %}
             
-            <div style="text-align: center; margin-top: 1rem;">
+            <div class="center-actions">
                 <a href="/api/staff/inventory/" class="btn btn-secondary btn-sm">
                     View Inventory
                 </a>
             </div>
         {% else %}
             <div class="empty-state">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+                <div class="empty-emoji-sm">📊</div>
                 <p>No recent inventory activity.</p>
             </div>
         {% endif %}
@@ -217,30 +218,5 @@
 {% endblock %}
 
 {% block extra_css %}
-<style>
-    .maintenance-tips {
-        background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-top: 1rem;
-    }
-    
-    .maintenance-tips h4 {
-        margin-bottom: 1rem;
-        color: #2a69ac;
-    }
-    
-    .tip-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-    }
-    
-    .tip-item {
-        background: rgba(255, 255, 255, 0.7);
-        padding: 1rem;
-        border-radius: 8px;
-        font-size: 0.875rem;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/pages/maintenance-dashboard.css' %}">
 {% endblock %}
