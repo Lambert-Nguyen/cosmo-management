@@ -1,0 +1,96 @@
+/* Invite Codes List Page Styles */
+
+.invite-codes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4, 1rem);
+}
+
+.filters-section {
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.filters-title {
+    margin-bottom: var(--space-4, 1rem);
+    color: var(--color-gray-700, #374151);
+}
+
+.filters-form {
+    display: flex;
+    gap: var(--space-4, 1rem);
+    flex-wrap: wrap;
+    align-items: end;
+}
+
+.filter-form-group {
+    min-width: 150px;
+    margin-bottom: 0;
+}
+
+.filter-form-group.search-field {
+    min-width: 200px;
+}
+
+.filter-actions {
+    display: flex;
+    gap: var(--space-2, 0.5rem);
+}
+
+.codes-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4, 1rem);
+}
+
+.codes-table-title {
+    margin: 0;
+    color: var(--color-gray-700, #374151);
+}
+
+.table-overflow {
+    overflow-x: auto;
+}
+
+.invite-code {
+    background: var(--color-gray-100, #f1f5f9);
+    padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
+    border-radius: var(--radius-sm, 4px);
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.uses-count {
+    font-weight: var(--font-weight-medium, 500);
+}
+
+.expiry-text {
+    color: var(--color-gray-500, #64748b);
+}
+
+.revoke-form,
+.reactivate-form,
+.delete-form {
+    display: inline;
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--space-12, 3rem);
+    color: var(--color-gray-500, #64748b);
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-4, 1rem);
+}
+
+.empty-state-title {
+    margin-bottom: var(--space-4, 1rem);
+    color: var(--color-gray-700, #374151);
+}
+
+.empty-state-message {
+    margin-bottom: var(--space-8, 2rem);
+}

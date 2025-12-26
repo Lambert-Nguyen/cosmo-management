@@ -1,0 +1,225 @@
+/* Portal digest settings page (extracted from portal/digest_settings.html) */
+
+.portal-digest-shell {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.portal-digest-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #0E4B8F 0%, #1e40af 100%);
+    color: white;
+    border-radius: 12px;
+}
+
+.portal-digest-title {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+}
+
+.portal-digest-subtitle {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.portal-digest-status-card {
+    margin-bottom: 20px;
+}
+
+.portal-digest-status-inner {
+    text-align: center;
+    padding: 16px;
+}
+
+.portal-digest-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.portal-digest-status-badge--enabled {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.portal-digest-status-badge--disabled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.portal-digest-muted {
+    color: #64748b;
+    margin: 0;
+}
+
+.portal-digest-card-inner {
+    padding: 24px;
+}
+
+.portal-digest-section-title {
+    margin: 0 0 16px 0;
+    color: #1e293b;
+}
+
+.portal-digest-optout-wrap {
+    margin-bottom: 24px;
+}
+
+.portal-digest-optout-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.portal-digest-optout-checkbox {
+    margin-top: 2px;
+    width: 18px;
+    height: 18px;
+}
+
+.portal-digest-optout-body {
+    flex: 1;
+}
+
+.portal-digest-optout-label {
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+}
+
+.portal-digest-optout-desc {
+    margin: 4px 0 0 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.portal-digest-info {
+    padding: 16px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.portal-digest-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.portal-digest-info-icon {
+    font-size: 16px;
+}
+
+.portal-digest-info-body {
+    flex: 1;
+}
+
+.portal-digest-info-title {
+    margin: 0 0 8px 0;
+    color: #1e40af;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.portal-digest-info-text {
+    margin: 0;
+    color: #1e40af;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.portal-digest-save-row {
+    text-align: right;
+}
+
+.portal-digest-save-btn {
+    font-weight: 600;
+    min-width: 120px;
+    background: #0E4B8F;
+    border-color: #0E4B8F;
+    color: white;
+}
+
+.portal-digest-current {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.portal-digest-current-title {
+    margin: 0 0 12px 0;
+    color: #374151;
+    font-size: 14px;
+}
+
+.portal-digest-current-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.portal-digest-current-icon--off {
+    color: #dc2626;
+}
+
+.portal-digest-current-text--off {
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.portal-digest-current-icon--on {
+    color: #16a34a;
+}
+
+.portal-digest-current-text--on {
+    color: #16a34a;
+    font-weight: 500;
+}
+
+.portal-digest-nav {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.portal-digest-back-btn {
+    background: #6b7280;
+    border-color: #6b7280;
+    color: white;
+}
+
+.portal-digest-message-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.portal-digest-message-content {
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.portal-digest-message-content.is-success {
+    background: #10b981;
+}
+
+.portal-digest-message-content.is-error {
+    background: #ef4444;
+}

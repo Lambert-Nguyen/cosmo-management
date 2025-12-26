@@ -39,7 +39,7 @@ Users can sign up, log in, browse, filter and manage cleaning/maintenance tasksâ
   - `http`, `shared_preferences`, `image_picker`, `intl`  
 - **Backend**  
   - Django & Django REST Framework  
-  - SQLite (dev) / PostgreSQL (prod)  
+  - PostgreSQL (dev & prod)  
   - `django-filter` for advanced filtering  
 - **Auth**  
   - DRF TokenAuthentication  

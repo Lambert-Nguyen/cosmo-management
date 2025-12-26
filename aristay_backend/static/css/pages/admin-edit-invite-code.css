@@ -1,0 +1,272 @@
+/* ============================================
+   Edit Invite Code Page Styles
+   ============================================ */
+
+.edit-invite-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-5, 20px);
+}
+
+/* ============================================
+   Page Header
+   ============================================ */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-8, 30px);
+    padding-bottom: var(--space-5, 20px);
+    border-bottom: 2px solid var(--color-border, #e0e0e0);
+}
+
+.page-title {
+    font-size: var(--font-size-2xl, 2rem);
+    color: var(--color-text-primary, #333);
+    margin: 0;
+}
+
+.breadcrumb {
+    font-size: var(--font-size-sm, 0.9rem);
+    color: var(--color-text-secondary, #666);
+}
+
+.breadcrumb a {
+    color: var(--color-primary, #007cba);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   Form Container
+   ============================================ */
+
+.form-container {
+    background: var(--color-surface, white);
+    padding: var(--space-8, 30px);
+    border-radius: var(--radius-md, 8px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+    margin-bottom: var(--space-8, 30px);
+}
+
+.section-title {
+    font-size: var(--font-size-xl, 1.2rem);
+    color: var(--color-text-primary, #333);
+    margin-bottom: var(--space-5, 20px);
+    padding-bottom: var(--space-3, 10px);
+    border-bottom: 1px solid var(--color-border, #e0e0e0);
+}
+
+/* ============================================
+   Form Layout
+   ============================================ */
+
+.form-row {
+    display: flex;
+    gap: var(--space-5, 20px);
+    margin-bottom: var(--space-5, 20px);
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 500;
+    margin-bottom: var(--space-1, 5px);
+    color: var(--color-text-primary, #333);
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    padding: var(--space-3, 10px) var(--space-3, 12px);
+    border: 1px solid var(--color-border-light, #ddd);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--font-size-sm, 14px);
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary, #007cba);
+    box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+}
+
+.form-help {
+    font-size: var(--font-size-xs, 0.8rem);
+    color: var(--color-text-secondary, #666);
+    margin-top: var(--space-1, 5px);
+}
+
+/* ============================================
+   Role Description
+   ============================================ */
+
+.role-description {
+    background: var(--color-bg-subtle, #f8f9fa);
+    padding: var(--space-3, 10px);
+    border-radius: var(--radius-sm, 4px);
+    margin-top: var(--space-1, 5px);
+    font-size: var(--font-size-sm, 0.9rem);
+    color: var(--color-text-primary, #333);
+}
+
+.role-description.hidden {
+    display: none;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.btn {
+    padding: var(--space-3, 12px) var(--space-6, 24px);
+    border: none;
+    border-radius: var(--radius-md, 5px);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: var(--font-size-sm, 14px);
+}
+
+.btn-primary {
+    background-color: var(--color-primary, #007cba);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #005a87;
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary, #6c757d);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--space-3, 10px);
+    justify-content: flex-end;
+    margin-top: var(--space-8, 30px);
+    padding-top: var(--space-5, 20px);
+    border-top: 1px solid var(--color-border, #e0e0e0);
+}
+
+/* ============================================
+   Alerts
+   ============================================ */
+
+.alert {
+    padding: var(--space-3, 12px) var(--space-4, 16px);
+    border-radius: var(--radius-sm, 4px);
+    margin-bottom: var(--space-5, 20px);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+/* ============================================
+   Required Field Indicator
+   ============================================ */
+
+.required {
+    color: var(--color-danger, #dc3545);
+}
+
+/* ============================================
+   Code Display
+   ============================================ */
+
+.code-display {
+    background: var(--color-bg-subtle, #f8f9fa);
+    padding: var(--space-4, 15px);
+    border-radius: var(--radius-sm, 4px);
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-xl, 1.2rem);
+    font-weight: bold;
+    color: var(--color-primary, #007cba);
+    text-align: center;
+    margin-bottom: var(--space-5, 20px);
+}
+
+/* ============================================
+   Usage Info Box
+   ============================================ */
+
+.usage-info {
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-radius: var(--radius-sm, 4px);
+    padding: var(--space-4, 15px);
+    margin-bottom: var(--space-5, 20px);
+}
+
+.usage-info h4 {
+    margin: 0 0 var(--space-3, 10px) 0;
+    color: #1976d2;
+}
+
+.usage-info p {
+    margin: 0;
+    color: var(--color-text-tertiary, #424242);
+}
+
+/* ============================================
+   Status Colors
+   ============================================ */
+
+.status-expired-text {
+    color: #f39c12;
+}
+
+.status-inactive-text {
+    color: #e74c3c;
+}
+
+.status-usable-text {
+    color: #27ae60;
+}
+
+.status-active-text {
+    color: #3498db;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.hidden {
+    display: none;
+}

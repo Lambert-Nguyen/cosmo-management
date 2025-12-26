@@ -3,10 +3,14 @@
 
 {% block title %}Invite Code Management - AriStay{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/invite-codes-list.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="card">
     <div class="card-header">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div class="invite-codes-header">
             <h1 class="card-title">🎫 Invite Code Management</h1>
             <div class="action-buttons">
                 <a href="{% if is_manager_portal %}/manager/create-invite-code/{% else %}/admin/create-invite-code/{% endif %}" class="btn btn-primary">
@@ -18,17 +22,17 @@
     
     <div class="card-body">
         <!-- Filters Section -->
-        <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card filters-section">
             <div class="card-body">
-                <h3 style="margin-bottom: 1rem; color: #374151;">🔍 Filter Invite Codes</h3>
-                <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: end;">
-                    <div class="form-group" style="min-width: 200px; margin-bottom: 0;">
+                <h3 class="filters-title">🔍 Filter Invite Codes</h3>
+                <form method="get" class="filters-form">
+                    <div class="form-group filter-form-group search-field">
                         <label for="search">Search</label>
-                        <input type="text" name="search" id="search" class="form-control" 
+                        <input type="text" name="search" id="search" class="form-control"
                                value="{{ current_filters.search }}" placeholder="Code, creator, notes...">
                     </div>
-                    
-                    <div class="form-group" style="min-width: 150px; margin-bottom: 0;">
+
+                    <div class="form-group filter-form-group">
                         <label for="role">Role</label>
                         <select name="role" id="role" class="form-control">
                             <option value="">All Roles</option>
@@ -37,8 +41,8 @@
                             {% endfor %}
                         </select>
                     </div>
-                    
-                    <div class="form-group" style="min-width: 150px; margin-bottom: 0;">
+
+                    <div class="form-group filter-form-group">
                         <label for="status">Status</label>
                         <select name="status" id="status" class="form-control">
                             <option value="">All Status</option>
@@ -47,8 +51,8 @@
                             <option value="expired" {% if current_filters.status == 'expired' %}selected{% endif %}>Expired</option>
                         </select>
                     </div>
-                    
-                    <div class="form-group" style="min-width: 150px; margin-bottom: 0;">
+
+                    <div class="form-group filter-form-group">
                         <label for="task_group">Task Group</label>
                         <select name="task_group" id="task_group" class="form-control">
                             <option value="">All Groups</option>
@@ -57,8 +61,8 @@
                             {% endfor %}
                         </select>
                     </div>
-                    
-                    <div style="display: flex; gap: 0.5rem;">
+
+                    <div class="filter-actions">
                         <button type="submit" class="btn btn-primary">🔍 Filter</button>
                         <a href="{% if is_manager_portal %}/manager/invite-codes/{% else %}/admin/invite-codes/{% endif %}" class="btn btn-secondary">🔄 Clear</a>
                     </div>
@@ -69,17 +73,17 @@
         <!-- Invite Codes Table -->
         <div class="card">
             <div class="card-body">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3 style="margin: 0; color: #374151;">📋 Invite Codes ({{ invite_codes|length }} total)</h3>
+                <div class="codes-table-header">
+                    <h3 class="codes-table-title">📋 Invite Codes ({{ invite_codes|length }} total)</h3>
                     {% if invite_codes %}
                     <div class="action-buttons">
-                        <button onclick="exportToCSV()" class="btn btn-secondary btn-sm">📊 Export CSV</button>
+                        <button data-action="export-csv" class="btn btn-secondary btn-sm">📊 Export CSV</button>
                     </div>
                     {% endif %}
                 </div>
 
                 {% if invite_codes %}
-                <div style="overflow-x: auto;">
+                <div class="table-overflow">
                     <table class="table">
                         <thead>
                             <tr>
@@ -97,9 +101,7 @@
                             {% for invite_code in invite_codes %}
                             <tr>
                                 <td>
-                                    <code style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 4px; font-family: 'Monaco', 'Menlo', monospace;">
-                                        {{ invite_code.code }}
-                                    </code>
+                                    <code class="invite-code">{{ invite_code.code }}</code>
                                 </td>
                                 <td>
                                     <span class="badge badge-info">{{ invite_code.get_role_display }}</span>
@@ -115,9 +117,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <span style="font-weight: 500;">
-                                        {{ invite_code.used_count }}/{{ invite_code.max_uses|default:"∞" }}
-                                    </span>
+                                    <span class="uses-count">{{ invite_code.used_count }}/{{ invite_code.max_uses|default:"∞" }}</span>
                                 </td>
                                 <td>
                                     {% if invite_code.expires_at %}
@@ -126,7 +126,7 @@
                                             <span class="badge badge-warning">Expired</span>
                                         {% endif %}
                                     {% else %}
-                                        <span style="color: #64748b;">Never</span>
+                                        <span class="expiry-text">Never</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ invite_code.created_at|date:"M d, Y" }}</td>
@@ -141,22 +141,22 @@
                                         {% endif %}
                                         
                                         {% if invite_code.is_active %}
-                                        <form method="post" action="{% if is_manager_portal %}/manager/invite-codes/{{ invite_code.id }}/revoke/{% else %}/admin/invite-codes/{{ invite_code.id }}/revoke/{% endif %}" 
-                                              style="display: inline;" onsubmit="return confirm('Are you sure you want to revoke this invite code?')">
+                                        <form method="post" action="{% if is_manager_portal %}/manager/invite-codes/{{ invite_code.id }}/revoke/{% else %}/admin/invite-codes/{{ invite_code.id }}/revoke/{% endif %}"
+                                              class="revoke-form" data-action="revoke">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-danger btn-sm" title="Revoke">🚫</button>
                                         </form>
                                         {% else %}
-                                        <form method="post" action="{% if is_manager_portal %}/manager/invite-codes/{{ invite_code.id }}/reactivate/{% else %}/admin/invite-codes/{{ invite_code.id }}/reactivate/{% endif %}" 
-                                              style="display: inline;" onsubmit="return confirm('Are you sure you want to reactivate this invite code?')">
+                                        <form method="post" action="{% if is_manager_portal %}/manager/invite-codes/{{ invite_code.id }}/reactivate/{% else %}/admin/invite-codes/{{ invite_code.id }}/reactivate/{% endif %}"
+                                              class="reactivate-form" data-action="reactivate">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-success btn-sm" title="Reactivate">✅</button>
                                         </form>
                                         {% endif %}
-                                        
+
                                         {% if invite_code.used_count == 0 %}
-                                        <form method="post" action="{% if is_manager_portal %}/manager/invite-codes/{{ invite_code.id }}/delete/{% else %}/admin/invite-codes/{{ invite_code.id }}/delete/{% endif %}" 
-                                              style="display: inline;" onsubmit="return confirm('Are you sure you want to permanently delete this invite code? This action cannot be undone.')">
+                                        <form method="post" action="{% if is_manager_portal %}/manager/invite-codes/{{ invite_code.id }}/delete/{% else %}/admin/invite-codes/{{ invite_code.id }}/delete/{% endif %}"
+                                              class="delete-form" data-action="delete">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-danger btn-sm" title="Delete">🗑️</button>
                                         </form>
@@ -169,10 +169,10 @@
                     </table>
                 </div>
                 {% else %}
-                <div style="text-align: center; padding: 3rem; color: #64748b;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎫</div>
-                    <h3 style="margin-bottom: 1rem; color: #374151;">No Invite Codes Found</h3>
-                    <p style="margin-bottom: 2rem;">Get started by creating your first invite code.</p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎫</div>
+                    <h3 class="empty-state-title">No Invite Codes Found</h3>
+                    <p class="empty-state-message">Get started by creating your first invite code.</p>
                     <a href="{% if is_manager_portal %}/manager/create-invite-code/{% else %}/admin/create-invite-code/{% endif %}" class="btn btn-primary">
                         ➕ Create Your First Invite Code
                     </a>
@@ -183,32 +183,5 @@
     </div>
 </div>
 
-<script>
-function exportToCSV() {
-    // Simple CSV export functionality
-    const table = document.querySelector('.table');
-    const rows = Array.from(table.querySelectorAll('tr'));
-    
-    const csvContent = rows.map(row => {
-        const cells = Array.from(row.querySelectorAll('th, td'));
-        return cells.map(cell => {
-            // Clean up cell content for CSV
-            let text = cell.textContent.trim();
-            // Remove emoji and clean up text
-            text = text.replace(/[🎫👁️✏️🚫✅🗑️📊🔄🔍]/g, '');
-            // Escape quotes
-            text = text.replace(/"/g, '""');
-            return `"${text}"`;
-        }).join(',');
-    }).join('\n');
-    
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'invite_codes.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
-}
-</script>
+<script src="{% static 'js/pages/invite-codes-list.js' %}"></script>
 {% endblock %}

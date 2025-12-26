@@ -60,60 +60,60 @@
 
 /* Subtle pulse animation for attention */
 @keyframes themeTogglePulse {
-    0% { box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
-    50% { box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5), 0 0 0 4px rgba(102, 126, 234, 0.1); }
-    100% { box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+    0% { box-shadow: 0 4px 12px rgba(14, 75, 143, 0.3); }
+    50% { box-shadow: 0 4px 12px rgba(14, 75, 143, 0.5), 0 0 0 4px rgba(14, 75, 143, 0.1); }
+    100% { box-shadow: 0 4px 12px rgba(14, 75, 143, 0.3); }
 }
 
 .theme-toggle.pulse {
     animation: themeTogglePulse 2s ease-in-out infinite;
 }
 
-/* Staff portal specific styling - matches purple theme */
+/* Staff portal specific styling - matches navy theme */
 .user-info .theme-toggle {
     margin: 0 8px 0 0;
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-    box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
+    box-shadow: 0 2px 4px rgba(14, 75, 143, 0.2);
 }
 
 .user-info .theme-toggle:hover {
-    box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 8px rgba(14, 75, 143, 0.3);
 }
 
 .user-info .theme-toggle.dark {
-    background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
-    box-shadow: 0 2px 4px rgba(109, 40, 217, 0.2);
+    background: linear-gradient(135deg, #082F5B 0%, #052141 100%);
+    box-shadow: 0 2px 4px rgba(8, 47, 91, 0.2);
 }
 
-/* Portal specific styling - matches indigo theme */
+/* Portal specific styling - matches navy theme */
 .brand .theme-toggle {
     margin: 0 8px 0 0;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
+    box-shadow: 0 2px 4px rgba(14, 75, 143, 0.2);
 }
 
 .brand .theme-toggle:hover {
-    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 8px rgba(14, 75, 143, 0.3);
 }
 
 .brand .theme-toggle.dark {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+    background: linear-gradient(135deg, #082F5B 0%, #052141 100%);
+    box-shadow: 0 2px 4px rgba(8, 47, 91, 0.2);
 }
 
-/* Admin specific styling - matches blue theme */
+/* Admin specific styling - matches navy theme */
 .branding .theme-toggle {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    background: linear-gradient(135deg, #0E4B8F 0%, #0B3D75 100%);
+    box-shadow: 0 2px 4px rgba(14, 75, 143, 0.2);
 }
 
 .branding .theme-toggle:hover {
-    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 8px rgba(14, 75, 143, 0.3);
 }
 
 .branding .theme-toggle.dark {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    background: linear-gradient(135deg, #082F5B 0%, #052141 100%);
+    box-shadow: 0 2px 4px rgba(8, 47, 91, 0.2);
 }
 
 
@@ -157,7 +157,7 @@
     display: block;
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.8) rotate(-90deg);
-    color: #6366f1;
+    color: #6B9BD0;
 }
 
 /* Dark Mode States */
@@ -213,17 +213,17 @@
     /* Border Colors */
     --border-primary: #334155;
     --border-secondary: #475569;
-    --border-accent: #6366f1;
-    
+    --border-accent: #6B9BD0;
+
     /* Card and Surface Colors */
     --card-bg: #1e293b;
     --card-bg-hover: #334155;
     --surface-bg: #0f172a;
     --header-bg: #0f172a;
-    
+
     /* Accent Colors */
-    --accent-primary: #6366f1;
-    --accent-secondary: #8b5cf6;
+    --accent-primary: #6B9BD0;
+    --accent-secondary: #9DBDE1;
     --accent-success: #10b981;
     --accent-warning: #f59e0b;
     --accent-danger: #ef4444;
@@ -333,15 +333,15 @@
 [data-theme="dark"] select:focus,
 [data-theme="dark"] textarea:focus {
     border-color: var(--accent-primary) !important;
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+    box-shadow: 0 0 0 2px rgba(14, 75, 143, 0.2) !important;
 }
 
 /* Links and Buttons */
 [data-theme="dark"] .addlink,
 [data-theme="dark"] .changelink,
 [data-theme="dark"] .viewlink {
-    background: rgba(99, 102, 241, 0.1) !important;
-    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    background: rgba(14, 75, 143, 0.1) !important;
+    border: 1px solid rgba(14, 75, 143, 0.3) !important;
     color: var(--accent-primary) !important;
     border-radius: 6px !important;
     padding: 4px 8px !important;
@@ -350,7 +350,7 @@
 [data-theme="dark"] .addlink:hover,
 [data-theme="dark"] .changelink:hover,
 [data-theme="dark"] .viewlink:hover {
-    background: rgba(99, 102, 241, 0.2) !important;
+    background: rgba(14, 75, 143, 0.2) !important;
     border-color: var(--accent-primary) !important;
 }
 
@@ -470,13 +470,6 @@
 }
 
 /* Staff Dashboard Cards Dark Mode */
-[data-theme="dark"] .card {
-    background: var(--card-bg) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-primary) !important;
-    box-shadow: var(--shadow-md) !important;
-}
-
 [data-theme="dark"] .card-header {
     background: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
@@ -612,15 +605,15 @@
 [data-theme="dark"] .branding a[href="/api/portal/"],
 [data-theme="dark"] .branding a[href="/manager/"],
 [data-theme="dark"] .branding a[href="/admin/"] {
-    background: rgba(99, 102, 241, 0.2) !important;
+    background: rgba(14, 75, 143, 0.2) !important;
     color: var(--text-primary) !important;
-    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    border: 1px solid rgba(14, 75, 143, 0.3) !important;
 }
 
 [data-theme="dark"] .branding a[href="/api/portal/"]:hover,
 [data-theme="dark"] .branding a[href="/manager/"]:hover,
 [data-theme="dark"] .branding a[href="/admin/"]:hover {
-    background: rgba(99, 102, 241, 0.3) !important;
+    background: rgba(14, 75, 143, 0.3) !important;
     border-color: var(--accent-primary) !important;
     transform: translateY(-1px) !important;
     box-shadow: var(--shadow-md) !important;

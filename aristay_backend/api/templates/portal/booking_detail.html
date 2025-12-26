@@ -1,10 +1,16 @@
 {% extends "portal/base.html" %}
+{% load static %}
 {% load tz %}
 {% load timezone_tags %}
 {% block title %}Booking · {{ property.name }} · AriStay Portal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/portal-booking-detail.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="card">
-  <div style="display:flex; justify-content:space-between; align-items:center;">
+  <div class="portal-booking-detail-top">
     <div>
       <div class="section-title">Booking</div>
       <div class="muted">Check-in: {{ booking.check_in_date|dual_timezone:user }}</div>
@@ -15,8 +21,8 @@
     </div>
   </div>
 
-  <div style="margin-top:12px;">
-    <form method="get" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+  <div class="portal-booking-detail-filters">
+    <form method="get" class="portal-booking-detail-filters-form">
       <label class="muted">Status:</label>
       <select name="status">
         <option value="">All</option>
@@ -43,18 +49,18 @@
   <div class="grid">
     {% for ttype, tasks in by_type.items %}
       <div class="card">
-        <div class="section-title" style="text-transform:capitalize;">{{ ttype|cut:'_' }}</div>
+        <div class="section-title portal-booking-detail-type-title">{{ ttype|cut:'_' }}</div>
         {% if tasks %}
-          <ul style="margin:0; padding-left:18px;">
+          <ul class="portal-booking-detail-task-list">
             {% for t in tasks %}
-              <li style="margin:6px 0;">
+              <li class="portal-booking-detail-task-list-item">
                 <strong>{{ t.title }}</strong>
                 {% if t.assigned_to %}<span class="muted">· {{ t.assigned_to.username }}</span>{% endif %}
                 {% if t.due_date %}<span class="muted">· Due {{ t.due_date|date:"M d H:i" }}</span>{% endif %}
                 <div class="muted">Status: {{ t.status }}</div>
-                <div style="margin-top:6px; display:flex; gap:8px;">
+                <div class="portal-booking-detail-task-actions">
                   <a class="button" href="/api/portal/tasks/{{ t.id }}/">View Task</a>
-                  <form action="/api/tasks/{{ t.id }}/notify_manager/" method="post" style="display:inline;">
+                  <form action="/api/tasks/{{ t.id }}/notify_manager/" method="post" class="portal-booking-detail-inline-form">
                     {% csrf_token %}
                     <button class="button" type="submit">Notify Manager</button>
                   </form>
@@ -69,7 +75,7 @@
     {% endfor %}
   </div>
 
-  <div style="margin-top:12px; display:flex; gap:8px;">
+  <div class="portal-booking-detail-pagination">
     {% if has_prev %}
       <a class="button" href="?status={{ active_status }}&type={{ active_type }}&q={{ search_q }}&page={{ page|add:'-1' }}">Prev</a>
     {% endif %}

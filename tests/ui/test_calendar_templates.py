@@ -73,7 +73,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Property Management Calendar')
-        self.assertContains(response, 'FullCalendar')
+        self.assertContains(response, 'fullcalendar')
         self.assertContains(response, 'calendar-container')
     
     def test_standalone_calendar_view_unauthorized(self):
@@ -90,7 +90,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Property Management Calendar')
-        self.assertContains(response, 'FullCalendar')
+        self.assertContains(response, 'fullcalendar')
         self.assertContains(response, 'calendar-container')
     
     def test_portal_calendar_view_unauthorized(self):
@@ -115,7 +115,7 @@ class CalendarTemplateTestCase(TestCase):
         
         # Check for FullCalendar integration
         self.assertContains(response, 'fullcalendar')
-        self.assertContains(response, 'FullCalendar')
+        self.assertContains(response, 'index.global.min.js')
         
         # Check for filter elements
         self.assertContains(response, 'propertyFilter')
@@ -136,17 +136,17 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for JavaScript functions
-        self.assertContains(response, 'initializeCalendar')
-        self.assertContains(response, 'loadCalendarEvents')
-        self.assertContains(response, 'showEventDetails')
-        self.assertContains(response, 'applyFilters')
-        self.assertContains(response, 'clearFilters')
-        
-        # Check for event handlers
-        self.assertContains(response, 'eventClick')
-        self.assertContains(response, 'dateClick')
-        self.assertContains(response, 'eventDidMount')
+        # JS is now loaded as an external module
+        self.assertContains(response, 'js/pages/portal-calendar.js')
+        self.assertContains(response, 'type="module"')
+
+        # Check for action hooks used by the JS module
+        self.assertContains(response, 'data-action="calendar-refresh"')
+        self.assertContains(response, 'data-action="calendar-export"')
+        self.assertContains(response, 'data-action="calendar-apply-filters"')
+        self.assertContains(response, 'data-action="calendar-clear-filters"')
+        self.assertContains(response, 'data-action="calendar-close-modal"')
+        self.assertContains(response, 'data-action="calendar-view-details"')
     
     def test_calendar_template_contains_css_styles(self):
         """Test that calendar template contains required CSS styles"""
@@ -155,13 +155,17 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for CSS classes
-        self.assertContains(response, 'event-task')
-        self.assertContains(response, 'event-booking')
-        self.assertContains(response, 'status-badge')
-        self.assertContains(response, 'status-pending')
-        self.assertContains(response, 'status-in-progress')
-        self.assertContains(response, 'status-completed')
+        # CSS is now loaded as an external stylesheet
+        self.assertContains(response, 'css/pages/portal-calendar.css')
+
+        css_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
+        css = css_path.read_text(encoding='utf-8')
+        self.assertIn('event-task', css)
+        self.assertIn('event-booking', css)
+        self.assertIn('status-badge', css)
+        self.assertIn('status-pending', css)
+        self.assertIn('status-in-progress', css)
+        self.assertIn('status-completed', css)
     
     def test_calendar_modal_functionality(self):
         """Test that calendar template contains modal functionality"""
@@ -176,9 +180,8 @@ class CalendarTemplateTestCase(TestCase):
         self.assertContains(response, 'eventModalBody')
         self.assertContains(response, 'eventModalAction')
         
-        # Check for modal functionality
-        self.assertContains(response, 'eventModal')
-        self.assertContains(response, 'closeEventModal')
+        # Modal controls are now wired via data-action hooks
+        self.assertContains(response, 'data-action="calendar-close-modal"')
     
     def test_calendar_responsive_design(self):
         """Test that calendar template is responsive"""
@@ -216,8 +219,9 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for general loading/error hooks (less brittle)
-        self.assertContains(response, 'console.error')
+        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js = js_path.read_text(encoding='utf-8')
+        self.assertIn('console.error', js)
     
     def test_calendar_template_error_handling(self):
         """Test that calendar template contains error handling"""
@@ -226,8 +230,9 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for error handling (less brittle)
-        self.assertContains(response, 'console.error')
+        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js = js_path.read_text(encoding='utf-8')
+        self.assertIn('console.error', js)
     
     def test_calendar_template_fontawesome_integration(self):
         """Test that calendar template includes FontAwesome icons"""
@@ -334,10 +339,11 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for event styling
-        self.assertContains(response, '#007bff')  # Default event color
-        self.assertContains(response, 'border-left: 3px solid')
-        self.assertContains(response, 'background-color: #f8f9fa')
+        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js = js_path.read_text(encoding='utf-8')
+        self.assertIn('#007bff', js)  # Default event color
+        self.assertIn('border-left: 3px solid', js)
+        self.assertIn('background-color: #f8f9fa', js)
     
     def test_calendar_template_mobile_optimization(self):
         """Test that calendar template is mobile-optimized"""
@@ -346,10 +352,11 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for mobile optimization
-        self.assertContains(response, 'text-overflow: ellipsis')
-        self.assertContains(response, 'overflow: hidden')
         self.assertContains(response, 'calendar-container')
+        css_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
+        css = css_path.read_text(encoding='utf-8')
+        self.assertIn('text-overflow: ellipsis', css)
+        self.assertIn('overflow: hidden', css)
     
     def test_calendar_template_performance_optimization(self):
         """Test that calendar template includes performance optimizations"""
@@ -358,9 +365,10 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for performance optimizations
-        self.assertContains(response, 'cursor: pointer')
         self.assertContains(response, 'calendar-container')
+        css_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
+        css = css_path.read_text(encoding='utf-8')
+        self.assertIn('cursor: pointer', css)
     
     def test_calendar_template_internationalization(self):
         """Test that calendar template supports internationalization"""
@@ -369,9 +377,10 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for i18n support
-        self.assertContains(response, 'toLocaleDateString')
-        self.assertContains(response, 'toISOString')
+        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js = js_path.read_text(encoding='utf-8')
+        self.assertIn('toLocaleDateString', js)
+        self.assertIn('toISOString', js)
     
     def test_calendar_template_cross_browser_compatibility(self):
         """Test that calendar template is cross-browser compatible"""
@@ -380,10 +389,11 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for cross-browser compatibility
-        self.assertContains(response, 'addEventListener')
-        self.assertContains(response, 'preventDefault')
-        self.assertContains(response, 'stopPropagation')
+        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js = js_path.read_text(encoding='utf-8')
+        self.assertIn('addEventListener', js)
+        self.assertIn('preventDefault', js)
+        self.assertIn('stopPropagation', js)
     
     def test_calendar_template_security_features(self):
         """Test that calendar template includes security features"""
@@ -407,9 +417,10 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for analytics support
-        self.assertContains(response, 'console.log')
-        self.assertContains(response, 'console.error')
+        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js = js_path.read_text(encoding='utf-8')
+        self.assertIn('console.log', js)
+        self.assertIn('console.error', js)
     
     def test_calendar_template_debugging_support(self):
         """Test that calendar template includes debugging support"""
@@ -418,7 +429,8 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        # Check for debugging support
-        self.assertContains(response, 'console.error')
-        self.assertContains(response, 'Error loading events')
-        self.assertContains(response, 'Error loading day events')
+        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js = js_path.read_text(encoding='utf-8')
+        self.assertIn('console.error', js)
+        self.assertIn('Error loading events', js)
+        self.assertIn('Error loading day events', js)

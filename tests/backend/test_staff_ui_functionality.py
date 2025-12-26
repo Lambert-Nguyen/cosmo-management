@@ -5,6 +5,7 @@ Tests the enhanced staff task detail page and API endpoints
 
 import pytest
 import json
+from pathlib import Path
 from django.test import TestCase, Client, override_settings
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -108,7 +109,9 @@ class StaffUIFunctionalityTest(TestCase):
         
         response = self.client.get('/api/staff/')
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'AriStay Staff Portal')
+        # Staff dashboard content is rendered via templates; JS behavior lives in ES modules.
+        self.assertContains(response, 'Welcome back')
+        self.assertContains(response, 'View All Tasks')
         self.assertContains(response, self.staff_user.username)
 
     def test_task_detail_loads(self):
@@ -124,10 +127,12 @@ class StaffUIFunctionalityTest(TestCase):
         self.assertContains(response, 'Clean bathroom')
         self.assertContains(response, 'Vacuum floors')
         
-        # Check JavaScript functions are included
-        self.assertContains(response, 'initializeTaskTimer')
-        self.assertContains(response, 'initializeChecklistManagement')
-        self.assertContains(response, 'getCsrfToken')
+        # Check ES module entrypoint is included (no inline JS required)
+        self.assertContains(response, '/static/js/pages/task-detail.js')
+        self.assertContains(response, '/static/js/core/api-client.js')
+        self.assertContains(response, '/static/js/core/csrf.js')
+        # Structured data for JS initialization
+        self.assertContains(response, 'id="taskData"')
 
     def test_checklist_item_update_api(self):
         """Test checklist item update API endpoint"""
@@ -231,7 +236,8 @@ class StaffUIFunctionalityTest(TestCase):
         
         # Check that CSRF token input field exists
         self.assertContains(response, 'name="csrfmiddlewaretoken"')
-        self.assertContains(response, 'getCsrfToken()')
+        # Modern pattern: CSRF token also exposed via meta tag for JS modules
+        self.assertContains(response, 'name="csrf-token"')
 
     def test_javascript_error_handling(self):
         """Test that JavaScript includes proper error handling"""
@@ -239,11 +245,21 @@ class StaffUIFunctionalityTest(TestCase):
         
         response = self.client.get(f'/api/staff/tasks/{self.task.id}/')
         self.assertEqual(response.status_code, 200)
-        
-        # Check for error handling patterns
-        self.assertContains(response, 'catch (error)')
-        self.assertContains(response, 'showNotification')
-        self.assertContains(response, 'response.ok')
+
+        # HTML should reference the ES module entrypoint
+        self.assertContains(response, '/static/js/pages/task-detail.js')
+
+        # Error handling patterns live in JS modules (avoid inline script assertions)
+        repo_root = Path(__file__).resolve().parents[2]
+        api_client_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'core' / 'api-client.js'
+        task_actions_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'modules' / 'task-actions.js'
+
+        api_client_js = api_client_path.read_text(encoding='utf-8')
+        task_actions_js = task_actions_path.read_text(encoding='utf-8')
+
+        self.assertIn('response.ok', api_client_js)
+        self.assertIn('catch (error)', api_client_js)
+        self.assertIn('catch (error)', task_actions_js)
 
     def test_responsive_design_elements(self):
         """Test that responsive design elements are included"""
@@ -265,8 +281,8 @@ class StaffUIFunctionalityTest(TestCase):
         self.assertEqual(response.status_code, 200)
         
         # Check for accessibility features that actually exist
-        self.assertContains(response, 'tabindex')  # Keyboard navigation
-        self.assertContains(response, 'alt=')      # Image alt text
+        self.assertContains(response, 'aria-label="Toggle navigation"')
+        self.assertContains(response, 'alt="AriStay"')
         self.assertContains(response, 'type="checkbox"')  # Form controls
 
     def test_task_timer_functionality(self):
@@ -275,12 +291,20 @@ class StaffUIFunctionalityTest(TestCase):
         
         response = self.client.get(f'/api/staff/tasks/{self.task.id}/')
         self.assertEqual(response.status_code, 200)
-        
-        # Check for timer functions
-        self.assertContains(response, 'startTimer')
-        self.assertContains(response, 'pauseTimer')
-        self.assertContains(response, 'updateTimerDisplay')
-        self.assertContains(response, 'saveTimerState')
+
+        # Check timer DOM elements exist
+        self.assertContains(response, 'id="taskTimer"')
+        self.assertContains(response, 'id="timerText"')
+        self.assertContains(response, 'id="startTimerBtn"')
+
+        # Timer behavior lives in JS modules
+        repo_root = Path(__file__).resolve().parents[2]
+        timer_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'modules' / 'task-timer.js'
+        timer_js = timer_path.read_text(encoding='utf-8')
+        self.assertIn('window.startTimer', timer_js)
+        self.assertIn('window.pauseTimer', timer_js)
+        self.assertIn('saveState()', timer_js)
+        self.assertIn('updateDisplay()', timer_js)
 
 
 @override_settings(

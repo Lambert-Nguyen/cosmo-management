@@ -10,6 +10,7 @@ from .invite_code_views import (
     reactivate_invite_code, delete_invite_code, invite_code_detail,
     create_invite_code_api, revoke_invite_code_api
 )
+from .property_search_views import property_search
 
 from .views import (
     AdminUserCreateView,
@@ -165,6 +166,7 @@ urlpatterns = [
         name='taskimage-detail'
     ),
     path('properties/', PropertyListCreate.as_view(), name='property-list'),
+    path('properties/search/', property_search, name='property-search'),  # AJAX autocomplete
     path('properties/<int:pk>/', PropertyDetail.as_view(), name='property-detail'),
     path('users/', UserList.as_view(), name='user-list'),
     path('admin/invite/', AdminInviteUserView.as_view(), name='admin-invite'),

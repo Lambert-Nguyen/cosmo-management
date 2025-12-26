@@ -1,0 +1,102 @@
+{% extends "layouts/base_unified.html" %}
+{% load static %}
+
+{% block title %}{% block page_title %}Guest Portal{% endblock %} · AriStay{% endblock %}
+
+{% block header %}
+<header class="header portal-header">
+    <div class="header-content container">
+        <div class="header-left">
+            <a href="#" class="logo">
+                <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay" height="32" class="logo-img">
+                <span class="logo-text">AriStay</span>
+            </a>
+        </div>
+        
+        <div class="header-right">
+            {% block header_actions %}
+            {% if request.user.is_authenticated %}
+            <div class="user-info">
+                <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                <a href="{% url 'unified_logout' %}" class="btn btn-sm btn-outline-primary">
+                    Logout
+                </a>
+            </div>
+            {% else %}
+            <div class="auth-buttons">
+                <a href="{% url 'unified_login' %}" class="btn btn-sm btn-outline-primary">
+                    Login
+                </a>
+                <a href="{% url 'register' %}" class="btn btn-sm btn-primary">
+                    Sign Up
+                </a>
+            </div>
+            {% endif %}
+            {% endblock %}
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block navigation %}
+{% if request.user.is_authenticated %}
+<nav class="portal-nav">
+    <div class="container">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link">My Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Payments</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Messages</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+<footer class="footer portal-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>AriStay</h4>
+                <p>Premium property management services</p>
+            </div>
+            
+            <div class="footer-section">
+                <h5>Quick Links</h5>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h5>Legal</h5>
+                <ul class="footer-links">
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; {{ current_year|default:"2025" }} AriStay. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/layout-portal.css' %}">
+{% endblock %}
