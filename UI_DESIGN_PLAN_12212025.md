@@ -2169,6 +2169,92 @@ git push -u origin main
 - `firebase_options.dart` - ✅ Bundle IDs updated
 - Project ID remains `cosmoapp` (requires Firebase Console to change)
 
+#### Manual Setup Steps (Run Once Per Environment)
+
+##### Step 1: Create PostgreSQL Database
+```bash
+# On Ubuntu/Debian/Raspberry Pi:
+sudo -u postgres psql -c "CREATE DATABASE cosmo_db;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE cosmo_db TO postgres;"
+
+# On macOS (if using Homebrew PostgreSQL):
+createdb cosmo_db
+
+# Verify database exists:
+sudo -u postgres psql -c "\l" | grep cosmo_db
+```
+
+##### Step 2: Set Up Python Environment
+```bash
+cd /path/to/cosmo-management
+
+# Create virtual environment (if not exists)
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install --upgrade pip
+pip install -r cosmo_backend/requirements.txt
+```
+
+##### Step 3: Configure Environment Variables
+```bash
+# Copy example env file
+cp .env.example cosmo_backend/.env
+
+# Edit .env with your settings (at minimum, verify DATABASE_URL)
+# Default: postgresql://postgres:postgres@localhost:5432/cosmo_db
+```
+
+##### Step 4: Run Django Migrations
+```bash
+cd cosmo_backend
+
+# Run migrations
+python manage.py migrate --settings=backend.settings_local
+
+# Create superuser for admin access
+python manage.py createsuperuser --settings=backend.settings_local
+
+# Collect static files
+python manage.py collectstatic --noinput --settings=backend.settings_local
+```
+
+##### Step 5: Verify Project Runs
+```bash
+# Start development server
+python manage.py runserver --settings=backend.settings_local
+
+# Visit http://127.0.0.1:8000 to verify
+# Visit http://127.0.0.1:8000/admin to access Django admin
+```
+
+##### Step 6: Firebase Console Updates (Optional - for Push Notifications)
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Select project "cosmoapp" (or create new project "cosmomanagement")
+3. Go to **Project Settings** → **General**
+4. Under "Your apps", add new apps:
+   - **Android**: Package name `com.cosmomgmt.app` → Download new `google-services.json`
+   - **iOS**: Bundle ID `com.cosmomgmt.app` → Download new `GoogleService-Info.plist`
+5. Replace files in:
+   - `cosmo_app/android/app/google-services.json`
+   - `cosmo_app/ios/Runner/GoogleService-Info.plist`
+6. If creating new project, run: `flutterfire configure`
+
+##### Step 7: Verify Flutter App (Optional)
+```bash
+cd cosmo_app
+
+# Get dependencies
+flutter pub get
+
+# Run on device/emulator
+flutter run
+
+# Or build for web
+flutter build web
+```
+
 ---
 
 ### Phase 1: Backend Preparation (PREREQUISITE)
