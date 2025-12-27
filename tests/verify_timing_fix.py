@@ -20,7 +20,7 @@ def find_project_root(start_path, marker='manage.py'):
 
 # Find the project root and add the backend directory to sys.path
 project_root = find_project_root(__file__)
-backend_path = os.path.join(project_root, 'aristay_backend')
+backend_path = os.path.join(project_root, 'cosmo_backend')
 sys.path.append(backend_path)
 
 # Configure Django settings
@@ -34,7 +34,7 @@ def verify_timing_fix():
     print("=" * 45)
     
     # Read the template file
-    template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aristay_backend', 'api', 'templates', 'staff', 'task_detail.html')
+    template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cosmo_backend', 'api', 'templates', 'staff', 'task_detail.html')
     
     try:
         with open(template_path, 'r') as f:

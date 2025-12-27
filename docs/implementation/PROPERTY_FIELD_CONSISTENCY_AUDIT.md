@@ -15,7 +15,7 @@ Scan the entire backend codebase to ensure consistent use of `property` vs `prop
 ### ❌ **CRITICAL ISSUES** (Fixed)
 
 #### 1. Task Search Filter - Incorrect Field Reference
-**File**: `aristay_backend/api/staff_views.py:423`
+**File**: `cosmo_backend/api/staff_views.py:423`
 ```python
 # BEFORE (causing FieldError)
 Q(property__name__icontains=search)
@@ -26,7 +26,7 @@ Q(property_ref__name__icontains=search)
 **Impact**: Task search functionality was broken in staff portal.
 
 #### 2. Task Creation in Template System
-**File**: `aristay_backend/api/task_templates.py:134`
+**File**: `cosmo_backend/api/task_templates.py:134`
 ```python
 # BEFORE (causing FieldError)
 property=booking.property,
@@ -37,7 +37,7 @@ property_ref=booking.property,
 **Impact**: Automated task creation from templates was broken.
 
 #### 3. Scheduled Task Generation 
-**File**: `aristay_backend/api/management/commands/generate_scheduled_tasks.py:109`
+**File**: `cosmo_backend/api/management/commands/generate_scheduled_tasks.py:109`
 ```python
 # BEFORE (causing FieldError)
 property=schedule.property_ref,
@@ -48,7 +48,7 @@ property_ref=schedule.property_ref,
 **Impact**: Scheduled task generation command was broken.
 
 #### 4. Sample Data Creation Commands
-**Files**: `aristay_backend/api/management/commands/create_sample_tasks.py`
+**Files**: `cosmo_backend/api/management/commands/create_sample_tasks.py`
 - Line 77: `property=prop` → `property_ref=prop`
 - Line 111: `property=prop` → `property_ref=prop`
 - Line 161: `property=prop` → `property_ref=prop`
@@ -56,7 +56,7 @@ property_ref=schedule.property_ref,
 **Impact**: Development and testing sample data creation was broken.
 
 #### 5. Excel Import Service Backup
-**File**: `aristay_backend/api/services/excel_import_service_backup.py:975`
+**File**: `cosmo_backend/api/services/excel_import_service_backup.py:975`
 ```python
 # BEFORE (causing FieldError)
 property=booking.property,
@@ -67,7 +67,7 @@ property_ref=booking.property,
 **Impact**: Legacy excel import functionality was broken.
 
 #### 6. Error Message Correction
-**File**: `aristay_backend/api/models.py:400`
+**File**: `cosmo_backend/api/models.py:400`
 ```python
 # BEFORE (misleading error message)
 "Task.property must match Task.booking.property"

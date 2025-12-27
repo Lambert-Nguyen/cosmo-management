@@ -72,7 +72,7 @@ The Aristay Calendar system provides a unified view of all bookings and tasks in
 ## 📁 File Structure
 
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── calendar_views.py              # DRF API endpoints
 │   ├── calendar_django_views.py       # Django HTML views
@@ -312,7 +312,7 @@ When you click on an event, you'll see:
 
 ```bash
 # Database
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/aristay_local
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/cosmo_db
 
 # JWT Settings
 JWT_SIGNING_KEY=your-secret-key

@@ -14,9 +14,9 @@
 ## Test Execution
 Commands:
 ```
-export POSTGRES_DB=aristay_local POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres POSTGRES_HOST=127.0.0.1 POSTGRES_PORT=5432
+export POSTGRES_DB=cosmo_db POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres POSTGRES_HOST=127.0.0.1 POSTGRES_PORT=5432
 unset DATABASE_URL
-cd aristay_backend && python manage.py migrate --noinput
+cd cosmo_backend && python manage.py migrate --noinput
 cd .. && python -m pytest -q
 ```
 

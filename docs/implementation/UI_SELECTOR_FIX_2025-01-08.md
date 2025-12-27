@@ -21,7 +21,7 @@
 ## 🛠️ **Implementation**
 
 ### **File Modified**
-- `aristay_backend/api/templates/staff/task_detail.html`
+- `cosmo_backend/api/templates/staff/task_detail.html`
 
 ### **Changes Applied**
 1. **Fixed Element Selectors**:

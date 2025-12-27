@@ -149,7 +149,7 @@ The system is **fully compatible** with your existing Cloudinary migration plan:
 
 ```bash
 # Test image optimization
-cd aristay_backend && python -c "from api.utils.image_ops import optimize_image; print('✅ Working')"
+cd cosmo_backend && python -c "from api.utils.image_ops import optimize_image; print('✅ Working')"
 
 # Check settings
 python manage.py shell -c "from django.conf import settings; print(f'Max upload: {settings.MAX_UPLOAD_BYTES//1048576}MB')"

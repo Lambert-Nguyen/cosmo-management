@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Centralized Test Runner for Aristay Project
+Centralized Test Runner for Cosmo Management Project
 Runs all tests in the organized test structure
 """
 import os
@@ -9,8 +9,8 @@ import subprocess
 from pathlib import Path
 
 # Project root directory  
-PROJECT_ROOT = Path(__file__).parent.parent  # Go up to /Users/.../aristay_app
-BACKEND_DIR = PROJECT_ROOT / "aristay_backend"
+PROJECT_ROOT = Path(__file__).parent.parent  # Go up to /Users/.../cosmo-management
+BACKEND_DIR = PROJECT_ROOT / "cosmo_backend"
 TESTS_DIR = PROJECT_ROOT / "tests"
 
 def run_command(cmd, cwd=None, env=None):
@@ -119,7 +119,7 @@ def run_ui_tests():
 
 def main():
     """Main test runner"""
-    print("🧪 ARISTAY PROJECT TEST SUITE")
+    print("🧪 COSMO MANAGEMENT TEST SUITE")
     print("=" * 60)
     print(f"📁 Project Root: {PROJECT_ROOT}")
     print(f"🐍 Python: {get_python_executable()}")
@@ -192,7 +192,7 @@ def main():
 if __name__ == "__main__":
     if "--help" in sys.argv:
         print("""
-Aristay Test Runner
+Cosmo Management Test Runner
 
 Usage:
     python run_tests.py [options]

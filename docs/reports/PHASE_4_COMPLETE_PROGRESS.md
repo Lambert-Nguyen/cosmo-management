@@ -124,7 +124,7 @@ Complex multi-module interactions:
 ### Pattern 1: Spy Setup
 ```javascript
 // ❌ OLD (Doesn't work)
-jest.mock('../../../aristay_backend/static/js/core/api-client.js');
+jest.mock('../../../cosmo_backend/static/js/core/api-client.js');
 
 // ✅ NEW (Works!)
 let requestSpy, uploadSpy;

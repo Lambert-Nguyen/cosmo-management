@@ -17,7 +17,7 @@ if [ -z "$VIRTUAL_ENV" ]; then
 fi
 
 # Change to backend directory
-cd aristay_backend
+cd cosmo_backend
 
 # Load test fixtures
 echo "📦 Loading test fixtures..."

@@ -13,7 +13,7 @@ def _read_calendar_template() -> str:
     """Read the standalone calendar template reliably from repo root."""
     # tests/ui/<this_file> → parents[2] == project root
     project_root = Path(__file__).resolve().parents[2]
-    template_path = project_root / "aristay_backend" / "api" / "templates" / "calendar" / "calendar_view.html"
+    template_path = project_root / "cosmo_backend" / "api" / "templates" / "calendar" / "calendar_view.html"
     assert template_path.exists(), f"Calendar template not found at {template_path}"
     return template_path.read_text(encoding="utf-8")
 

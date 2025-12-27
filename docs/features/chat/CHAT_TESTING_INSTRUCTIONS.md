@@ -17,7 +17,7 @@ redis-server
 
 ### Step 2: Start Server with WebSocket Support
 ```bash
-cd /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend
+cd /Users/duylam1407/Workspace/SJSU/cosmo-management/cosmo_backend
 daphne backend.asgi:application -b 127.0.0.1 -p 8000
 ```
 **Use Daphne (not `runserver`) for WebSocket support!**

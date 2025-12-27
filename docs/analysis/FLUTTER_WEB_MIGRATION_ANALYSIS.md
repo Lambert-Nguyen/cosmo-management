@@ -168,7 +168,7 @@ OUTCOME: iOS app in App Store, Android updated, Backend optimized
 
 **Existing Flutter Assets**:
 ```
-aristay_flutter_frontend/
+cosmo_app/
 ├── lib/screens/ (15 screens)
 │   ├── home_screen.dart
 │   ├── task_detail_screen.dart
@@ -418,7 +418,7 @@ Option C: "Stay Django-First"
 
 **Update `pubspec.yaml`:**
 ```yaml
-name: aristay_flutter_frontend
+name: cosmo_app
 description: "Aristay Property Management - Mobile & Web"
 
 environment:
@@ -605,7 +605,7 @@ class ApiService {
 
 **Build Flutter for web:**
 ```bash
-cd aristay_flutter_frontend
+cd cosmo_app
 
 # Development build (fast, debugging enabled)
 flutter build web --web-renderer auto --dart-define=API_BASE_URL=/api
@@ -618,7 +618,7 @@ flutter build web --release --web-renderer canvaskit --dart-define=API_BASE_URL=
 
 **Serve from Django:**
 ```python
-# aristay_backend/backend/urls.py
+# cosmo_backend/backend/urls.py
 from django.urls import path, re_path
 from django.views.static import serve
 from django.conf import settings
@@ -631,13 +631,13 @@ urlpatterns = [
     
     # Flutter web app - catch-all route
     re_path(r'^app/(?P<path>.*)$', serve, {
-        'document_root': os.path.join(settings.BASE_DIR, '../aristay_flutter_frontend/build/web'),
+        'document_root': os.path.join(settings.BASE_DIR, '../cosmo_app/build/web'),
         'show_indexes': False,
     }),
     
     # Fallback to Flutter for SPA routing
     re_path(r'^app/$', serve, {
-        'document_root': os.path.join(settings.BASE_DIR, '../aristay_flutter_frontend/build/web'),
+        'document_root': os.path.join(settings.BASE_DIR, '../cosmo_app/build/web'),
         'path': 'index.html',
     }),
 ]

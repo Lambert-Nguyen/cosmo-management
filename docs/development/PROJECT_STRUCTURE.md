@@ -15,10 +15,10 @@
 ### Legacy Root Directory Structure
 
 ```
-aristay_app/
+cosmo-management/
 ├── 📁 docs/                    # All project documentation
 │   ├── features/               # Feature documentation
-│   ├── fixes/                  # Bug fix documentation  
+│   ├── fixes/                  # Bug fix documentation
 │   ├── backend/               # Backend technical docs
 │   ├── requirements/          # Requirements & specs
 │   └── README.md              # Documentation index
@@ -32,8 +32,8 @@ aristay_app/
 │   ├── admin/               # Administrative tools
 │   └── README.md            # Script usage guide
 ├── 📁 assets/                  # Static assets & files
-├── 📁 aristay_backend/         # Django backend (cleaned)
-├── 📁 aristay_flutter_frontend/ # Flutter frontend
+├── 📁 cosmo_backend/         # Django backend (cleaned)
+├── 📁 cosmo_app/ # Flutter frontend
 ├── 📄 README.md               # Main project README
 └── 📄 .gitignore             # Git ignore rules
 ```
@@ -41,7 +41,7 @@ aristay_app/
 ### Backend Structure (Cleaned)
 
 ```
-aristay_backend/
+cosmo_backend/
 ├── 📁 api/                     # Main Django app
 ├── 📁 backend/                 # Django settings
 ├── 📁 logs/                    # Application logs

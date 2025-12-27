@@ -32,7 +32,7 @@ if [ -z "$VIRTUAL_ENV" ]; then
 fi
 
 # Navigate to backend
-cd aristay_backend
+cd cosmo_backend
 echo -e "${YELLOW}📂 Working directory: $(pwd)${NC}"
 echo ""
 

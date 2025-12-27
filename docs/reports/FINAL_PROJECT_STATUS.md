@@ -194,8 +194,8 @@ tests/
 - **Development Guide**: [`docs/development/`](../development/)
 
 ### Key Files
-- **Main API**: `aristay_backend/api/views.py` (production-hardened)
-- **Settings**: `aristay_backend/backend/settings.py` (production-configured)
+- **Main API**: `cosmo_backend/api/views.py` (production-hardened)
+- **Settings**: `cosmo_backend/backend/settings.py` (production-configured)
 - **Test Runner**: `tests/run_final_validation.py` (comprehensive validation)
 
 ---

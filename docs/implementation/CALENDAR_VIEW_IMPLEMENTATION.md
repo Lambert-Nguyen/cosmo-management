@@ -216,7 +216,7 @@ GET /api/calendar/stats/       # Calendar statistics
 ### File Structure
 
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── calendar_serializers.py      # Calendar data serializers
 │   ├── calendar_views.py            # DRF API endpoints

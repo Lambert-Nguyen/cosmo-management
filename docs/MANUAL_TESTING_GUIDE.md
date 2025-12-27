@@ -4,7 +4,7 @@
 
 **Setup & Run Test Data:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py create_test_data
 python manage.py runserver
 ```
@@ -199,7 +199,7 @@ Based on our recent fixes, verify these specific areas:
 
 **Check database directly:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py shell
 ```
 
@@ -227,7 +227,7 @@ for notif in Notification.objects.all():
 
 **If you need to reset:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py flush  # WARNING: Deletes all data
 python manage.py create_test_data  # Recreate test data
 ```

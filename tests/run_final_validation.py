@@ -7,9 +7,9 @@ Runs all critical tests to validate production readiness.
 import os, sys, subprocess
 from pathlib import Path
 
-# Project root: .../aristay_app
+# Project root: .../cosmo-management
 ROOT = Path(__file__).resolve().parents[1]
-BACKEND = ROOT / "aristay_backend"
+BACKEND = ROOT / "cosmo_backend"
 
 def get_python_executable():
     """Get the appropriate Python executable for the current environment"""

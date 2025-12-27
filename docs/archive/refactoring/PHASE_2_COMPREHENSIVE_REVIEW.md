@@ -51,7 +51,7 @@
 
 ### Current Problem
 
-**Location**: `aristay_backend/api/templates/staff/task_form.html` (lines 122-133)
+**Location**: `cosmo_backend/api/templates/staff/task_form.html` (lines 122-133)
 
 **Current Implementation**:
 ```django-html
@@ -61,7 +61,7 @@
 {{ form.property_ref }}
 ```
 
-**Django Form** (`aristay_backend/api/staff_views.py:563`):
+**Django Form** (`cosmo_backend/api/staff_views.py:563`):
 ```python
 class TaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class TaskForm(ModelForm):
 
 ### Comparison: Flutter vs Django
 
-**Flutter Implementation** (`aristay_flutter_frontend/lib/screens/task_form_screen.dart`):
+**Flutter Implementation** (`cosmo_app/lib/screens/task_form_screen.dart`):
 - ✅ Modal bottom sheet with search
 - ✅ Real-time filtering
 - ✅ Lazy loading

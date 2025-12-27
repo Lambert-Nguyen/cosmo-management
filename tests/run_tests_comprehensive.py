@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Comprehensive Test Runner for Aristay Project
+Comprehensive Test Runner for Cosmo Management Project
 Runs all tests in the organized test structure according to PROJECT_STRUCTURE.md
 """
 import os
@@ -13,8 +13,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'backend.settings_test'
 os.environ['DJANGO_ENVIRONMENT'] = 'testing'
 
 # Project root directory  
-PROJECT_ROOT = Path(__file__).parent.parent  # Go up to /Users/.../aristay_app
-BACKEND_DIR = PROJECT_ROOT / "aristay_backend"
+PROJECT_ROOT = Path(__file__).parent.parent  # Go up to /Users/.../cosmo-management
+BACKEND_DIR = PROJECT_ROOT / "cosmo_backend"
 TESTS_DIR = PROJECT_ROOT / "tests"
 
 def run_command(cmd, cwd=None):
@@ -259,7 +259,7 @@ def run_cloudinary_tests():
 
 def main():
     """Main test runner"""
-    print("🧪 ARISTAY PROJECT COMPREHENSIVE TEST SUITE")
+    print("🧪 COSMO MANAGEMENT COMPREHENSIVE TEST SUITE")
     print("=" * 70)
     print(f"📁 Project Root: {PROJECT_ROOT}")
     print(f"🐍 Python: {get_python_executable()}")
@@ -352,7 +352,7 @@ def main():
 if __name__ == "__main__":
     if "--help" in sys.argv:
         print("""
-Aristay Comprehensive Test Runner
+Cosmo Management Comprehensive Test Runner
 
 Usage:
     python run_tests_comprehensive.py [options]

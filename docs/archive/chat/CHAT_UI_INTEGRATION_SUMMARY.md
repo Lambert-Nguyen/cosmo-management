@@ -17,7 +17,7 @@
 
 ### 1. **Staff Portal Navigation Bar**
 
-**Location**: `aristay_backend/api/templates/staff/base.html`
+**Location**: `cosmo_backend/api/templates/staff/base.html`
 
 ```html
 <nav class="nav">
@@ -34,7 +34,7 @@
 
 ### 2. **Portal Navigation Menu**
 
-**Location**: `aristay_backend/api/templates/portal/base.html`
+**Location**: `cosmo_backend/api/templates/portal/base.html`
 
 ```html
 <div class="nav-menu" id="navMenu">
@@ -52,7 +52,7 @@
 
 ### 3. **Portal Home Page Card**
 
-**Location**: `aristay_backend/api/templates/portal/home.html`
+**Location**: `cosmo_backend/api/templates/portal/home.html`
 
 ```html
 <!-- Chat Portal -->
@@ -72,7 +72,7 @@
 
 ### 4. **Staff Dashboard Quick Actions**
 
-**Location**: `aristay_backend/api/templates/staff/dashboard.html`
+**Location**: `cosmo_backend/api/templates/staff/dashboard.html`
 
 ```html
 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
@@ -183,16 +183,16 @@ All integration points are mobile-optimized:
 
 ## 📂 Files Modified
 
-1. **`aristay_backend/api/templates/staff/base.html`**
+1. **`cosmo_backend/api/templates/staff/base.html`**
    - Added chat link to navigation bar (line 678)
 
-2. **`aristay_backend/api/templates/portal/base.html`**
+2. **`cosmo_backend/api/templates/portal/base.html`**
    - Added chat link to navigation menu (line 340)
 
-3. **`aristay_backend/api/templates/portal/home.html`**
+3. **`cosmo_backend/api/templates/portal/home.html`**
    - Added Team Chat card (lines 48-56)
 
-4. **`aristay_backend/api/templates/staff/dashboard.html`**
+4. **`cosmo_backend/api/templates/staff/dashboard.html`**
    - Added chat quick action button (line 26)
 
 ---

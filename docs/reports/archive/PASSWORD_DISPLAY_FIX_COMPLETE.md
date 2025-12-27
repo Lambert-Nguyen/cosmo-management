@@ -37,9 +37,9 @@ Our automated test (`test_password_config.py`) confirmed:
 
 1. **Start the Django server:**
    ```bash
-   cd /Users/duylam1407/Workspace/SJSU/aristay_app
+   cd /Users/duylam1407/Workspace/SJSU/cosmo-management
    source .venv/bin/activate
-   cd aristay_backend
+   cd cosmo_backend
    python manage.py runserver 8001
    ```
 
@@ -60,7 +60,7 @@ Our automated test (`test_password_config.py`) confirmed:
 
 ## 📋 Fixed Configuration
 
-**File**: `aristay_backend/api/managersite.py`
+**File**: `cosmo_backend/api/managersite.py`
 
 **UserManagerAdmin Class Changes:**
 

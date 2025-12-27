@@ -33,13 +33,13 @@ mkdir -p tools/secret-hygiene
 
 # Overwrite list of paths to purge from history each run.
 cat > tools/secret-hygiene/paths-to-remove.txt <<'EOF'
-aristay_backend/firebase_credentials.json
+cosmo_backend/firebase_credentials.json
 .env
 .env.local
 .env.production
 .env.development
-aristay_backend/.env
-aristay_backend/.env.local
+cosmo_backend/.env
+cosmo_backend/.env.local
 EOF
 
 REPLACE_ARGS=()

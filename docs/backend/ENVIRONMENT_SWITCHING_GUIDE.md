@@ -2,7 +2,7 @@
 
 ## 🎯 **Overview**
 
-The Aristay project uses a simple environment parameter system that allows you to switch between development, testing, and production configurations with a single command. This system integrates with your existing `.env` file structure and requires minimal changes to your workflow.
+The Cosmo Management project uses a simple environment parameter system that allows you to switch between development, testing, and production configurations with a single command. This system integrates with your existing `.env` file structure and requires minimal changes to your workflow.
 
 ## 🔧 **How It Works**
 
@@ -46,13 +46,13 @@ python scripts/add_env_parameter.py production
 source .venv/bin/activate
 
 # Start development server
-cd aristay_backend && python manage.py runserver
+cd cosmo_backend && python manage.py runserver
 
 # Run tests
 python -m pytest
 
 # Check settings
-cd aristay_backend && python manage.py check
+cd cosmo_backend && python manage.py check
 ```
 
 ## 📋 **Environment Configurations**
@@ -114,10 +114,10 @@ DJANGO_SETTINGS_MODULE = backend.settings_test
 #### **Check Current Environment**
 ```bash
 # Check .env file
-grep DJANGO_ENVIRONMENT aristay_backend/.env
+grep DJANGO_ENVIRONMENT cosmo_backend/.env
 
 # Check Django settings
-cd aristay_backend && python -c "
+cd cosmo_backend && python -c "
 import os
 from dotenv import load_dotenv
 load_dotenv('.env', override=True)
@@ -128,7 +128,7 @@ print('DJANGO_ENVIRONMENT:', os.getenv('DJANGO_ENVIRONMENT'))
 #### **Verify Settings Loading**
 ```bash
 # Check which settings file is being used
-cd aristay_backend && python -c "
+cd cosmo_backend && python -c "
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 import django
@@ -142,7 +142,7 @@ print('DJANGO_ENVIRONMENT:', getattr(settings, 'DJANGO_ENVIRONMENT', 'NOT_SET'))
 ## 📁 **File Structure**
 
 ```
-aristay_backend/
+cosmo_backend/
 ├── .env                     # Your environment configuration
 ├── backend/
 │   ├── settings.py          # Main settings (environment detection)
@@ -164,7 +164,7 @@ docs/backend/
 
 ### **Development Workflow**
 1. **Start with development**: `python scripts/add_env_parameter.py development`
-2. **Run your app**: `cd aristay_backend && python manage.py runserver`
+2. **Run your app**: `cd cosmo_backend && python manage.py runserver`
 3. **Make changes**: Edit code, test locally
 4. **Run tests**: `python scripts/add_env_parameter.py testing && python -m pytest`
 5. **Deploy**: `python scripts/add_env_parameter.py production && git push heroku deployment-clean:main`
@@ -176,7 +176,7 @@ docs/backend/
 
 ### **Production Workflow**
 1. **Switch to production**: `python scripts/add_env_parameter.py production`
-2. **Verify settings**: `cd aristay_backend && python manage.py check`
+2. **Verify settings**: `cd cosmo_backend && python manage.py check`
 3. **Deploy**: `git push heroku deployment-clean:main`
 
 ## 🔧 **Advanced Usage**

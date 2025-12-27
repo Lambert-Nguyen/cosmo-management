@@ -5,7 +5,7 @@
 **Date**: September 8, 2025  
 **Feature**: Password field descriptions in manager admin interface  
 **Status**: ✅ Complete  
-**Files Modified**: `aristay_backend/api/managersite.py`
+**Files Modified**: `cosmo_backend/api/managersite.py`
 
 ## 🎯 Enhancement Details
 
@@ -24,7 +24,7 @@ Added descriptive text to both user creation and user editing forms explaining p
 
 ## 🔧 Technical Implementation
 
-### File: `aristay_backend/api/managersite.py`
+### File: `cosmo_backend/api/managersite.py`
 
 #### Change 1: Edit User Form (UserManagerAdmin.fieldsets)
 
@@ -115,9 +115,9 @@ Created comprehensive test script that verified:
 
 1. **Start Django Server**:
    ```bash
-   cd /Users/duylam1407/Workspace/SJSU/aristay_app
+   cd /Users/duylam1407/Workspace/SJSU/cosmo-management
    source .venv/bin/activate
-   cd aristay_backend
+   cd cosmo_backend
    python manage.py runserver 8001
    ```
 
@@ -149,7 +149,7 @@ This enhancement builds upon previous authentication system fixes:
 ## 📁 Files Created/Modified
 
 ### Modified
-- ✅ `aristay_backend/api/managersite.py` - Added password field descriptions
+- ✅ `cosmo_backend/api/managersite.py` - Added password field descriptions
 
 ### Created (Testing/Documentation)
 - ✅ `test_password_descriptions.py` - Verification test script

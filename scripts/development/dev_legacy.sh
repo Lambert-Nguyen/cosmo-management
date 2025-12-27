@@ -4,7 +4,7 @@
 echo "🚀 Starting local development server..."
 
 # Set environment variables for local development
-export DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/aristay_local"
+export DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/cosmo_db"
 export DEBUG=true
 export DJANGO_ENVIRONMENT=development
 export SECRET_KEY="local-dev-secret-key-change-me"
@@ -17,5 +17,5 @@ export LOAD_DOTENV=true
 
 # Activate virtual environment and start server
 source .venv/bin/activate
-cd aristay_backend
+cd cosmo_backend
 python manage.py runserver 0.0.0.0:8000

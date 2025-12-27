@@ -7,7 +7,7 @@ This project uses environment-based Django settings to handle different deployme
 ## 📁 **Settings Structure**
 
 ```
-aristay_backend/backend/
+cosmo_backend/backend/
 ├── settings.py              # Main settings (environment-aware)
 ├── settings_base.py         # Common settings shared across environments
 ├── settings_local.py        # Local development settings
@@ -70,7 +70,7 @@ DJANGO_ENVIRONMENT=production python manage.py runserver
 ### **Development (.env file)**
 ```bash
 # Database
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/aristay_local
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/cosmo_db
 
 # Security
 SECRET_KEY=local-dev-secret-key-change-me
@@ -130,7 +130,7 @@ The test environment (`settings_test.py`) is optimized for speed and reliability
 
 1. **Backup your current settings**:
    ```bash
-   cp aristay_backend/backend/settings.py aristay_backend/backend/settings_backup.py
+   cp cosmo_backend/backend/settings.py cosmo_backend/backend/settings_backup.py
    ```
 
 2. **Update your .env file**:

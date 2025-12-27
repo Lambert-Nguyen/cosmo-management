@@ -103,7 +103,7 @@ This index provides a comprehensive guide to all documentation created for the P
 ```bash
 # Clone repository
 git clone <repository-url>
-cd aristay_app
+cd cosmo-management
 
 # Setup virtual environment
 python -m venv .venv

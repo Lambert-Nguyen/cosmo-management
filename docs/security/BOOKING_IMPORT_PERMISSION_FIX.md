@@ -36,7 +36,7 @@ def enhanced_excel_import_view(request):
 
 Replaced the `@staff_or_perm('manage_bookings')` decorator with `@user_passes_test(is_superuser_or_manager)` on all enhanced excel import views:
 
-**File:** `aristay_backend/api/views.py`
+**File:** `cosmo_backend/api/views.py`
 
 1. **enhanced_excel_import_view()** (line ~2212)
    - Before: `@staff_or_perm('manage_bookings')`
@@ -95,7 +95,7 @@ Comprehensive test coverage including:
 ### Running Tests
 
 ```bash
-cd /home/runner/work/aristay_app/aristay_app
+cd /home/runner/work/cosmo-management/cosmo-management
 export DATABASE_URL="sqlite:///db.sqlite3"
 python -m pytest tests/security/test_excel_import_permissions.py -v
 ```
@@ -134,13 +134,13 @@ This now matches the documented permission matrix in `docs/USER_WORKFLOWS.md`.
 ## Related Files
 
 ### Modified Files
-1. `aristay_backend/api/views.py` - Fixed decorator usage on 4 views
+1. `cosmo_backend/api/views.py` - Fixed decorator usage on 4 views
 2. `tests/security/test_excel_import_permissions.py` - New comprehensive test suite
 
 ### Reference Files
-1. `aristay_backend/api/decorators.py` - Decorator definitions
-2. `aristay_backend/api/models.py` - User roles and Profile model
-3. `aristay_backend/api/management/commands/setup_permissions.py` - Permission definitions
+1. `cosmo_backend/api/decorators.py` - Decorator definitions
+2. `cosmo_backend/api/models.py` - User roles and Profile model
+3. `cosmo_backend/api/management/commands/setup_permissions.py` - Permission definitions
 4. `docs/USER_WORKFLOWS.md` - Permission matrix documentation
 5. `docs/features/EXCEL_IMPORT_FEATURE.md` - Feature documentation
 

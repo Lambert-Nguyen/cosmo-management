@@ -80,7 +80,7 @@ python3.13 -m venv venv
 source venv/bin/activate
 
 # Install dependencies
-pip install -r aristay_backend/requirements.txt
+pip install -r cosmo_backend/requirements.txt
 
 # Install additional production dependencies
 pip install gunicorn psycopg2-binary redis
@@ -148,7 +148,7 @@ Create production settings file:
 
 ```bash
 # Create production settings
-sudo nano /opt/aristay/aristay_backend/backend/settings_production.py
+sudo nano /opt/aristay/cosmo_backend/backend/settings_production.py
 ```
 
 ```python
@@ -252,23 +252,23 @@ source venv/bin/activate
 export DJANGO_SETTINGS_MODULE=backend.settings_production
 
 # Run migrations
-python aristay_backend/manage.py migrate
+python cosmo_backend/manage.py migrate
 
 # Create superuser
-python aristay_backend/manage.py createsuperuser
+python cosmo_backend/manage.py createsuperuser
 
 # Collect static files
-python aristay_backend/manage.py collectstatic --noinput
+python cosmo_backend/manage.py collectstatic --noinput
 ```
 
 ### 2. Load Initial Data
 
 ```bash
 # Load initial data (if available)
-python aristay_backend/manage.py loaddata initial_data.json
+python cosmo_backend/manage.py loaddata initial_data.json
 
 # Create initial task groups
-python aristay_backend/manage.py assign_task_groups --auto-assign
+python cosmo_backend/manage.py assign_task_groups --auto-assign
 ```
 
 ## Web Server Configuration
@@ -468,7 +468,7 @@ fi
 cd /opt/aristay
 source venv/bin/activate
 export DJANGO_SETTINGS_MODULE=backend.settings_production
-if ! python aristay_backend/manage.py check --deploy; then
+if ! python cosmo_backend/manage.py check --deploy; then
     echo "ERROR: Django health check failed"
     exit 1
 fi
@@ -620,7 +620,7 @@ apt update && apt upgrade -y
 cd /opt/aristay
 source venv/bin/activate
 pip install --upgrade pip
-pip install --upgrade -r aristay_backend/requirements.txt
+pip install --upgrade -r cosmo_backend/requirements.txt
 
 # Restart services
 systemctl restart aristay
@@ -650,13 +650,13 @@ echo "Security updates completed"
    # Check Django database connection
    cd /opt/aristay
    source venv/bin/activate
-   python aristay_backend/manage.py dbshell
+   python cosmo_backend/manage.py dbshell
    ```
 
 3. **Static files not loading**
    ```bash
    # Recollect static files
-   python aristay_backend/manage.py collectstatic --noinput
+   python cosmo_backend/manage.py collectstatic --noinput
    
    # Check Nginx configuration
    sudo nginx -t
@@ -721,7 +721,7 @@ echo "Security updates completed"
 For deployment support:
 
 - **Documentation**: https://docs.aristay.com/deployment
-- **Support Email**: deployment-support@aristay.com
+- **Support Email**: deployment-support@cosmo-management.cloud
 - **Emergency Contact**: +1-555-ARISTAY
 
 ---

@@ -1,8 +1,8 @@
-# 👥 AriStay Staff Portal Documentation
+# 👥 Cosmo Management Staff Portal Documentation
 
 ## 🌟 Overview
 
-The AriStay Staff Portal provides specialized web interfaces for different types of property management staff. Each role has a customized dashboard and workflow optimized for their specific responsibilities.
+The Cosmo Management Staff Portal provides specialized web interfaces for different types of property management staff. Each role has a customized dashboard and workflow optimized for their specific responsibilities.
 
 ## 🔐 Access & Authentication
 

@@ -184,14 +184,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DJANGO_SETTINGS_MODULE: backend.settings
-      PYTHONPATH: ${{ github.workspace }}/aristay_backend
+      PYTHONPATH: ${{ github.workspace }}/cosmo_backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-          cache-dependency-path: 'aristay_backend/requirements.txt'
+          cache-dependency-path: 'cosmo_backend/requirements.txt'
 ```
 
 ## 🧪 Testing Framework
@@ -223,7 +223,7 @@ jobs:
 
 # Traditional execution
 python tests/production/test_production_hardening.py
-cd aristay_backend && python -m pytest ../tests/integration/ -v
+cd cosmo_backend && python -m pytest ../tests/integration/ -v
 ```
 
 ## 📁 Project Organization

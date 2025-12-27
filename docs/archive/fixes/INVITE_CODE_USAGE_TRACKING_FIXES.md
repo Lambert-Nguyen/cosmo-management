@@ -98,7 +98,7 @@ Created comprehensive test suite (`tests/unit/test_invite_code_fixes.py`) coveri
 
 ## Files Modified
 
-- `aristay_backend/api/models.py` - Updated `InviteCode` model methods
+- `cosmo_backend/api/models.py` - Updated `InviteCode` model methods
 - `tests/unit/test_invite_code_fixes.py` - Comprehensive test suite
 
 ## Migration

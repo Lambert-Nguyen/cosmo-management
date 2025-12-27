@@ -60,7 +60,7 @@ Added comprehensive test suite (`tests/booking/test_import_file_storage.py`) wit
 
 ```bash
 # Run all import/cleanup tests
-cd /home/runner/work/aristay_app/aristay_app
+cd /home/runner/work/cosmo-management/cosmo-management
 DATABASE_URL="sqlite:///tmp/test_db.sqlite3" python -m pytest tests/booking/test_import_file_storage.py -v
 
 # Run specific test

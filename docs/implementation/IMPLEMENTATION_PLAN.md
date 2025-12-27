@@ -109,7 +109,7 @@ This plan modernizes AriStay's data layer with enterprise-grade features:
 
 ### **Proposed New Structure:**
 ```
-aristay_backend/api/
+cosmo_backend/api/
 ├── models/
 │   ├── __init__.py           # Import all models
 │   ├── core.py              # Core mixins (TimeStamped, UserStamped, etc.)

@@ -4,8 +4,8 @@
  */
 
 import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
-import { CSRFManager } from '../../../aristay_backend/static/js/core/csrf.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
+import { CSRFManager } from '../../../cosmo_backend/static/js/core/csrf.js';
 
 describe('APIClient', () => {
   let csrfSpy;

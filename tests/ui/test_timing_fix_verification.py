@@ -17,7 +17,7 @@ class TestTimingFixVerification:
         
         try:
             repo_root = Path(__file__).resolve().parents[2]
-            task_detail_js = repo_root / 'aristay_backend' / 'static' / 'js' / 'pages' / 'task-detail.js'
+            task_detail_js = repo_root / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'task-detail.js'
 
             if not task_detail_js.exists():
                 pytest.skip('task-detail.js not found; skipping timing verification')

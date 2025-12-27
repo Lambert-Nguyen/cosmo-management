@@ -27,7 +27,7 @@ def debug_excel_import():
     User = get_user_model()
     user = User.objects.get(id=1)
     
-    excel_file_path = "/Users/duylam1407/Workspace/SJSU/aristay_app/docs/requirements/Cleaning_schedule_1.xlsx"
+    excel_file_path = "docs/requirements/Cleaning_schedule_1.xlsx"
     
     print("=== Step-by-step debugging ===")
     

@@ -17,7 +17,7 @@ Phase 0 established the foundational infrastructure required for safe JavaScript
 
 ### 1. Core JavaScript Utilities
 
-Created three essential utility modules in `aristay_backend/static/js/core/`:
+Created three essential utility modules in `cosmo_backend/static/js/core/`:
 
 #### **csrf.js** - CSRF Token Management
 - ✅ Centralized CSRF token retrieval
@@ -182,8 +182,8 @@ Created `baseline.spec.js` with initial tests:
 ## 📁 File Structure Created
 
 ```
-aristay_app/
-├── aristay_backend/
+cosmo-management/
+├── cosmo_backend/
 │   └── static/
 │       └── js/
 │           └── core/
@@ -213,7 +213,7 @@ To complete the baseline E2E tests, run:
 npm install
 
 # 2. Start Django server
-cd aristay_backend
+cd cosmo_backend
 python manage.py runserver
 
 # 3. Generate authentication state (in another terminal)

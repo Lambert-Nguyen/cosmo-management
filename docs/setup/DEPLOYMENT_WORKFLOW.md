@@ -6,7 +6,7 @@
 
 ## Overview
 
-This document describes the complete deployment workflow for the Aristay Property Management system, including local development, staging, and production deployment processes.
+This document describes the complete deployment workflow for the Cosmo Management Property Management system, including local development, staging, and production deployment processes.
 
 ## Architecture Overview
 
@@ -44,7 +44,7 @@ Local Development → GitHub main → deployment-clean → Heroku main
 
 **Features**:
 - Installs PostgreSQL if needed
-- Creates local database (`aristay_local`)
+- Creates local database (`cosmo_db`)
 - Runs Django migrations
 - Sets up local development configuration
 
@@ -105,7 +105,7 @@ Local Development → GitHub main → deployment-clean → Heroku main
 ```bash
 # Clone repository
 git clone <repository-url>
-cd aristay_app
+cd cosmo-management
 
 # Set up local development
 ./scripts/development/setup_local_dev.sh
@@ -157,13 +157,13 @@ git push origin main
 
 ### Local Development Environment
 
-**Database**: PostgreSQL (`aristay_local`)  
+**Database**: PostgreSQL (`cosmo_db`)  
 **Settings**: `backend.settings_local`  
 **Debug**: `True`  
 **Email**: Console backend  
 
 **Key Files**:
-- `aristay_backend/backend/settings_local.py`
+- `cosmo_backend/backend/settings_local.py`
 - `scripts/development/dev_local.sh`
 - `scripts/development/setup_local_dev.sh`
 
@@ -202,14 +202,14 @@ git push origin main
 ## File Organization
 
 ```
-aristay_app/
+cosmo-management/
 ├── scripts/
 │   ├── development/
 │   │   ├── setup_local_dev.sh      # Initial setup
 │   │   └── dev_local.sh            # Start dev server
 │   └── deployment/
 │       └── deploy.sh               # Deploy to Heroku
-├── aristay_backend/
+├── cosmo_backend/
 │   ├── backend/
 │   │   ├── settings.py             # Production settings
 │   │   └── settings_local.py       # Local development settings
@@ -257,13 +257,13 @@ git status
 
 ```bash
 # Check deployment status
-heroku ps -a aristay-internal-backend
+heroku ps -a cosmo-management-backend
 
 # View logs
-heroku logs -a aristay-internal-backend
+heroku logs -a cosmo-management-backend
 
 # Test application
-curl https://aristay-internal-backend-72ffd16c9352.herokuapp.com/
+curl https://cosmo-management-backend-72ffd16c9352.herokuapp.com/
 ```
 
 ## Troubleshooting
@@ -273,7 +273,7 @@ curl https://aristay-internal-backend-72ffd16c9352.herokuapp.com/
 #### 1. Build Failures
 ```bash
 # Check build logs
-heroku logs -a aristay-internal-backend --tail
+heroku logs -a cosmo-management-backend --tail
 
 # Common causes:
 # - Missing dependencies in requirements.txt
@@ -284,19 +284,19 @@ heroku logs -a aristay-internal-backend --tail
 #### 2. Migration Failures
 ```bash
 # Run migrations manually
-heroku run python manage.py migrate -a aristay-internal-backend
+heroku run python manage.py migrate -a cosmo-management-backend
 
 # Check migration status
-heroku run python manage.py showmigrations -a aristay-internal-backend
+heroku run python manage.py showmigrations -a cosmo-management-backend
 ```
 
 #### 3. Application Errors
 ```bash
 # Check application logs
-heroku logs -a aristay-internal-backend --tail
+heroku logs -a cosmo-management-backend --tail
 
 # Restart application
-heroku restart -a aristay-internal-backend
+heroku restart -a cosmo-management-backend
 ```
 
 ### Local Development Issues
@@ -316,8 +316,8 @@ brew services start postgresql@14
 python manage.py migrate --settings=backend.settings_local
 
 # Reset database (if needed)
-dropdb aristay_local
-createdb aristay_local
+dropdb cosmo_db
+createdb cosmo_db
 python manage.py migrate --settings=backend.settings_local
 ```
 
@@ -341,13 +341,13 @@ python manage.py migrate --settings=backend.settings_local
 ### Health Checks
 ```bash
 # Check application status
-heroku ps -a aristay-internal-backend
+heroku ps -a cosmo-management-backend
 
 # Monitor logs
-heroku logs -a aristay-internal-backend --tail
+heroku logs -a cosmo-management-backend --tail
 
 # Check database
-heroku pg:info -a aristay-internal-backend
+heroku pg:info -a cosmo-management-backend
 ```
 
 ### Regular Maintenance

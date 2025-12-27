@@ -42,7 +42,7 @@ This guide explains how to set up local development environment that mirrors the
 ### Database Configuration
 
 **Local Development**:
-- **Database**: PostgreSQL (`aristay_local`)
+- **Database**: PostgreSQL (`cosmo_db`)
 - **Host**: 127.0.0.1:5432
 - **User**: postgres
 - **Settings**: Default `backend.settings` (no custom settings module needed)
@@ -70,7 +70,7 @@ This guide explains how to set up local development environment that mirrors the
 
 **What it does**:
 1. Installs PostgreSQL (if not present)
-2. Creates `aristay_local` database
+2. Creates `cosmo_db` database
 3. Runs Django migrations
 4. Sets up local development configuration
 
@@ -125,7 +125,7 @@ This guide explains how to set up local development environment that mirrors the
 
 ```bash
 # Run migrations
-cd aristay_backend
+cd cosmo_backend
 python manage.py migrate
 
 # Create superuser
@@ -139,7 +139,7 @@ python manage.py seed_test_data
 
 ```bash
 # Run tests
-cd aristay_backend
+cd cosmo_backend
 python manage.py test
 
 # Run specific test categories
@@ -163,7 +163,7 @@ createuser -s postgres
 
 #### 2. Database Already Exists
 ```
-Database aristay_local already exists
+Database cosmo_db already exists
 ```
 
 **Solution**: This is normal - the script handles this gracefully.
@@ -194,8 +194,8 @@ The local development setup uses these environment variables:
 
 ```bash
 # Either DATABASE_URL or POSTGRES_* can be used
-DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/aristay_local
-POSTGRES_DB=aristay_local
+DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/cosmo_db
+POSTGRES_DB=cosmo_db
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=127.0.0.1
@@ -214,14 +214,14 @@ EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 ## File Structure
 
 ```
-aristay_app/
+cosmo-management/
 ├── scripts/
 │   ├── development/
 │   │   ├── setup_local_dev.sh      # Initial setup
 │   │   └── dev_local.sh            # Start dev server
 │   └── deployment/
 │       └── deploy.sh               # Deploy to Heroku
-├── aristay_backend/
+├── cosmo_backend/
 │   ├── backend/
 │   │   └── settings.py             # Unified settings (local/prod via env)
 │   └── manage.py
@@ -263,7 +263,7 @@ If you encounter issues:
 
 1. Check this documentation
 2. Review the troubleshooting section
-3. Check the logs in `aristay_backend/logs/`
+3. Check the logs in `cosmo_backend/logs/`
 4. Verify PostgreSQL is running: `brew services list | grep postgresql`
 
 ---

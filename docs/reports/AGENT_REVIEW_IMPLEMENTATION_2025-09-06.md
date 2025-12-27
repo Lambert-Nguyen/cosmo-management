@@ -60,7 +60,7 @@ Implemented comprehensive agent review feedback for copilot instructions and fix
 
 ## Files Modified
 - `.github/copilot-instructions.md` - 7 accuracy fixes and 4 polish improvements
-- `aristay_backend/requirements.txt` - Added django-ratelimit dependency
+- `cosmo_backend/requirements.txt` - Added django-ratelimit dependency
 
 ## Next Steps
 - Monitor CI workflow for successful execution

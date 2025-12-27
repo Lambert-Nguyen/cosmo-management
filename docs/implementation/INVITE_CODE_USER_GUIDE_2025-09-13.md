@@ -354,9 +354,9 @@ Created → Active → Revoked → Reactivated → Active
 - API documentation
 
 **Contact Information:**
-- **System Administrator** - admin@aristay.com
-- **Technical Support** - support@aristay.com
-- **Development Team** - dev@aristay.com
+- **System Administrator** - admin@cosmo-management.cloud
+- **Technical Support** - support@cosmo-management.cloud
+- **Development Team** - dev@cosmo-management.cloud
 
 **Emergency Support:**
 - For urgent issues, contact the system administrator

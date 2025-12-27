@@ -604,7 +604,7 @@ Official SDKs are available for:
 For API support and questions:
 
 - **Documentation**: https://docs.aristay.com
-- **Support Email**: api-support@aristay.com
+- **Support Email**: api-support@cosmo-management.cloud
 - **Status Page**: https://status.aristay.com
 
 ---

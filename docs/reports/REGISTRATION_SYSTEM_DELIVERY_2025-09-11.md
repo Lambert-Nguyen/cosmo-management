@@ -73,7 +73,7 @@ CREATE TABLE api_invitecode (
 
 ### File Structure
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── models.py                    # InviteCode model added
 │   ├── registration_views.py        # Registration views (NEW)

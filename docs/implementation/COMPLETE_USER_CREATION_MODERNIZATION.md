@@ -7,12 +7,12 @@
 ## 🎯 **Complete Implementation Summary**
 
 ### **✅ Manager Console Updated** (`/manager/auth/user/add/`)
-- **File**: `aristay_backend/api/managersite.py`
+- **File**: `cosmo_backend/api/managersite.py`
 - **Removed**: `is_staff`, `is_superuser` checkboxes from form
 - **Added**: Automatic Profile creation and syncing
 
 ### **✅ Admin Console Updated** (`/admin/auth/user/add/`)  
-- **File**: `aristay_backend/api/admin.py`
+- **File**: `cosmo_backend/api/admin.py`
 - **Removed**: `is_staff`, `is_superuser` checkboxes from form
 - **Added**: Automatic Profile creation and syncing
 

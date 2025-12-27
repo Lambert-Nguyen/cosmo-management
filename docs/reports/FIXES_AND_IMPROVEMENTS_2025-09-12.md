@@ -21,7 +21,7 @@ This document details all the fixes, improvements, and enhancements applied to t
 
 **Fix Applied**:
 ```python
-# In aristay_backend/api/serializers.py
+# In cosmo_backend/api/serializers.py
 class TaskImageSerializer(serializers.ModelSerializer):
     fields = [
         'id', 'task', 'image', 'uploaded_at', 'uploaded_by', 'uploaded_by_username',
@@ -81,7 +81,7 @@ def test_auto_assign_command(self):
 
 **Fix Applied**:
 ```python
-# In aristay_backend/api/middleware.py
+# In cosmo_backend/api/middleware.py
 def process_exception(self, request, exception):
     """Handle exceptions globally"""
     if isinstance(exception, PermissionDenied):
@@ -107,7 +107,7 @@ def process_exception(self, request, exception):
 
 **Fix Applied**:
 ```python
-# In aristay_backend/backend/settings.py
+# In cosmo_backend/backend/settings.py
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         # Maintain backward compatibility for tests expecting 'taskimage'
@@ -128,7 +128,7 @@ REST_FRAMEWORK = {
 
 **Fix Applied**:
 ```python
-# In aristay_backend/api/management/commands/assign_task_groups.py
+# In cosmo_backend/api/management/commands/assign_task_groups.py
 # Keep backward-compatible message for tests that assert without emoji
 plain = f'Auto-assigned task groups to {assigned_count} users'
 self.stdout.write(plain)

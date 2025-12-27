@@ -87,7 +87,7 @@ concurrency:
 ```yaml
 # Auto-install dependencies including pytest-django, pandas
 - name: Install deps
-  run: pip install -r aristay_backend/requirements.txt
+  run: pip install -r cosmo_backend/requirements.txt
 
 # Clean cache to avoid import conflicts  
 - name: Clean pyc cache

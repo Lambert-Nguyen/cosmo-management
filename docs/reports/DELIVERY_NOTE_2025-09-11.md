@@ -29,7 +29,7 @@ Environment: Heroku (Production) + Local Dev (PostgreSQL)
 #### 4) Operational notes
 - Database: PostgreSQL (prod + CI). Redis for throttling/caching
 - Security: JWT with rotation/blacklist, Axes login protection, CSP headers in production
-- Deploys: Heroku app `aristay-internal-backend` from branch `deployment-clean` subdir `aristay_backend`
+- Deploys: Heroku app `aristay-internal-backend` from branch `deployment-clean` subdir `cosmo_backend`
 - Static: `collectstatic` runs on release. Warning: prefer `.python-version` over `runtime.txt` in future
 
 #### 5) Primary URLs (Heroku)

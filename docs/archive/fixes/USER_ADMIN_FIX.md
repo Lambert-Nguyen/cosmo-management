@@ -8,7 +8,7 @@ When clicking "Add User" in the Django admin interface, the following error occu
 KeyError: 'password1'
 Traceback (most recent call last):
   ...
-  File "/Users/duylam1407/Workspace/SJSU/aristay_app/.venv/lib/python3.13/site-packages/django/contrib/auth/forms.py", line 610, in __init__
+  File "/Users/duylam1407/Workspace/SJSU/cosmo-management/.venv/lib/python3.13/site-packages/django/contrib/auth/forms.py", line 610, in __init__
     self.fields["password1"].required = False
     ~~~~~~~~~~~^^^^^^^^^^^^^
 KeyError: 'password1'

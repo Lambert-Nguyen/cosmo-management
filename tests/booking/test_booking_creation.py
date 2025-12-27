@@ -26,7 +26,7 @@ def test_booking_creation():
         user, created = User.objects.get_or_create(
             username='test_import_user',
             defaults={
-                'email': 'test@aristay.com',
+                'email': 'test@cosmo-management.cloud',
                 'is_superuser': True
             }
         )

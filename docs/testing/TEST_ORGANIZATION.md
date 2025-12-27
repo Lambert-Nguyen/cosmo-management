@@ -28,12 +28,12 @@ tests/                               # Organized testing structure
 ├── permissions/                   # Permission system tests  
 └── run_tests.py                   # Central test runner
 
-scripts/admin/                     # Moved from aristay_backend/
+scripts/admin/                     # Moved from cosmo_backend/
 ├── audit_user_access.py          # User access audit tool
 └── seed_new_permissions.py       # Permission seeding script
 
 Legacy Location (for reference):
-aristay_backend/                   # Some test files remain here for backend-specific tests
+cosmo_backend/                   # Some test files remain here for backend-specific tests
 ├── test_critical_fixes.py        # Core permission system tests
 ├── test_final_critical_fixes.py  # Final security tests
 └── [other backend-specific tests]
@@ -60,13 +60,13 @@ python tests/run_tests.py --integration
 ./scripts/testing/jwt_smoke_test_improved.sh
 
 # Security-focused tests
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/security/ -v
 ```
 
 ### Legacy Backend Tests (Still Important)
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python test_critical_fixes.py        # Core permission system verification
 python test_final_critical_fixes.py  # Final security & correctness tests
 ```
@@ -86,7 +86,7 @@ python scripts/admin/seed_new_permissions.py
 
 ### 3. User Access Verification
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python audit_user_access.py
 ```
 **Purpose**: Comprehensive user access and permission audit
