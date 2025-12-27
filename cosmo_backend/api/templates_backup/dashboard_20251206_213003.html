@@ -2,7 +2,7 @@
 {% load static %}
 {% load timezone_tags %}
 
-{% block title %}Dashboard · AriStay{% endblock %}
+{% block title %}Dashboard · Cosmo{% endblock %}
 
 {% block content %}
 <div class="dashboard-grid">
@@ -667,12 +667,12 @@
             }
         }
         
-        function sendPushNotification(title, body, icon = '/static/images/aristay_logo.jpg') {
+        function sendPushNotification(title, body, icon = '/static/images/cosmo_logo.jpg') {
             if ('Notification' in window && Notification.permission === 'granted') {
                 new Notification(title, {
                     body: body,
                     icon: icon,
-                    badge: '/static/images/aristay_logo.jpg',
+                    badge: '/static/images/cosmo_logo.jpg',
                     tag: 'cosmo-notification'
                 });
             }

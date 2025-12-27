@@ -1,6 +1,6 @@
 # Test Suite Organization
 
-This document organizes all test files and documentation for the AriStay project's comprehensive test suite.
+This document organizes all test files and documentation for the Cosmo project's comprehensive test suite.
 
 **📋 Current Test Structure**: Updated to match the official project organization (see [PROJECT_STRUCTURE.md](../../PROJECT_STRUCTURE.md))
 

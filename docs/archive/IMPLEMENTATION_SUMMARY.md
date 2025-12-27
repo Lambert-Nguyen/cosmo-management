@@ -1,8 +1,8 @@
-# AriStay Chat System - Implementation Summary
+# Cosmo Chat System - Implementation Summary
 
 ## 📋 What Was Built
 
-I've implemented approximately **60% of the internal chat system** for AriStay, focusing on the critical backend infrastructure that will support both web and iOS Flutter clients.
+I've implemented approximately **60% of the internal chat system** for Cosmo, focusing on the critical backend infrastructure that will support both web and iOS Flutter clients.
 
 ### ✅ Completed Components
 

@@ -52,8 +52,8 @@ The headers across different pages had inconsistencies:
 
 **Consistent Logo Style Applied to All Templates:**
 ```html
-<img src="{% static 'images/aristay_logo.jpg' %}" 
-     alt="AriStay" 
+<img src="{% static 'images/cosmo_logo.jpg' %}" 
+     alt="Cosmo" 
      style="width: 50px; 
             height: 50px; 
             border-radius: 12px; 
@@ -93,8 +93,8 @@ The headers across different pages had inconsistencies:
 **After:**
 ```html
 <div class="logo" style="display: flex; align-items: center; gap: 12px;">
-    <img src="{% static 'images/aristay_logo.jpg' %}" 
-         alt="AriStay" 
+    <img src="{% static 'images/cosmo_logo.jpg' %}" 
+         alt="Cosmo" 
          style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
     <span>Cosmo Management Staff Portal</span>
 </div>
@@ -132,7 +132,7 @@ All headers now use consistent logo styling:
 ### Common Elements Across All Headers:
 
 1. **Logo Section** (Left)
-   - AriStay logo image (50x50px)
+   - Cosmo logo image (50x50px)
    - Page title/heading
    - Subtitle (where applicable)
 

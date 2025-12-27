@@ -1,7 +1,7 @@
 # 🏗️ System Testing Guide
 
 ## Overview
-This guide focuses on system-level testing for the Aristay application, covering end-to-end validation, system integration, and production readiness verification.
+This guide focuses on system-level testing for the Cosmo application, covering end-to-end validation, system integration, and production readiness verification.
 
 ## System Test Categories
 
@@ -112,7 +112,7 @@ python -m pytest ../tests/integration/ -k "file" -v
 #!/bin/bash
 # comprehensive_system_test.sh
 
-echo "🏗️ ARISTAY SYSTEM VALIDATION"
+echo "🏗️ Cosmo SYSTEM VALIDATION"
 echo "============================================================"
 
 # 1. Environment validation
@@ -343,7 +343,7 @@ python tests/production/test_production_hardening.py || exit 1
 
 ## 🏁 System Test Summary
 
-The Aristay system testing framework provides comprehensive validation across:
+The Cosmo system testing framework provides comprehensive validation across:
 
 - **Production hardening** with idempotent operations
 - **Integration workflows** with end-to-end validation  

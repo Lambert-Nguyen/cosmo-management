@@ -1,4 +1,4 @@
-# Aristay Property Management - Deployment Guide
+# Cosmo Property Management - Deployment Guide
 
 **Date:** September 12, 2025  
 **Version:** 2.0  
@@ -6,7 +6,7 @@
 
 ## Overview
 
-This guide provides comprehensive instructions for deploying the Aristay Property Management System to production environments. The system has been thoroughly tested and is ready for production deployment.
+This guide provides comprehensive instructions for deploying the Cosmo Property Management System to production environments. The system has been thoroughly tested and is ready for production deployment.
 
 ## Prerequisites
 
@@ -57,10 +57,10 @@ sudo apt install -y nodejs
 sudo -u postgres psql
 
 # Create database and user
-CREATE DATABASE aristay_production;
-CREATE USER aristay_user WITH PASSWORD 'secure_password';
-GRANT ALL PRIVILEGES ON DATABASE aristay_production TO aristay_user;
-ALTER USER aristay_user CREATEDB;
+CREATE DATABASE cosmo_production;
+CREATE USER cosmo_user WITH PASSWORD 'secure_password';
+GRANT ALL PRIVILEGES ON DATABASE cosmo_production TO cosmo_user;
+ALTER USER cosmo_user CREATEDB;
 \q
 ```
 
@@ -99,9 +99,9 @@ sudo nano /opt/cosmo/.env.production
 
 ```bash
 # Database Configuration
-DATABASE_URL=postgresql://aristay_user:secure_password@localhost/aristay_production
-DB_NAME=aristay_production
-DB_USER=aristay_user
+DATABASE_URL=postgresql://cosmo_user:secure_password@localhost/cosmo_production
+DB_NAME=cosmo_production
+DB_USER=cosmo_user
 DB_PASSWORD=secure_password
 DB_HOST=localhost
 DB_PORT=5432
@@ -367,7 +367,7 @@ sudo nano /etc/systemd/system/cosmo.service
 
 ```ini
 [Unit]
-Description=Aristay Property Management Gunicorn daemon
+Description=Cosmo Property Management Gunicorn daemon
 After=network.target
 
 [Service]
@@ -460,7 +460,7 @@ sudo nano /opt/cosmo/health_check.sh
 
 # Check if Gunicorn is running
 if ! systemctl is-active --quiet cosmo; then
-    echo "ERROR: Aristay service is not running"
+    echo "ERROR: Cosmo service is not running"
     exit 1
 fi
 
@@ -505,19 +505,19 @@ sudo nano /opt/cosmo/backup_db.sh
 
 BACKUP_DIR="/opt/cosmo/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="$BACKUP_DIR/aristay_db_$DATE.sql"
+BACKUP_FILE="$BACKUP_DIR/cosmo_db_$DATE.sql"
 
 # Create backup directory
 mkdir -p $BACKUP_DIR
 
 # Create database backup
-pg_dump -h localhost -U aristay_user aristay_production > $BACKUP_FILE
+pg_dump -h localhost -U cosmo_user cosmo_production > $BACKUP_FILE
 
 # Compress backup
 gzip $BACKUP_FILE
 
 # Remove backups older than 30 days
-find $BACKUP_DIR -name "aristay_db_*.sql.gz" -mtime +30 -delete
+find $BACKUP_DIR -name "cosmo_db_*.sql.gz" -mtime +30 -delete
 
 echo "Database backup completed: $BACKUP_FILE.gz"
 ```
@@ -722,7 +722,7 @@ For deployment support:
 
 - **Documentation**: https://docs.cosmo.com/deployment
 - **Support Email**: deployment-support@cosmo-management.cloud
-- **Emergency Contact**: +1-555-ARISTAY
+- **Emergency Contact**: +1-555-Cosmo
 
 ---
 *Deployment Guide generated on September 12, 2025*  

@@ -1,10 +1,10 @@
-# 🏗️ Aristay Project - Official Structure
+# 🏗️ Cosmo Project - Official Structure
 
 This document defines the official organization of the Cosmo Management project, consolidating all previous reorganization plans into a single authoritative structure.
 
 ## 📋 Project Overview
 
-**Aristay** is a comprehensive property management system consisting of:
+**Cosmo** is a comprehensive property management system consisting of:
 - **Backend**: Django REST API with JWT authentication, booking management, and task automation
 - **Frontend**: Flutter mobile application for property managers and staff
 - **Infrastructure**: PostgreSQL database, file storage, and production deployment tools

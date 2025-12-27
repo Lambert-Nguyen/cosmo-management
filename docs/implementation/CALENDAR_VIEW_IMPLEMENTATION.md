@@ -2,7 +2,7 @@
 
 ## Overview
 
-Successfully implemented a comprehensive calendar view system for the Aristay Property Management application that displays all bookings and tasks in a unified visual format. The implementation includes both backend API endpoints and a responsive HTML interface.
+Successfully implemented a comprehensive calendar view system for the Cosmo Property Management application that displays all bookings and tasks in a unified visual format. The implementation includes both backend API endpoints and a responsive HTML interface.
 
 ## Implementation Summary
 

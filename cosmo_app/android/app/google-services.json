@@ -1,8 +1,8 @@
 {
   "project_info": {
     "project_number": "676131410875",
-    "project_id": "aristayapp",
-    "storage_bucket": "aristayapp.firebasestorage.app"
+    "project_id": "cosmoapp",
+    "storage_bucket": "cosmoapp.firebasestorage.app"
   },
   "client": [
     {

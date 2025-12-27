@@ -1,4 +1,4 @@
-/* AriStay Dark Mode - applies automatically when OS is in dark mode */
+/* Cosmo Dark Mode - applies automatically when OS is in dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-0: #0b0f14;

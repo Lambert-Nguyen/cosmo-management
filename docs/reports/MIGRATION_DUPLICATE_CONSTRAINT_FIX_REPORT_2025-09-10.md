@@ -1,5 +1,5 @@
 # 🔧 **MIGRATION DUPLICATE CONSTRAINT FIX REPORT**
-## **Aristay Property Management System - Migration Cleanup and CI Fix**
+## **Cosmo Property Management System - Migration Cleanup and CI Fix**
 
 **Date**: September 10, 2025  
 **Status**: ✅ **MIGRATION ISSUES RESOLVED - CI WORKING WITH POSTGRESQL**
@@ -75,7 +75,7 @@ python manage.py migrate --plan
 ### **CI Testing with PostgreSQL**
 ```bash
 # Tested full test suite with PostgreSQL:
-POSTGRES_DB='aristay_test' POSTGRES_USER='postgres' POSTGRES_PASSWORD='postgres' POSTGRES_HOST='localhost' POSTGRES_PORT='5432' TESTING=true CI=true python -m pytest -q
+POSTGRES_DB='cosmo_test' POSTGRES_USER='postgres' POSTGRES_PASSWORD='postgres' POSTGRES_HOST='localhost' POSTGRES_PORT='5432' TESTING=true CI=true python -m pytest -q
 
 # Result: ✅ ALL TESTS PASSING
 # 100% success rate with PostgreSQL
@@ -158,7 +158,7 @@ def add_booking_overlap_constraint(apps, schema_editor):
 python manage.py showmigrations api
 
 # Test with PostgreSQL
-POSTGRES_DB='aristay_test' POSTGRES_USER='postgres' POSTGRES_PASSWORD='postgres' POSTGRES_HOST='localhost' POSTGRES_PORT='5432' TESTING=true CI=true python -m pytest -q
+POSTGRES_DB='cosmo_test' POSTGRES_USER='postgres' POSTGRES_PASSWORD='postgres' POSTGRES_HOST='localhost' POSTGRES_PORT='5432' TESTING=true CI=true python -m pytest -q
 
 # Verify constraint exists
 python manage.py shell -c "from django.db import connection; cursor = connection.cursor(); cursor.execute('SELECT conname FROM pg_constraint WHERE conname = \\'booking_no_overlap_active\\';'); print('Constraint exists:', len(cursor.fetchall()) > 0)"

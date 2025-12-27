@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a comprehensive status update on the JWT authentication and security system implementation for the Aristay backend application.
+This document provides a comprehensive status update on the JWT authentication and security system implementation for the Cosmo backend application.
 
 ## ✅ Completed Features
 

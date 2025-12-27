@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-This document provides comprehensive technical documentation for the Aristay Calendar API endpoints and implementation details.
+This document provides comprehensive technical documentation for the Cosmo Calendar API endpoints and implementation details.
 
 ## 🔗 Base URL
 

@@ -6,7 +6,7 @@
 
 ## 📋 Executive Summary
 
-This document provides a comprehensive overview of the Lost & Found feature implementation in the Aristay Property Management System. The feature enables staff members to report lost and found items directly from task contexts, with full integration into both the staff portal and Django admin interface, including detailed change tracking and history logging.
+This document provides a comprehensive overview of the Lost & Found feature implementation in the Cosmo Property Management System. The feature enables staff members to report lost and found items directly from task contexts, with full integration into both the staff portal and Django admin interface, including detailed change tracking and history logging.
 
 ## 🎯 Objectives Achieved
 

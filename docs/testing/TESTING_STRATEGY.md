@@ -234,4 +234,4 @@ The project includes pre-commit hooks for:
 
 ---
 
-*This testing documentation ensures comprehensive validation of the Aristay system's functionality, reliability, and production readiness.*
+*This testing documentation ensures comprehensive validation of the Cosmo system's functionality, reliability, and production readiness.*

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the comprehensive JWT authentication and security system implemented for the Aristay backend application.
+This document describes the comprehensive JWT authentication and security system implemented for the Cosmo backend application.
 
 ## System Architecture
 

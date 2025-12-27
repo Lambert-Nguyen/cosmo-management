@@ -1,6 +1,6 @@
 # Testing Guide
 
-**Aristay Property Management - Frontend Testing**
+**Cosmo Property Management - Frontend Testing**
 
 This guide covers all aspects of testing the refactored Django UI, including unit tests, integration tests, and end-to-end tests.
 

@@ -1,7 +1,7 @@
 # 🎨 UI/UX Improvements & User Analytics Dashboard
 
 ## Overview
-Comprehensive UI/UX improvements to the AriStay Manager console with enhanced contrast, modern styling, and advanced user performance analytics.
+Comprehensive UI/UX improvements to the Cosmo Manager console with enhanced contrast, modern styling, and advanced user performance analytics.
 
 ## ✅ Completed Improvements
 

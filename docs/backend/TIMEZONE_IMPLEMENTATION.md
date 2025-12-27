@@ -1,8 +1,8 @@
-# AriStay Dual Timezone Implementation Guide
+# Cosmo Dual Timezone Implementation Guide
 
 ## Overview
 
-AriStay now supports dual timezone display throughout the application with Tampa, Florida (Eastern Time) as the default server timezone and user-specific timezone preferences.
+Cosmo now supports dual timezone display throughout the application with Tampa, Florida (Eastern Time) as the default server timezone and user-specific timezone preferences.
 
 ## Key Features
 
@@ -144,8 +144,8 @@ class Profile(models.Model):
 ### Django Settings
 ```python
 TIME_ZONE = "America/New_York"  # Tampa, FL (Eastern Time)
-ARISTAY_DEFAULT_TIMEZONE = "America/New_York"
-ARISTAY_TIMEZONE_DISPLAY_NAME = "Tampa, FL"
+COSMO_DEFAULT_TIMEZONE = "America/New_York"
+COSMO_TIMEZONE_DISPLAY_NAME = "Tampa, FL"
 USE_TZ = True
 ```
 

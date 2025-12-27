@@ -9,7 +9,7 @@
 **Legacy Approach**: 
 - Manager adds users at `/manager/auth/user/add/`
 - Used Django's built-in `is_staff` checkbox to designate managers
-- **Inconsistent** with Aristay's modern role-based permission system
+- **Inconsistent** with Cosmo's modern role-based permission system
 
 **Modern System**:
 - Uses `Profile.role` field with choices: `staff`, `manager`, `superuser`, `viewer`
@@ -165,7 +165,7 @@ if user.is_staff:  # ❌ Don't use for app logic
 - ✅ Simpler permission logic
 - ✅ Clear separation of concerns
 - ✅ Future-proof role system
-- ✅ Consistent with Aristay architecture
+- ✅ Consistent with Cosmo architecture
 
 ## 🧪 **Testing the Updated System**
 
@@ -188,12 +188,12 @@ if user.is_staff:  # ❌ Don't use for app logic
 
 **Status**: ✅ **MODERNIZATION COMPLETE**
 
-**Key Achievement**: User creation now uses Aristay's modern role-based system instead of legacy Django `is_staff` approach.
+**Key Achievement**: User creation now uses Cosmo's modern role-based system instead of legacy Django `is_staff` approach.
 
 **Impact**: 
 - Consistent permission checking across entire application
 - Clear role hierarchy with automatic Django admin access syncing  
 - Better user experience with guided role assignment
-- Future-proof architecture aligned with Aristay's permission system
+- Future-proof architecture aligned with Cosmo's permission system
 
-The manager user creation form now properly integrates with Aristay's role-based permission system! 🎉
+The manager user creation form now properly integrates with Cosmo's role-based permission system! 🎉

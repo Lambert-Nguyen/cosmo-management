@@ -101,7 +101,7 @@ document.addEventListener('keydown', function(e) {
 ## Manager Dashboard Secret Message Activation Methods
 
 ### Method 1: Double-Click Welcome Logo ✅
-- Double-click the AriStay logo in the welcome section
+- Double-click the Cosmo logo in the welcome section
 - Visual feedback with hover effects
 - Most discoverable method
 
@@ -121,7 +121,7 @@ document.addEventListener('keydown', function(e) {
 
 ### ✅ Double-Click Logo Activation
 1. Go to `/manager/`
-2. Double-click the AriStay logo in welcome section
+2. Double-click the Cosmo logo in welcome section
 3. Secret message should appear with bounce animation
 
 ### ✅ Keyboard Sequence Activation  

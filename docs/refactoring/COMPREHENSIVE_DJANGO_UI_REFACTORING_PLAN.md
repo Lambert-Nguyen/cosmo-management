@@ -1,6 +1,6 @@
 # 🎨 Comprehensive Django UI Refactoring Plan
 
-**Project**: Aristay Property Management System  
+**Project**: Cosmo Property Management System  
 **Date**: December 2024  
 **Status**: ⚠️ CRITICAL - Requires Phase 0 Infrastructure  
 **Timeline**: 8 weeks (includes pre-refactoring setup)  
@@ -989,7 +989,7 @@ describe('ChecklistManager API Integration', () => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token }}">
-  <title>{% block title %}AriStay{% endblock %}</title>
+  <title>{% block title %}Cosmo{% endblock %}</title>
   
   <!-- Design System CSS -->
   <link rel="stylesheet" href="{% static 'css/design-system.css' %}">

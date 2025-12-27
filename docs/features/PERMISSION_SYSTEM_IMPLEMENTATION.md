@@ -1,7 +1,7 @@
 # Permission System Implementation Summary
 
 ## Overview
-We have successfully implemented a comprehensive, flexible role-based permission system for the AriStay application as requested. The system provides three levels of access (Superuser, Manager, Staff/Crew) with the ability to customize permissions via Django REST Framework and an easy-to-use UI.
+We have successfully implemented a comprehensive, flexible role-based permission system for the Cosmo application as requested. The system provides three levels of access (Superuser, Manager, Staff/Crew) with the ability to customize permissions via Django REST Framework and an easy-to-use UI.
 
 ## Key Features Implemented
 

@@ -82,7 +82,7 @@ class UserManagerAdmin(DjangoUserAdmin):
 
 ## 🔄 Related Fixes Completed
 
-This fix is part of a larger effort to correct Aristay's role-based permission system:
+This fix is part of a larger effort to correct Cosmo's role-based permission system:
 
 1. ✅ **Profile Role System**: Fixed test data creation to use `UserRole` enum instead of legacy `is_staff`
 2. ✅ **Manager Dashboard Access**: Fixed `manager_portal_access` permission for manager role  

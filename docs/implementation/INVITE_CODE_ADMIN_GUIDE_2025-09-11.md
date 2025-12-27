@@ -1,4 +1,4 @@
-# Invite Code Management Guide - AriStay Admin
+# Invite Code Management Guide - Cosmo Admin
 
 **For System Administrators**  
 **Last Updated:** September 11, 2025

@@ -1,4 +1,4 @@
-# Aristay PyTest Workflow Guide
+# Cosmo PyTest Workflow Guide
 
 **Date**: September 7, 2025  
 **Status**: ✅ UPDATED - Test Organization Complete
