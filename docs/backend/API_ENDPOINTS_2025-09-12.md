@@ -1,4 +1,4 @@
-# Aristay Property Management - API Endpoints Documentation
+# Cosmo Property Management - API Endpoints Documentation
 
 **Date:** September 12, 2025  
 **API Version:** 2.0  

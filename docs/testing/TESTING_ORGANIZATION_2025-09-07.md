@@ -1,4 +1,4 @@
-# Aristay Testing Organization Guide
+# Cosmo Testing Organization Guide
 
 **Date**: September 7, 2025  
 **Component**: Testing Infrastructure  
@@ -6,7 +6,7 @@
 
 ## 🏗️ Testing Directory Structure
 
-Following the Aristay PROJECT_STRUCTURE guidelines, all tests are now properly organized:
+Following the Cosmo PROJECT_STRUCTURE guidelines, all tests are now properly organized:
 
 ```
 tests/

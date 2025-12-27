@@ -134,7 +134,7 @@ On mobile devices (< 768px width):
 
 ## 🎨 Design Consistency
 
-All chat access points follow the AriStay design system:
+All chat access points follow the Cosmo design system:
 
 - **Icon**: 💬 (chat bubble emoji)
 - **Color**: Primary brand color (#6366f1)
@@ -250,7 +250,7 @@ All integration points are mobile-optimized:
 
 ## ✅ Conclusion
 
-The chat feature is now **fully integrated** into the AriStay UI with multiple access points. Users can easily discover and access the chat functionality from:
+The chat feature is now **fully integrated** into the Cosmo UI with multiple access points. Users can easily discover and access the chat functionality from:
 
 - Staff portal navigation
 - Portal navigation menu  

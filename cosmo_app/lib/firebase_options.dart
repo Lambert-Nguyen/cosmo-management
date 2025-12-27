@@ -50,25 +50,25 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyBFPVfZGxRiNZcMFaTcVP6F42JSfRh3gtQ',
     appId: '1:676131410875:web:529b65628a66239b2bea9e',
     messagingSenderId: '676131410875',
-    projectId: 'aristayapp',
-    authDomain: 'aristayapp.firebaseapp.com',
-    storageBucket: 'aristayapp.firebasestorage.app',
+    projectId: 'cosmoapp',
+    authDomain: 'cosmoapp.firebaseapp.com',
+    storageBucket: 'cosmoapp.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAYS2OX0zBeSjBmjm3F0NOR8kxvMTlIweM',
     appId: '1:676131410875:android:d7ba332bda9d44022bea9e',
     messagingSenderId: '676131410875',
-    projectId: 'aristayapp',
-    storageBucket: 'aristayapp.firebasestorage.app',
+    projectId: 'cosmoapp',
+    storageBucket: 'cosmoapp.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBEWjPyKBSb3TISbeLXposnwGZLb89KsoY',
     appId: '1:676131410875:ios:368ac79a81d4c17b2bea9e',
     messagingSenderId: '676131410875',
-    projectId: 'aristayapp',
-    storageBucket: 'aristayapp.firebasestorage.app',
+    projectId: 'cosmoapp',
+    storageBucket: 'cosmoapp.firebasestorage.app',
     iosBundleId: 'com.cosmomgmt.app',
   );
 }

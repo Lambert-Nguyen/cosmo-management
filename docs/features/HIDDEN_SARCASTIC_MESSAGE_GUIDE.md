@@ -2,7 +2,7 @@
 
 ## Overview
 
-I've successfully implemented your sarcastic and elegant hidden message across all major HTML templates in the AriStay system. Each template has its own unique activation method and styling, making the discovery process both challenging and delightful.
+I've successfully implemented your sarcastic and elegant hidden message across all major HTML templates in the Cosmo system. Each template has its own unique activation method and styling, making the discovery process both challenging and delightful.
 
 ## 📝 The Hidden Message
 
@@ -28,7 +28,7 @@ Pray tell, dear friend, have you no shame?
 ### 1. **Admin Templates** (`admin/base_site.html`)
 - **Title**: "🎭 A Message for the Curious Soul 🎭"
 - **Activation Methods**:
-  - **Primary**: Click the AriStay logo 7 times within 2 seconds
+  - **Primary**: Click the Cosmo logo 7 times within 2 seconds
   - **Alternative**: Konami Code (↑↑↓↓←→←→BA)
 - **Styling**: Elegant gradient with Georgia serif font
 - **Features**: Smooth animations, backdrop blur, elegant close button
@@ -140,7 +140,7 @@ The implementation perfectly captures the sarcastic yet elegant tone you request
 ## 🚀 Usage Instructions
 
 1. **Navigate** to any of the four template areas
-2. **Look** for the AriStay logo (usually in the header)
+2. **Look** for the Cosmo logo (usually in the header)
 3. **Try** the activation method for that specific template
 4. **Enjoy** the elegant reveal of your sarcastic message
 5. **Close** using the elegant close button

@@ -1,6 +1,6 @@
 # 🔍 Flutter Web Migration Analysis
 **Date**: December 5, 2025  
-**Project**: Aristay Property Management System  
+**Project**: Cosmo Property Management System  
 **Branch**: refactor_01  
 **Status**: ⚠️ PRIORITY CHANGED - Django UI/UX Refactoring Required First
 
@@ -419,7 +419,7 @@ Option C: "Stay Django-First"
 **Update `pubspec.yaml`:**
 ```yaml
 name: cosmo_app
-description: "Aristay Property Management - Mobile & Web"
+description: "Cosmo Property Management - Mobile & Web"
 
 environment:
   sdk: ^3.7.2
@@ -499,7 +499,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Aristay',
+      title: 'Cosmo',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       

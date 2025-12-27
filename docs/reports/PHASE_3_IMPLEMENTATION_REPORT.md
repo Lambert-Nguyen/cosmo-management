@@ -177,8 +177,8 @@ Always:
 + {% extends "layouts/staff_layout.html" %}
 
 + {% block page_title %}{{ task.title }}{% endblock %}
-- {% block title %}{{ task.title }} · AriStay{% endblock %}
-+ {% block title %}{{ task.title }} · AriStay Staff{% endblock %}
+- {% block title %}{{ task.title }} · Cosmo{% endblock %}
++ {% block title %}{{ task.title }} · Cosmo Staff{% endblock %}
 ```
 
 **Result**:
@@ -261,11 +261,11 @@ layouts/base_unified.html (100 lines) ✅ SINGLE SOURCE
 
 ```django
 <!-- OLD -->
-{% block title %}Page Title · AriStay{% endblock %}
+{% block title %}Page Title · Cosmo{% endblock %}
 
 <!-- NEW -->
 {% block page_title %}Page Title{% endblock %}
-{% block title %}Page Title · AriStay Staff{% endblock %}
+{% block title %}Page Title · Cosmo Staff{% endblock %}
 ```
 
 #### 4. Remove Duplicate Header/Nav (if any)

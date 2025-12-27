@@ -2,7 +2,7 @@
 
 ## Overview
 
-The AriStay application now features a comprehensive, robust dynamic permissions system that provides fine-grained access control with role-based permissions, user-specific overrides, and expiration capabilities.
+The Cosmo application now features a comprehensive, robust dynamic permissions system that provides fine-grained access control with role-based permissions, user-specific overrides, and expiration capabilities.
 
 ## 🏗️ Architecture
 

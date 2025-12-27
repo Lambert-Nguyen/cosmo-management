@@ -2,7 +2,7 @@
 
 ## 🔐 **User Types & Access Patterns**
 
-> **Note**: Aristay uses a Profile-based role system (`UserRole.SUPERUSER`, `UserRole.MANAGER`, `UserRole.STAFF`, `UserRole.VIEWER`) as the source of truth for permissions. Django's `is_staff`/`is_superuser` fields are automatically synced based on the Profile role.
+> **Note**: Cosmo uses a Profile-based role system (`UserRole.SUPERUSER`, `UserRole.MANAGER`, `UserRole.STAFF`, `UserRole.VIEWER`) as the source of truth for permissions. Django's `is_staff`/`is_superuser` fields are automatically synced based on the Profile role.
 
 ### **1. SUPERUSER (System Administrator)**
 

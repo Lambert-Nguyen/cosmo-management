@@ -16,82 +16,82 @@ MIGRATED TEMPLATES
 ✓ lockout.html
   Old: base.html
   New: layouts/public_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/lockout_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/lockout_20251206_213003.html
 
 ✓ chatbox.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/chatbox_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/chatbox_20251206_213003.html
 
 ✓ photo_comparison.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/photo_comparison_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/photo_comparison_20251206_213003.html
 
 ✓ photo_management.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/photo_management_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/photo_management_20251206_213003.html
 
 ✓ photo_upload.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/photo_upload_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/photo_upload_20251206_213003.html
 
 ✓ register.html
   Old: base.html
   New: layouts/public_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/register_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/register_20251206_213003.html
 
 ✓ checklist_templates.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/checklist_templates_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/checklist_templates_20251206_213003.html
 
 ✓ cleaning_dashboard.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/cleaning_dashboard_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/cleaning_dashboard_20251206_213003.html
 
 ✓ dashboard.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/dashboard_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/dashboard_20251206_213003.html
 
 ✓ inventory_lookup.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/inventory_lookup_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/inventory_lookup_20251206_213003.html
 
 ✓ laundry_dashboard.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/laundry_dashboard_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/laundry_dashboard_20251206_213003.html
 
 ✓ lawn_pool_dashboard.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/lawn_pool_dashboard_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/lawn_pool_dashboard_20251206_213003.html
 
 ✓ lost_found_list.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/lost_found_list_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/lost_found_list_20251206_213003.html
 
 ✓ maintenance_dashboard.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/maintenance_dashboard_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/maintenance_dashboard_20251206_213003.html
 
 ✓ my_tasks.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/my_tasks_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/my_tasks_20251206_213003.html
 
 ✓ task_form.html
   Old: staff/base.html
   New: layouts/staff_layout.html
-  Backup: /Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/templates_backup/task_form_20251206_213003.html
+  Backup: /Users/duylam1407/Workspace/SJSU/cosmo_app/cosmo_backend/api/templates_backup/task_form_20251206_213003.html
 
 ISSUES FOUND
 --------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ ISSUES FOUND
 ⚠ change_password.html
   - Unknown base template: admin/base_site.html
 
-⚠ base_aristay.html
+⚠ base_cosmo.html
   - No extends tag found
 
 ⚠ base_site.html
@@ -171,7 +171,7 @@ ISSUES FOUND
   - No extends tag found
 
 ⚠ property_approval.html
-  - Unknown base template: admin/base_aristay.html
+  - Unknown base template: admin/base_cosmo.html
 
 ⚠ security_dashboard.html
   - Unknown base template: admin/base_site.html

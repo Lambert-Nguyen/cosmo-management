@@ -1,7 +1,7 @@
-# 🧪 Aristay Testing User Manual
+# 🧪 Cosmo Testing User Manual
 
 ## Overview
-This manual provides comprehensive instructions for running all tests in the Aristay booking management system. The test suite is organized into three main categories with different execution methods available.
+This manual provides comprehensive instructions for running all tests in the Cosmo booking management system. The test suite is organized into three main categories with different execution methods available.
 
 ## Test Structure
 

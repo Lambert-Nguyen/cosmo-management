@@ -1,4 +1,4 @@
-# aristay_flutter_frontend
+# cosmo_flutter_frontend
 
 A new Flutter project.
 

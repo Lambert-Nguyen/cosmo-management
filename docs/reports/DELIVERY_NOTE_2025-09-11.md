@@ -1,4 +1,4 @@
-### AriStay Management System Delivery Note
+### Cosmo Management System Delivery Note
 
 Date: 2025-09-11
 Environment: Heroku (Production) + Local Dev (PostgreSQL)

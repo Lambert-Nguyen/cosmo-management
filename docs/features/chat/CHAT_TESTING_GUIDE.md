@@ -1,4 +1,4 @@
-# AriStay Chat System - Testing Guide
+# Cosmo Chat System - Testing Guide
 
 **Date**: 2025-10-19  
 **Test Users**: `duylam1407` (password: `1`), `user` (password: `Duylam@123`)

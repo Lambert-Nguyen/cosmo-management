@@ -1,6 +1,6 @@
 ## Task Groups: Staff Assignment and Dashboard Permissions
 
-This document describes the Task Group capability added to AriStay for assigning staff/crew to departments and scoping dashboard permissions.
+This document describes the Task Group capability added to Cosmo for assigning staff/crew to departments and scoping dashboard permissions.
 
 ### Overview
 - Purpose: Segment staff into functional groups for visibility and permissions

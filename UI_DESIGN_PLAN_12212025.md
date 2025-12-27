@@ -4,13 +4,13 @@
 **Created:** 2025-12-21
 **Last Updated:** 2025-12-24
 **Status:** Requires Architectural Decisions Before Implementation
-**Platform Name:** Cosmo Management (formerly AriStay)
+**Platform Name:** Cosmo Management (formerly Cosmo)
 
 ### 📋 Revision History
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 3.2 | 2025-12-24 | **Backend audit corrections:** JWT already implemented (not pending), fixed directory paths (`aristay_backend/` not `cosmo/`), updated Phase 1 status, added endpoint verification requirements |
+| 3.2 | 2025-12-24 | **Backend audit corrections:** JWT already implemented (not pending), fixed directory paths (`cosmo_backend/` not `cosmo/`), updated Phase 1 status, added endpoint verification requirements |
 | 3.1 | 2025-12-24 | Added Critical Review section |
 | 3.0 | 2025-12-23 | Reorganized into 3 Stages |
 
@@ -76,7 +76,7 @@
 
 | Option | Description | Pros | Cons |
 |--------|-------------|------|------|
-| **A) Parallel Build** | Build new `cosmo_app/` from scratch alongside existing `aristay_flutter_frontend/` | Clean slate, no legacy issues | More initial work, no code reuse |
+| **A) Parallel Build** | Build new `cosmo_app/` from scratch alongside existing `cosmo_flutter_frontend/` | Clean slate, no legacy issues | More initial work, no code reuse |
 | **B) Incremental Refactor** | Gradually migrate existing code module by module | Some code reuse | Complex, broken intermediate states |
 | **C) Mobile-First MVP** | Rebuild mobile app first with new stack, then add web | Faster validation, smaller scope | Delayed web delivery |
 
@@ -116,12 +116,12 @@ Multi-tenant SaaS capabilities are **completely deferred** to a separate v2.0 pl
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | **Phase 0** | GitHub Repo & Project Renaming | Clean start with new identity before any development |
-| **Flutter Base** | Extend existing `aristay_flutter_frontend/` → `cosmo_app/` | Leverage existing Firebase setup and mobile infrastructure |
+| **Flutter Base** | Extend existing `cosmo_flutter_frontend/` → `cosmo_app/` | Leverage existing Firebase setup and mobile infrastructure |
 | **Manager Module** | Move to Flutter Web | Unified experience for managers alongside Portal/Staff |
 | **Chat Implementation** | HTTP Polling first | Simpler implementation, add WebSocket later |
 | **Phase Priority** | Renaming first, then Staff Module | Rename first for clean slate, then focus on core task management |
 | **Multi-Tenancy** | Defer to v2.0+ | Build single-tenant MVP first (Phases 0-12) |
-| **Git Strategy** | Create new repository `cosmo-management` | Fresh start, archive old aristay_app repo |
+| **Git Strategy** | Create new repository `cosmo-management` | Fresh start, archive old cosmo_app repo |
 | **Database Strategy** | Create new `cosmo_db` | Fresh database, migrate data as needed |
 | **Repository Rename** | Phase 0 via GitHub UI | Rename first before any development work |
 
@@ -189,10 +189,10 @@ class ApiException implements Exception {
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  Phase 0: GitHub Repo & Project Renaming ◀── FIRST STEP ────────────────── │
-│     ├── Rename GitHub repository (aristay_app → cosmo-management)           │
+│     ├── Rename GitHub repository (cosmo_app → cosmo-management)           │
 │     ├── Rename project directories (cosmo → cosmo_backend)                │
 │     ├── Update all code references (package names, imports)                 │
-│     ├── Update database name (aristay_db → cosmo_db)                        │
+│     ├── Update database name (cosmo_db → cosmo_db)                        │
 │     └── Update bundle identifiers and app metadata                          │
 │                                                                              │
 │  Phase 1: Backend Preparation ◀── PREREQUISITE ─────────────────────────── │
@@ -409,7 +409,7 @@ class ApiException implements Exception {
 ## Multi-Tenant SaaS Architecture
 
 ### Vision
-Transform this platform into a **white-label SaaS template** that can serve multiple businesses with similar property/task management needs, not just AriStay.
+Transform this platform into a **white-label SaaS template** that can serve multiple businesses with similar property/task management needs, not just Cosmo.
 
 ### Multi-Tenant Target Architecture
 ```
@@ -421,7 +421,7 @@ Transform this platform into a **white-label SaaS template** that can serve mult
 │                      Tenant Isolation Layer                         │
 ├──────────────┬──────────────┬──────────────┬───────────────────────┤
 │   Tenant A   │   Tenant B   │   Tenant C   │   Tenant N...         │
-│ (AriStay)    │ (Hotel Corp) │ (Cleaning Co)│                       │
+│ (Cosmo)    │ (Hotel Corp) │ (Cleaning Co)│                       │
 ├──────────────┴──────────────┴──────────────┴───────────────────────┤
 │           Flutter Web/Mobile (Tenant-Aware, White-Label)            │
 ├─────────────────────────────────────────────────────────────────────┤
@@ -744,8 +744,8 @@ class FeatureService {
 ```
 Current                              → Target
 ────────────────────────────────────────────────────────────
-aristay_app/                         → cosmo_management/
-├── aristay_backend/                 → cosmo_backend/
+cosmo_app/                         → cosmo_management/
+├── cosmo_backend/                 → cosmo_backend/
 │   ├── backend/                     → backend/ (Django project config)
 │   │   ├── settings.py              → Update APP_NAME, DB_NAME
 │   │   ├── urls.py                  → Update URL patterns
@@ -753,7 +753,7 @@ aristay_app/                         → cosmo_management/
 │   ├── api/                         → api/ (DRF application - no change)
 │   └── manage.py                    → Update settings reference
 
-aristay_flutter_frontend/            → cosmo_app/
+cosmo_flutter_frontend/            → cosmo_app/
 ├── lib/
 │   ├── core/constants/app.dart      → Update app name, package ID
 │   └── main.dart                    → Update app title
@@ -777,7 +777,7 @@ aristay_flutter_frontend/            → cosmo_app/
 **Phase 3: Database**
 ```sql
 -- Rename database (or create new)
-ALTER DATABASE aristay_db RENAME TO cosmo_db;
+ALTER DATABASE cosmo_db RENAME TO cosmo_db;
 
 -- Or in settings.py:
 DATABASES = {
@@ -2033,7 +2033,7 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 ---
 
 ### Phase 0: GitHub Repo & Project Renaming (FIRST STEP)
-**Objective:** Rename entire project from AriStay to Cosmo Management before any development
+**Objective:** Rename entire project from Cosmo to Cosmo Management before any development
 
 **Priority:** Must complete FIRST - Clean start with new identity
 **Status:** Ready to begin
@@ -2054,15 +2054,15 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 # Option B: Create fresh repository (recommended)
 # 1. Create new repo "cosmo-management" on GitHub
 # 2. Clone locally, copy relevant files
-# 3. Archive old "aristay_app" repo
+# 3. Archive old "cosmo_app" repo
 ```
 
 ##### 0.2 Project Directory Renaming
 ```bash
 Current                              → Target
 ────────────────────────────────────────────────────────────
-aristay_app/                         → cosmo_management/ (or cosmo-management/)
-├── aristay_backend/                 → cosmo_backend/
+cosmo_app/                         → cosmo_management/ (or cosmo-management/)
+├── cosmo_backend/                 → cosmo_backend/
 │   ├── backend/                     → backend/ (Django project config)
 │   │   ├── settings.py              → Update APP_NAME, DB_NAME
 │   │   ├── settings_base.py         → Update APP_NAME, DEFAULT_FROM_EMAIL
@@ -2071,7 +2071,7 @@ aristay_app/                         → cosmo_management/ (or cosmo-management/
 │   ├── api/                         → api/ (DRF application - no change)
 │   └── manage.py                    → Update settings reference
 
-aristay_flutter_frontend/            → cosmo_app/
+cosmo_flutter_frontend/            → cosmo_app/
 ├── lib/
 │   ├── core/constants/app.dart      → Update app name, package ID
 │   └── main.dart                    → Update app title
@@ -2098,7 +2098,7 @@ grep -r "cosmo" --include="*.py" --include="*.dart" --include="*.yaml" --include
 ##### 0.4 Database Rename
 ```sql
 -- Option A: Rename existing database
-ALTER DATABASE aristay_db RENAME TO cosmo_db;
+ALTER DATABASE cosmo_db RENAME TO cosmo_db;
 
 -- Option B: Create new database (recommended for clean start)
 CREATE DATABASE cosmo_db;
@@ -2129,7 +2129,7 @@ git init
 git add .
 git commit -m "Initial commit: Cosmo Management project structure
 
-Renamed from AriStay to Cosmo Management.
+Renamed from Cosmo to Cosmo Management.
 - Django backend: cosmo_backend/
 - Flutter app: cosmo_app/
 - Database: cosmo_db"
@@ -2223,7 +2223,7 @@ Create or update API documentation covering:
 
 > **⚠️ ENDPOINT PATH VERIFICATION REQUIRED:**
 > Some endpoint paths in this plan may differ from actual backend routes.
-> Before Flutter development, audit these paths against `aristay_backend/api/urls.py`:
+> Before Flutter development, audit these paths against `cosmo_backend/api/urls.py`:
 > - `/api/staff/tasks/{id}/` vs `/api/tasks/{id}/`
 > - `/api/tasks/{id}/set_status/` vs `/api/staff/task/{id}/status/`
 > - `/api/mobile/offline-sync/` - may not exist yet
@@ -2423,13 +2423,13 @@ git checkout -b refactor/cosmo-rename
 
 #### Step 2: Directory Renames
 ```bash
-# From project root: /home/duylam1407/WorkSpace/aristay_app/
+# From project root: /home/duylam1407/WorkSpace/cosmo_app/
 
 # Rename backend directory (preserves git history)
-git mv aristay_backend cosmo_backend
+git mv cosmo_backend cosmo_backend
 
 # Rename frontend directory
-git mv aristay_flutter_frontend cosmo_app
+git mv cosmo_flutter_frontend cosmo_app
 
 # Note: The backend Django project config is in cosmo_backend/backend/
 # The API app is in cosmo_backend/api/
@@ -2441,36 +2441,36 @@ git mv aristay_flutter_frontend cosmo_app
 
 ```bash
 # Update pubspec.yaml first
-# Change: name: aristay_flutter_frontend
+# Change: name: cosmo_flutter_frontend
 # To:     name: cosmo_app
 
 # Then update ALL Dart import statements:
-# FROM: import 'package:aristay_flutter_frontend/...
+# FROM: import 'package:cosmo_flutter_frontend/...
 # TO:   import 'package:cosmo_app/...
 
 # Find all files needing update:
-grep -r "package:aristay_flutter_frontend" cosmo_app/lib/ --include="*.dart"
+grep -r "package:cosmo_flutter_frontend" cosmo_app/lib/ --include="*.dart"
 
 # Use IDE "Find and Replace in Files" or sed:
-find cosmo_app/lib -name "*.dart" -exec sed -i 's/package:aristay_flutter_frontend/package:cosmo_app/g' {} +
+find cosmo_app/lib -name "*.dart" -exec sed -i 's/package:cosmo_flutter_frontend/package:cosmo_app/g' {} +
 ```
 
 #### Step 4: Code References (Search & Replace)
 ```bash
 # Replace in order (specific patterns first):
-"aristay_flutter_frontend" → "cosmo_app"
-"aristay_backend"          → "cosmo_backend"
-"aristay_local"            → "cosmo_db"
-"AriStay"                  → "Cosmo Management"  (brand name in UI)
+"cosmo_flutter_frontend" → "cosmo_app"
+"cosmo_backend"          → "cosmo_backend"
+"cosmo_local"            → "cosmo_db"
+"Cosmo"                  → "Cosmo Management"  (brand name in UI)
 "cosmo"                  → "cosmo"              (lowercase references)
 
-# Files to update (after renaming aristay_backend → cosmo_backend):
+# Files to update (after renaming cosmo_backend → cosmo_backend):
 cosmo_backend/backend/settings_base.py   → APP_NAME, DEFAULT_FROM_EMAIL
 cosmo_backend/backend/settings.py        → DJANGO_SETTINGS_MODULE references
 cosmo_backend/backend/wsgi.py            → DJANGO_SETTINGS_MODULE
 cosmo_backend/backend/asgi.py            → DJANGO_SETTINGS_MODULE
 cosmo_backend/manage.py                  → DJANGO_SETTINGS_MODULE
-cosmo_backend/api/templates/**/*.html    → Any "AriStay" text
+cosmo_backend/api/templates/**/*.html    → Any "Cosmo" text
 cosmo_app/lib/main.dart                  → App title
 cosmo_app/android/app/build.gradle       → applicationId, namespace
 cosmo_app/android/app/src/main/AndroidManifest.xml → android:label
@@ -2563,10 +2563,10 @@ grep -ri "cosmo" --include="*.py" --include="*.dart" --include="*.yaml" --includ
 git add -A
 git status  # Review all changes
 
-git commit -m "Rename platform from AriStay to Cosmo Management
+git commit -m "Rename platform from Cosmo to Cosmo Management
 
-- Rename aristay_backend/ → cosmo_backend/
-- Rename aristay_flutter_frontend/ → cosmo_app/
+- Rename cosmo_backend/ → cosmo_backend/
+- Rename cosmo_flutter_frontend/ → cosmo_app/
 - Update all Dart package imports
 - Update Android/iOS bundle identifiers
 - Update web manifest and HTML
@@ -2591,13 +2591,13 @@ git push -u origin refactor/cosmo-rename
 #### Deliverables Summary
 | Item | Before | After |
 |------|--------|-------|
-| Django backend | `aristay_backend/` | `cosmo_backend/` |
-| Flutter app | `aristay_flutter_frontend/` | `cosmo_app/` |
-| Dart package | `package:aristay_flutter_frontend` | `package:cosmo_app` |
-| Database | `aristay_local` | `cosmo_db` |
-| Android ID | `com.example.aristay_flutter_frontend` | `com.cosmomgmt.app` |
-| iOS Bundle | `com.example.aristayFlutterFrontend` | `com.cosmomgmt.app` |
-| Git Repo | `aristay_app` | `cosmo-management` (manual) |
+| Django backend | `cosmo_backend/` | `cosmo_backend/` |
+| Flutter app | `cosmo_flutter_frontend/` | `cosmo_app/` |
+| Dart package | `package:cosmo_flutter_frontend` | `package:cosmo_app` |
+| Database | `cosmo_local` | `cosmo_db` |
+| Android ID | `com.example.cosmo_flutter_frontend` | `com.cosmomgmt.app` |
+| iOS Bundle | `com.example.cosmoFlutterFrontend` | `com.cosmomgmt.app` |
+| Git Repo | `cosmo_app` | `cosmo-management` (manual) |
 
 #### Definition of Done - Phase 0
 - [ ] All directories renamed
@@ -3047,7 +3047,7 @@ lib/
    - Create Tenant, TenantSettings, Subscription, Plan models
    - Add `tenant_id` foreign key to ALL existing models (40+ migrations)
    - Create tenant-aware indexes and constraints
-   - Data migration for existing AriStay data as first tenant
+   - Data migration for existing Cosmo data as first tenant
 
 2. **Middleware & Authentication**
    - Implement TenantMiddleware for request context
@@ -3241,7 +3241,7 @@ lib/
 ## Flutter Project Structure (Target)
 
 ```
-aristay_flutter_frontend/
+cosmo_flutter_frontend/
 ├── lib/
 │   ├── main.dart
 │   ├── app.dart
@@ -3573,9 +3573,9 @@ Phase 2: Auth              →     Phase 2: Auth (3 screens)
 
 **Deliverables Table:**
 - Clear before/after mapping for all components
-- `aristay_app/` → `cosmo_management/`
-- `aristay_flutter_frontend/` → `cosmo_app/`
-- `aristay_db` → `cosmo_db`
+- `cosmo_app/` → `cosmo_management/`
+- `cosmo_flutter_frontend/` → `cosmo_app/`
+- `cosmo_db` → `cosmo_db`
 
 **Updated Phase 1:**
 - Updated Flutter project path reference to `cosmo_app/`

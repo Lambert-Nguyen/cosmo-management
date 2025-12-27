@@ -156,7 +156,7 @@ def save_formset(self, request, form, formset, change):
 - ✅ Automatic Django admin field syncing
 - ✅ Consistent role-based permission system
 
-**Result**: All user creation now uses Aristay's modern Profile.role system instead of legacy Django `is_staff`/`is_superuser` checkboxes. The system automatically maintains consistency between app roles and Django admin access! 🚀✨
+**Result**: All user creation now uses Cosmo's modern Profile.role system instead of legacy Django `is_staff`/`is_superuser` checkboxes. The system automatically maintains consistency between app roles and Django admin access! 🚀✨
 
 ---
 

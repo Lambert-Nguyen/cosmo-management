@@ -21,7 +21,7 @@ This document provides comprehensive testing procedures for the Photo Management
 ```bash
 # Test environment variables
 export DJANGO_SETTINGS_MODULE=backend.settings_test
-export POSTGRES_DB=aristay_test
+export POSTGRES_DB=cosmo_test
 export POSTGRES_USER=postgres
 export POSTGRES_PASSWORD=postgres
 export USE_CLOUDINARY=false
@@ -33,7 +33,7 @@ export USE_CLOUDINARY=false
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'aristay_test',
+        'NAME': 'cosmo_test',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
@@ -497,7 +497,7 @@ sudo systemctl status postgresql
 sudo systemctl restart postgresql
 
 # Check database exists
-psql -U postgres -c "\l" | grep aristay_test
+psql -U postgres -c "\l" | grep cosmo_test
 ```
 
 #### Test Environment Issues

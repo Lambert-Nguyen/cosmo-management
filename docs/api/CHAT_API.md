@@ -1,4 +1,4 @@
-# AriStay Chat API Documentation for Flutter/iOS
+# Cosmo Chat API Documentation for Flutter/iOS
 
 **Version**: 1.0.0  
 **Last Updated**: 2025-10-19  
@@ -1095,5 +1095,5 @@ For issues or questions:
 
 **Last Updated**: 2025-10-19  
 **API Version**: 1.0.0  
-**Maintained by**: AriStay Development Team
+**Maintained by**: Cosmo Development Team
 

@@ -16,17 +16,17 @@ KeyError: 'password1'
 
 ## Root Cause
 
-The `AriStayUserAdmin` class in `api/admin.py` had:
+The `CosmoUserAdmin` class in `api/admin.py` had:
 - `exclude = ('password',)` which excluded password fields from the form
 - **Missing `add_fieldsets`** configuration for the "Add User" form
 - Django's UserAdmin expects `password1` and `password2` fields in the add form
 
 ## Solution Applied
 
-Added the missing `add_fieldsets` configuration to the `AriStayUserAdmin` class:
+Added the missing `add_fieldsets` configuration to the `CosmoUserAdmin` class:
 
 ```python
-class AriStayUserAdmin(DjangoUserAdmin):
+class CosmoUserAdmin(DjangoUserAdmin):
     # ... existing configuration ...
     
     # Add fieldsets for creating new users (includes password fields)

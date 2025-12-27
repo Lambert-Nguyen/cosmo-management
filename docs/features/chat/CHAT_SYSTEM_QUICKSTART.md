@@ -1,4 +1,4 @@
-# AriStay Chat System - Quick Start Guide
+# Cosmo Chat System - Quick Start Guide
 
 ## 🎯 What's Been Implemented
 

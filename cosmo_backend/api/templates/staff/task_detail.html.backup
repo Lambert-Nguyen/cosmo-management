@@ -1,6 +1,6 @@
 {% extends "staff/base.html" %}
 
-{% block title %}{{ task.title }} · AriStay{% endblock %}
+{% block title %}{{ task.title }} · Cosmo{% endblock %}
 
 {% block content %}
 <div class="task-detail-container">

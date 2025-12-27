@@ -43,8 +43,8 @@ Successfully integrated calendar HTML template tests into the main project test 
 
 ### Database Setup Challenges
 - **Issue**: Django test runner creates test database with different naming convention
-- **Expected**: `aristay_test` (as configured in settings_test.py)
-- **Actual**: `test_aristay_test` (Django's default naming)
+- **Expected**: `cosmo_test` (as configured in settings_test.py)
+- **Actual**: `test_cosmo_test` (Django's default naming)
 - **Impact**: Complex UI tests requiring database access fail
 
 ### Workaround Implemented
