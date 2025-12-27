@@ -11,7 +11,7 @@ from pathlib import Path
 from django.test import TestCase
 
 # Add backend to Python path for imports
-backend_path = Path(__file__).parent.parent.parent / "aristay_backend"
+backend_path = Path(__file__).parent.parent.parent / "cosmo_backend"
 sys.path.insert(0, str(backend_path))
 
 @pytest.mark.django_db

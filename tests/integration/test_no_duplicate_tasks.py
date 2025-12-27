@@ -8,7 +8,7 @@ import sys
 import django
 
 # Add the Django backend to the Python path
-backend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'aristay_backend'))
+backend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'cosmo_backend'))
 sys.path.append(backend_path)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 

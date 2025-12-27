@@ -45,7 +45,7 @@
 ## 🛠️ **Changes Made**
 
 ### **1. Updated Manager User Creation Form**
-**File**: `aristay_backend/api/managersite.py`
+**File**: `cosmo_backend/api/managersite.py`
 
 **Removed `is_staff` from form fields**:
 ```python

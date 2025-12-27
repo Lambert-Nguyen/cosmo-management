@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
+
+import 'models/task.dart';
+import 'models/property.dart';
+
+import 'theme/app_theme.dart';
+
+import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/task_list_screen.dart';
+import 'screens/task_form_screen.dart';
+import 'screens/edit_task_screen.dart';
+import 'screens/task_detail_screen.dart';
+import 'screens/property_list_screen.dart';
+import 'screens/property_form_screen.dart';
+import 'screens/admin_invite_screen.dart';
+import 'screens/admin_reset_password_screen.dart';
+import 'screens/admin_user_list_screen.dart';
+import 'screens/admin_user_create_screen.dart';
+import 'screens/notification_list_screen.dart';
+
+import 'services/notification_service.dart';
+import 'services/navigation_service.dart';
+import 'services/route_observer.dart';
+
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('🔕 Background Message: ${message.messageId}');
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await NotificationService.init();
+  await NotificationService.registerPendingTokenIfAny();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Cosmo Management',
+      navigatorKey: navigatorKey,
+      navigatorObservers: [routeObserver],
+      initialRoute: '/',
+      routes: {
+        '/': (c) => const LoginScreen(),
+        '/home': (c) => const HomeScreen(),
+        '/settings': (c) => const SettingsScreen(),
+        '/tasks': (c) => const TaskListScreen(),
+        '/properties': (c) => const PropertyListScreen(),
+        '/properties/new': (c) => const PropertyFormScreen(),
+        '/properties/edit': (c) {
+          final prop = ModalRoute.of(c)!.settings.arguments as Property;
+          return PropertyFormScreen(property: prop);
+        },
+        '/create-task': (c) => const TaskFormScreen(),
+        '/edit-task': (c) {
+          final task = ModalRoute.of(c)!.settings.arguments as Task;
+          return EditTaskScreen(task: task);
+        },
+        '/task-detail': (c) {
+          final args = ModalRoute.of(c)!.settings.arguments;
+          if (args is Task) {
+            return TaskDetailScreen(initialTask: args);
+          } else if (args is int) {
+            return TaskDetailScreen(taskId: args);
+          } else if (args is Map && args['taskId'] is int) {
+            return TaskDetailScreen(taskId: args['taskId'] as int);
+          }
+          throw ArgumentError('Invalid arguments for /task-detail: $args');
+        },
+        // Admin user management
+        '/admin/users': (c) => const AdminUserListScreen(),
+        '/admin/invite': (c) => const AdminInviteScreen(),
+        '/admin/reset-password': (c) => const AdminResetPasswordScreen(),
+        '/admin/create-user': (c) => const AdminUserCreateScreen(),
+        '/notifications': (c) => const NotificationListScreen(),
+      },
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
+      
+      // stop lerping TextStyles between light/dark
+      themeAnimationDuration: Duration.zero,
+      themeAnimationCurve: Curves.linear,
+    );
+  }
+}

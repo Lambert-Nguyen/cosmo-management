@@ -150,7 +150,7 @@ Overall: 8/8 tests PASSED ✅
 
 ### Security System Files
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── auth_views.py              # JWT authentication views
 │   ├── auth_mixins.py             # Authentication mixins

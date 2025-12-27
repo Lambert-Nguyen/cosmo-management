@@ -46,7 +46,7 @@ The Aristay Calendar implementation has been successfully completed and is now p
 
 ### **Key Files Implemented**
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── calendar_views.py              # DRF API endpoints
 │   ├── calendar_django_views.py       # Django HTML views

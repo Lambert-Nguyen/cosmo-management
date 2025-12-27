@@ -9,7 +9,7 @@ import sys
 import django
 
 # Add the backend directory to Python path
-backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aristay_backend')
+backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cosmo_backend')
 sys.path.append(backend_path)
 
 # Configure Django settings
@@ -25,7 +25,7 @@ def analyze_execution_order():
     # Read the template file using relative path
     from pathlib import Path
     project_root = Path(__file__).resolve().parent.parent
-    template_path = project_root / 'aristay_backend' / 'api' / 'templates' / 'staff' / 'task_detail.html'
+    template_path = project_root / 'cosmo_backend' / 'api' / 'templates' / 'staff' / 'task_detail.html'
 
     try:
         with open(template_path, 'r') as f:

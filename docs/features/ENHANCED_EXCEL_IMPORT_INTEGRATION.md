@@ -136,7 +136,7 @@ if result['requires_review']:
 Run the test script to verify functionality:
 
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python test_enhanced_excel_import.py
 ```
 

@@ -112,7 +112,7 @@ document.addEventListener('keydown', function(e) {
 
 ## Files Modified
 
-1. **`aristay_backend/api/templates/manager_admin/index.html`**
+1. **`cosmo_backend/api/templates/manager_admin/index.html`**
    - Removed broken click sequence code
    - Added keyboard sequence activation
    - Maintained double-click logo activation

@@ -15,7 +15,7 @@ Performed comprehensive grep search for database field reference patterns:
 ## 🐛 **Issues Found & Fixed**
 
 ### **Issue #1: Task Change Tracking - Invalid Field Reference** ✅
-**File**: `aristay_backend/api/views.py` (lines 570, 576-578)  
+**File**: `cosmo_backend/api/views.py` (lines 570, 576-578)  
 **Problem**: Task update tracking included non-existent `property` field in loop
 
 **Before**:
@@ -42,7 +42,7 @@ if old_prop != new_prop:
 **Impact**: ❌ Would cause AttributeError when trying to track property changes on Task updates
 
 ### **Issue #2: Mobile API Property Filter - Wrong Field Name** ✅  
-**File**: `aristay_backend/api/mobile_views.py` (line 287)  
+**File**: `cosmo_backend/api/mobile_views.py` (line 287)  
 **Problem**: Task filtering used non-existent `property_id` field
 
 **Before**:
@@ -62,7 +62,7 @@ if property_filter:
 **Impact**: ❌ Would cause FieldError when mobile app filters tasks by property
 
 ### **Issue #3: Mobile API select_related - Wrong Field Name** ✅
-**File**: `aristay_backend/api/mobile_views.py` (line 277)  
+**File**: `cosmo_backend/api/mobile_views.py` (line 277)  
 **Problem**: Query optimization used non-existent `property` field
 
 **Before**:
@@ -82,7 +82,7 @@ user_tasks = Task.objects.filter(assigned_to=user).select_related(
 **Impact**: ❌ Would cause FieldError in mobile API when fetching user tasks
 
 ### **Issue #4: Mobile API Property Access - Wrong Attribute** ✅
-**File**: `aristay_backend/api/mobile_views.py` (line 296)  
+**File**: `cosmo_backend/api/mobile_views.py` (line 296)  
 **Problem**: Task property access used non-existent attribute
 
 **Before**:

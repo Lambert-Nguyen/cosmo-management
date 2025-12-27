@@ -17,8 +17,8 @@ class TestButtonFixVerification:
         
         try:
             repo_root = Path(__file__).resolve().parents[2]
-            task_detail_js = repo_root / 'aristay_backend' / 'static' / 'js' / 'pages' / 'task-detail.js'
-            task_actions_js = repo_root / 'aristay_backend' / 'static' / 'js' / 'modules' / 'task-actions.js'
+            task_detail_js = repo_root / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'task-detail.js'
+            task_actions_js = repo_root / 'cosmo_backend' / 'static' / 'js' / 'modules' / 'task-actions.js'
 
             if not task_detail_js.exists() or not task_actions_js.exists():
                 pytest.skip('Task detail JS files not found; skipping verification')

@@ -17,14 +17,14 @@ echo "🚀 Starting local development server with PostgreSQL..."
 source .venv/bin/activate
 
 # Ensure PostgreSQL env vars (override with your own if desired)
-export POSTGRES_DB=${POSTGRES_DB:-aristay_local}
+export POSTGRES_DB=${POSTGRES_DB:-cosmo_db}
 export POSTGRES_USER=${POSTGRES_USER:-postgres}
 export POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
 export POSTGRES_HOST=${POSTGRES_HOST:-127.0.0.1}
 export POSTGRES_PORT=${POSTGRES_PORT:-5432}
 
 # Change to backend directory and start server with default settings
-cd aristay_backend
+cd cosmo_backend
 
 # Apply migrations before running
 python manage.py migrate --noinput

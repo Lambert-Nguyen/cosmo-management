@@ -5,17 +5,17 @@
 ### Prerequisites
 ```bash
 # Ensure smoke test script is executable
-chmod +x /Users/duylam1407/Workspace/SJSU/aristay_app/jwt_smoke_test_improved.sh
+chmod +x /Users/duylam1407/Workspace/SJSU/cosmo-management/jwt_smoke_test_improved.sh
 ```
 
 ### Complete Verification Run
 ```bash
 # 1. Repository setup
-cd /Users/duylam1407/Workspace/SJSU/aristay_app
+cd /Users/duylam1407/Workspace/SJSU/cosmo-management
 source .venv/bin/activate
 
 # 2. Start Django server in background (clean process management)
-( cd aristay_backend && python manage.py runserver 8000 >/tmp/dj.out 2>&1 & echo $! > /tmp/dj.pid )
+( cd cosmo_backend && python manage.py runserver 8000 >/tmp/dj.out 2>&1 & echo $! > /tmp/dj.pid )
 sleep 2
 
 # 3. Verify deprecation headers (works even with bad credentials)
@@ -34,7 +34,7 @@ export USER_PASS='testpassword123'
 ./jwt_smoke_test_improved.sh
 
 # 5. Run Django security tests
-cd aristay_backend
+cd cosmo_backend
 python manage.py test tests/security -v 2
 
 # 6. Clean shutdown
@@ -54,11 +54,11 @@ kill -9 <pid_from_lsof>
 
 ### Path Issues
 ```bash
-# From aristay_backend/ directory, call smoke test with relative path
+# From cosmo_backend/ directory, call smoke test with relative path
 ../jwt_smoke_test_improved.sh
 
 # Always run from repo root for simplest paths
-cd /Users/duylam1407/Workspace/SJSU/aristay_app
+cd /Users/duylam1407/Workspace/SJSU/cosmo-management
 ```
 
 ## Production Deployment Summary

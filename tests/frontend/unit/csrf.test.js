@@ -3,7 +3,7 @@
  */
 
 import { jest, describe, test, beforeEach, expect } from '@jest/globals';
-import { CSRFManager } from '../../../aristay_backend/static/js/core/csrf.js';
+import { CSRFManager } from '../../../cosmo_backend/static/js/core/csrf.js';
 
 describe('CSRFManager', () => {
   beforeEach(() => {

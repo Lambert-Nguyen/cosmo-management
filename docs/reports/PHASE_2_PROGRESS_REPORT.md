@@ -42,7 +42,7 @@ Phase 2 has been **successfully completed**, achieving all objectives for JavaSc
 ## 📁 Deliverables Completed
 
 ### 1. ChecklistManager Module (430 lines)
-**File**: `aristay_backend/static/js/modules/checklist-manager.js`
+**File**: `cosmo_backend/static/js/modules/checklist-manager.js`
 
 **Purpose**: Manages checklist item interactions, photo uploads per item, and progress tracking
 
@@ -77,7 +77,7 @@ window.uploadPhotos(event, responseId)
 ---
 
 ### 2. PhotoManager Module (420 lines)
-**File**: `aristay_backend/static/js/modules/photo-manager.js`
+**File**: `cosmo_backend/static/js/modules/photo-manager.js`
 
 **Purpose**: Unified photo gallery management with CRUD operations
 
@@ -117,7 +117,7 @@ window.archivePhoto(photoId)
 ---
 
 ### 3. NavigationManager Module (200 lines)
-**File**: `aristay_backend/static/js/modules/navigation-manager.js`
+**File**: `cosmo_backend/static/js/modules/navigation-manager.js`
 
 **Purpose**: Task navigation with keyboard shortcuts
 
@@ -152,7 +152,7 @@ window.navigateToTaskList(filters)
 ---
 
 ### 4. Updated Main Entry Point
-**File**: `aristay_backend/static/js/pages/task-detail.js`
+**File**: `cosmo_backend/static/js/pages/task-detail.js`
 
 **Changes**:
 - ✅ Added imports for 3 new modules
@@ -350,7 +350,7 @@ const response = await APIClient.request(endpoint, {
 
 #### Week 4 (Integration & Documentation)
    ```bash
-   cd aristay_backend
+   cd cosmo_backend
    npm test tests/frontend/unit/
    ```
 

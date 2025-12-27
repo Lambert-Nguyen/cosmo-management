@@ -137,7 +137,7 @@ def test_photo_status_update(self):
 
 #### Full Test Suite
 ```bash
-cd aristay_backend
+cd cosmo_backend
 DJANGO_SETTINGS_MODULE=backend.settings_test python -m pytest tests/ -v
 ```
 
@@ -446,7 +446,7 @@ jobs:
     
     - name: Run tests
       run: |
-        cd aristay_backend
+        cd cosmo_backend
         DJANGO_SETTINGS_MODULE=backend.settings_test python -m pytest tests/ -v
 ```
 

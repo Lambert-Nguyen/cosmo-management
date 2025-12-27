@@ -73,7 +73,7 @@ def test_staff_ui_functionality():
     response = client.get('/api/staff/')
     if response.status_code == 200:
         print("✅ Staff dashboard loads successfully")
-        if 'AriStay Staff Portal' in response.content.decode():
+        if 'Cosmo Management Staff Portal' in response.content.decode():
             print("✅ Dashboard contains expected content")
         else:
             print("⚠️  Dashboard missing expected content")
@@ -172,7 +172,7 @@ def test_template_rendering():
 
 def main():
     """Run all tests"""
-    print("🚀 Aristay Staff UI/UX Final Validation")
+    print("🚀 Cosmo Management Staff UI/UX Final Validation")
     print("=" * 50)
     
     try:

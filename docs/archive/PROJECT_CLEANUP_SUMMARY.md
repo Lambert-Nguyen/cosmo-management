@@ -44,7 +44,7 @@ docs/
 **Centralized All Tests** in `tests/`:
 ```
 tests/
-├── backend/               # Backend tests (3 files from aristay_backend/)
+├── backend/               # Backend tests (3 files from cosmo_backend/)
 ├── archive/
 │   └── legacy_validations/  # Archived validation tests (17 files)
 ├── api/                   # API tests
@@ -54,7 +54,7 @@ tests/
 ```
 
 **Moved**:
-- 3 test files from `aristay_backend/` → `tests/backend/`
+- 3 test files from `cosmo_backend/` → `tests/backend/`
 - 11 test scripts from root → `tests/`
 - 17 legacy validation tests → `tests/archive/legacy_validations/`
 
@@ -91,7 +91,7 @@ tools/
 ## New Project Structure
 
 ```
-aristay_app/
+cosmo-management/
 ├── README.md                    ✅ Project overview
 ├── Makefile                     ✅ Build automation
 ├── pytest.ini                   ✅ Test configuration
@@ -100,12 +100,12 @@ aristay_app/
 ├── runtime.txt                  ✅ Runtime version
 ├── CLEANUP_PLAN.md              ✅ Cleanup documentation
 │
-├── aristay_backend/             Django backend
+├── cosmo_backend/             Django backend
 │   ├── manage.py
 │   ├── api/
 │   └── backend/
 │
-├── aristay_flutter_frontend/    Flutter app
+├── cosmo_app/    Flutter app
 │
 ├── docs/                        📚 All documentation
 │   ├── CURRENT_DOCUMENTATION.md ⭐ Quick reference

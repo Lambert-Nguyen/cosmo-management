@@ -8,7 +8,7 @@ import sys
 import django
 
 # Add the backend directory to Python path
-backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aristay_backend')
+backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cosmo_backend')
 sys.path.append(backend_path)
 
 # Configure Django settings
@@ -22,7 +22,7 @@ def verify_fix():
     print("=" * 50)
     
     # Read the fixed template file
-    template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aristay_backend', 'api', 'templates', 'staff', 'task_detail.html')
+    template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cosmo_backend', 'api', 'templates', 'staff', 'task_detail.html')
     
     try:
         with open(template_path, 'r') as f:

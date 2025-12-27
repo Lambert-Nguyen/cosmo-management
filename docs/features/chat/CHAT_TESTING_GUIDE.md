@@ -16,7 +16,7 @@
 
 2. **Start Django Server**
    ```bash
-   cd aristay_backend
+   cd cosmo_backend
    python manage.py runserver
    # OR for WebSocket support:
    daphne backend.asgi:application -b 127.0.0.1 -p 8000

@@ -70,7 +70,7 @@ tests/
 - **Files Fixed**: 
   - `tests/security/test_permissions.py`
   - `tests/integration/test_agent_validation.py`
-  - `aristay_backend/api/serializers.py`
+  - `cosmo_backend/api/serializers.py`
 
 #### **Unique Constraint Violations Fixed**
 - **Issue**: TaskImage model had unique constraint on `(task_id, photo_type, sequence_number)`

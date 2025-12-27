@@ -1,4 +1,4 @@
-# 🚀 Production Deployment Guide - AriStay MVP1
+# 🚀 Production Deployment Guide - Cosmo Management MVP1
 
 ## 📋 Critical Security Fixes Completed
 
@@ -82,7 +82,7 @@ django-cloudinary-storage==0.3.0
 2. **Deploy to Heroku staging**
    ```bash
    # Create Heroku app
-   heroku create aristay-staging
+   heroku create cosmo-management-staging
    
    # Set environment variables
    heroku config:set USE_CLOUDINARY=true
@@ -229,7 +229,7 @@ django-cloudinary-storage==0.3.0
 
 ## 🎊 Final Status: PRODUCTION READY
 
-**The AriStay MVP1 backend is now fully secured and ready for production deployment with Cloudinary integration.**
+**The Cosmo Management MVP1 backend is now fully secured and ready for production deployment with Cloudinary integration.**
 
 ### **Next Immediate Steps:**
 1. Set up free Cloudinary account

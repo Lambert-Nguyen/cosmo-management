@@ -15,7 +15,7 @@ import django
 from decimal import Decimal
 
 # Add the backend directory to Python path
-backend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aristay_backend')
+backend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cosmo_backend')
 sys.path.insert(0, backend_dir)
 
 # Set up Django

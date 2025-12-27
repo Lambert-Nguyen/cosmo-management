@@ -8,7 +8,7 @@ set -e  # Exit on any error
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd ../.. && pwd)"
 cd "$PROJECT_ROOT"
 
-echo "🧪 ARISTAY QUICK TEST RUNNER"
+echo "🧪 COSMO MANAGEMENT QUICK TEST RUNNER"
 echo "============================================================"
 
 # Function to run production tests
@@ -23,7 +23,7 @@ run_production_tests() {
 run_integration_tests() {
     echo "📋 2. INTEGRATION SYSTEM TESTS"
     echo "----------------------------"
-    cd aristay_backend
+    cd cosmo_backend
     python -m pytest ../tests/integration/ -v --tb=short
     cd ..
     echo
@@ -33,7 +33,7 @@ run_integration_tests() {
 run_unit_tests() {
     echo "📋 3. UNIT COMPONENT TESTS" 
     echo "----------------------------"
-    cd aristay_backend
+    cd cosmo_backend
     python -m pytest ../tests/unit/ -v --tb=short
     cd ..
     echo
@@ -56,7 +56,7 @@ validate_environment() {
     python -c "import django; print(f'✅ Django {django.VERSION[0]}.{django.VERSION[1]}')" 2>/dev/null || echo "❌ Django not available"
     
     # Check database
-    cd aristay_backend
+    cd cosmo_backend
     python manage.py check --database default 2>/dev/null && echo "✅ Database connection" || echo "❌ Database issues"
     cd ..
     
@@ -68,10 +68,10 @@ run_ci_tests() {
     echo "🤖 CI-STYLE VALIDATION"
     echo "----------------------------"
     export DJANGO_SETTINGS_MODULE=backend.settings
-    export PYTHONPATH="$PROJECT_ROOT/aristay_backend"
+    export PYTHONPATH="$PROJECT_ROOT/cosmo_backend"
     export DEBUG=0
     
-    cd aristay_backend
+    cd cosmo_backend
     python -m pytest ../tests/ -v --tb=short
     cd ..
     echo

@@ -82,9 +82,9 @@ This PR implements comprehensive production hardening, code quality improvements
 ## 🛠️ Files Changed
 
 ### Core Backend Files
-- **`aristay_backend/api/views.py`**: Production-hardened with import cleanup and exception fixes
-- **`aristay_backend/api/models.py`**: Database constraints and soft delete implementations
-- **`aristay_backend/api/services/`**: Enhanced Excel import and conflict resolution services
+- **`cosmo_backend/api/views.py`**: Production-hardened with import cleanup and exception fixes
+- **`cosmo_backend/api/models.py`**: Database constraints and soft delete implementations
+- **`cosmo_backend/api/services/`**: Enhanced Excel import and conflict resolution services
 
 ### Test Infrastructure
 - **`tests/`**: Complete reorganization with production/, integration/, unit/ structure

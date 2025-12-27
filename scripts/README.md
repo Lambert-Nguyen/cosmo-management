@@ -6,7 +6,7 @@
 
 ## Overview
 
-This directory contains all automation scripts for the Aristay Property Management system, organized by functionality and following the project structure guidelines.
+This directory contains all automation scripts for the Cosmo Management system, organized by functionality and following the project structure guidelines.
 
 ## Directory Structure
 
@@ -39,7 +39,7 @@ scripts/
 
 **Features**:
 - Installs PostgreSQL if needed
-- Creates local database (`aristay_local`)
+- Creates local database (`cosmo_db`)
 - Runs Django migrations
 - Sets up local development configuration
 
@@ -155,21 +155,21 @@ python scripts/permissions/validate_permissions.py
 ### Management: assign_task_groups (Django command)
 **Purpose**: Assign Task Groups to users (bulk or specific user)
 
-**Defined In**: `aristay_backend/api/management/commands/assign_task_groups.py`
+**Defined In**: `cosmo_backend/api/management/commands/assign_task_groups.py`
 
 **Usage** (from repo root):
 ```bash
 # List available groups
-python aristay_backend/manage.py assign_task_groups --list-groups
+python cosmo_backend/manage.py assign_task_groups --list-groups
 
 # Show users and current task groups
-python aristay_backend/manage.py assign_task_groups --show-users
+python cosmo_backend/manage.py assign_task_groups --show-users
 
 # Auto-assign based on Django groups/roles (staff default to general)
-python aristay_backend/manage.py assign_task_groups --auto-assign
+python cosmo_backend/manage.py assign_task_groups --auto-assign
 
 # Manually assign a user to a group
-python aristay_backend/manage.py assign_task_groups --username alice --task-group cleaning
+python cosmo_backend/manage.py assign_task_groups --username alice --task-group cleaning
 ```
 
 **Notes**:
@@ -210,7 +210,7 @@ python scripts/testing/run_tests.py --production
 ```bash
 # 1. Clone repository
 git clone <repository-url>
-cd aristay_app
+cd cosmo-management
 
 # 2. Set up local development
 ./scripts/development/setup_local_dev.sh
@@ -261,7 +261,7 @@ Scripts use these environment variables:
 
 ```bash
 # Database
-DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/aristay_local
+DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/cosmo_db
 
 # Django
 DEBUG=true

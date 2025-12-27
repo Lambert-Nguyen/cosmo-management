@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-PORTAL_HOME_CSS_PATH = PROJECT_ROOT / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-home.css'
+PORTAL_HOME_CSS_PATH = PROJECT_ROOT / 'cosmo_backend' / 'static' / 'css' / 'pages' / 'portal-home.css'
 
 
 @override_settings(

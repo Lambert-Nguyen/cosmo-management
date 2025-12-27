@@ -278,7 +278,7 @@ python manage.py generate_scheduled_tasks --dry-run
 #### Management Command Setup
 ```bash
 # Add to crontab for daily execution
-0 6 * * * cd /path/to/aristay_backend && python manage.py generate_scheduled_tasks
+0 6 * * * cd /path/to/cosmo_backend && python manage.py generate_scheduled_tasks
 ```
 
 ### 11. 🗂️ Lost & Found System
@@ -443,10 +443,10 @@ python manage.py migrate
 ### Cron Jobs
 ```bash
 # Daily task generation at 6 AM
-0 6 * * * cd /path/to/aristay_backend && python manage.py generate_scheduled_tasks
+0 6 * * * cd /path/to/cosmo_backend && python manage.py generate_scheduled_tasks
 
 # Weekly inventory reporting (optional)
-0 8 * * 1 cd /path/to/aristay_backend && python manage.py send_inventory_report
+0 8 * * 1 cd /path/to/cosmo_backend && python manage.py send_inventory_report
 ```
 
 ### Monitoring

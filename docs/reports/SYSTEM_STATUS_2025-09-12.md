@@ -44,7 +44,7 @@ The Aristay Property Management System is a comprehensive Django-based platform 
 
 ### Backend (Django)
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/                    # Core API application
 │   ├── models.py          # Database models
 │   ├── views.py           # API endpoints
@@ -58,7 +58,7 @@ aristay_backend/
 
 ### Frontend (Flutter)
 ```
-aristay_flutter_frontend/
+cosmo_app/
 ├── lib/
 │   ├── screens/          # Mobile screens
 │   ├── widgets/          # Reusable components

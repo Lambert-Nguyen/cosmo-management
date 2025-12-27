@@ -233,7 +233,7 @@ The Lost & Found feature allows staff members to report and manage items found d
 ## 📞 Support Information
 
 ### Technical Support
-- **Email**: support@aristay.com
+- **Email**: support@cosmo-management.cloud
 - **Phone**: (555) 123-4567
 - **Hours**: Monday-Friday, 9 AM - 5 PM
 
@@ -287,4 +287,4 @@ The Lost & Found feature allows staff members to report and manage items found d
 ### Contact Information
 - **Emergency**: (555) 911-HELP
 - **General**: (555) 123-4567
-- **Email**: help@aristay.com
+- **Email**: help@cosmo-management.cloud

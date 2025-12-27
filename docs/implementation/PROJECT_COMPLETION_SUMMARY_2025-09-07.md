@@ -70,7 +70,7 @@ tests/
 
 ### **Backend Structure** ✅ ENHANCED
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── audit_signals.py            # ✅ Enhanced with universal JSON safety
 │   ├── management/commands/
@@ -225,7 +225,7 @@ DRY RUN: Would delete 1245 audit events older than 90 days
 ### **Quick System Health Check**
 ```bash
 # Verify Cloudinary integration
-cd aristay_backend && python ../tests/cloudinary/test_cloudinary_integration.py
+cd cosmo_backend && python ../tests/cloudinary/test_cloudinary_integration.py
 
 # Verify audit JSON safety
 pytest tests/security/test_audit_events.py -v

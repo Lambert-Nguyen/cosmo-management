@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Aristay Test Runner - Organized and Clean Test Execution
+Cosmo Management Test Runner - Organized and Clean Test Execution
 Updated for the new test organization structure
 """
 
@@ -52,7 +52,7 @@ def run_test_category(category_name, test_paths, description):
 
 def main():
     """Run all test categories"""
-    print("🚀 Aristay Test Suite - Organized Execution")
+    print("🚀 Cosmo Management Test Suite - Organized Execution")
     print("=" * 60)
     
     # Define test categories that should work

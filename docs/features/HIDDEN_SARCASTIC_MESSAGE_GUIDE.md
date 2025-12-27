@@ -44,7 +44,7 @@ Pray tell, dear friend, have you no shame?
 ### 3. **Staff Templates** (`staff/base.html`)
 - **Title**: "📱 A Staff Member's Secret 📱"
 - **Activation Methods**:
-  - **Primary**: Long press (2 seconds) on the "AriStay Staff Portal" logo
+  - **Primary**: Long press (2 seconds) on the "Cosmo Management Staff Portal" logo
   - **Alternative**: Triple-click the logo (desktop fallback)
   - **Mobile**: Diagonal swipe gesture (top-left to bottom-right) 3 times
 - **Styling**: Mobile-optimized with responsive design
@@ -99,7 +99,7 @@ Pray tell, dear friend, have you no shame?
 
 ### **File Structure**
 ```
-aristay_backend/api/templates/
+cosmo_backend/api/templates/
 ├── admin/base_site.html          # Admin secret message
 ├── manager_admin/index.html      # Manager secret message  
 ├── staff/base.html              # Staff secret message

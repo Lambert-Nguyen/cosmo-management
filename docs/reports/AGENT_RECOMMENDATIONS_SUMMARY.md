@@ -33,7 +33,7 @@
    • Result: Accurate ✅/❌ display per test
 
 ✅ **5. Environment Best Practice Reinforced**
-   • All tests now consistently use `/Users/duylam1407/Workspace/SJSU/aristay_app/.venv/bin/python`
+   • All tests now consistently use `/Users/duylam1407/Workspace/SJSU/cosmo-management/.venv/bin/python`
    • No more `ModuleNotFoundError: No module named 'django'` issues
    • Clear path to production-ready execution
 

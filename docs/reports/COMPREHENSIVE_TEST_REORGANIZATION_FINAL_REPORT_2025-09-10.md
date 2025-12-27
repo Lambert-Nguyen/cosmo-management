@@ -98,7 +98,7 @@ tests/
 - **Fix**: Updated all test files and serializers to use correct field names
 - **Files Fixed**: 
   - `tests/security/test_permissions.py`
-  - `aristay_backend/api/serializers.py`
+  - `cosmo_backend/api/serializers.py`
 
 #### **Test Assertion Fixes**
 - **Issue**: Unit tests expecting wrong user counts in command output
@@ -212,7 +212,7 @@ tests/
 - ✅ Exit code handling improvements
 
 ### **Bug Fixes Applied**
-- ✅ `aristay_backend/api/serializers.py` - Field name standardization
+- ✅ `cosmo_backend/api/serializers.py` - Field name standardization
 - ✅ `tests/security/test_permissions.py` - Field name updates
 - ✅ `tests/unit/test_assign_task_groups_command.py` - Assertion fixes
 

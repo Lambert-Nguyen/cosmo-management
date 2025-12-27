@@ -74,7 +74,7 @@ After deep analysis, we've identified **6 high-risk areas** that could break fun
 ### **Template Inventory**
 
 ```
-📁 aristay_backend/api/templates/
+📁 cosmo_backend/api/templates/
 ├─ 78 total HTML files
 ├─ 54 files with inline <style> blocks (69%)
 ├─ 437 inline color definitions
@@ -736,10 +736,10 @@ test('checklist item can be checked', async ({ page }) => {
 
 ```bash
 # Create directory structure
-mkdir -p aristay_backend/static/css
-mkdir -p aristay_backend/static/js/core
-mkdir -p aristay_backend/static/js/modules
-mkdir -p aristay_backend/static/js/pages
+mkdir -p cosmo_backend/static/css
+mkdir -p cosmo_backend/static/js/core
+mkdir -p cosmo_backend/static/js/modules
+mkdir -p cosmo_backend/static/js/pages
 ```
 
 Create the 5 core CSS files with design tokens and components.
@@ -750,7 +750,7 @@ Run automated color extraction:
 
 ```bash
 # Find all inline colors
-grep -roh '#[0-9a-fA-F]\{6\}' aristay_backend/api/templates/ | sort | uniq -c
+grep -roh '#[0-9a-fA-F]\{6\}' cosmo_backend/api/templates/ | sort | uniq -c
 ```
 
 Create migration script to replace inline colors with CSS variables.
@@ -1428,7 +1428,7 @@ Month 5+: Maintain Both Platforms
 ### **A. File Structure**
 
 ```
-aristay_backend/
+cosmo_backend/
 ├── static/
 │   ├── css/
 │   │   ├── design-system.css

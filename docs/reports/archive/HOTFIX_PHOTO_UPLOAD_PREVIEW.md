@@ -5,7 +5,7 @@
 ### 1. ✅ Photo Preview Not Showing (CSP Violation)
 **Problem**: Blob URLs blocked by Content Security Policy
 ```
-Refused to load the image 'blob:https://aristay-internal.cloud/...' 
+Refused to load the image 'blob:https://cosmo-management.cloud/...' 
 because it violates the following Content Security Policy directive: "img-src 'self' data: https:".
 ```
 
@@ -67,10 +67,10 @@ Refused to load the font 'https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2'
 
 ## Files Modified
 
-1. `aristay_backend/api/enhanced_security_middleware.py`
+1. `cosmo_backend/api/enhanced_security_middleware.py`
    - Added `blob:` to CSP `img-src` directive
 
-2. `aristay_backend/api/templates/staff/base.html`
+2. `cosmo_backend/api/templates/staff/base.html`
    - Removed duplicate `touchStartX` declaration
    - Added passive event listeners for better performance
 

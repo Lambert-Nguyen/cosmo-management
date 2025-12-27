@@ -1,7 +1,7 @@
 #!/bin/bash
 # Verification script for UI refactoring
 
-echo "🔍 ARISTAY REFACTORING VERIFICATION"
+echo "🔍 COSMO MANAGEMENT REFACTORING VERIFICATION"
 echo "===================================="
 echo ""
 
@@ -30,11 +30,11 @@ echo ""
 # Check for inline handlers in priority files
 echo "2️⃣  Scanning priority templates for inline handlers..."
 PRIORITY_FILES=(
-    "aristay_backend/api/templates/calendar/calendar_view.html"
-    "aristay_backend/api/templates/admin/permission_management.html"
-    "aristay_backend/api/templates/chat/chatbox.html"
-    "aristay_backend/api/templates/admin/security_dashboard.html"
-    "aristay_backend/api/templates/admin/system_metrics.html"
+    "cosmo_backend/api/templates/calendar/calendar_view.html"
+    "cosmo_backend/api/templates/admin/permission_management.html"
+    "cosmo_backend/api/templates/chat/chatbox.html"
+    "cosmo_backend/api/templates/admin/security_dashboard.html"
+    "cosmo_backend/api/templates/admin/system_metrics.html"
 )
 
 ISSUES_FOUND=0
@@ -61,11 +61,11 @@ MISSING_ASSETS=0
 
 # Check CSS files
 CSS_FILES=(
-    "aristay_backend/static/css/design-system.css"
-    "aristay_backend/static/css/components.css"
-    "aristay_backend/static/css/pages/task-detail.css"
-    "aristay_backend/static/css/pages/dashboard.css"
-    "aristay_backend/static/css/pages/portal-calendar.css"
+    "cosmo_backend/static/css/design-system.css"
+    "cosmo_backend/static/css/components.css"
+    "cosmo_backend/static/css/pages/task-detail.css"
+    "cosmo_backend/static/css/pages/dashboard.css"
+    "cosmo_backend/static/css/pages/portal-calendar.css"
 )
 
 for file in "${CSS_FILES[@]}"; do
@@ -79,11 +79,11 @@ done
 
 # Check JS files
 JS_FILES=(
-    "aristay_backend/static/js/core/api-client.js"
-    "aristay_backend/static/js/core/csrf-manager.js"
-    "aristay_backend/static/js/pages/task-detail.js"
-    "aristay_backend/static/js/pages/dashboard.js"
-    "aristay_backend/static/js/modules/task-actions.js"
+    "cosmo_backend/static/js/core/api-client.js"
+    "cosmo_backend/static/js/core/csrf-manager.js"
+    "cosmo_backend/static/js/pages/task-detail.js"
+    "cosmo_backend/static/js/pages/dashboard.js"
+    "cosmo_backend/static/js/modules/task-actions.js"
 )
 
 for file in "${JS_FILES[@]}"; do

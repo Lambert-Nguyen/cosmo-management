@@ -60,7 +60,7 @@ user.is_superuser = False  # Auto-synced by Aristay system
 ## 🧪 **Verification:**
 
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py create_test_data  # Now uses correct Profile.role system
 python manage.py shell -c "
 from api.models import Profile, User

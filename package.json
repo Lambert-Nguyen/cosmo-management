@@ -1,7 +1,7 @@
 {
-  "name": "aristay-frontend",
+  "name": "cosmo-management",
   "version": "1.0.0",
-  "description": "Frontend assets for Aristay Property Management",
+  "description": "Frontend assets for Cosmo Management",
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
@@ -25,8 +25,8 @@
     ],
     "transform": {},
     "collectCoverageFrom": [
-      "aristay_backend/static/js/**/*.js",
-      "!aristay_backend/static/js/**/*.test.js"
+      "cosmo_backend/static/js/**/*.js",
+      "!cosmo_backend/static/js/**/*.test.js"
     ],
     "coverageThreshold": {
       "global": {

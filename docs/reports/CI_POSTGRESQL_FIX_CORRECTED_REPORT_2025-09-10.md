@@ -168,7 +168,7 @@ This fix was **CRITICAL** because:
 
 ## 📁 **FILES VERIFIED**
 
-- `aristay_backend/backend/settings.py` - Already supported PostgreSQL environment variables
+- `cosmo_backend/backend/settings.py` - Already supported PostgreSQL environment variables
 - `tests/` - All tests verified to work with PostgreSQL
 
 ---

@@ -4,8 +4,8 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
-import { NavigationManager } from '../../../aristay_backend/static/js/modules/navigation-manager.js';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { NavigationManager } from '../../../cosmo_backend/static/js/modules/navigation-manager.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 describe('NavigationManager', () => {
   let getSpy;

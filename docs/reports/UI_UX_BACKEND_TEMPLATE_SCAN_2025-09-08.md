@@ -245,4 +245,4 @@ The UI/UX backend template scan has been completed successfully with all identif
 **Report Generated**: September 8, 2025  
 **Next Review Date**: October 8, 2025  
 **Contact**: GitHub Copilot AI Assistant</content>
-<parameter name="filePath">/Users/duylam1407/Workspace/SJSU/aristay_app/docs/reports/UI_UX_BACKEND_TEMPLATE_SCAN_2025-09-08.md
+<parameter name="filePath">/Users/duylam1407/Workspace/SJSU/cosmo-management/docs/reports/UI_UX_BACKEND_TEMPLATE_SCAN_2025-09-08.md

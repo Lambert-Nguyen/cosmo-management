@@ -4,8 +4,8 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
-import { PhotoManager } from '../../../aristay_backend/static/js/modules/photo-manager.js';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { PhotoManager } from '../../../cosmo_backend/static/js/modules/photo-manager.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 describe('PhotoManager', () => {
   let photoManager;

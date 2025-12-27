@@ -1,12 +1,12 @@
-# 🧪 Aristay App Test Suite
+# 🧪 Cosmo Management Test Suite
 
-This directory contains all tests for the Aristay App project, organized by type and purpose.
+This directory contains all tests for the Cosmo Management project, organized by type and purpose.
 
 ## � Quick Start
 
 **Run all tests:**
 ```bash
-cd /path/to/aristay_app
+cd /path/to/cosmo-management
 /path/to/.venv/bin/python tests/run_final_validation.py
 ```
 
@@ -89,7 +89,7 @@ The test suite provides comprehensive coverage across:
 
 ### Production Readiness Check:
 ```bash
-cd aristay_backend
+cd cosmo_backend
 /path/to/.venv/bin/python ../tests/integration/verify_production_readiness.py
 ```
 

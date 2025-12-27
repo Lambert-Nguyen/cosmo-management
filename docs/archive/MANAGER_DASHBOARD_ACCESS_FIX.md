@@ -71,7 +71,7 @@ teststaff: has_permission("manager_portal_access") = True
 
 3. **Verify Permission:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py shell -c "
 user = User.objects.get(username='manager_alice')
 print(f'Has manager_portal_access: {user.profile.has_permission(\"manager_portal_access\")}')

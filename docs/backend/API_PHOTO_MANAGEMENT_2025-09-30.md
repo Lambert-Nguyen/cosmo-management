@@ -536,7 +536,7 @@ A Postman collection is available for testing all endpoints:
 For API support and questions:
 - **Documentation**: `/docs/api/`
 - **Issue Tracker**: GitHub Issues
-- **Email**: api-support@aristay.com
+- **Email**: api-support@cosmo-management.cloud
 - **Slack**: #api-support channel
 
 ## Conclusion

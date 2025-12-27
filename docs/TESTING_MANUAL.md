@@ -18,7 +18,7 @@ tests/
 ### 🚀 **Run All Tests (Recommended)**
 ```bash
 # From project root
-cd /path/to/aristay_app
+cd /path/to/cosmo-management
 python tests/run_tests.py
 ```
 
@@ -28,10 +28,10 @@ python tests/run_tests.py
 python tests/production/test_production_hardening.py
 
 # Integration tests  
-cd aristay_backend && python -m pytest ../tests/integration/ -v
+cd cosmo_backend && python -m pytest ../tests/integration/ -v
 
 # Unit tests
-cd aristay_backend && python -m pytest ../tests/unit/ -v
+cd cosmo_backend && python -m pytest ../tests/unit/ -v
 ```
 
 ## Detailed Test Categories
@@ -52,7 +52,7 @@ cd aristay_backend && python -m pytest ../tests/unit/ -v
 python tests/production/test_production_hardening.py
 
 # Via pytest
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/production/ -v --tb=short
 ```
 
@@ -83,7 +83,7 @@ python -m pytest ../tests/production/ -v --tb=short
 **Run Commands:**
 ```bash
 # From backend directory
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/ -v
 
 # Specific test file
@@ -101,7 +101,7 @@ python -m pytest ../tests/integration/ -v --tb=short -s
 **Run Commands:**
 ```bash
 # From backend directory  
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/unit/ -v
 
 # With coverage report
@@ -117,7 +117,7 @@ python -m pytest ../tests/unit/ -k "test_booking" -v
 
 **Run Specific Test Functions:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/test_final_phases.py::test_all_phases_complete -v
 ```
 
@@ -146,12 +146,12 @@ pip install -r requirements.txt
 
 # Set Django environment
 export DJANGO_SETTINGS_MODULE=backend.settings
-export PYTHONPATH="$(pwd)/aristay_backend"
+export PYTHONPATH="$(pwd)/cosmo_backend"
 ```
 
 **Database Setup:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py migrate
 python manage.py collectstatic --noinput
 ```
@@ -160,7 +160,7 @@ python manage.py collectstatic --noinput
 
 **Get Full Error Traces:**
 ```bash
-cd aristay_backend  
+cd cosmo_backend  
 python -m pytest ../tests/integration/ -v --tb=long
 ```
 
@@ -189,7 +189,7 @@ The project includes automated testing via GitHub Actions:
 **Triggers:**
 - Push to `main` branch
 - Pull requests to `main`  
-- Changes to `aristay_backend/**` or `tests/**`
+- Changes to `cosmo_backend/**` or `tests/**`
 
 **Manual Trigger:**
 ```bash
@@ -216,13 +216,13 @@ git push origin mvp1_development
 time python tests/production/test_production_hardening.py
 
 # Pytest timing
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/ --durations=10
 ```
 
 ### 📈 **Coverage Analysis**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/ --cov=api --cov-report=html
 open htmlcov/index.html  # View coverage report
 ```
@@ -235,13 +235,13 @@ open htmlcov/index.html  # View coverage report
 ```bash
 # Solution: Set environment variables
 export DJANGO_SETTINGS_MODULE=backend.settings
-export PYTHONPATH="$(pwd)/aristay_backend"
+export PYTHONPATH="$(pwd)/cosmo_backend"
 ```
 
 **2. Database Errors:**
 ```bash
 # Solution: Ensure migrations are current
-cd aristay_backend
+cd cosmo_backend
 python manage.py migrate
 ```
 
@@ -262,7 +262,7 @@ chmod +x tests/production/test_production_hardening.py
 
 **Check Test Discovery:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/ --collect-only
 ```
 
@@ -274,7 +274,7 @@ python -c "from api.models import Task; print('✅ Models imported successfully'
 
 **Test Database Connection:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py check
 python manage.py showmigrations
 ```
@@ -323,13 +323,13 @@ python tests/run_tests.py
 python tests/production/test_production_hardening.py
 
 # Integration tests
-cd aristay_backend && python -m pytest ../tests/integration/ -v
+cd cosmo_backend && python -m pytest ../tests/integration/ -v
 
 # Unit tests  
-cd aristay_backend && python -m pytest ../tests/unit/ -v
+cd cosmo_backend && python -m pytest ../tests/unit/ -v
 
 # CI-style run (from project root)
-cd aristay_backend && python -m pytest ../tests/ -v --tb=short
+cd cosmo_backend && python -m pytest ../tests/ -v --tb=short
 ```
 
 ### 📋 **Test Status Checklist**

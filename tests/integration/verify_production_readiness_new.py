@@ -13,9 +13,9 @@ from api.models import Task, Property, TaskImage
 from api.staff_views import cleaning_dashboard
 from api.views import TaskImageDetailView
 
-# Project root: .../aristay_app
+# Project root: .../cosmo-management
 ROOT = Path(__file__).resolve().parents[2]
-BACKEND = ROOT / "aristay_backend"
+BACKEND = ROOT / "cosmo_backend"
 sys.path.insert(0, str(BACKEND))
 
 # Django setup

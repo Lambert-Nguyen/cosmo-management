@@ -9,21 +9,21 @@
 ## Proposed Organized Structure:
 
 ```
-aristay_app/
+cosmo-management/
 ├── README.md                              # Main project README
 ├── Makefile                               # Build/deployment commands
 ├── .env.example                           # Environment template
 ├── .gitignore                             # Git ignore rules
 ├── .pre-commit-config.yaml               # Code quality hooks
 │
-├── aristay_backend/                       # Django backend
+├── cosmo_backend/                       # Django backend
 │   ├── manage.py
 │   ├── requirements.txt
 │   ├── api/
 │   ├── backend/
 │   └── ...
 │
-├── aristay_flutter_frontend/              # Flutter mobile app
+├── cosmo_app/              # Flutter mobile app
 │   ├── pubspec.yaml
 │   ├── lib/
 │   └── ...

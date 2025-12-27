@@ -11,7 +11,7 @@ This guide focuses on system-level testing for the Aristay application, covering
 #### Test Execution
 ```bash
 # Primary system test - hermetic and self-contained
-cd /path/to/aristay_app
+cd /path/to/cosmo-management
 python tests/production/test_production_hardening.py
 ```
 
@@ -25,7 +25,7 @@ python tests/production/test_production_hardening.py
 
 #### Test Execution
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/ -v --tb=short
 ```
 
@@ -54,7 +54,7 @@ echo "1. Production Hardening Tests:"
 python tests/production/test_production_hardening.py
 
 echo "2. Integration System Tests:"
-cd aristay_backend && python -m pytest ../tests/integration/ -v
+cd cosmo_backend && python -m pytest ../tests/integration/ -v
 
 echo "3. Unit Component Tests:"
 python -m pytest ../tests/unit/ -v
@@ -69,7 +69,7 @@ echo "✅ System validation complete"
 #### Booking Management System Flow
 ```bash
 # Test the complete booking lifecycle
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/test_final_phases.py::test_all_phases_complete -v
 ```
 
@@ -82,7 +82,7 @@ python tests/production/test_production_hardening.py
 #### Permission Management System
 ```bash
 # Test role-based access control system
-cd aristay_backend  
+cd cosmo_backend  
 python -m pytest ../tests/unit/ -k "permission" -v
 ```
 
@@ -91,7 +91,7 @@ python -m pytest ../tests/unit/ -k "permission" -v
 #### Database System Tests
 ```bash
 # Test database integrity and constraints
-cd aristay_backend
+cd cosmo_backend
 python manage.py check
 python manage.py migrate --check
 ```
@@ -99,7 +99,7 @@ python manage.py migrate --check
 #### File System Tests
 ```bash
 # Test file upload and storage systems
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/ -k "file" -v
 ```
 
@@ -122,7 +122,7 @@ python -c "from api.models import Task; print('✅ Models accessible')"
 
 # 2. Database system check
 echo "📋 Database System:"
-cd aristay_backend
+cd cosmo_backend
 python manage.py check --database default
 python manage.py showmigrations
 
@@ -133,7 +133,7 @@ python tests/production/test_production_hardening.py
 
 # 4. Integration system tests
 echo "📋 Integration Systems:" 
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/ -v --tb=short
 
 # 5. System configuration validation
@@ -147,10 +147,10 @@ echo "✅ System validation complete"
 ```bash
 # Simulate CI environment locally
 export DJANGO_SETTINGS_MODULE=backend.settings
-export PYTHONPATH="$(pwd)/aristay_backend" 
+export PYTHONPATH="$(pwd)/cosmo_backend" 
 export DEBUG=0
 
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/ -v --tb=short
 ```
 
@@ -159,14 +159,14 @@ python -m pytest ../tests/ -v --tb=short
 #### Load Testing Setup
 ```bash
 # Test system under load (requires additional tools)
-cd aristay_backend
+cd cosmo_backend
 python manage.py test --parallel 4
 ```
 
 #### Memory and Performance Profiling
 ```bash
 # System resource monitoring during tests
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/ --profile-svg
 ```
 
@@ -177,21 +177,21 @@ python -m pytest ../tests/integration/ --profile-svg
 #### Enable Verbose System Logging
 ```bash
 # Run with comprehensive logging
-cd aristay_backend
+cd cosmo_backend
 DJANGO_LOG_LEVEL=DEBUG python -m pytest ../tests/integration/ -v -s
 ```
 
 #### Monitor System Events
 ```bash
 # Watch system logs during testing
-tail -f aristay_backend/logs/debug.log
+tail -f cosmo_backend/logs/debug.log
 ```
 
 ### 🔍 **System Diagnostics**
 
 #### System Health Diagnostics
 ```bash
-cd aristay_backend
+cd cosmo_backend
 
 # Database connectivity
 python manage.py dbshell --command="SELECT 1;"
@@ -220,7 +220,7 @@ python -c "import django, rest_framework, pytest; print('✅ Core dependencies a
 #### Database Recovery Testing
 ```bash
 # Test system recovery from various states
-cd aristay_backend
+cd cosmo_backend
 
 # Backup current state
 python manage.py dumpdata --natural-foreign --natural-primary > system_backup.json
@@ -234,7 +234,7 @@ python tests/production/test_production_hardening.py
 #### System Rollback Testing
 ```bash
 # Test system rollback capabilities
-cd aristay_backend
+cd cosmo_backend
 python manage.py migrate api zero
 python manage.py migrate
 python -m pytest ../tests/integration/ -v
@@ -244,7 +244,7 @@ python -m pytest ../tests/integration/ -v
 
 #### Permission System Validation
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/unit/ -k "permission" -v
 python -c "from api.authz import AuthzHelper; print('✅ Authorization system loaded')"
 ```
@@ -252,7 +252,7 @@ python -c "from api.authz import AuthzHelper; print('✅ Authorization system lo
 #### System Input Validation
 ```bash
 # Test system input sanitization and validation
-cd aristay_backend  
+cd cosmo_backend  
 python -m pytest ../tests/integration/ -k "validation" -v
 ```
 
@@ -287,7 +287,7 @@ echo "============================================================"
 python tests/production/test_production_hardening.py || exit 1
 
 # Integration systems  
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/integration/ -v || exit 1
 
 # Security checks

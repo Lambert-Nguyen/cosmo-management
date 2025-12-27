@@ -124,9 +124,9 @@ To verify the system is working correctly:
 
 ## Files Modified
 
-- `aristay_backend/api/models.py` - Updated InviteCode model
-- `aristay_backend/api/migrations/0071_update_invite_code_role_choices.py` - Migration
-- `aristay_backend/api/registration_views.py` - No changes needed (already correct)
+- `cosmo_backend/api/models.py` - Updated InviteCode model
+- `cosmo_backend/api/migrations/0071_update_invite_code_role_choices.py` - Migration
+- `cosmo_backend/api/registration_views.py` - No changes needed (already correct)
 
 ## Summary
 

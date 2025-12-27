@@ -8,7 +8,7 @@ import django
 from datetime import datetime
 
 # Add the project directory to the Python path
-sys.path.append('/Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend')
+sys.path.append('cosmo_backend')
 
 # Setup Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')

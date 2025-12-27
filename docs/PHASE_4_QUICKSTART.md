@@ -15,7 +15,7 @@
 # 2. Manual setup
 npm install
 npx playwright install
-cd aristay_backend && python manage.py runserver 8000
+cd cosmo_backend && python manage.py runserver 8000
 
 # 3. Run tests
 npm run test              # Unit tests
@@ -70,7 +70,7 @@ npm run lint              # Check for issues
 1. **Run Tests**:
    ```bash
    # Make sure Django is running first
-   cd aristay_backend && python manage.py runserver 8000
+   cd cosmo_backend && python manage.py runserver 8000
    
    # In another terminal
    npm run test:e2e
@@ -161,7 +161,7 @@ Focus on user workflows:
 **"Django server not found"**
 ```bash
 # Start Django in separate terminal
-cd aristay_backend
+cd cosmo_backend
 python manage.py runserver 8000
 ```
 

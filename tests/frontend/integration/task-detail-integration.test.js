@@ -6,10 +6,10 @@
  */
 
 import { jest } from '@jest/globals';
-import { ChecklistManager } from '../../../aristay_backend/static/js/modules/checklist-manager.js';
-import { PhotoManager } from '../../../aristay_backend/static/js/modules/photo-manager.js';
-import { NavigationManager } from '../../../aristay_backend/static/js/modules/navigation-manager.js';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { ChecklistManager } from '../../../cosmo_backend/static/js/modules/checklist-manager.js';
+import { PhotoManager } from '../../../cosmo_backend/static/js/modules/photo-manager.js';
+import { NavigationManager } from '../../../cosmo_backend/static/js/modules/navigation-manager.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 describe('Task Detail Integration Tests', () => {
   let postSpy;

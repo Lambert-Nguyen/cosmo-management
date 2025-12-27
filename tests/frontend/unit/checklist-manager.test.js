@@ -4,8 +4,8 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
-import { ChecklistManager } from '../../../aristay_backend/static/js/modules/checklist-manager.js';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { ChecklistManager } from '../../../cosmo_backend/static/js/modules/checklist-manager.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 describe('ChecklistManager', () => {
   let postSpy;

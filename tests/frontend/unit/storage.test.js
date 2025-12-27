@@ -3,7 +3,7 @@
  */
 
 import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
-import { StorageManager } from '../../../aristay_backend/static/js/core/storage.js';
+import { StorageManager } from '../../../cosmo_backend/static/js/core/storage.js';
 
 describe('StorageManager', () => {
   beforeEach(() => {

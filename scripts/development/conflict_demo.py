@@ -8,7 +8,7 @@ import django
 from datetime import datetime, date, timedelta
 
 # Setup Django
-sys.path.append('/Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend')
+sys.path.append('/Users/duylam1407/Workspace/SJSU/cosmo-management/cosmo_backend')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 

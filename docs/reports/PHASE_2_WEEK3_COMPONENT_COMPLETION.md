@@ -19,7 +19,7 @@ This completes the core Phase 2 deliverables, bringing Phase 2 overall to **80% 
 ## 📦 Component Template Deliverables
 
 ### 1. task_timer.html (41 lines)
-**Location**: `aristay_backend/api/templates/staff/components/task_timer.html`
+**Location**: `cosmo_backend/api/templates/staff/components/task_timer.html`
 
 **Purpose**: Timer display with start/pause/stop controls for tracking time spent on tasks
 
@@ -52,7 +52,7 @@ This completes the core Phase 2 deliverables, bringing Phase 2 overall to **80% 
 ---
 
 ### 2. task_navigation.html (37 lines)
-**Location**: `aristay_backend/api/templates/staff/components/task_navigation.html`
+**Location**: `cosmo_backend/api/templates/staff/components/task_navigation.html`
 
 **Purpose**: Navigation buttons for moving between tasks and returning to task list
 
@@ -79,7 +79,7 @@ This completes the core Phase 2 deliverables, bringing Phase 2 overall to **80% 
 ---
 
 ### 3. task_progress.html (78 lines)
-**Location**: `aristay_backend/api/templates/staff/components/task_progress.html`
+**Location**: `cosmo_backend/api/templates/staff/components/task_progress.html`
 
 **Purpose**: Visual progress tracking with percentage, progress bar, and checklist statistics
 
@@ -134,7 +134,7 @@ This completes the core Phase 2 deliverables, bringing Phase 2 overall to **80% 
 ---
 
 ### 4. task_checklist.html (276 lines)
-**Location**: `aristay_backend/api/templates/staff/components/task_checklist.html`
+**Location**: `cosmo_backend/api/templates/staff/components/task_checklist.html`
 
 **Purpose**: Complete checklist with items grouped by room, including checkboxes, photo uploads, notes, and completion tracking
 
@@ -382,7 +382,7 @@ This completes the core Phase 2 deliverables, bringing Phase 2 overall to **80% 
 
 ### Component Templates (4 files)
 ```
-aristay_backend/api/templates/staff/components/
+cosmo_backend/api/templates/staff/components/
 ├── task_timer.html         (41 lines)
 ├── task_navigation.html    (37 lines)
 ├── task_progress.html      (78 lines)
@@ -391,7 +391,7 @@ aristay_backend/api/templates/staff/components/
 
 ### Previously Created This Week
 ```
-aristay_backend/static/js/modules/
+cosmo_backend/static/js/modules/
 ├── checklist-manager.js    (430 lines)
 ├── photo-manager.js        (420 lines)
 └── navigation-manager.js   (200 lines)

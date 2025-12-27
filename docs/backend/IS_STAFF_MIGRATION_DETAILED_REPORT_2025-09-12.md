@@ -64,9 +64,9 @@ if not (request.user.is_superuser or
 ```
 
 **Files Updated**:
-- `aristay_backend/api/digest_views.py`
-- `aristay_backend/api/admin_file_cleanup.py`
-- `aristay_backend/api/checklist_views.py`
+- `cosmo_backend/api/digest_views.py`
+- `cosmo_backend/api/admin_file_cleanup.py`
+- `cosmo_backend/api/checklist_views.py`
 
 #### **Pattern 2: Admin Interface Lists**
 **Files Affected**: 2 files
@@ -81,8 +81,8 @@ list_filter = ('is_active', 'groups', 'profile__role')
 ```
 
 **Files Updated**:
-- `aristay_backend/api/admin.py`
-- `aristay_backend/api/managersite.py`
+- `cosmo_backend/api/admin.py`
+- `cosmo_backend/api/managersite.py`
 
 #### **Pattern 3: JWT Token Claims**
 **Files Affected**: 2 files
@@ -103,8 +103,8 @@ data['user'] = {
 ```
 
 **Files Updated**:
-- `aristay_backend/api/jwt_auth_views.py`
-- `aristay_backend/api/auth_views.py`
+- `cosmo_backend/api/jwt_auth_views.py`
+- `cosmo_backend/api/auth_views.py`
 
 ### **2. Test Suite Migration**
 
@@ -140,7 +140,7 @@ def test_staff_access(self):
 ### **3. System Metrics Updates**
 
 #### **User Statistics**
-**File**: `aristay_backend/api/system_metrics.py`
+**File**: `cosmo_backend/api/system_metrics.py`
 ```python
 # BEFORE
 'staff': User.objects.filter(is_staff=True).count(),
@@ -153,7 +153,7 @@ def test_staff_access(self):
 ### **4. Middleware Updates**
 
 #### **Admin Access Control**
-**File**: `aristay_backend/backend/middleware.py`
+**File**: `cosmo_backend/backend/middleware.py`
 ```python
 # BEFORE
 if request.user.is_staff:
@@ -249,14 +249,14 @@ def get_profile_role(self, obj):
 ## Files Modified Summary
 
 ### **Core Application Files (8 files)**
-1. `aristay_backend/api/views.py` - Logging updates
-2. `aristay_backend/api/checklist_views.py` - Permission function updates
-3. `aristay_backend/api/digest_views.py` - Permission checks
-4. `aristay_backend/api/admin_file_cleanup.py` - Permission checks
-5. `aristay_backend/api/jwt_auth_views.py` - Token generation
-6. `aristay_backend/api/managersite.py` - Admin interface
-7. `aristay_backend/backend/middleware.py` - Access control
-8. `aristay_backend/api/system_metrics.py` - User statistics
+1. `cosmo_backend/api/views.py` - Logging updates
+2. `cosmo_backend/api/checklist_views.py` - Permission function updates
+3. `cosmo_backend/api/digest_views.py` - Permission checks
+4. `cosmo_backend/api/admin_file_cleanup.py` - Permission checks
+5. `cosmo_backend/api/jwt_auth_views.py` - Token generation
+6. `cosmo_backend/api/managersite.py` - Admin interface
+7. `cosmo_backend/backend/middleware.py` - Access control
+8. `cosmo_backend/api/system_metrics.py` - User statistics
 
 ### **Test Files (21 files)**
 - Unit tests: 4 files

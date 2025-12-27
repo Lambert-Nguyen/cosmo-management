@@ -19,7 +19,7 @@ from io import BytesIO
 from PIL import Image
 
 # Add the backend directory to Python path
-backend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aristay_backend')
+backend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cosmo_backend')
 sys.path.insert(0, backend_dir)
 
 # Set up Django
@@ -111,7 +111,7 @@ def test_status_key_consistency():
     
     # Check staff_views.py for consistent status keys - use relative path
     import os
-    backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'aristay_backend')
+    backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'cosmo_backend')
     staff_views_path = os.path.join(backend_dir, 'api', 'staff_views.py')
     
     with open(staff_views_path, 'r') as f:
@@ -177,7 +177,7 @@ def test_migration_created():
     import os
     
     # Use relative path instead of hardcoded absolute path
-    backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'aristay_backend')
+    backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'cosmo_backend')
     migration_pattern = os.path.join(backend_dir, 'api', 'migrations', '*uploaded_by*.py')
     migration_files = glob.glob(migration_pattern)
     
