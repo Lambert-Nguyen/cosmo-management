@@ -280,7 +280,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://user:pass@db:5432/aristay
+      - DATABASE_URL=postgresql://user:pass@db:5432/cosmo
     depends_on:
       - db
       - redis
@@ -288,7 +288,7 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_DB: aristay
+      POSTGRES_DB: cosmo
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
     volumes:

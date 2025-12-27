@@ -1,5 +1,5 @@
 """
-Soft Delete Mixin and Manager for Aristay Models
+Soft Delete Mixin and Manager for Cosmo Models
 """
 from django.db import models
 from django.utils import timezone

@@ -1,12 +1,12 @@
 function getTheme() {
-  const key = 'aristay-theme';
+  const key = 'cosmo-theme';
   const saved = localStorage.getItem(key);
   if (saved === 'dark' || saved === 'light') return saved;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 function setTheme(theme) {
-  const key = 'aristay-theme';
+  const key = 'cosmo-theme';
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem(key, theme);
 
@@ -60,7 +60,7 @@ function initMenu() {
 }
 
 function initSecretMessage() {
-  const message = document.getElementById('aristay-secret-message');
+  const message = document.getElementById('cosmo-secret-message');
   const overlay = document.getElementById('secret-message-overlay');
   const closeBtn = document.querySelector('[data-action="admin-secret-close"]');
   const logo = document.getElementById('adminHeaderLogo');

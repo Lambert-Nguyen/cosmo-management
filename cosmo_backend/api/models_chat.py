@@ -1,6 +1,6 @@
 # api/models_chat.py
 """
-Chat System Models for AriStay
+Chat System Models for Cosmo
 Supports one-on-one and group chats with real-time messaging
 """
 

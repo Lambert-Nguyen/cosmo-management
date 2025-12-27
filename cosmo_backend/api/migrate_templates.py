@@ -106,7 +106,7 @@ def migrate_template(content: str, analysis: Dict) -> str:
     if analysis["has_title_block"]:
         title_content = analysis["title_content"]
         
-        # Extract just the page title (remove " · AriStay" suffix if present)
+        # Extract just the page title (remove " · Cosmo" suffix if present)
         page_title = title_content
         if "·" in title_content or "|" in title_content:
             page_title = re.split(r'[·|]', title_content)[0].strip()

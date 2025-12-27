@@ -42,7 +42,7 @@ class Command(BaseCommand):
                 admin_user, created = User.objects.get_or_create(
                     username='admin',
                     defaults={
-                        'email': 'admin@aristay.com',
+                        'email': 'admin@cosmo-management.cloud',
                         'is_superuser': True,
                     }
                 )

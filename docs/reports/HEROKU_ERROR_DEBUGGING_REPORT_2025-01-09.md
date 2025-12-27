@@ -198,7 +198,7 @@ git merge mvp1dot5_development
 ### 2. Verify Deployment
 ```bash
 # Check Heroku logs
-heroku logs --tail --app aristay-internal-backend-72ffd16c9352
+heroku logs --tail --app cosmo-internal-backend-72ffd16c9352
 
 # Test user creation
 # Navigate to /admin/auth/user/add/ and create a test user
@@ -280,7 +280,7 @@ heroku logs --tail --app aristay-internal-backend-72ffd16c9352
 ## 📞 Support Information
 
 ### If Issues Persist
-1. Check Heroku logs: `heroku logs --tail --app aristay-internal-backend-72ffd16c9352`
+1. Check Heroku logs: `heroku logs --tail --app cosmo-internal-backend-72ffd16c9352`
 2. Verify database migrations: `heroku run python manage.py migrate`
 3. Test user creation: Navigate to `/admin/auth/user/add/`
 4. Check notification templates: Navigate to `/api/admin/notification-management/`

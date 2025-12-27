@@ -1,5 +1,5 @@
 """
-Custom template tags for dual timezone display in AriStay
+Custom template tags for dual timezone display in Cosmo
 Provides filters for showing both user timezone and Tampa, FL timezone
 """
 

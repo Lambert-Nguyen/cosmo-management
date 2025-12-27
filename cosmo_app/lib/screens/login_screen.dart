@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Aristay Employee App Login')),
+      appBar: AppBar(title: const Text('Cosmo Management Login')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 // 1. Add your logo image here
                 Image.asset(
-                  'assets/aristay_logo.jpg',  // Update path/filename as needed
+                  'assets/cosmo_logo.jpg',  // Update path/filename as needed
                   width: 200,                // Adjust sizing to your preference
                   height: 200,
                 ),

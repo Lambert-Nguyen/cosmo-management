@@ -27,7 +27,7 @@ function createSparkleEffect() {
 }
 
 function initSecretMessageManager() {
-  const message = document.getElementById(useId('aristay-secret-message-manager'));
+  const message = document.getElementById(useId('cosmo-secret-message-manager'));
   const overlay = document.getElementById(useId('secret-message-overlay-manager'));
   const welcomeLogo = document.querySelector('.welcome-logo');
 
@@ -71,8 +71,8 @@ function initSecretMessageManager() {
     });
   }
 
-  // keyboard sequence: "aristay"
-  const targetSequence = ['a', 'r', 'i', 's', 't', 'a', 'y'];
+  // keyboard sequence: "cosmo"
+  const targetSequence = ['c', 'o', 's', 'm', 'o'];
   let seq = [];
   document.addEventListener('keydown', (e) => {
     seq.push(String(e.key || '').toLowerCase());

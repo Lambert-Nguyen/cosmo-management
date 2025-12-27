@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}AriStay Portal Home{% endblock %}
+{% block title %}Cosmo Portal Home{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/pages/portal-home.css' %}">
@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="card">
-    <div class="section-title">Welcome to AriStay, {{ user.get_full_name|default:user.username }}! 👋</div>
+    <div class="section-title">Welcome to Cosmo, {{ user.get_full_name|default:user.username }}! 👋</div>
     
     <div class="portal-home-intro">
         <p>Your role: <strong>{% if user.profile %}{{ user.profile.get_role_display|default:"Staff" }}{% else %}Staff{% endif %}</strong></p>

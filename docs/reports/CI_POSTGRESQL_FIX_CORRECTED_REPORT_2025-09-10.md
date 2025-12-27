@@ -115,7 +115,7 @@ POSTGRES_DB='aristay_test' POSTGRES_USER='postgres' POSTGRES_PASSWORD='postgres'
 # Uses POSTGRES_* environment variables for CI
 DATABASES["default"] = {
     "ENGINE": "django.db.backends.postgresql",
-    "NAME": os.getenv("POSTGRES_DB", "aristay"),
+    "NAME": os.getenv("POSTGRES_DB", "cosmo"),
     "USER": os.getenv("POSTGRES_USER", "postgres"),
     "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
     "HOST": os.getenv("POSTGRES_HOST", "127.0.0.1"),

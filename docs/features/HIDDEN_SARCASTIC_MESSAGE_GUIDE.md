@@ -54,7 +54,7 @@ Pray tell, dear friend, have you no shame?
 - **Title**: "🌟 A Portal Wanderer's Secret 🌟"
 - **Activation Methods**:
   - **Primary**: Click the brand logo 5 times within 2 seconds
-  - **Alternative**: Type "aristay" on the keyboard
+  - **Alternative**: Type "cosmo" on the keyboard
 - **Styling**: Theme-aware (adapts to light/dark mode)
 - **Features**: Dynamic theme switching, particle effects, smooth transitions
 
@@ -125,7 +125,7 @@ cosmo_backend/api/templates/
 | **Admin** | 7x Logo Click | Konami Code | Elegant animations |
 | **Manager** | Double-click Logo | Card Sequence | Sparkle effects |
 | **Staff** | Long Press Logo | Triple-click | Mobile vibration |
-| **Portal** | 5x Logo Click | Type "aristay" | Theme-aware |
+| **Portal** | 5x Logo Click | Type "cosmo" | Theme-aware |
 
 ## 🎭 The Sarcastic Elegance
 

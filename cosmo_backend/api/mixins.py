@@ -1,5 +1,5 @@
 """
-Core mixins for AriStay models.
+Core mixins for Cosmo models.
 
 This module provides reusable mixins that add common functionality to models:
 - TimeStampedMixin: created_at, modified_at timestamps

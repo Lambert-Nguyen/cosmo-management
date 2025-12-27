@@ -98,7 +98,7 @@ class EmailDigestService:
                 "now": local_now,
             }
 
-            subject = "🧹 Daily Task Digest – Aristay"
+            subject = "🧹 Daily Task Digest – Cosmo"
             from_email = settings.DEFAULT_FROM_EMAIL
             to_email = [user.email]
 

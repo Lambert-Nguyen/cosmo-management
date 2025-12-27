@@ -1,6 +1,6 @@
 # api/enhanced_security_middleware.py
 """
-Enhanced Security Middleware for AriStay
+Enhanced Security Middleware for Cosmo
 """
 
 import logging

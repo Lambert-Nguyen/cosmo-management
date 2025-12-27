@@ -170,7 +170,7 @@ function initMetricsDashboard() {
     // Pause auto-refresh when page is not visible
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    console.log('🚀 AriStay System Metrics Dashboard loaded successfully!');
+    console.log('🚀 Cosmo System Metrics Dashboard loaded successfully!');
 }
 
 // Cleanup on page unload

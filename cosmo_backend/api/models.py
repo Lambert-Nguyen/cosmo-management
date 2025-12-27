@@ -675,7 +675,7 @@ class DepartmentGroups:
 
 class Profile(models.Model):
     user     = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # Curated timezone choices for AriStay locations
+    # Curated timezone choices for Cosmo locations
     TIMEZONE_CHOICES = [
         ('America/New_York', 'Eastern Time (Tampa, FL)'),
         ('America/Los_Angeles', 'Pacific Time (San Jose, CA)'),

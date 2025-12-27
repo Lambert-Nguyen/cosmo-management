@@ -127,10 +127,10 @@ class ApiService {
 flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000/api
 
 # Staging  
-flutter run --dart-define=API_BASE_URL=https://staging.aristay.com/api
+flutter run --dart-define=API_BASE_URL=https://staging.cosmo.com/api
 
 # Production
-flutter run --dart-define=API_BASE_URL=https://api.aristay.com/api
+flutter run --dart-define=API_BASE_URL=https://api.cosmo.com/api
 ```
 
 **Device-Specific Base URLs**:
@@ -454,7 +454,7 @@ DJANGO_ENVIRONMENT=development
 # Network configuration
 ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.40
 CORS_ALLOWED_ORIGINS=http://127.0.0.1:3000,http://localhost:3000
-CSRF_TRUSTED_ORIGINS=https://staging.aristay.com,https://app.aristay.com
+CSRF_TRUSTED_ORIGINS=https://staging.cosmo.com,https://app.cosmo.com
 ```
 
 ## 📁 Proper File Placement Guidelines

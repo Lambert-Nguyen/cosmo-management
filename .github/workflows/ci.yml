@@ -1,4 +1,4 @@
-name: Aristay CI
+name: Cosmo Management CI
 permissions:
   contents: read
 
@@ -56,25 +56,25 @@ jobs:
 
       - name: Ensure logs directory exists
         run: |
-          mkdir -p aristay_backend/logs
+          mkdir -p cosmo_backend/logs
 
       - name: Prepare database
         env:
           PGPASSWORD: postgres
         run: |
           until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do sleep 1; done
-          psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE aristay_ci;"
+          psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE cosmo_ci;"
 
       - name: Run comprehensive tests
         working-directory: .
         env:
           DJANGO_ENVIRONMENT: development
           DJANGO_SETTINGS_MODULE: backend.settings_local
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/aristay_ci
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/cosmo_ci
           LOAD_DOTENV: 'false'
           USE_CLOUDINARY: 'false'
         run: |
-          python aristay_backend/manage.py check | cat || true
+          python cosmo_backend/manage.py check | cat || true
           python tests/run_tests_comprehensive.py
 
       - name: Upload logs on failure
@@ -82,7 +82,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: django-logs
-          path: aristay_backend/logs
+          path: cosmo_backend/logs
           if-no-files-found: ignore
 
 
