@@ -1,6 +1,6 @@
 # api/authz.py
 """
-Centralized authorization helpers for AriStay application.
+Centralized authorization helpers for Cosmo application.
 Provides consistent permission checking across views and templates.
 """
 

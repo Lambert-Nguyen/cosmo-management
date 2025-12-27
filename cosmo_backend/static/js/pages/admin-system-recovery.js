@@ -27,7 +27,7 @@ function downloadDiagnostics() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `aristay-diagnostics-${new Date().toISOString().slice(0, 19)}.json`;
+    a.download = `cosmo-diagnostics-${new Date().toISOString().slice(0, 19)}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -97,7 +97,7 @@ function initRecoveryDashboard() {
     // Stop refresh when page is hidden
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    console.log('🚨 AriStay System Crash Recovery loaded successfully!');
+    console.log('🚨 Cosmo System Crash Recovery loaded successfully!');
 }
 
 // Initialize when DOM is ready

@@ -71,7 +71,7 @@
    daphne backend.asgi:application -b 0.0.0.0 -p 8000
 
 5. Access Chat:
-   https://aristay-internal.cloud/api/chat/
+   https://cosmo-internal.cloud/api/chat/
 
 ═══════════════════════════════════════════════════════════════════════════════
 

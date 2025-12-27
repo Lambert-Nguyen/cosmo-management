@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initUserPerformanceChart(chartData.userPerformanceChart);
     initUserActivityChart(chartData.userActivityChart);
 
-    console.log('🚀 AriStay Manager Dashboard loaded successfully!');
+    console.log('🚀 Cosmo Manager Dashboard loaded successfully!');
 });
 
 function refreshData() {

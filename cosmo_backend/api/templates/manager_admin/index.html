@@ -1,11 +1,11 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
-{% block title %}{% trans 'Site administration' %} | {{ site_title|default:_('AriStay Manager') }}{% endblock %}
+{% block title %}{% trans 'Site administration' %} | {{ site_title|default:_('Cosmo Manager') }}{% endblock %}
 
 {% block branding %}
 <h1 id="site-name">
-    <a href="{% url 'manager_admin:index' %}">{{ site_header|default:_('AriStay Manager') }}</a>
+    <a href="{% url 'manager_admin:index' %}">{{ site_header|default:_('Cosmo Manager') }}</a>
 </h1>
 {% endblock %}
 
@@ -15,11 +15,11 @@
 <div id="header" class="ma-header">
     <div class="ma-header-inner">
         <div class="ma-brand">
-            <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay" class="ma-brand-logo">
+            <img src="{% static 'images/cosmo_logo.jpg' %}" alt="Cosmo" class="ma-brand-logo">
             <div>
                 <h1 class="ma-header-site-name">
                     <a href="{% url 'manager_admin:index' %}">
-                        {{ site_header|default:_('AriStay Manager') }}
+                        {{ site_header|default:_('Cosmo Manager') }}
                     </a>
                 </h1>
                 <p class="ma-header-subtitle">Property Management Console</p>
@@ -52,7 +52,7 @@
 {% endblock %}
 
 {% block extrastyle %}
-<!-- AriStay Favicons -->
+<!-- Cosmo Favicons -->
 <link rel="icon" type="image/x-icon" href="{% static 'images/favicons/favicon.ico' %}">
 <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
 <link rel="apple-touch-icon" href="{% static 'images/favicons/apple-touch-icon.png' %}">
@@ -70,8 +70,8 @@
         <!-- Menu Header -->
         <div class="ma-menu-header">
             <div class="ma-menu-user">
-                <img src="{% static 'images/aristay_logo.jpg' %}" 
-                     alt="AriStay" 
+                <img src="{% static 'images/cosmo_logo.jpg' %}"
+                     alt="Cosmo"
                      class="ma-menu-logo">
                 <div>
                     <h3 class="ma-menu-title">Quick Menu</h3>
@@ -144,7 +144,7 @@
 <div id="menu-overlay" class="ma-menu-overlay"></div>
 
 <!-- Hidden Sarcastic Message - Manager Edition -->
-<div id="aristay-secret-message-manager" class="ma-secret-message is-hidden">
+<div id="cosmo-secret-message-manager" class="ma-secret-message is-hidden">
     <div class="ma-secret-title">
         👔 A Manager's Secret Confession 👔
     </div>
@@ -171,9 +171,9 @@ Pray tell, dear friend, have you no shame?</div>
 <div id="content-main">
     <div class="welcome-section">
         <div class="logo-container">
-            <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay Logo" class="welcome-logo">
+            <img src="{% static 'images/cosmo_logo.jpg' %}" alt="Cosmo Logo" class="welcome-logo">
             <div class="welcome-text">
-                <h1 class="welcome-title">Welcome to AriStay Manager Console</h1>
+                <h1 class="welcome-title">Welcome to Cosmo Manager Console</h1>
                 <p class="welcome-subtitle">Your comprehensive property and task management dashboard</p>
             </div>
         </div>
@@ -315,7 +315,7 @@ Pray tell, dear friend, have you no shame?</div>
         </p>
         <p><strong>Last Login:</strong> {{ user.last_login|date:"M d, Y H:i" }}</p>
         <p><strong>Current Time:</strong> <span id="current-time">{{ "now"|date:"M d, Y H:i" }}</span></p>
-        <p><strong>Console Version:</strong> AriStay Manager v2.0</p>
+        <p><strong>Console Version:</strong> Cosmo Manager v2.0</p>
     </div>
 
     <!-- Footer with Copyright -->

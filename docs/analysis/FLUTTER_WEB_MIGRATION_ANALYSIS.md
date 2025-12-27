@@ -29,7 +29,7 @@
 - **Frontend Mobile**: Flutter iOS/Android (33 Dart files, 15 screens) - **ON HOLD 4 MONTHS** ⚠️
 - **Frontend Web**: Django HTML templates (78 template files) - **PRODUCTION READY** ✅
 - **API**: RESTful with JWT authentication
-- **Bundle ID**: `com.aristay.internalapp`
+- **Bundle ID**: `com.cosmo.internalapp`
 - **iOS Target**: 15.0+
 
 ### Migration Recommendation: **MINIMAL EFFORT - FOCUS ON iOS FIRST** 🎯
@@ -956,7 +956,7 @@ Feature Completeness:
 
 App Store Requirements:
   - [ ] App Store Connect account ready
-  - [ ] Bundle identifier: com.aristay.internalapp
+  - [ ] Bundle identifier: com.cosmo.internalapp
   - [ ] Privacy policy hosted
   - [ ] Terms of service hosted
   - [ ] App Store screenshots (all sizes)

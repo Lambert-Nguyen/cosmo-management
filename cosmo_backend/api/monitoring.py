@@ -47,7 +47,7 @@ class HealthCheckView(View):
             return JsonResponse({
                 'status': 'healthy',
                 'timestamp': datetime.utcnow().isoformat(),
-                'service': 'aristay-backend',
+                'service': 'cosmo-backend',
                 'version': getattr(settings, 'VERSION', '1.0.0'),
             })
         
@@ -75,7 +75,7 @@ class DetailedHealthCheckView(View):
             health_data = {
                 'status': 'healthy',
                 'timestamp': datetime.utcnow().isoformat(),
-                'service': 'aristay-backend',
+                'service': 'cosmo-backend',
                 'version': getattr(settings, 'VERSION', '1.0.0'),
                 'environment': getattr(settings, 'ENVIRONMENT', 'unknown'),
                 'debug_mode': settings.DEBUG,

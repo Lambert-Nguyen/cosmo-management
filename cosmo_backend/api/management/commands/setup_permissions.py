@@ -322,7 +322,7 @@ class Command(BaseCommand):
                 # Create new superuser
                 user = User.objects.create_user(
                     username='admin',
-                    email='admin@aristay.com',
+                    email='admin@cosmo-management.cloud',
                     password='admin123',
                     is_superuser=True,
                     is_staff=True

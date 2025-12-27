@@ -149,7 +149,7 @@ python -m pytest tests/api/ -v
 ### Environment Variables
 ```bash
 # Database
-POSTGRES_DB=aristay
+POSTGRES_DB=cosmo
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 

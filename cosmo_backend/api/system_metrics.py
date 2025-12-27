@@ -1,5 +1,5 @@
 """
-System Metrics Collection for AriStay Admin Dashboard
+System Metrics Collection for Cosmo Admin Dashboard
 Provides performance, logging, and health metrics for superuser monitoring.
 """
 

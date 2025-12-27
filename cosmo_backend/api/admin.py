@@ -243,9 +243,9 @@ class DateRangeFilter(admin.SimpleListFilter):
 
 
 class CustomAdminSite(admin.AdminSite):
-    site_header = "AriStay Administration"
-    site_title = "AriStay Admin"
-    index_title = "Welcome to AriStay Administration"
+    site_header = "Cosmo Administration"
+    site_title = "Cosmo Admin"
+    index_title = "Welcome to Cosmo Administration"
     
     def has_permission(self, request):
         # Restrict Superuser admin to Superusers only
@@ -834,7 +834,7 @@ class ProfileInline(admin.StackedInline):
             kwargs['help_text'] = 'Assign staff to specific task groups for dashboard permissions'
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-class AriStayUserAdmin(ProvenanceStampMixin, DjangoUserAdmin):
+class CosmoUserAdmin(ProvenanceStampMixin, DjangoUserAdmin):
     """
     Custom UserAdmin with role-based permissions:
     - Superusers: Full access (can modify passwords, usernames, groups)
@@ -1246,7 +1246,7 @@ class AriStayUserAdmin(ProvenanceStampMixin, DjangoUserAdmin):
 
 
 # Manager version of UserAdmin (more restricted)
-class ManagerUserAdmin(AriStayUserAdmin):
+class ManagerUserAdmin(CosmoUserAdmin):
     """
     Manager version of UserAdmin with additional restrictions
     """
@@ -1277,7 +1277,7 @@ class ManagerUserAdmin(AriStayUserAdmin):
 
 
 # Alias for backwards compatibility
-SuperuserUserAdmin = AriStayUserAdmin
+SuperuserUserAdmin = CosmoUserAdmin
 
 # Register on default admin site with profile inline
 try:

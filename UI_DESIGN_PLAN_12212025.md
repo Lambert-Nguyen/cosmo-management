@@ -10,7 +10,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 3.2 | 2025-12-24 | **Backend audit corrections:** JWT already implemented (not pending), fixed directory paths (`aristay_backend/` not `aristay/`), updated Phase 1 status, added endpoint verification requirements |
+| 3.2 | 2025-12-24 | **Backend audit corrections:** JWT already implemented (not pending), fixed directory paths (`aristay_backend/` not `cosmo/`), updated Phase 1 status, added endpoint verification requirements |
 | 3.1 | 2025-12-24 | Added Critical Review section |
 | 3.0 | 2025-12-23 | Reorganized into 3 Stages |
 
@@ -190,7 +190,7 @@ class ApiException implements Exception {
 │                                                                              │
 │  Phase 0: GitHub Repo & Project Renaming ◀── FIRST STEP ────────────────── │
 │     ├── Rename GitHub repository (aristay_app → cosmo-management)           │
-│     ├── Rename project directories (aristay → cosmo_backend)                │
+│     ├── Rename project directories (cosmo → cosmo_backend)                │
 │     ├── Update all code references (package names, imports)                 │
 │     ├── Update database name (aristay_db → cosmo_db)                        │
 │     └── Update bundle identifiers and app metadata                          │
@@ -600,7 +600,7 @@ GET /api/tenants/{tenant_id}/tasks/
 {
   "user_id": 123,
   "tenant_id": "abc-123-def",
-  "tenant_slug": "aristay",
+  "tenant_slug": "cosmo",
   "role": "manager",
   "permissions": ["task.create", "task.edit", ...],
   "features": ["chat", "photos", "inventory"],
@@ -765,7 +765,7 @@ aristay_flutter_frontend/            → cosmo_app/
 
 **Phase 2: Code References**
 ```bash
-# Files to update (grep for 'aristay'):
+# Files to update (grep for 'cosmo'):
 - settings_base.py          → APP_NAME = 'Cosmo Management'
 - email templates           → Replace branding
 - API responses             → Update platform references
@@ -818,7 +818,7 @@ Platform Domains:
 └── status.cosmomgmt.com        → Status page
 
 Tenant Subdomains:
-├── {tenant}.cosmomgmt.com      → Tenant application (e.g., aristay.cosmomgmt.com)
+├── {tenant}.cosmomgmt.com      → Tenant application (e.g., cosmo.cosmomgmt.com)
 └── {custom-domain}.com         → Enterprise white-label option
 ```
 
@@ -2083,7 +2083,7 @@ aristay_flutter_frontend/            → cosmo_app/
 
 ##### 0.3 Code Reference Updates
 ```bash
-# Files to update (grep for 'aristay'):
+# Files to update (grep for 'cosmo'):
 - settings_base.py          → APP_NAME = 'Cosmo Management'
 - email templates           → Replace branding
 - API responses             → Update platform references
@@ -2092,7 +2092,7 @@ aristay_flutter_frontend/            → cosmo_app/
 - Environment files         → DATABASE_URL, etc.
 
 # Run search:
-grep -r "aristay" --include="*.py" --include="*.dart" --include="*.yaml" --include="*.html"
+grep -r "cosmo" --include="*.py" --include="*.dart" --include="*.yaml" --include="*.html"
 ```
 
 ##### 0.4 Database Rename
@@ -2140,8 +2140,8 @@ git push -u origin main
 
 #### Definition of Done - Phase 0
 - [ ] New GitHub repository "cosmo-management" created
-- [ ] All directories renamed (aristay → cosmo)
-- [ ] All code references updated (grep returns no "aristay")
+- [ ] All directories renamed (cosmo → cosmo)
+- [ ] All code references updated (grep returns no "cosmo")
 - [ ] Database renamed or recreated as cosmo_db
 - [ ] Bundle identifiers updated for iOS/Android
 - [ ] pubspec.yaml updated with new name
@@ -2462,7 +2462,7 @@ find cosmo_app/lib -name "*.dart" -exec sed -i 's/package:aristay_flutter_fronte
 "aristay_backend"          → "cosmo_backend"
 "aristay_local"            → "cosmo_db"
 "AriStay"                  → "Cosmo Management"  (brand name in UI)
-"aristay"                  → "cosmo"              (lowercase references)
+"cosmo"                  → "cosmo"              (lowercase references)
 
 # Files to update (after renaming aristay_backend → cosmo_backend):
 cosmo_backend/backend/settings_base.py   → APP_NAME, DEFAULT_FROM_EMAIL
@@ -2543,7 +2543,7 @@ flutter analyze                     # ✓ No errors
 flutter build web                   # ✓ Web builds
 
 # Code check - should return NOTHING (excluding git history and build artifacts)
-grep -ri "aristay" --include="*.py" --include="*.dart" --include="*.yaml" --include="*.md" \
+grep -ri "cosmo" --include="*.py" --include="*.dart" --include="*.yaml" --include="*.md" \
   --exclude-dir=.git --exclude-dir=build --exclude-dir=.dart_tool --exclude-dir=__pycache__ \
   --exclude-dir=staticfiles --exclude-dir=migrations
 ```
@@ -2555,7 +2555,7 @@ grep -ri "aristay" --include="*.py" --include="*.dart" --include="*.yaml" --incl
 - [ ] `flutter pub get` succeeds
 - [ ] `flutter analyze` shows no errors
 - [ ] `flutter build web` succeeds
-- [ ] No "aristay" references remain (grep check)
+- [ ] No "cosmo" references remain (grep check)
 - [ ] All tests pass
 
 #### Step 8: Git Commit & Push
@@ -2606,7 +2606,7 @@ git push -u origin refactor/cosmo-rename
 - [ ] Database created and migrations run
 - [ ] Django server starts and passes checks
 - [ ] Flutter builds for web without errors
-- [ ] No "aristay" string found in codebase
+- [ ] No "cosmo" string found in codebase
 - [ ] Changes committed and pushed
 - [ ] GitHub repository renamed
 

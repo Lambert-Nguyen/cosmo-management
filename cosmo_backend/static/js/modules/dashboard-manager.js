@@ -285,7 +285,7 @@ export class DashboardManager {
     }, 2000);
   }
 
-  sendPushNotification(title, body, icon = '/static/images/aristay_logo.jpg') {
+  sendPushNotification(title, body, icon = '/static/images/cosmo_logo.jpg') {
     if (!('Notification' in window)) return;
     if (Notification.permission !== 'granted') return;
 
@@ -293,8 +293,8 @@ export class DashboardManager {
       new Notification(title, {
         body,
         icon,
-        badge: '/static/images/aristay_logo.jpg',
-        tag: 'aristay-notification'
+        badge: '/static/images/cosmo_logo.jpg',
+        tag: 'cosmo-notification'
       });
     } catch (error) {
       console.error('[DashboardManager] Failed to send push notification:', error);

@@ -197,7 +197,7 @@ def task_image_upload_path(instance, filename):
     
     if getattr(settings, 'USE_CLOUDINARY', False):
         # Cloudinary auto-organizes, flat structure preferred
-        return f"aristay/tasks/{task_id}/{unique_filename}"
+        return f"cosmo/tasks/{task_id}/{unique_filename}"
     else:
         # Local storage with organized folders
         return f'task_images/{task_id}/{unique_filename}'
@@ -296,8 +296,8 @@ class Command(BaseCommand):
                 # Upload to Cloudinary with same path structure
                 result = cloudinary.uploader.upload(
                     image.image.path,
-                    public_id=f"aristay/tasks/{image.task.id}/{image.id}",
-                    folder="aristay/tasks"
+                    public_id=f"cosmo/tasks/{image.task.id}/{image.id}",
+                    folder="cosmo/tasks"
                 )
                 # Update model to point to Cloudinary URL
                 image.image = result['secure_url']

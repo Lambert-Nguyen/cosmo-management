@@ -1,5 +1,5 @@
 """
-Authentication mixins for AriStay API views
+Authentication mixins for Cosmo API views
 """
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication

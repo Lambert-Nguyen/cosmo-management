@@ -1,5 +1,5 @@
 """
-JSON utility functions for the Aristay API
+JSON utility functions for the Cosmo API
 """
 import json
 import logging

@@ -4,7 +4,7 @@
 {% block title %}{% trans 'Site administration' %} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
 {% block extrastyle %}
-<!-- AriStay Favicons -->
+<!-- Cosmo Favicons -->
 <link rel="icon" type="image/x-icon" href="{% static 'images/favicons/favicon.ico' %}">
 <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
 <link rel="apple-touch-icon" href="{% static 'images/favicons/apple-touch-icon.png' %}">
@@ -607,9 +607,9 @@ body {
 <div id="content-main">
     <div class="welcome-section">
         <div class="logo-container">
-            <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay Logo" class="welcome-logo">
+            <img src="{% static 'images/cosmo_logo.jpg' %}" alt="Cosmo Logo" class="welcome-logo">
             <div class="welcome-text">
-                <h1 class="welcome-title">AriStay Administration</h1>
+                <h1 class="welcome-title">Cosmo Administration</h1>
                 <p class="welcome-subtitle">Comprehensive system management and control center</p>
             </div>
         </div>
@@ -745,6 +745,6 @@ setInterval(function() {
     document.getElementById('current-time').textContent = now.toLocaleDateString('en-US', options);
 }, 60000);
 
-console.log('🛡️ AriStay Admin Dashboard loaded successfully!');
+console.log('🛡️ Cosmo Admin Dashboard loaded successfully!');
 </script>
 {% endblock %}

@@ -25,7 +25,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url("/static/images/aristay_banner.jpg");
+    background-image: url("/static/images/cosmo_banner.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

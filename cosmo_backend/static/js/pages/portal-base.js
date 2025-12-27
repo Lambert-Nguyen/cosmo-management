@@ -68,7 +68,7 @@ function initMobileNav() {
 }
 
 function initPortalSecretMessage() {
-  const message = qs('#aristay-secret-message-portal');
+  const message = qs('#cosmo-secret-message-portal');
   const overlay = qs('#secret-message-overlay-portal');
   const brandLogo = qs('.portal-brand-logo');
 

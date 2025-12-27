@@ -90,7 +90,7 @@ function initMobileNav() {
 }
 
 function initSecretMessage() {
-  const message = document.getElementById('aristay-secret-message-staff');
+  const message = document.getElementById('cosmo-secret-message-staff');
   const overlay = document.getElementById('secret-message-overlay-staff');
   const closeBtn = document.querySelector('.js-secret-message-staff-close');
   const logo = document.querySelector('.logo');

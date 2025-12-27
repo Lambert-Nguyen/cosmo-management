@@ -1,5 +1,5 @@
 """
-Unified authentication views for AriStay backend
+Unified authentication views for Cosmo backend
 Handles role-based routing for Admin and Manager users
 """
 
@@ -128,8 +128,8 @@ class UnifiedLoginView(LoginView):
         """
         context = super().get_context_data(**kwargs)
         context.update({
-            'site_title': 'AriStay Management',
-            'site_header': 'AriStay Management',
+            'site_title': 'Cosmo Management',
+            'site_header': 'Cosmo Management',
             'site_description': 'Access your management dashboards',
         })
         return context

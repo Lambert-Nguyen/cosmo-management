@@ -2,7 +2,7 @@
 {% load static %}
 {% load timezone_tags %}
 
-{% block title %}{% block page_title %}AriStay Staff Portal{% endblock %} · AriStay{% endblock %}
+{% block title %}{% block page_title %}Cosmo Staff Portal{% endblock %} · Cosmo{% endblock %}
 
 {% block header %}
 <header class="header staff-header">
@@ -13,8 +13,8 @@
             </button>
             
             <a href="{% url 'staff-dashboard' %}" class="logo">
-                <img src="{% static 'images/aristay_logo.jpg' %}" alt="AriStay" height="32" class="logo-img">
-                <span class="logo-text">AriStay Staff</span>
+                <img src="{% static 'images/cosmo_logo.jpg' %}" alt="Cosmo" height="32" class="logo-img">
+                <span class="logo-text">Cosmo Staff</span>
             </a>
         </div>
         
@@ -120,7 +120,7 @@
     <div class="container">
         <div class="footer-content">
             <p class="footer-text">
-                © {{ current_year|default:"2025" }} AriStay. All rights reserved.
+                © {{ current_year|default:"2025" }} Cosmo Management. All rights reserved.
             </p>
             <div class="footer-links">
                 <a href="#" class="footer-link">Help</a>

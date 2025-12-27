@@ -103,7 +103,7 @@ class Command(BaseCommand):
         superuser, created = User.objects.get_or_create(
             username='admin_super',
             defaults={
-                'email': 'superuser@aristay.com',
+                'email': 'superuser@cosmo-management.cloud',
                 'first_name': 'System',
                 'last_name': 'Administrator',
                 # Don't set is_staff/is_superuser - let Profile.role sync handle it
@@ -140,7 +140,7 @@ class Command(BaseCommand):
         manager, created = User.objects.get_or_create(
             username='manager_alice',
             defaults={
-                'email': 'alice.manager@aristay.com',
+                'email': 'alice.manager@cosmo-management.cloud',
                 'first_name': 'Alice',
                 'last_name': 'Manager',
                 # Don't set is_staff/is_superuser - let Profile.role sync handle it
@@ -176,7 +176,7 @@ class Command(BaseCommand):
         staff, created = User.objects.get_or_create(
             username='staff_bob',
             defaults={
-                'email': 'bob.staff@aristay.com',
+                'email': 'bob.staff@cosmo-management.cloud',
                 'first_name': 'Bob',
                 'last_name': 'Cleaner',
                 # Don't set is_staff/is_superuser - let Profile.role sync handle it
@@ -217,7 +217,7 @@ class Command(BaseCommand):
             user, created = User.objects.get_or_create(
                 username=username,
                 defaults={
-                    'email': f'{username}@aristay.com',
+                    'email': f'{username}@cosmo-management.cloud',
                     'first_name': name.split()[0],
                     'last_name': name.split()[1],
                     # Don't set is_staff/is_superuser - let Profile.role sync handle it

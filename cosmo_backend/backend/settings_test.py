@@ -1,5 +1,5 @@
 """
-Test Settings for Aristay
+Test Settings for Cosmo
 Use this for running tests
 """
 
@@ -73,7 +73,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'aristay_test',
+            'NAME': 'cosmo_test',
             'USER': 'postgres',
             'PASSWORD': 'postgres',
             'HOST': '127.0.0.1',

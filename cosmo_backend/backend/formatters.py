@@ -61,7 +61,7 @@ class JSONFormatter(logging.Formatter):
         # Add environment information
         log_data['environment'] = {
             'debug': getattr(settings, 'DEBUG', False),
-            'service': 'aristay-backend',
+            'service': 'cosmo-backend',
             'version': getattr(settings, 'VERSION', '1.0.0'),
         }
         

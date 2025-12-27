@@ -31,7 +31,7 @@ class NotificationService {
   /// Tiny helper to throw a local banner manually from anywhere.
   static Future<void> showLocalTestNotification() => _showLocal(
         const RemoteNotification(
-          title: '🔔 Aristay Test Notification',
+          title: '🔔 Cosmo Test Notification',
           body:  'This is just a local test.',
         ),
       );

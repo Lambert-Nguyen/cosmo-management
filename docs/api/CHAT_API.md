@@ -1088,8 +1088,8 @@ void _handleReconnection() {
 
 For issues or questions:
 - Email: support@cosmo-management.cloud
-- Docs: https://docs.aristay.com
-- API Status: https://status.aristay.com
+- Docs: https://docs.cosmo.com
+- API Status: https://status.cosmo.com
 
 ---
 

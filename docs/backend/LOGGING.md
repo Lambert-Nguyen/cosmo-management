@@ -77,7 +77,7 @@ Each log entry includes:
   "thread_name": "MainThread",
   "environment": {
     "debug": false,
-    "service": "aristay-backend",
+    "service": "cosmo-backend",
     "version": "1.0.0"
   },
   "request": {
@@ -189,7 +189,7 @@ curl http://localhost:8000/api/health/
 {
   "status": "healthy",
   "timestamp": "2025-08-28T00:13:17Z",
-  "service": "aristay-backend",
+  "service": "cosmo-backend",
   "version": "1.0.0"
 }
 ```
@@ -296,8 +296,8 @@ export SENTRY_DSN="your-sentry-dsn"
 ### **4. Set Up Log Rotation** (systemd example)
 ```bash
 # Create logrotate configuration
-sudo cat > /etc/logrotate.d/aristay << EOF
-/var/log/aristay/*.log {
+sudo cat > /etc/logrotate.d/cosmo << EOF
+/var/log/cosmo/*.log {
     daily
     missingok
     rotate 30

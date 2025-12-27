@@ -192,7 +192,7 @@ function initLogsViewer() {
     // Pause refresh when page is not visible
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    console.log('📝 AriStay System Logs Viewer loaded successfully!');
+    console.log('📝 Cosmo System Logs Viewer loaded successfully!');
     console.log('💡 Tips: Click auto-refresh to toggle, use Ctrl+F to search, Ctrl+K/J to scroll');
 }
 

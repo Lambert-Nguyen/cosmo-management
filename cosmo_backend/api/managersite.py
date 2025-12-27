@@ -115,8 +115,8 @@ def create_unified_history_view(model_class):
     return history_view
 
 class ManagerAdminSite(admin.AdminSite):
-    site_header = "AriStay Manager"
-    site_title  = "AriStay Manager"
+    site_header = "Cosmo Manager"
+    site_title  = "Cosmo Manager"
     index_title = "Management Console"
     index_template = 'manager_admin/index.html'
     login_template = 'manager_admin/login.html'

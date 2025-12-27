@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: AriStay API
+  title: Cosmo API
   version: 1.0.0
   description: Internal APIs for portal, mobile, and admin surfaces.
 paths:

@@ -3,7 +3,7 @@
     'use strict';
     
     // Theme storage key
-    const THEME_KEY = 'aristay-theme';
+    const THEME_KEY = 'cosmo-theme';
     
     // Initialize theme on page load
     function initTheme() {
