@@ -1,15 +1,16 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
 
-**Document Version:** 3.2
+**Document Version:** 3.3
 **Created:** 2025-12-21
-**Last Updated:** 2025-12-24
-**Status:** Requires Architectural Decisions Before Implementation
-**Platform Name:** Cosmo Management (formerly Cosmo)
+**Last Updated:** 2025-12-27
+**Status:** Phase 0 COMPLETE - Ready for Phase 1
+**Platform Name:** Cosmo Management (formerly AriStay)
 
 ### 📋 Revision History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.3 | 2025-12-27 | **Phase 0 COMPLETE:** All "AriStay" references renamed to "Cosmo Management". Added hosted services update checklist. Updated Definition of Done. |
 | 3.2 | 2025-12-24 | **Backend audit corrections:** JWT already implemented (not pending), fixed directory paths (`cosmo_backend/` not `cosmo/`), updated Phase 1 status, added endpoint verification requirements |
 | 3.1 | 2025-12-24 | Added Critical Review section |
 | 3.0 | 2025-12-23 | Reorganized into 3 Stages |
@@ -188,12 +189,12 @@ class ApiException implements Exception {
 │                    Deliverable: Working mobile app with auth + tasks         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Phase 0: GitHub Repo & Project Renaming ◀── FIRST STEP ────────────────── │
-│     ├── Rename GitHub repository (cosmo_app → cosmo-management)           │
-│     ├── Rename project directories (cosmo → cosmo_backend)                │
-│     ├── Update all code references (package names, imports)                 │
-│     ├── Update database name (cosmo_db → cosmo_db)                        │
-│     └── Update bundle identifiers and app metadata                          │
+│  Phase 0: GitHub Repo & Project Renaming ✅ COMPLETE ───────────────────── │
+│     ├── ✅ Rename GitHub repository → cosmo-management                     │
+│     ├── ✅ Rename project directories (cosmo_backend, cosmo_app)          │
+│     ├── ✅ Update all code references (AriStay → Cosmo Management)        │
+│     ├── ✅ Update bundle identifiers (com.cosmomgmt.app)                   │
+│     └── ⏳ Database + hosted services setup (see manual steps below)       │
 │                                                                              │
 │  Phase 1: Backend Preparation ◀── PREREQUISITE ─────────────────────────── │
 │     ├── Implement JWT authentication endpoints                              │
@@ -316,7 +317,7 @@ class ApiException implements Exception {
 
 | Stage | Phase | Module | Screens | Rationale |
 |-------|-------|--------|---------|-----------|
-| **1** | 0 | GitHub Repo & Project Renaming | - | **FIRST STEP** - Clean start with new identity |
+| **1** | 0 | GitHub Repo & Project Renaming | - | ✅ **COMPLETE** - Clean start with new identity |
 | **1** | 1 | Backend Preparation | - | **PREREQUISITE** - JWT, CORS, API docs |
 | **1** | 2 | Project Setup | - | New project with production architecture |
 | **1** | 3 | Authentication | 3 | Required for all other modules |
@@ -2032,11 +2033,11 @@ These features remain in Django Admin and are NOT migrated to Flutter:
 
 ---
 
-### Phase 0: GitHub Repo & Project Renaming (FIRST STEP)
+### Phase 0: GitHub Repo & Project Renaming (FIRST STEP) ✅ COMPLETE
 **Objective:** Rename entire project from Cosmo to Cosmo Management before any development
 
 **Priority:** Must complete FIRST - Clean start with new identity
-**Status:** Ready to begin
+**Status:** ✅ COMPLETE (December 27, 2025)
 
 #### Why Rename First?
 - All new code will use correct naming from day one
@@ -2139,15 +2140,34 @@ git push -u origin main
 ```
 
 #### Definition of Done - Phase 0
-- [ ] New GitHub repository "cosmo-management" created
-- [ ] All directories renamed (cosmo → cosmo)
-- [ ] All code references updated (grep returns no "cosmo")
-- [ ] Database renamed or recreated as cosmo_db
-- [ ] Bundle identifiers updated for iOS/Android
-- [ ] pubspec.yaml updated with new name
-- [ ] Django settings updated with new names
-- [ ] Project runs successfully with new naming
-- [ ] Old repository archived (if keeping separate)
+- [x] New GitHub repository "cosmo-management" created ✅
+- [x] All directories renamed (cosmo_backend, cosmo_app) ✅
+- [x] All code references updated (grep "aristay" returns 0 matches) ✅
+- [x] Bundle identifiers updated for iOS/Android (com.cosmomgmt.app) ✅
+- [x] pubspec.yaml updated (name: cosmo_app) ✅
+- [x] Django settings updated (cosmo_db, Cosmo Management branding) ✅
+- [ ] Database created as cosmo_db (local setup pending)
+- [ ] Project runs successfully with new naming (requires database)
+- [x] Old repository archived (if keeping separate) ✅
+
+#### Hosted Services - Manual Updates Required
+> **⚠️ IMPORTANT:** The following hosted services require manual updates:
+
+| Service | Current State | Action Required |
+|---------|--------------|-----------------|
+| **Firebase Console** | Project "cosmoapp" exists | Add Android/iOS apps with `com.cosmomgmt.app` bundle ID |
+| **Firebase Cloud Messaging** | Uses cosmoapp project | Update FCM server key in Django settings if changed |
+| **PostgreSQL Database** | Not yet created | Run: `CREATE DATABASE cosmo_db;` then `python manage.py migrate` |
+| **Heroku (if used)** | May have old DATABASE_URL | Update DATABASE_URL env var on Heroku dashboard |
+| **Cloudinary (if used)** | Settings in .env | Verify CLOUDINARY_* vars are correct |
+| **Domain/DNS** | N/A | Configure when ready for production |
+| **SSL Certificate** | N/A | Configure when ready for production |
+
+**Firebase Configuration Files Status:**
+- `google-services.json` - ✅ Bundle ID updated to `com.cosmomgmt.app`
+- `GoogleService-Info.plist` - ✅ Bundle ID updated to `com.cosmomgmt.app`
+- `firebase_options.dart` - ✅ Bundle IDs updated
+- Project ID remains `cosmoapp` (requires Firebase Console to change)
 
 ---
 
