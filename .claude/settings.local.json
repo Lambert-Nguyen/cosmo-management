@@ -24,7 +24,8 @@
       "Bash(sudo -u postgres psql:*)",
       "Bash(xargs ls:*)",
       "Bash(grep:*)",
-      "Bash(flutter pub get:*)"
+      "Bash(flutter pub get:*)",
+      "Bash(flutter pub upgrade:*)"
     ]
   }
 }
