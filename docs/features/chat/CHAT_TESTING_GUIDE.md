@@ -1,4 +1,4 @@
-# AriStay Chat System - Testing Guide
+# Cosmo Chat System - Testing Guide
 
 **Date**: 2025-10-19  
 **Test Users**: `duylam1407` (password: `1`), `user` (password: `Duylam@123`)
@@ -16,7 +16,7 @@
 
 2. **Start Django Server**
    ```bash
-   cd aristay_backend
+   cd cosmo_backend
    python manage.py runserver
    # OR for WebSocket support:
    daphne backend.asgi:application -b 127.0.0.1 -p 8000

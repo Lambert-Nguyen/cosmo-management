@@ -23,7 +23,7 @@ Successfully implemented searchable property autocomplete to replace the standar
 
 ### Original Issue
 
-**Location**: `aristay_backend/api/templates/staff/task_form.html` (line 125)
+**Location**: `cosmo_backend/api/templates/staff/task_form.html` (line 125)
 
 ```django-html
 <!-- OLD: Standard Django select - loads ALL properties -->
@@ -33,7 +33,7 @@ Successfully implemented searchable property autocomplete to replace the standar
 {{ form.property_ref }}  <!-- Renders <select> with all options in DOM -->
 ```
 
-**Backend**: `aristay_backend/api/staff_views.py:573`
+**Backend**: `cosmo_backend/api/staff_views.py:573`
 
 ```python
 # OLD: Loads entire queryset into form
@@ -67,7 +67,7 @@ Web app needed equivalent experience.
 
 ### 1. API Endpoint for Search
 
-**File**: `aristay_backend/api/property_search_views.py` (NEW)
+**File**: `cosmo_backend/api/property_search_views.py` (NEW)
 
 ```python
 @login_required
@@ -125,7 +125,7 @@ def property_search(request):
     })
 ```
 
-**URL Route**: `aristay_backend/api/urls.py`
+**URL Route**: `cosmo_backend/api/urls.py`
 
 ```python
 from .property_search_views import property_search
@@ -138,7 +138,7 @@ urlpatterns = [
 
 ### 2. JavaScript Autocomplete Component
 
-**File**: `aristay_backend/static/js/modules/property-autocomplete.js` (NEW - 424 lines)
+**File**: `cosmo_backend/static/js/modules/property-autocomplete.js` (NEW - 424 lines)
 
 **Key Features**:
 
@@ -183,7 +183,7 @@ new PropertyAutocomplete(propertySelect, {
 
 ### 3. CSS Styling
 
-**File**: `aristay_backend/static/css/components.css` (+128 lines)
+**File**: `cosmo_backend/static/css/components.css` (+128 lines)
 
 **Component Styles**:
 
@@ -259,7 +259,7 @@ new PropertyAutocomplete(propertySelect, {
 
 ### 4. Template Integration
 
-**File**: `aristay_backend/api/templates/staff/task_form.html` (modified)
+**File**: `cosmo_backend/api/templates/staff/task_form.html` (modified)
 
 **Added at bottom before `{% endblock %}`**:
 
@@ -492,12 +492,12 @@ GET /api/properties/search/?q=beach&page=2&page_size=10
 
 ### New Files (3)
 
-1. **`aristay_backend/api/property_search_views.py`** (83 lines)
+1. **`cosmo_backend/api/property_search_views.py`** (83 lines)
    - AJAX endpoint for property search
    - Pagination logic
    - Permission-protected
 
-2. **`aristay_backend/static/js/modules/property-autocomplete.js`** (424 lines)
+2. **`cosmo_backend/static/js/modules/property-autocomplete.js`** (424 lines)
    - ES6 class-based component
    - Event delegation
    - Keyboard navigation
@@ -510,13 +510,13 @@ GET /api/properties/search/?q=beach&page=2&page_size=10
 
 ### Modified Files (4)
 
-1. **`aristay_backend/api/urls.py`** (+2 lines)
+1. **`cosmo_backend/api/urls.py`** (+2 lines)
    - Added import and route for property search
 
-2. **`aristay_backend/api/templates/staff/task_form.html`** (+21 lines)
+2. **`cosmo_backend/api/templates/staff/task_form.html`** (+21 lines)
    - Added autocomplete initialization script
 
-3. **`aristay_backend/static/css/components.css`** (+128 lines)
+3. **`cosmo_backend/static/css/components.css`** (+128 lines)
    - Property autocomplete styles
    - Dark mode support
 

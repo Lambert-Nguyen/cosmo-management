@@ -30,7 +30,7 @@ else
 fi
 
 # Navigate to backend
-cd aristay_backend
+cd cosmo_backend
 
 # Start Django server
 echo -e "${YELLOW}🚀 Starting Django server on port 8000...${NC}"

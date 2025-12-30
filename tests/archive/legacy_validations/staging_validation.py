@@ -34,7 +34,7 @@ def create_staging_environment():
     # Create test user and property
     user, _ = User.objects.get_or_create(
         username='staging_user',
-        defaults={'email': 'staging@aristay.com', 'first_name': 'Staging', 'last_name': 'User'}
+        defaults={'email': 'staging@cosmo-management.cloud', 'first_name': 'Staging', 'last_name': 'User'}
     )
     
     property_obj, _ = Property.objects.get_or_create(
@@ -270,7 +270,7 @@ def demonstrate_safety_checks():
     
     user, _ = User.objects.get_or_create(
         username='staging_user',
-        defaults={'email': 'staging@aristay.com'}
+        defaults={'email': 'staging@cosmo-management.cloud'}
     )
     
     # Create second property for property conflict test

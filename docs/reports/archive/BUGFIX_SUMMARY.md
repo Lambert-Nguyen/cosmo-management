@@ -44,11 +44,11 @@ old_logs = BookingImportLog.objects.filter(imported_at__lt=cutoff_date)  # Works
 ## Files Modified
 
 ### Production Code (2 files)
-1. **`aristay_backend/api/services/file_cleanup_service.py`**
+1. **`cosmo_backend/api/services/file_cleanup_service.py`**
    - Added: `from django.utils import timezone`
    - Changed: `datetime.now()` → `timezone.now()` (line 33)
 
-2. **`aristay_backend/api/management/commands/cleanup_old_imports.py`**
+2. **`cosmo_backend/api/management/commands/cleanup_old_imports.py`**
    - Added: `from django.utils import timezone`
    - Changed: `datetime.now()` → `timezone.now()` (line 64)
 
@@ -131,7 +131,7 @@ python manage.py cleanup_old_imports --days 30 --force
 ### Cron Job
 ```bash
 # Weekly cleanup (keep last 30 days)
-0 2 * * 0 cd /path/to/aristay_backend && python manage.py cleanup_old_imports --days 30 --force
+0 2 * * 0 cd /path/to/cosmo_backend && python manage.py cleanup_old_imports --days 30 --force
 ```
 
 ## Acceptance Criteria - All Met ✅

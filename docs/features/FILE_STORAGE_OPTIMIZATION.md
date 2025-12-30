@@ -1,7 +1,7 @@
 # Excel Import File Storage Optimization Solutions
 
 ## Problem Statement
-The Excel import system saves every uploaded file to `aristay_backend/media/booking_imports/YYYY/MM/`, which causes disk space to grow indefinitely over time.
+The Excel import system saves every uploaded file to `cosmo_backend/media/booking_imports/YYYY/MM/`, which causes disk space to grow indefinitely over time.
 
 ## Current Storage Status
 - **Total Files**: 19
@@ -81,10 +81,10 @@ curl -X POST /api/file-cleanup/api/ \
 **Setup Instructions**:
 ```bash
 # Add to crontab for weekly cleanup (Sundays at 2 AM)
-0 2 * * 0 cd /path/to/aristay_backend && python cleanup_cron.py --days 30
+0 2 * * 0 cd /path/to/cosmo_backend && python cleanup_cron.py --days 30
 
 # Add to crontab for daily size-based cleanup (1 AM daily)
-0 1 * * * cd /path/to/aristay_backend && python cleanup_cron.py --target-mb 50
+0 1 * * * cd /path/to/cosmo_backend && python cleanup_cron.py --target-mb 50
 ```
 
 **Features**:
@@ -100,7 +100,7 @@ Keep files for a fixed period, then automatically delete them.
 
 ```bash
 # Keep last 30 days, run weekly
-0 2 * * 0 cd /path/to/aristay_backend && python manage.py cleanup_imports --days 30
+0 2 * * 0 cd /path/to/cosmo_backend && python manage.py cleanup_imports --days 30
 ```
 
 **Pros**: Predictable, simple, good for compliance
@@ -111,7 +111,7 @@ Dynamically adjust retention to stay under a target size.
 
 ```bash
 # Keep under 100MB, run daily
-0 1 * * * cd /path/to/aristay_backend && python cleanup_cron.py --target-mb 100
+0 1 * * * cd /path/to/cosmo_backend && python cleanup_cron.py --target-mb 100
 ```
 
 **Pros**: Predictable disk usage
@@ -122,9 +122,9 @@ Combine both strategies for optimal results.
 
 ```bash
 # Size check daily, minimum 7 days retention
-0 1 * * * cd /path/to/aristay_backend && python cleanup_cron.py --target-mb 100
+0 1 * * * cd /path/to/cosmo_backend && python cleanup_cron.py --target-mb 100
 # Time-based weekly cleanup as backup
-0 2 * * 0 cd /path/to/aristay_backend && python manage.py cleanup_imports --days 90
+0 2 * * 0 cd /path/to/cosmo_backend && python manage.py cleanup_imports --days 90
 ```
 
 ## 🔧 Advanced Configuration Options

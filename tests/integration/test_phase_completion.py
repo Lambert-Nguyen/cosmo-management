@@ -5,8 +5,8 @@ Test that all requested features are implemented and working
 import sys
 import os
 
-# Add the aristay_backend directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'aristay_backend'))
+# Add the cosmo_backend directory to the Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'cosmo_backend'))
 
 # Setup Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -27,7 +27,7 @@ def test_all_phases_complete():
     # Get or create test user
     user, _ = User.objects.get_or_create(
         username='test_user',
-        defaults={'email': 'test@aristay.com'}
+        defaults={'email': 'test@cosmo-management.cloud'}
     )
     print(f"✓ Test user: {user.username}")
     

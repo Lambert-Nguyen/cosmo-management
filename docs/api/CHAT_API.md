@@ -1,8 +1,8 @@
-# AriStay Chat API Documentation for Flutter/iOS
+# Cosmo Chat API Documentation for Flutter/iOS
 
 **Version**: 1.0.0  
 **Last Updated**: 2025-10-19  
-**Base URL**: `https://aristay-internal.cloud/api`
+**Base URL**: `https://cosmo-management.cloud/api`
 
 ---
 
@@ -55,7 +55,7 @@ Authorization: Bearer <access_token>
 
 **WebSocket**:
 ```
-ws://aristay-internal.cloud/ws/chat/<room_id>/?token=<access_token>
+ws://cosmo-management.cloud/ws/chat/<room_id>/?token=<access_token>
 ```
 
 ### Token Refresh
@@ -295,7 +295,7 @@ Authorization: Bearer <access_token>
 ```json
 {
   "count": 142,
-  "next": "https://aristay-internal.cloud/api/chat/messages/?page=2&room=550e8400...",
+  "next": "https://cosmo-management.cloud/api/chat/messages/?page=2&room=550e8400...",
   "previous": null,
   "results": [
     {
@@ -472,7 +472,7 @@ Content-Type: application/json
 ### Connection
 
 ```dart
-final wsUrl = 'wss://aristay-internal.cloud/ws/chat/$roomId/?token=$accessToken';
+final wsUrl = 'wss://cosmo-management.cloud/ws/chat/$roomId/?token=$accessToken';
 final channel = WebSocketChannel.connect(Uri.parse(wsUrl));
 ```
 
@@ -689,8 +689,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 
 class ChatService {
-  final String baseUrl = 'https://aristay-internal.cloud/api';
-  final String wsBaseUrl = 'wss://aristay-internal.cloud/ws';
+  final String baseUrl = 'https://cosmo-management.cloud/api';
+  final String wsBaseUrl = 'wss://cosmo-management.cloud/ws';
   String? accessToken;
   
   // WebSocket channel
@@ -1087,13 +1087,13 @@ void _handleReconnection() {
 ## 📞 Support
 
 For issues or questions:
-- Email: support@aristay.com
-- Docs: https://docs.aristay.com
-- API Status: https://status.aristay.com
+- Email: support@cosmo-management.cloud
+- Docs: https://docs.cosmo.com
+- API Status: https://status.cosmo.com
 
 ---
 
 **Last Updated**: 2025-10-19  
 **API Version**: 1.0.0  
-**Maintained by**: AriStay Development Team
+**Maintained by**: Cosmo Development Team
 

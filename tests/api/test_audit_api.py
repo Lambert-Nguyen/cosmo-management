@@ -15,7 +15,7 @@ pytestmark = pytest.mark.skipif(
     reason="Integration test requires running server"
 )
 
-BASE_URL = os.getenv("ARISTAY_BASE_URL", "http://127.0.0.1:8001")
+BASE_URL = os.getenv("COSMO_BASE_URL", "http://127.0.0.1:8001")
 
 def test_audit_api():
     """Test the audit system API endpoints."""

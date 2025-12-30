@@ -1,4 +1,4 @@
-# === Django/Python (for aristay_backend) ===
+# === Django/Python (for cosmo_backend) ===
 # Ignore Python bytecode and caches
 *.pyc
 *.pyo
@@ -6,19 +6,19 @@
 __pycache__/
 
 # Ignore the development database
-aristay_backend/db.sqlite3
+cosmo_backend/db.sqlite3
 *.db
 *.sqlite3
-aristay_backend/**/db.sqlite3
+cosmo_backend/**/db.sqlite3
 
 # Django static files (collected static files)
-aristay_backend/staticfiles/
+cosmo_backend/staticfiles/
 
 # Django logs
-aristay_backend/logs/*.log
+cosmo_backend/logs/*.log
 
 # Ignore virtual environments (update the path to match your project structure)
-aristay_backend/venv/
+cosmo_backend/venv/
 .venv/
 env/
 ENV/
@@ -29,13 +29,13 @@ ENV/
 .env.production
 .env.development
 
-# === Flutter/Dart (for aristay_flutter_frontend) ===
+# === Flutter/Dart (for cosmo_flutter_frontend) ===
 # Build and generated files
-aristay_flutter_frontend/build/
-aristay_flutter_frontend/.dart_tool/
-aristay_flutter_frontend/.flutter-plugins
-aristay_flutter_frontend/.flutter-plugins-dependencies
-aristay_flutter_frontend/.packages
+cosmo_flutter_frontend/build/
+cosmo_flutter_frontend/.dart_tool/
+cosmo_flutter_frontend/.flutter-plugins
+cosmo_flutter_frontend/.flutter-plugins-dependencies
+cosmo_flutter_frontend/.packages
 
 # Additional Flutter/Dart ignores
 **/doc/api/
@@ -73,15 +73,15 @@ templates/backup/
 *.bak
 
 # Ignore sensitive files but KEEP migrations
-aristay_backend/firebase_credentials.json
+cosmo_backend/firebase_credentials.json
 
 # Media and static files (optional - uncomment if you don't want to track uploaded files)
-# aristay_backend/media/
-# aristay_backend/static/
+# cosmo_backend/media/
+# cosmo_backend/static/
 .env.backup
 
 # Logs (including rotated logs like debug.log.1, .2, etc.)
-aristay_backend/logs/
+cosmo_backend/logs/
 *.log
 *.log.*
 # Build artifacts
@@ -93,4 +93,4 @@ logs/*.log
 cookies.txt
 *.tmp
 *.cache
-/aristay_backend/media
+/cosmo_backend/media

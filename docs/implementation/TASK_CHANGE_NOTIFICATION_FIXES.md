@@ -15,8 +15,8 @@
 **Root Cause**: The Task model was migrated from `property` to `property_ref` relationship, but some code still referenced the old field names.
 
 **Files Fixed**:
-- `aristay_backend/api/staff_views.py` (lines 570-577)
-- `aristay_backend/api/notification_management_views.py` (multiple lines)
+- `cosmo_backend/api/staff_views.py` (lines 570-577)
+- `cosmo_backend/api/notification_management_views.py` (multiple lines)
 
 **Specific Corrections**:
 ```python
@@ -34,7 +34,7 @@ Task.objects.filter(assigned_to=request.user).values_list('property_ref', flat=T
 **Root Cause**: The Notification model uses `read` (Boolean field) but code was referencing `is_read`.
 
 **Files Fixed**:
-- `aristay_backend/api/notification_management_views.py` (line 317)
+- `cosmo_backend/api/notification_management_views.py` (line 317)
 
 **Specific Corrections**:
 ```python

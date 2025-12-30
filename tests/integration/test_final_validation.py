@@ -10,8 +10,8 @@ import sys
 import django
 from datetime import datetime, date
 
-# Add the aristay_backend directory to the path to import Django modules
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'aristay_backend'))
+# Add the cosmo_backend directory to the path to import Django modules
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'cosmo_backend'))
 
 # Set up Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings_test')

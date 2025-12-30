@@ -27,7 +27,7 @@ def test_safety_checks():
     
     user, _ = User.objects.get_or_create(
         username='safety_user',
-        defaults={'email': 'safety@aristay.com'}
+        defaults={'email': 'safety@cosmo-management.cloud'}
     )
     
     # Create properties for testing

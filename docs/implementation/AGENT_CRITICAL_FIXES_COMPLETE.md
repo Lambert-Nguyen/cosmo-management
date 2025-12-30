@@ -123,4 +123,4 @@ The enhanced image upload system is now:
 
 **🚀 System Ready for Production Deployment!** 
 
-The Aristay property management system now provides a best-in-class image upload experience that automatically handles large files from users while maintaining optimal storage efficiency and security.
+The Cosmo property management system now provides a best-in-class image upload experience that automatically handles large files from users while maintaining optimal storage efficiency and security.

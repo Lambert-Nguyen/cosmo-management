@@ -1,0 +1,373 @@
+{% extends "layouts/staff_layout.html" %}
+
+{% block page_title %}{{ task.title }}{% endblock %}
+{% block title %}{{ task.title }} · Cosmo Staff{% endblock %}
+
+{% block content %}
+<div id="taskDetailContainer" class="task-detail-container" data-task-id="{{ task.id }}">
+    <!-- Enhanced Task Header -->
+    <div class="card task-header-card">
+        <div class="task-header-content">
+            <div class="task-info-section">
+                <div class="task-title-section">
+                    <h1 class="task-title">{{ task.title }}</h1>
+                    <div class="task-badges">
+                        <span class="status-badge status-{{ task.status|cut:'-' }}">
+                            {{ task.get_status_display }}
+                        </span>
+                        <span class="type-badge">{{ task.get_task_type_display }}</span>
+                        {% if task.due_date %}
+                            {% if task.is_overdue %}
+                            <span class="priority-badge overdue">⚠️ OVERDUE</span>
+                            {% elif task.is_due_soon %}
+                            <span class="priority-badge urgent">⏰ DUE SOON</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="task-meta-grid">
+                    <div class="meta-item">
+                        <span class="meta-icon">🏠</span>
+                        <span class="meta-text">{{ task.property_ref.name }}</span>
+                    </div>
+                    {% if task.booking %}
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <span class="meta-text">
+                            {{ task.booking.check_in_date|date:"M j, Y" }} → {{ task.booking.check_out_date|date:"M j, Y" }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    {% if task.due_date %}
+                    <div class="meta-item">
+                        <span class="meta-icon">⏰</span>
+                        <span class="meta-text">{{ task.due_date|date:"M j, Y g:i A" }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="meta-item">
+                        <span class="meta-icon">👤</span>
+                        <span class="meta-text">
+                            {% if task.assigned_to %}
+                                Assigned to {{ task.assigned_to.get_full_name|default:task.assigned_to.username }}
+                            {% else %}
+                                Not assigned
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if task.created_by %}
+                    <div class="meta-item">
+                        <span class="meta-icon">📝</span>
+                        <span class="meta-text">Created by {{ task.created_by.get_full_name|default:task.created_by.username }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="task-description{% if not task.description %} hidden{% endif %}">
+                    <h4>Description</h4>
+                    <p>{{ task.description|default:"" }}</p>
+                </div>
+            </div>
+
+            <div class="task-actions-section">
+                <!-- CRUD Actions -->
+                <div class="crud-actions">
+                    <a href="/api/staff/tasks/{{ task.id }}/edit/" class="btn-action edit-task">
+                        ✏️ Edit Task
+                    </a>
+                    <button class="btn-action duplicate-task">
+                        📋 Duplicate
+                    </button>
+                    <button class="btn-action delete-task btn-danger">
+                        🗑️ Delete
+                    </button>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="btn-action start-task"
+                            {% if task.status != 'pending' %}disabled{% endif %}>
+                        ▶️ Start Task
+                    </button>
+                    <button class="btn-action complete-task"
+                            {% if task.status == 'completed' %}disabled{% endif %}>
+                        ✅ Complete Task
+                    </button>
+                    <button class="btn-action add-note">
+                        📝 Add Note
+                    </button>
+                    <button class="btn-action share-task">
+                        📤 Share
+                    </button>
+                    <button class="btn-action report-lost-found">
+                        🔍 Report Lost & Found
+                    </button>
+                </div>
+                
+                <!-- Photo Management Actions -->
+                <div class="photo-actions">
+                    <a href="/api/staff/photos/upload/?task={{ task.id }}" class="btn-action photo-upload">
+                        📸 Upload Photos
+                    </a>
+                    <a href="/api/staff/photos/comparison/{{ task.id }}/" class="btn-action photo-comparison">
+                        🔍 View Before/After
+                    </a>
+                </div>
+
+                <!-- Unified Photo Gallery -->
+                {% if task.images.all %}
+                <div class="unified-photo-gallery">
+                    <div class="unified-photo-gallery-header">
+                        <h4>📸 All Task Photos</h4>
+                    </div>
+                    <div class="photo-gallery-grid">
+                        {% for image in task.images.all %}
+                        {% if image.image %}
+                        <div class="gallery-photo-item" data-photo-type="{{ image.photo_type }}" data-photo-id="{{ image.id }}">
+                            <img src="{{ image.image.url }}" 
+                                 alt="{{ image.get_photo_type_display }} photo"
+                                 data-photo-url="{{ image.image.url }}"
+                                 data-photo-id="{{ image.id }}"
+                                   class="gallery-photo"
+                                   loading="lazy">
+                            <div class="photo-meta">
+                                <div class="photo-header">
+                                    <span class="photo-type-badge">{{ image.get_photo_type_display }}</span>
+                                    <span class="photo-status status-{{ image.photo_status }}">{{ image.get_photo_status_display }}</span>
+                                </div>
+                                {% if image.checklist_response %}
+                                <span class="checklist-badge">Checklist</span>
+                                {% endif %}
+                                {% if image.description %}
+                                <p class="photo-description">{{ image.description|truncatechars:50 }}</p>
+                                {% endif %}
+                                {% if can_approve_photos %}
+                                <div class="photo-approval-controls">
+                                    {% if image.photo_status == 'pending' %}
+                                    <button class="btn-approve" data-photo-id="{{ image.id }}">
+                                        ✓ Approve
+                                    </button>
+                                    <button class="btn-reject" data-photo-id="{{ image.id }}">
+                                        ✗ Reject
+                                    </button>
+                                    {% elif image.photo_status == 'approved' %}
+                                    <span class="status-approved">✓ Approved</span>
+                                    <button class="btn-archive btn-archive-photo" data-photo-id="{{ image.id }}">
+                                        📁 Archive
+                                    </button>
+                                    {% elif image.photo_status == 'rejected' %}
+                                    <span class="status-rejected">✗ Rejected</span>
+                                    <button class="btn-approve" data-photo-id="{{ image.id }}">
+                                        ✓ Approve
+                                    </button>
+                                    {% elif image.photo_status == 'archived' %}
+                                    <span class="status-archived">📁 Archived</span>
+                                    <button class="btn-approve" data-photo-id="{{ image.id }}">
+                                        ✓ Unarchive
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Handle TaskImage objects without files -->
+                        <div class="gallery-photo-item photo-error" data-photo-type="{{ image.photo_type }}" data-photo-id="{{ image.id }}">
+                            <div class="photo-placeholder">
+                                <span class="placeholder-icon">⚠️</span>
+                                <span class="placeholder-text">No Image File</span>
+                            </div>
+                            <div class="photo-meta">
+                                <div class="photo-header">
+                                    <span class="photo-type-badge">{{ image.get_photo_type_display }}</span>
+                                    <span class="photo-status status-error">Error</span>
+                                </div>
+                                <p class="photo-description">This photo record has no associated file</p>
+                                {% if can_approve_photos %}
+                                <div class="photo-approval-controls">
+                                    <button class="btn-danger btn-delete-photo" data-photo-id="{{ image.id }}">
+                                        🗑️ Delete Record
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Component: Task Timer #}
+                {% include "staff/components/task_timer.html" %}
+
+                {# Component: Task Navigation #}
+                {% include "staff/components/task_navigation.html" %}
+
+    {# Component: Task Progress Overview #}
+    {% include "staff/components/task_progress.html" %}
+
+    {# Component: Task Checklist #}
+    {% include "staff/components/task_checklist.html" %}
+    <!-- Task Notes/Comments -->
+    <div class="card task-notes">
+        <div class="notes-header">
+            <h3>💬 Task Notes & Comments</h3>
+            <button class="btn-add-note">➕ Add Note</button>
+        </div>
+        <div class="notes-list" id="notesList">
+            <!-- Notes will be loaded dynamically -->
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Photo Modal with Zoom and Approval Controls -->
+<div id="photoModal" class="photo-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="photo-info">
+                <h3 id="modalPhotoTitle">Photo Viewer</h3>
+                <div class="photo-meta-info">
+                    <span id="modalPhotoType" class="photo-type-badge"></span>
+                    <span id="modalPhotoStatus" class="photo-status"></span>
+                    <span id="modalPhotoDate" class="photo-date"></span>
+                </div>
+            </div>
+            <div class="modal-controls">
+                <button id="zoomInBtn" class="btn-zoom" title="Zoom In">🔍+</button>
+                <button id="zoomOutBtn" class="btn-zoom" title="Zoom Out">🔍-</button>
+                <button id="resetZoomBtn" class="btn-zoom" title="Reset Zoom">⌂</button>
+                <button class="modal-close close-modal" type="button">&times;</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="photo-container">
+                <img id="modalPhoto" src="" alt="Photo" class="modal-photo">
+            </div>
+            <div class="photo-description-container">
+                <p id="modalPhotoDescription" class="photo-description"></p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="photo-approval-section">
+                <div id="modalApprovalControls" class="photo-approval-controls">
+                    <!-- Approval controls will be populated by JavaScript -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary close-modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notes Modal -->
+<div id="noteModal" class="note-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Edit Notes</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form class="item-form">
+                <button class="btn-secondary close-modal" type="button">Close</button>
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-control notes-input" rows="6" placeholder="Add your notes here..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Notes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Lost & Found Modal -->
+<div id="lostFoundModal" class="lost-found-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🔍 Report Lost & Found Item</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="lostFoundForm" class="item-form">
+                <div class="form-group">
+                    <label class="form-label">Item Title *</label>
+                    <input type="text" class="form-control" name="title" required placeholder="e.g., iPhone 12, Wedding Ring, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-control" name="description" rows="3" required placeholder="Describe the item in detail..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-control" name="category">
+                            <option value="">Select category...</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Jewelry">Jewelry</option>
+                            <option value="Personal Items">Personal Items</option>
+                            <option value="Documents">Documents</option>
+                            <option value="Toys">Toys</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Estimated Value ($)</label>
+                        <input type="number" class="form-control" name="estimated_value" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Found Location *</label>
+                    <input type="text" class="form-control" name="found_location" required placeholder="e.g., Master bedroom, Kitchen counter, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Storage Location</label>
+                    <input type="text" class="form-control" name="storage_location" placeholder="Where will this item be stored?">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-control" name="notes" rows="2" placeholder="Any additional information..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Report Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% load static %}
+{# Load modular JavaScript - replaces 1,400+ lines of inline code #}
+<script type="module" src="{% static 'js/pages/task-detail.js' %}"></script>
+
+{# Task data for JavaScript modules #}
+<script id="taskData" type="application/json">
+{
+  "taskId": {{ task.id }},
+  "taskStatus": "{{ task.status }}",
+  "canEdit": {{ can_edit|yesno:"true,false" }},
+  "hasChecklist": {{ checklist|yesno:"true,false" }}
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/pages/task-detail.css' %}">
+{% endblock %}

@@ -8,7 +8,7 @@ When clicking "Add User" in the Django admin interface, the following error occu
 KeyError: 'password1'
 Traceback (most recent call last):
   ...
-  File "/Users/duylam1407/Workspace/SJSU/aristay_app/.venv/lib/python3.13/site-packages/django/contrib/auth/forms.py", line 610, in __init__
+  File "/Users/duylam1407/Workspace/SJSU/cosmo-management/.venv/lib/python3.13/site-packages/django/contrib/auth/forms.py", line 610, in __init__
     self.fields["password1"].required = False
     ~~~~~~~~~~~^^^^^^^^^^^^^
 KeyError: 'password1'
@@ -16,17 +16,17 @@ KeyError: 'password1'
 
 ## Root Cause
 
-The `AriStayUserAdmin` class in `api/admin.py` had:
+The `CosmoUserAdmin` class in `api/admin.py` had:
 - `exclude = ('password',)` which excluded password fields from the form
 - **Missing `add_fieldsets`** configuration for the "Add User" form
 - Django's UserAdmin expects `password1` and `password2` fields in the add form
 
 ## Solution Applied
 
-Added the missing `add_fieldsets` configuration to the `AriStayUserAdmin` class:
+Added the missing `add_fieldsets` configuration to the `CosmoUserAdmin` class:
 
 ```python
-class AriStayUserAdmin(DjangoUserAdmin):
+class CosmoUserAdmin(DjangoUserAdmin):
     # ... existing configuration ...
     
     # Add fieldsets for creating new users (includes password fields)

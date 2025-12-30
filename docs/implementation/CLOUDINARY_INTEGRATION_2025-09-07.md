@@ -18,7 +18,7 @@ Successfully implemented enterprise-grade cloud storage with Cloudinary CDN inte
 
 ### **File Structure**
 ```
-aristay_backend/
+cosmo_backend/
 ├── backend/settings.py                    # Cloudinary + Audit settings
 ├── api/audit_signals.py                   # Hardened audit system
 ├── api/management/commands/prune_audit.py # Audit maintenance

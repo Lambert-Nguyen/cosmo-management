@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permission Management - Cosmo</title>
+    <link rel="stylesheet" href="{% load static %}{% static 'admin/css/base.css' %}">
+    <link rel="stylesheet" href="{% load static %}{% static 'admin/css/forms.css' %}">
+    <link rel="stylesheet" href="{% load static %}{% static 'css/pages/admin-permission-management.css' %}">
+</head>
+<body class="admin_body">
+    <div id="container">
+        <div id="header">
+            <div id="branding">
+                <h1 id="site-name">
+                    <a href="{% url 'admin:index' %}">Cosmo Administration</a>
+                </h1>
+            </div>
+            <div id="user-tools">
+                Welcome, <strong>{{ user.get_full_name|default:user.username }}</strong>.
+                <a href="{% url 'admin:logout' %}">Log out</a>
+            </div>
+        </div>
+
+        <div class="breadcrumbs">
+            <a href="{% url 'admin:index' %}">Home</a> › Permission Management
+        </div>
+
+        <div class="permission-management">
+            <h1>Permission Management</h1>
+            
+            <!-- Messages -->
+            <div id="messages"></div>
+
+            <!-- Stats Overview -->
+            <div class="section">
+                <div class="section-header">System Overview</div>
+                <div class="section-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-users">-</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-permissions">-</div>
+                            <div class="stat-label">Total Permissions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="active-overrides">-</div>
+                            <div class="stat-label">Active Overrides</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="delegatable-permissions">-</div>
+                            <div class="stat-label">You Can Delegate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Permissions -->
+            <div class="section">
+                <div class="section-header">Manage User Permissions</div>
+                <div class="section-content">
+                    <!-- Filters -->
+                    <input type="text" class="search-box" id="user-search" placeholder="Search users by name or email...">
+                    
+                    <div class="role-filter">
+                        <button class="role-btn active" data-role="all">All Roles</button>
+                        <button class="role-btn" data-role="manager">Managers</button>
+                        <button class="role-btn" data-role="staff">Staff/Crew</button>
+                        <button class="role-btn" data-role="viewer">Viewers</button>
+                    </div>
+
+                    <!-- Users List -->
+                    <div id="users-container">
+                        <div class="loading">Loading users...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Permissions Reference -->
+            <div class="section">
+                <div class="section-header">Available Permissions Reference</div>
+                <div class="section-content">
+                    <div id="permissions-reference">
+                        <div class="loading">Loading permissions...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/pages/admin-permission-management.js' %}"></script>
+</body>
+</html>

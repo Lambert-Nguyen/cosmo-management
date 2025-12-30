@@ -1,0 +1,117 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Create Invite Code - Cosmo Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/admin-create-invite-code.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="create-invite-container">
+    <div class="page-header">
+        <h1 class="page-title">Create Invite Code</h1>
+        <div class="breadcrumb">
+            <a href="/admin/">Admin</a> &gt; 
+            <a href="/api/admin/invite-codes/">Invite Codes</a> &gt; 
+            Create New
+        </div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                <h2 class="section-title">Basic Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="role">Role *</label>
+                        <select name="role" id="role" required>
+                            <option value="">Select a role</option>
+                            {% for value, label in role_choices %}
+                            <option value="{{ value }}" {% if request.POST.role == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-help">The permission level for the invited user</div>
+                        <div id="role-description" class="role-description hidden"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task_group">Task Group *</label>
+                        <select name="task_group" id="task_group" required>
+                            <option value="">Select a task group</option>
+                            {% for value, label in task_group_choices %}
+                            <option value="{{ value }}" {% if request.POST.task_group == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-help">The task group the user will be assigned to</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-title">Usage Settings</h2>
+                
+                <div class="form-group">
+                    <label>Usage Limit</label>
+                    <div class="usage-options">
+                        <div class="usage-option">
+                            <input type="radio" name="usage_type" value="single" id="single-use" checked>
+                            <label for="single-use">Single Use</label>
+                            <div class="description">Can only be used once</div>
+                        </div>
+                        <div class="usage-option">
+                            <input type="radio" name="usage_type" value="multiple" id="multiple-use">
+                            <label for="multiple-use">Multiple Use</label>
+                            <div class="description">Can be used multiple times</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group hidden" id="max-uses-group">
+                    <label for="max_uses">Maximum Uses</label>
+                    <input type="number" name="max_uses" id="max_uses" min="1" value="5">
+                    <div class="form-help">Set to 0 for unlimited uses</div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-title">Expiration</h2>
+                
+                <div class="form-group">
+                    <label for="expires_days">Expires In (Days)</label>
+                    <input type="number" name="expires_days" id="expires_days" min="1" max="365" placeholder="Leave blank for no expiration">
+                    <div class="form-help">Leave blank if the code should never expire</div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-title">Additional Information</h2>
+                
+                <div class="form-group full-width">
+                    <label for="notes">Notes (Optional)</label>
+                    <textarea name="notes" id="notes" placeholder="Add any notes about this invite code...">{{ request.POST.notes|default:'' }}</textarea>
+                    <div class="form-help">Internal notes about this invite code</div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <a href="/api/admin/invite-codes/" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create Invite Code</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/pages/admin-create-invite-code.js' %}"></script>
+{% endblock %}

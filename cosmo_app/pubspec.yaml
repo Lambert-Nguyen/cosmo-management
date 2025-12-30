@@ -1,0 +1,72 @@
+name: cosmo_app
+description: "Cosmo Management - Universal property & operations management"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Icons
+  cupertino_icons: ^1.0.8
+
+  # State Management (Riverpod 2.x - as per plan)
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # HTTP Client (Dio with interceptors - as per plan)
+  dio: ^5.7.0
+
+  # Routing (GoRouter declarative - as per plan)
+  go_router: ^17.0.0
+
+  # Local Storage (Hive for offline-first - as per plan)
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Immutable Models (Freezed - as per plan)
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # Firebase
+  firebase_core: ^4.3.0
+  firebase_messaging: ^16.1.0
+
+  # Notifications
+  flutter_local_notifications: ^19.5.0
+
+  # Utilities
+  intl: ^0.20.2
+  timezone: ^0.10.1
+  shared_preferences: ^2.3.4
+  image_picker: ^1.1.2
+  rxdart: ^0.28.0
+  connectivity_plus: ^7.0.0
+  cached_network_image: ^3.4.1
+  flutter_secure_storage: ^10.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Linting
+  flutter_lints: ^5.0.0
+
+  # Code Generation
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.6.3
+  hive_generator: ^2.0.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/cosmo_logo.jpg
+    - assets/cosmo_banner.jpg
+    - assets/illustrations/

@@ -1,0 +1,46 @@
+{% extends "portal/base.html" %}
+{% load timezone_tags static %}
+{% block title %}{{ property.name }} · Cosmo Portal{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/portal-property-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="portal-property-detail-header">
+    <div>
+      <div class="section-title">{{ property.name }}</div>
+      {% if property.address %}<div class="muted">{{ property.address }}</div>{% endif %}
+    </div>
+    <div>
+      <a class="button" href="{% url 'portal-properties' %}">Back</a>
+    </div>
+  </div>
+
+  <div class="grid portal-property-detail-grid">
+    {% for label, items in groups.items %}
+      <div class="card">
+        <div class="section-title portal-property-detail-group-title">{{ label }} bookings</div>
+        {% if items %}
+          <ul class="portal-property-detail-booking-list">
+            {% for b in items %}
+              <li class="portal-property-detail-booking-item">
+                {{ b.check_in_date|dual_timezone:user }} → {{ b.check_out_date|dual_timezone:user }}
+                <a class="button portal-property-detail-booking-open" href="{% url 'portal-booking-detail' property.id b.id %}">Open</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="muted">No {{ label }} bookings.</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="portal-property-detail-admin-row">
+    <a class="button" href="/admin/api/booking/">Manage Bookings</a>
+  </div>
+</div>
+{% endblock %}
+

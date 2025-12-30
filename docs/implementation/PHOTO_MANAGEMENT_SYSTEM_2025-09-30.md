@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Photo Management System provides a unified interface for managing, reviewing, and approving photos across all tasks in the AriStay property management platform. This system consolidates previously separate photo upload systems (checklist photos and task before/after photos) into a single, comprehensive solution.
+The Photo Management System provides a unified interface for managing, reviewing, and approving photos across all tasks in the Cosmo property management platform. This system consolidates previously separate photo upload systems (checklist photos and task before/after photos) into a single, comprehensive solution.
 
 ## Key Features
 

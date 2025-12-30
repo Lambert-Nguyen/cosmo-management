@@ -19,7 +19,7 @@ Implemented bulletproof audit system with universal JSON serialization, transact
 
 ### **File Architecture**
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── audit_signals.py           # Enhanced with universal JSON safety
 │   ├── management/commands/

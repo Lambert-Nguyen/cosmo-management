@@ -61,7 +61,7 @@ fi
 # Navigate to Django project
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname $(dirname "$SCRIPT_DIR"))"
-cd "$PROJECT_ROOT/aristay_backend"
+cd "$PROJECT_ROOT/cosmo_backend"
 
 echo -e "${YELLOW}📂 Working directory: $(pwd)${NC}"
 echo ""

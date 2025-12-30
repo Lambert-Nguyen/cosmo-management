@@ -6,7 +6,7 @@
 
 ## 🎯 Overview
 
-This technical guide provides detailed implementation information for the Lost & Found feature in the Aristay Property Management System. It covers database schema, API endpoints, frontend implementation, and integration patterns.
+This technical guide provides detailed implementation information for the Lost & Found feature in the Cosmo Property Management System. It covers database schema, API endpoints, frontend implementation, and integration patterns.
 
 ## 🗄️ Database Schema
 

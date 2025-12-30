@@ -7,7 +7,7 @@
 # 
 # What it does:
 # 1. Installs PostgreSQL if not present
-# 2. Creates local database (aristay_local)
+# 2. Creates local database (cosmo_db)
 # 3. Runs Django migrations
 # 4. Sets up local development configuration
 
@@ -33,7 +33,7 @@ fi
 
 # 2. Create local database
 echo "🗄️ Creating local database..."
-createdb aristay_local 2>/dev/null || echo "Database aristay_local already exists"
+createdb cosmo_db 2>/dev/null || echo "Database cosmo_db already exists"
 
 # 3. Set up environment variables for local development
 echo "⚙️ Setting up environment variables..."
@@ -41,10 +41,10 @@ echo "⚙️ Setting up environment variables..."
 # 4. Activate virtual environment and run migrations
 echo "🔄 Activating virtual environment and running migrations..."
 source .venv/bin/activate
-cd aristay_backend
+cd cosmo_backend
 
 # Set environment variables and run migrations
-export DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/aristay_local"
+export DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/cosmo_db"
 export DEBUG=true
 export DJANGO_ENVIRONMENT=development
 export SECRET_KEY="local-dev-secret-key-change-me"

@@ -1,9 +1,9 @@
-# User Registration Guide - AriStay
+# User Registration Guide - Cosmo
 
 **For End Users**  
 **Last Updated:** September 11, 2025
 
-## 🎯 How to Register for AriStay
+## 🎯 How to Register for Cosmo
 
 ### Step 1: Get an Invite Code
 Before you can register, you need an **invite code** from your administrator. This code determines:
@@ -14,7 +14,7 @@ Before you can register, you need an **invite code** from your administrator. Th
 **Contact your administrator to get your invite code.**
 
 ### Step 2: Access the Registration Page
-1. Go to the AriStay login page
+1. Go to the Cosmo login page
 2. Click **"Register with invite code"** link
 3. You'll be taken to the registration form
 
@@ -90,7 +90,7 @@ Based on your invite code, you'll be automatically assigned:
 If you're using the mobile app:
 
 1. **Get your invite code** from your administrator
-2. **Open the AriStay mobile app**
+2. **Open the Cosmo mobile app**
 3. **Tap "Register"** on the login screen
 4. **Enter your information** including the invite code
 5. **Submit the form**
@@ -161,4 +161,4 @@ If you're still having trouble with registration:
 
 **Remember:** Your invite code is unique to you and determines your access level. Keep it secure and don't share it with others.
 
-**Good luck with your AriStay registration!** 🚀
+**Good luck with your Cosmo registration!** 🚀

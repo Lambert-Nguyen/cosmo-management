@@ -1,15 +1,15 @@
 ---
 alwaysApply: true
 ---
-# Aristay Property Management - AI Coding Instructions
+# Cosmo Property Management - AI Coding Instructions
 
 ## 🏗️ Architecture Overview
 
-**Aristay** is a comprehensive property management system with Django REST API backend and Flutter mobile frontend, focusing on automated task management, secure JWT authentication, role-based access control, and intelligent booking import with conflict resolution.
+**Cosmo** is a comprehensive property management system with Django REST API backend and Flutter mobile frontend, focusing on automated task management, secure JWT authentication, role-based access control, and intelligent booking import with conflict resolution.
 
 ### Core Components
-- **Django Backend** (`aristay_backend/`): REST API with JWT auth, task automation, booking management, Excel import
-- **Flutter Frontend** (`aristay_flutter_frontend/`): Mobile app for property managers and staff  
+- **Django Backend** (`cosmo_backend/`): REST API with JWT auth, task automation, booking management, Excel import
+- **Flutter Frontend** (`cosmo_flutter_frontend/`): Mobile app for property managers and staff  
 - **JWT Security System**: Custom rate-limited auth with token ownership verification
 - **Task Automation**: Template-driven task creation from booking imports
 - **Role-Based Access**: Dynamic permissions with custom decorators and viewsets
@@ -17,10 +17,10 @@ alwaysApply: true
 
 ### 📁 File Placement Guardrails
 
-**Backend Service Logic**: `aristay_backend/api/services/<feature>_service.py`
-**Backend Endpoints**: `aristay_backend/api/<feature>_views.py` (+ urls.py registration)
-**Admin/HTML Templates**: `aristay_backend/api/templates/<area>/...`
-**Security & JWT**: `aristay_backend/api/auth_views.py`, throttling in `api/throttles.py`
+**Backend Service Logic**: `cosmo_backend/api/services/<feature>_service.py`
+**Backend Endpoints**: `cosmo_backend/api/<feature>_views.py` (+ urls.py registration)
+**Admin/HTML Templates**: `cosmo_backend/api/templates/<area>/...`
+**Security & JWT**: `cosmo_backend/api/auth_views.py`, throttling in `api/throttles.py`
 **Documentation**: `docs/<area>/...` exactly as specified in PROJECT_STRUCTURE.md
 **Tests**:
 - Unit: `tests/unit/test_<thing>.py`
@@ -106,7 +106,7 @@ class DynamicTaskPermissions(BasePermission):
 
 ## 📱 Flutter Frontend Architecture
 
-**Service Layer Pattern**: Central API communication through singleton services in `aristay_flutter_frontend/lib/services/`:
+**Service Layer Pattern**: Central API communication through singleton services in `cosmo_flutter_frontend/lib/services/`:
 
 ```dart
 // API service with token management and error handling
@@ -130,10 +130,10 @@ class ApiService {
 flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000/api
 
 # Staging  
-flutter run --dart-define=API_BASE_URL=https://staging.aristay.com/api
+flutter run --dart-define=API_BASE_URL=https://staging.cosmo.com/api
 
 # Production
-flutter run --dart-define=API_BASE_URL=https://api.aristay.com/api
+flutter run --dart-define=API_BASE_URL=https://api.cosmo.com/api
 ```
 
 **Device-Specific Base URLs**:
@@ -424,19 +424,19 @@ addopts = -q --tb=short
 testpaths = tests
 ```
 
-**Python Path Setup**: Since `backend.settings` lives under `aristay_backend/`, ensure Python can import it from repo root:
+**Python Path Setup**: Since `backend.settings` lives under `cosmo_backend/`, ensure Python can import it from repo root:
 ```python
 # conftest.py (repo root)
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parent / "aristay_backend"))
+sys.path.append(str(Path(__file__).resolve().parent / "cosmo_backend"))
 ```
 
 **Environment Setup**:
 ```bash
 # Project follows specific virtual env pattern
 source .venv/bin/activate
-cd aristay_backend && python manage.py runserver
+cd cosmo_backend && python manage.py runserver
 
 # Or use Makefile shortcuts
 make setup && make run
@@ -457,7 +457,7 @@ DJANGO_ENVIRONMENT=development
 # Network configuration
 ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.40
 CORS_ALLOWED_ORIGINS=http://127.0.0.1:3000,http://localhost:3000
-CSRF_TRUSTED_ORIGINS=https://staging.aristay.com,https://app.aristay.com
+CSRF_TRUSTED_ORIGINS=https://staging.cosmo.com,https://app.cosmo.com
 ```
 
 ## 📁 Proper File Placement Guidelines
@@ -484,7 +484,7 @@ scripts/
 
 ### **Backend Structure**:
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── models.py           # Core models with SoftDeleteMixin, AutoTaskTemplate
 │   ├── jwt_auth_views.py   # Secure JWT implementation with rate limiting
@@ -504,7 +504,7 @@ aristay_backend/
 
 ### **Frontend Structure**:
 ```
-aristay_flutter_frontend/
+cosmo_flutter_frontend/
 ├── lib/
 │   ├── main.dart           # App entry point with Firebase integration
 │   ├── screens/           # Full-screen views by feature
@@ -570,8 +570,8 @@ aristay_flutter_frontend/
 - `api/services/enhanced_excel_import_service.py` - Booking conflict resolution system
 - `PROJECT_STRUCTURE.md` - Official project organization
 - `tests/run_tests.py` - Central test orchestration
-- `aristay_flutter_frontend/lib/main.dart` - Flutter app entry point
-- `aristay_flutter_frontend/lib/services/api_service.dart` - Mobile API layer
+- `cosmo_flutter_frontend/lib/main.dart` - Flutter app entry point
+- `cosmo_flutter_frontend/lib/services/api_service.dart` - Mobile API layer
 
 ## 💡 Development Philosophy
 

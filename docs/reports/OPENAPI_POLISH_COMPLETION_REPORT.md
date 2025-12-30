@@ -107,7 +107,7 @@ def get_queryset(self):
 ```
 
 ### OpenAPI Features Implemented
-- **Professional branding** with Aristay title and descriptions
+- **Professional branding** with Cosmo title and descriptions
 - **Consistent security schemes** (single jwtAuth naming)
 - **Inline serializer patterns** for complex request/response schemas
 - **Proper operation IDs** preventing documentation collisions

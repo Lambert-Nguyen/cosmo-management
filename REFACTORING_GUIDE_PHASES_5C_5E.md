@@ -13,27 +13,27 @@ All inline styles, onclick handlers, and scripts have been externalized. Design 
 ## 📋 Remaining Work
 
 ### Phase 5C - Invite Code System (7 files)
-4. `aristay_backend/api/templates/invite_codes/list.html` → `invite-codes-list.css` + `invite-codes-list.js`
-5. `aristay_backend/api/templates/invite_codes/create.html` → `invite-codes-create.css` + `invite-codes-create.js`
-6. `aristay_backend/api/templates/admin/invite_code_detail.html` → `admin-invite-code-detail.css` + `admin-invite-code-detail.js`
-7. `aristay_backend/api/templates/admin/invite_code_list.html` → `admin-invite-code-list.css` + `admin-invite-code-list.js`
-8. `aristay_backend/api/templates/admin/create_invite_code.html` → `admin-create-invite-code.css` + `admin-create-invite-code.js`
-9. `aristay_backend/api/templates/admin/edit_invite_code.html` → `admin-edit-invite-code.css` + `admin-edit-invite-code.js`
-10. `aristay_backend/api/templates/admin/invite_codes.html` → `admin-invite-codes.css` + `admin-invite-codes.js`
+4. `cosmo_backend/api/templates/invite_codes/list.html` → `invite-codes-list.css` + `invite-codes-list.js`
+5. `cosmo_backend/api/templates/invite_codes/create.html` → `invite-codes-create.css` + `invite-codes-create.js`
+6. `cosmo_backend/api/templates/admin/invite_code_detail.html` → `admin-invite-code-detail.css` + `admin-invite-code-detail.js`
+7. `cosmo_backend/api/templates/admin/invite_code_list.html` → `admin-invite-code-list.css` + `admin-invite-code-list.js`
+8. `cosmo_backend/api/templates/admin/create_invite_code.html` → `admin-create-invite-code.css` + `admin-create-invite-code.js`
+9. `cosmo_backend/api/templates/admin/edit_invite_code.html` → `admin-edit-invite-code.css` + `admin-edit-invite-code.js`
+10. `cosmo_backend/api/templates/admin/invite_codes.html` → `admin-invite-codes.css` + `admin-invite-codes.js`
 
 ### Phase 5D - Admin Access Control (3 files)
-11. `aristay_backend/api/templates/admin/conflict_resolution.html` → `admin-conflict-resolution.css` + `admin-conflict-resolution.js`
-12. `aristay_backend/api/templates/admin/permission_management.html` → `admin-permission-management.css` + `admin-permission-management.js`
-13. `aristay_backend/api/templates/admin/property_approval.html` → `admin-property-approval.css` + `admin-property-approval.js`
+11. `cosmo_backend/api/templates/admin/conflict_resolution.html` → `admin-conflict-resolution.css` + `admin-conflict-resolution.js`
+12. `cosmo_backend/api/templates/admin/permission_management.html` → `admin-permission-management.css` + `admin-permission-management.js`
+13. `cosmo_backend/api/templates/admin/property_approval.html` → `admin-property-approval.css` + `admin-property-approval.js`
 
 ### Phase 5E - Communication & Remaining (7 files)
-14. `aristay_backend/api/templates/chat/chatbox.html` → `chat-chatbox.css` + `chat-chatbox.js`
-15. `aristay_backend/api/templates/calendar/calendar_view.html` → `calendar-view.css` + `calendar-view.js`
-16. `aristay_backend/api/templates/manager_admin/base_site.html` → `manager-admin-base-site.css` + `manager-admin-base-site.js`
-17. `aristay_backend/api/templates/admin/excel_import.html` → `admin-excel-import.css` + `admin-excel-import.js`
-18. `aristay_backend/api/templates/auth/unified_login.html` → `auth-unified-login.css` (no JS)
-19. `aristay_backend/api/templates/admin/notification_management.html` → `admin-notification-management.css` (no JS)
-20. `aristay_backend/api/templates/admin/digest_management.html` → `admin-digest-management.css` (no JS)
+14. `cosmo_backend/api/templates/chat/chatbox.html` → `chat-chatbox.css` + `chat-chatbox.js`
+15. `cosmo_backend/api/templates/calendar/calendar_view.html` → `calendar-view.css` + `calendar-view.js`
+16. `cosmo_backend/api/templates/manager_admin/base_site.html` → `manager-admin-base-site.css` + `manager-admin-base-site.js`
+17. `cosmo_backend/api/templates/admin/excel_import.html` → `admin-excel-import.css` + `admin-excel-import.js`
+18. `cosmo_backend/api/templates/auth/unified_login.html` → `auth-unified-login.css` (no JS)
+19. `cosmo_backend/api/templates/admin/notification_management.html` → `admin-notification-management.css` (no JS)
+20. `cosmo_backend/api/templates/admin/digest_management.html` → `admin-digest-management.css` (no JS)
 
 ## 🔧 Refactoring Steps for Each File
 
@@ -42,12 +42,12 @@ Follow these steps for EACH template file:
 ### Step 1: Read the Template
 ```bash
 # Read the template to understand structure
-cat aristay_backend/api/templates/[path]/[filename].html
+cat cosmo_backend/api/templates/[path]/[filename].html
 ```
 
 ### Step 2: Create CSS File
 
-**File Location:** `aristay_backend/static/css/pages/[filename].css`
+**File Location:** `cosmo_backend/static/css/pages/[filename].css`
 
 **Pattern:**
 ```css
@@ -118,7 +118,7 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
 ### Step 3: Create JS File (if needed)
 
-**File Location:** `aristay_backend/static/js/pages/[filename].js`
+**File Location:** `cosmo_backend/static/js/pages/[filename].js`
 
 **Pattern:**
 ```javascript
@@ -263,22 +263,22 @@ For each completed file:
 
 ```bash
 # 1. Count inline styles (should be 0 or only dynamic ones like width:50%)
-grep -n 'style="' aristay_backend/api/templates/[path]/[filename].html
+grep -n 'style="' cosmo_backend/api/templates/[path]/[filename].html
 
 # 2. Count inline handlers (should be 0)
-grep -nP '\son[a-zA-Z]+=' aristay_backend/api/templates/[path]/[filename].html
+grep -nP '\son[a-zA-Z]+=' cosmo_backend/api/templates/[path]/[filename].html
 
 # 3. Verify CSS file exists
-ls -lh aristay_backend/static/css/pages/[filename].css
+ls -lh cosmo_backend/static/css/pages/[filename].css
 
 # 4. Verify JS file exists (if applicable)
-ls -lh aristay_backend/static/js/pages/[filename].js
+ls -lh cosmo_backend/static/js/pages/[filename].js
 
 # 5. Check template loads CSS
-grep "{% static 'css/pages/" aristay_backend/api/templates/[path]/[filename].html
+grep "{% static 'css/pages/" cosmo_backend/api/templates/[path]/[filename].html
 
 # 6. Check template loads JS (if applicable)
-grep "{% static 'js/pages/" aristay_backend/api/templates/[path]/[filename].html
+grep "{% static 'js/pages/" cosmo_backend/api/templates/[path]/[filename].html
 ```
 
 ## 📝 Common Patterns
@@ -414,30 +414,30 @@ Total:                           3/20 ✅ 15% Complete
 
 ```bash
 # Navigate to project
-cd /Users/duylam1407/Workspace/SJSU/aristay_app
+cd /Users/duylam1407/Workspace/SJSU/cosmo_app
 
 # Create CSS file
-touch aristay_backend/static/css/pages/[filename].css
+touch cosmo_backend/static/css/pages/[filename].css
 
 # Create JS file
-touch aristay_backend/static/js/pages/[filename].js
+touch cosmo_backend/static/js/pages/[filename].js
 
 # Edit template
-code aristay_backend/api/templates/[path]/[filename].html
+code cosmo_backend/api/templates/[path]/[filename].html
 
 # Verify no inline styles
-grep -c 'style="' aristay_backend/api/templates/[path]/[filename].html
+grep -c 'style="' cosmo_backend/api/templates/[path]/[filename].html
 
 # Verify no inline handlers
-grep -cP '\son[a-zA-Z]+=' aristay_backend/api/templates/[path]/[filename].html
+grep -cP '\son[a-zA-Z]+=' cosmo_backend/api/templates/[path]/[filename].html
 ```
 
 ## 📚 Reference Files
 
 Use these completed files as reference:
-- `aristay_backend/static/css/pages/photo-upload.css`
-- `aristay_backend/static/js/pages/photo-upload.js`
-- `aristay_backend/api/templates/photo_upload.html`
+- `cosmo_backend/static/css/pages/photo-upload.css`
+- `cosmo_backend/static/js/pages/photo-upload.js`
+- `cosmo_backend/api/templates/photo_upload.html`
 
 These demonstrate the complete refactoring pattern.
 

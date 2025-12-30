@@ -10,7 +10,7 @@ After investigation, I found **two separate issues** that needed to be fixed:
 
 ## Issue #1: Missing `add_fieldsets`
 
-Both `AriStayUserAdmin` and `UserManagerAdmin` classes were missing the `add_fieldsets` configuration needed for the "Add User" form.
+Both `CosmoUserAdmin` and `UserManagerAdmin` classes were missing the `add_fieldsets` configuration needed for the "Add User" form.
 
 **Root Cause**: Django's UserAdmin expects:
 - `fieldsets` for editing existing users
@@ -51,7 +51,7 @@ def get_form(self, request, obj=None, **kwargs):
 
 ## Complete Solutions Applied
 
-### 1. Fixed `AriStayUserAdmin` in `api/admin.py`
+### 1. Fixed `CosmoUserAdmin` in `api/admin.py`
 
 **Added `add_fieldsets`:**
 ```python
@@ -150,7 +150,7 @@ def get_form(self, request, obj=None, **kwargs):
 ## Files Modified
 
 1. **`api/admin.py`**:
-   - Added `add_fieldsets` to `AriStayUserAdmin`
+   - Added `add_fieldsets` to `CosmoUserAdmin`
    - Fixed `get_form` method logic
 
 2. **`api/managersite.py`**:

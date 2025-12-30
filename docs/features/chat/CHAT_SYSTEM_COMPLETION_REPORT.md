@@ -1,4 +1,4 @@
-# AriStay Chat System - Completion Report
+# Cosmo Chat System - Completion Report
 
 **Date**: 2025-10-19  
 **Status**: ✅ **100% COMPLETE**  
@@ -8,7 +8,7 @@
 
 ## 🎉 Executive Summary
 
-The internal chat system for AriStay has been **fully implemented and tested**. The system provides real-time messaging capabilities for both web and iOS Flutter clients, with a focus on security, scalability, and developer experience.
+The internal chat system for Cosmo has been **fully implemented and tested**. The system provides real-time messaging capabilities for both web and iOS Flutter clients, with a focus on security, scalability, and developer experience.
 
 ### Key Achievements
 
@@ -25,7 +25,7 @@ The internal chat system for AriStay has been **fully implemented and tested**. 
 
 ### 1. Database Models (4 Models)
 
-**Location**: `aristay_backend/api/models_chat.py`
+**Location**: `cosmo_backend/api/models_chat.py`
 
 - `ChatRoom` - Direct messages, group chats, task/property discussions
 - `ChatParticipant` - User membership, read tracking, muting
@@ -41,7 +41,7 @@ The internal chat system for AriStay has been **fully implemented and tested**. 
 
 ### 2. REST API Endpoints (20+ Endpoints)
 
-**Location**: `aristay_backend/api/views_chat.py`
+**Location**: `cosmo_backend/api/views_chat.py`
 
 **Chat Rooms** (`/api/chat/rooms/`):
 - `GET /api/chat/rooms/` - List user's rooms
@@ -69,7 +69,7 @@ The internal chat system for AriStay has been **fully implemented and tested**. 
 
 ### 3. WebSocket Consumer
 
-**Location**: `aristay_backend/api/consumers.py`
+**Location**: `cosmo_backend/api/consumers.py`
 
 **WebSocket URL**: `ws://host/ws/chat/<room_id>/?token=<jwt>`
 
@@ -89,7 +89,7 @@ The internal chat system for AriStay has been **fully implemented and tested**. 
 
 ### 4. Permissions & Security
 
-**Location**: `aristay_backend/api/permissions_chat.py`
+**Location**: `cosmo_backend/api/permissions_chat.py`
 
 **Permission Classes**:
 - `IsChatParticipant` - Only participants can access room
@@ -107,7 +107,7 @@ The internal chat system for AriStay has been **fully implemented and tested**. 
 
 ### 5. Web Chat UI
 
-**Location**: `aristay_backend/api/templates/chat/chatbox.html`
+**Location**: `cosmo_backend/api/templates/chat/chatbox.html`
 
 **Features**:
 - Responsive design (mobile-first)
@@ -158,7 +158,7 @@ The internal chat system for AriStay has been **fully implemented and tested**. 
 
 ### 8. Database Migrations
 
-**Location**: `aristay_backend/api/migrations/0078_chatmessage_chatparticipant_chatroom_and_more.py`
+**Location**: `cosmo_backend/api/migrations/0078_chatmessage_chatparticipant_chatroom_and_more.py`
 
 **Status**: ✅ Successfully applied to PostgreSQL
 
@@ -246,7 +246,7 @@ CHANNEL_LAYERS = {
 ### Creating a Chat Room (REST API)
 
 ```bash
-curl -X POST https://aristay-internal.cloud/api/chat/rooms/ \
+curl -X POST https://cosmo-management.cloud/api/chat/rooms/ \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -258,7 +258,7 @@ curl -X POST https://aristay-internal.cloud/api/chat/rooms/ \
 ### Sending a Message (REST API)
 
 ```bash
-curl -X POST https://aristay-internal.cloud/api/chat/messages/ \
+curl -X POST https://cosmo-management.cloud/api/chat/messages/ \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -274,7 +274,7 @@ curl -X POST https://aristay-internal.cloud/api/chat/messages/ \
 const token = 'your_jwt_token';
 const roomId = 'room_uuid';
 
-const ws = new WebSocket(`wss://aristay-internal.cloud/ws/chat/${roomId}/?token=${token}`);
+const ws = new WebSocket(`wss://cosmo-management.cloud/ws/chat/${roomId}/?token=${token}`);
 
 ws.onopen = () => {
     console.log('Connected!');
@@ -301,7 +301,7 @@ See `docs/api/CHAT_API.md` for complete Flutter implementation.
 ### Run All Chat Tests
 
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python -m pytest ../tests/chat/ -v
 ```
 
@@ -436,13 +436,13 @@ python -m pytest ../tests/chat/test_chat_models.py::TestChatRoom::test_create_di
 
 ### New Files (13)
 
-1. `aristay_backend/api/models_chat.py` - Chat models
-2. `aristay_backend/api/consumers.py` - WebSocket consumer
-3. `aristay_backend/api/routing.py` - WebSocket routing
-4. `aristay_backend/api/serializers_chat.py` - API serializers
-5. `aristay_backend/api/views_chat.py` - REST API views
-6. `aristay_backend/api/permissions_chat.py` - Permissions
-7. `aristay_backend/api/templates/chat/chatbox.html` - Web UI
+1. `cosmo_backend/api/models_chat.py` - Chat models
+2. `cosmo_backend/api/consumers.py` - WebSocket consumer
+3. `cosmo_backend/api/routing.py` - WebSocket routing
+4. `cosmo_backend/api/serializers_chat.py` - API serializers
+5. `cosmo_backend/api/views_chat.py` - REST API views
+6. `cosmo_backend/api/permissions_chat.py` - Permissions
+7. `cosmo_backend/api/templates/chat/chatbox.html` - Web UI
 8. `docs/api/CHAT_API.md` - API documentation
 9. `tests/chat/test_chat_models.py` - Model tests
 10. `tests/chat/test_chat_api.py` - API tests
@@ -489,7 +489,7 @@ python -m pytest ../tests/chat/test_chat_models.py::TestChatRoom::test_create_di
 
 ## 🎊 Conclusion
 
-The AriStay internal chat system is **100% complete and production-ready**. The implementation follows Django and DRF best practices, provides comprehensive security, and offers excellent developer experience through complete documentation and tests.
+The Cosmo internal chat system is **100% complete and production-ready**. The implementation follows Django and DRF best practices, provides comprehensive security, and offers excellent developer experience through complete documentation and tests.
 
 ### What Was Built
 

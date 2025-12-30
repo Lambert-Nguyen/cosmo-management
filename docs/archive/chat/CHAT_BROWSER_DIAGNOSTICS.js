@@ -1,12 +1,12 @@
 /**
- * AriStay Chat Diagnostics Script
+ * Cosmo Chat Diagnostics Script
  * 
  * Paste this into the browser console on /api/chat/ page
  * to diagnose issues with the chat system.
  */
 
 (function() {
-    console.log('%c🔍 AriStay Chat Diagnostics', 'font-size: 20px; color: #6366f1; font-weight: bold;');
+    console.log('%c🔍 Cosmo Chat Diagnostics', 'font-size: 20px; color: #6366f1; font-weight: bold;');
     console.log('%c─'.repeat(50), 'color: #6366f1;');
     
     const results = {

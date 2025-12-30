@@ -45,7 +45,7 @@ Time:        4.795s
 
 ```javascript
 // ❌ OLD (Doesn't work)
-jest.mock('../../../aristay_backend/static/js/core/api-client.js', () => ({
+jest.mock('../../../cosmo_backend/static/js/core/api-client.js', () => ({
   APIClient: {
     request: jest.fn(),
     upload: jest.fn(),
@@ -53,7 +53,7 @@ jest.mock('../../../aristay_backend/static/js/core/api-client.js', () => ({
 }));
 
 // ✅ NEW (Works!)
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 let requestSpy;
 let uploadSpy;

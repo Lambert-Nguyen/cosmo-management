@@ -1,0 +1,223 @@
+{% extends "portal/base.html" %}
+{% load static %}
+{% load timezone_tags %}
+
+{% block title %}{{ task.title }} · Cosmo Portal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/portal-task-detail.css' %}">
+{% endblock %}
+
+{% block head %}
+<script type="module" src="{% static 'js/pages/portal-task-detail.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="portal-task-detail-header">
+        <div>
+            <div class="section-title">{{ task.title }}</div>
+            <div class="muted">
+                🏠 {{ task.property_ref.name }}
+                {% if task.booking %}
+                · 📅 {{ task.booking.check_in_date|date:"M d" }} → {{ task.booking.check_out_date|date:"M d" }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="portal-task-detail-header-right">
+            <div class="tag portal-task-detail-status">{{ task.get_status_display }}</div>
+            {% if task.due_date %}
+            <div class="muted">Due: {{ task.due_date|dual_timezone:user }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if task.description %}
+    <div class="portal-task-detail-description">
+        <strong>Description:</strong><br>
+        {{ task.description|linebreaks }}
+    </div>
+    {% endif %}
+
+    <div class="portal-task-detail-meta">
+        <strong>Task Type:</strong> {{ task.get_task_type_display }}<br>
+        <strong>Assigned to:</strong> 
+        {% if task.assigned_to %}
+            {{ task.assigned_to.get_full_name|default:task.assigned_to.username }}
+        {% else %}
+            <em>Unassigned</em>
+        {% endif %}<br>
+        {% if task.created_by %}
+        <strong>Created by:</strong> {{ task.created_by.get_full_name|default:task.created_by.username }}<br>
+        {% endif %}
+        <strong>Created:</strong> {{ task.created_at|dual_timezone:user }}
+    </div>
+
+    <!-- Action buttons -->
+    <div class="portal-task-detail-actions">
+        {% if can_edit and task.assigned_to == user %}
+        <a href="/api/staff/tasks/{{ task.id }}/" class="button">
+            📋 Interactive Checklist
+        </a>
+        {% endif %}
+        
+        {% if task.property_ref %}
+        <a href="/api/portal/properties/{{ task.property_ref.id }}/" class="button">
+            🏠 Back to Property
+        </a>
+        {% endif %}
+        
+        {% if task.booking %}
+        <a href="/api/portal/properties/{{ task.property_ref.id }}/bookings/{{ task.booking.id }}/" class="button">
+            📅 Back to Booking
+        </a>
+        {% endif %}
+        
+        <form action="/api/tasks/{{ task.id }}/notify_manager/" method="post" class="portal-task-detail-inline-form">
+            {% csrf_token %}
+            <button class="button" type="submit">📢 Notify Manager</button>
+        </form>
+    </div>
+</div>
+
+{% if checklist %}
+<div class="card">
+    <div class="section-title">
+        📋 {{ checklist.template.name }}
+        <span class="portal-task-detail-checklist-title-meta">
+            Progress: {{ checklist.completion_percentage }}%
+        </span>
+    </div>
+    
+    <div class="portal-task-detail-progress-track">
+        <div class="portal-task-detail-progress-bar" data-progress="{{ checklist.completion_percentage }}"></div>
+    </div>
+
+    {% for room, responses in responses_by_room.items %}
+    <div class="portal-task-detail-room">
+        <h3 class="portal-task-detail-room-title">
+            {% if room == 'General' %}
+                📋 General Tasks
+            {% elif room == 'bathroom' %}
+                🚿 Bathroom
+            {% elif room == 'bedroom' %}
+                🛏️ Bedroom
+            {% elif room == 'kitchen' %}
+                🍽️ Kitchen
+            {% elif room == 'living_room' %}
+                🛋️ Living Room
+            {% else %}
+                📍 {{ room|title }}
+            {% endif %}
+        </h3>
+        
+        <div class="grid">
+            {% for response in responses %}
+            <div class="portal-task-detail-response-card">
+                <div class="portal-task-detail-response-row">
+                    <span class="portal-task-detail-check-icon">
+                        {% if response.is_completed %}✅{% else %}⬜{% endif %}
+                    </span>
+                    
+                    <div class="portal-task-detail-response-body">
+                        <div class="portal-task-detail-item-title">
+                            {{ response.item.title }}
+                            {% if response.item.is_required %}
+                            <span class="portal-task-detail-required-asterisk">*</span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if response.item.description %}
+                        <div class="muted portal-task-detail-muted-spaced">
+                            {{ response.item.description }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="muted portal-task-detail-item-meta">
+                            Type: {{ response.item.get_item_type_display }}
+                            {% if response.item.item_type == 'blocking' %}
+                            <span class="portal-task-detail-item-required-badge">
+                                Required
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Show responses -->
+                        {% if response.text_response %}
+                        <div class="portal-task-detail-response-block">
+                            <strong>Response:</strong> {{ response.text_response|linebreaks }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if response.number_response %}
+                        <div class="portal-task-detail-response-block">
+                            <strong>Value:</strong> {{ response.number_response }}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Photos -->
+                        {% if response.photos.all %}
+                        <div class="portal-task-detail-photos">
+                            <div class="portal-task-detail-photos-title">Photos:</div>
+                            <div class="portal-task-detail-photos-grid">
+                                {% for photo in response.photos.all %}
+                                <img src="{{ photo.image.url }}" 
+                                     alt="Checklist photo"
+                                     class="portal-task-detail-photo-thumb"
+                                     data-action="portal-open-photo"
+                                     data-photo-src="{{ photo.image.url }}">
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if response.notes %}
+                        <div class="portal-task-detail-notes">
+                            <strong>Notes:</strong> {{ response.notes|linebreaks }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if response.is_completed and response.completed_at %}
+                        <div class="portal-task-detail-completed">
+                            ✅ Completed {{ response.completed_at|date:"M d, H:i" }}
+                            {% if response.completed_by %}by {{ response.completed_by.get_full_name|default:response.completed_by.username }}{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    
+    {% if can_edit and task.assigned_to == user %}
+    <div class="portal-task-detail-interactive-cta">
+        <p class="muted">Want to update checklist items? Use the interactive interface:</p>
+        <a href="/api/staff/tasks/{{ task.id }}/" class="button">
+            📋 Go to Interactive Checklist
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="card">
+    <div class="portal-task-detail-empty">
+        <div class="portal-task-detail-empty-icon">📋</div>
+        <h3>No Checklist Available</h3>
+        <p>This task doesn't have a checklist template assigned.</p>
+        {% if can_edit and task.assigned_to == user %}
+        <p class="muted">Contact your manager if you need a checklist for this task type.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Photo Modal -->
+<div id="photoModal" class="portal-task-detail-modal hidden" data-action="portal-close-photo">
+    <div class="portal-task-detail-modal-inner">
+        <img id="modalPhoto" class="portal-task-detail-modal-photo" alt="Photo preview">
+    </div>
+</div>
+{% endblock %}
+

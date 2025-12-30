@@ -10,7 +10,7 @@ from pathlib import Path
 
 # Get the absolute path to the project root
 PROJECT_ROOT = Path(__file__).parent.absolute()
-BACKEND_DIR = PROJECT_ROOT / 'aristay_backend'
+BACKEND_DIR = PROJECT_ROOT / 'cosmo_backend'
 
 # Add the backend directory to Python path for imports
 if str(BACKEND_DIR) not in sys.path:

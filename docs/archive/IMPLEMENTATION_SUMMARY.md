@@ -1,8 +1,8 @@
-# AriStay Chat System - Implementation Summary
+# Cosmo Chat System - Implementation Summary
 
 ## 📋 What Was Built
 
-I've implemented approximately **60% of the internal chat system** for AriStay, focusing on the critical backend infrastructure that will support both web and iOS Flutter clients.
+I've implemented approximately **60% of the internal chat system** for Cosmo, focusing on the critical backend infrastructure that will support both web and iOS Flutter clients.
 
 ### ✅ Completed Components
 
@@ -136,7 +136,7 @@ Test files:
 
 ### 1. Install Dependencies
 ```bash
-cd aristay_backend
+cd cosmo_backend
 pip install -r requirements.txt
 ```
 
@@ -309,7 +309,7 @@ ws://localhost:8000/ws/chat/<room_id>/?token=<jwt_token>
 2. `backend/settings.py` - Added channels, CHANNEL_LAYERS
 3. `api/models.py` - Import chat models
 4. `requirements.txt` - Added chat dependencies
-5. `aristay_backend/requirements.txt` - Added chat dependencies
+5. `cosmo_backend/requirements.txt` - Added chat dependencies
 6. `api/enhanced_security_middleware.py` - CSP for blob images (previous fix)
 
 ---

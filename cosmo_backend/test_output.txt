@@ -1,0 +1,11 @@
+.......................................................................  [100%]
+=============================== warnings summary ===============================
+cosmo_backend/tests/api/test_staff_crud.py: 9 warnings
+cosmo_backend/tests/api/test_task_image_api.py: 2 warnings
+cosmo_backend/tests/integration/test_unified_photo_system.py: 7 warnings
+cosmo_backend/tests/integration/test_unified_photo_system_simple.py: 8 warnings
+  /usr/lib/python3.13/unittest/case.py:597: RuntimeWarning: TestResult has no addDuration method
+    warnings.warn("TestResult has no addDuration method",
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+71 passed, 26 warnings in 23.52s

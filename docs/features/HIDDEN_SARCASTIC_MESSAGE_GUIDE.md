@@ -2,7 +2,7 @@
 
 ## Overview
 
-I've successfully implemented your sarcastic and elegant hidden message across all major HTML templates in the AriStay system. Each template has its own unique activation method and styling, making the discovery process both challenging and delightful.
+I've successfully implemented your sarcastic and elegant hidden message across all major HTML templates in the Cosmo system. Each template has its own unique activation method and styling, making the discovery process both challenging and delightful.
 
 ## 📝 The Hidden Message
 
@@ -28,7 +28,7 @@ Pray tell, dear friend, have you no shame?
 ### 1. **Admin Templates** (`admin/base_site.html`)
 - **Title**: "🎭 A Message for the Curious Soul 🎭"
 - **Activation Methods**:
-  - **Primary**: Click the AriStay logo 7 times within 2 seconds
+  - **Primary**: Click the Cosmo logo 7 times within 2 seconds
   - **Alternative**: Konami Code (↑↑↓↓←→←→BA)
 - **Styling**: Elegant gradient with Georgia serif font
 - **Features**: Smooth animations, backdrop blur, elegant close button
@@ -44,7 +44,7 @@ Pray tell, dear friend, have you no shame?
 ### 3. **Staff Templates** (`staff/base.html`)
 - **Title**: "📱 A Staff Member's Secret 📱"
 - **Activation Methods**:
-  - **Primary**: Long press (2 seconds) on the "AriStay Staff Portal" logo
+  - **Primary**: Long press (2 seconds) on the "Cosmo Management Staff Portal" logo
   - **Alternative**: Triple-click the logo (desktop fallback)
   - **Mobile**: Diagonal swipe gesture (top-left to bottom-right) 3 times
 - **Styling**: Mobile-optimized with responsive design
@@ -54,7 +54,7 @@ Pray tell, dear friend, have you no shame?
 - **Title**: "🌟 A Portal Wanderer's Secret 🌟"
 - **Activation Methods**:
   - **Primary**: Click the brand logo 5 times within 2 seconds
-  - **Alternative**: Type "aristay" on the keyboard
+  - **Alternative**: Type "cosmo" on the keyboard
 - **Styling**: Theme-aware (adapts to light/dark mode)
 - **Features**: Dynamic theme switching, particle effects, smooth transitions
 
@@ -99,7 +99,7 @@ Pray tell, dear friend, have you no shame?
 
 ### **File Structure**
 ```
-aristay_backend/api/templates/
+cosmo_backend/api/templates/
 ├── admin/base_site.html          # Admin secret message
 ├── manager_admin/index.html      # Manager secret message  
 ├── staff/base.html              # Staff secret message
@@ -125,7 +125,7 @@ aristay_backend/api/templates/
 | **Admin** | 7x Logo Click | Konami Code | Elegant animations |
 | **Manager** | Double-click Logo | Card Sequence | Sparkle effects |
 | **Staff** | Long Press Logo | Triple-click | Mobile vibration |
-| **Portal** | 5x Logo Click | Type "aristay" | Theme-aware |
+| **Portal** | 5x Logo Click | Type "cosmo" | Theme-aware |
 
 ## 🎭 The Sarcastic Elegance
 
@@ -140,7 +140,7 @@ The implementation perfectly captures the sarcastic yet elegant tone you request
 ## 🚀 Usage Instructions
 
 1. **Navigate** to any of the four template areas
-2. **Look** for the AriStay logo (usually in the header)
+2. **Look** for the Cosmo logo (usually in the header)
 3. **Try** the activation method for that specific template
 4. **Enjoy** the elegant reveal of your sarcastic message
 5. **Close** using the elegant close button

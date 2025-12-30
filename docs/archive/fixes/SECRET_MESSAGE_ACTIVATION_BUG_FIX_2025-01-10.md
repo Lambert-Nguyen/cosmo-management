@@ -59,7 +59,7 @@ actionCards.forEach((card, index) => {
 ```javascript
 // Keyboard sequence - WORKS PERFECTLY
 let managerSecretSequence = [];
-const managerTargetSequence = ['a', 'r', 'i', 's', 't', 'a', 'y']; // "aristay"
+const managerTargetSequence = ['a', 'r', 'i', 's', 't', 'a', 'y']; // "cosmo"
 
 document.addEventListener('keydown', function(e) {
     managerSecretSequence.push(e.key.toLowerCase());
@@ -67,7 +67,7 @@ document.addEventListener('keydown', function(e) {
         managerSecretSequence.shift();
     }
     
-    // Check for "aristay" sequence
+    // Check for "cosmo" sequence
     if (managerSecretSequence.join('') === managerTargetSequence.join('')) {
         showSecretMessageManager();
         managerSecretSequence = [];
@@ -83,7 +83,7 @@ document.addEventListener('keydown', function(e) {
 - Normal card clicking works as expected
 
 ### 2. **Consistent with Other Templates**
-- Portal template already uses "aristay" keyboard sequence
+- Portal template already uses "cosmo" keyboard sequence
 - Admin template uses Konami code
 - Staff template uses long-press/swipe
 - Each has a unique, non-interfering activation method
@@ -94,25 +94,25 @@ document.addEventListener('keydown', function(e) {
 - Doesn't interfere with normal dashboard usage
 
 ### 4. **Easier to Remember**
-- "aristay" is the brand name - intuitive
+- "cosmo" is the brand name - intuitive
 - No need to remember specific card order
 - Works from anywhere on the page
 
 ## Manager Dashboard Secret Message Activation Methods
 
 ### Method 1: Double-Click Welcome Logo ✅
-- Double-click the AriStay logo in the welcome section
+- Double-click the Cosmo logo in the welcome section
 - Visual feedback with hover effects
 - Most discoverable method
 
 ### Method 2: Keyboard Sequence ✅ (NEW)
-- Type "aristay" anywhere on the page
+- Type "cosmo" anywhere on the page
 - Works from any focus state
 - Consistent with portal template
 
 ## Files Modified
 
-1. **`aristay_backend/api/templates/manager_admin/index.html`**
+1. **`cosmo_backend/api/templates/manager_admin/index.html`**
    - Removed broken click sequence code
    - Added keyboard sequence activation
    - Maintained double-click logo activation
@@ -121,12 +121,12 @@ document.addEventListener('keydown', function(e) {
 
 ### ✅ Double-Click Logo Activation
 1. Go to `/manager/`
-2. Double-click the AriStay logo in welcome section
+2. Double-click the Cosmo logo in welcome section
 3. Secret message should appear with bounce animation
 
 ### ✅ Keyboard Sequence Activation  
 1. Go to `/manager/`
-2. Type "aristay" (case-insensitive)
+2. Type "cosmo" (case-insensitive)
 3. Secret message should appear with sparkle effect
 
 ### ✅ Normal Navigation Still Works
@@ -169,8 +169,8 @@ Pray tell, dear friend, have you no shame?
 | Template | Primary Method | Secondary Method |
 |----------|---------------|------------------|
 | **Admin** | Click logo 7 times | Konami code (↑↑↓↓←→←→BA) |
-| **Manager** | Double-click logo | Type "aristay" |
-| **Portal** | Click logo 5 times | Type "aristay" |
+| **Manager** | Double-click logo | Type "cosmo" |
+| **Portal** | Click logo 5 times | Type "cosmo" |
 | **Staff** | Long-press logo | Triple-click logo |
 
 ---

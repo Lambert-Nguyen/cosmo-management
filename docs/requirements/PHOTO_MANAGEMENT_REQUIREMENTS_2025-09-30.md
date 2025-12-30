@@ -6,7 +6,7 @@
 
 ## Overview
 
-This document outlines the functional and technical requirements for the Photo Management System, which provides a unified solution for managing, reviewing, and approving photos across all tasks in the AriStay property management platform.
+This document outlines the functional and technical requirements for the Photo Management System, which provides a unified solution for managing, reviewing, and approving photos across all tasks in the Cosmo property management platform.
 
 ## Business Requirements
 

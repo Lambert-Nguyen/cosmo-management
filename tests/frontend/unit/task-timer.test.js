@@ -3,11 +3,11 @@
  */
 
 import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
-import { TaskTimer } from '../../../aristay_backend/static/js/modules/task-timer.js';
-import { StorageManager } from '../../../aristay_backend/static/js/core/storage.js';
+import { TaskTimer } from '../../../cosmo_backend/static/js/modules/task-timer.js';
+import { StorageManager } from '../../../cosmo_backend/static/js/core/storage.js';
 
 // Mock StorageManager
-jest.mock('../../../aristay_backend/static/js/core/storage.js');
+jest.mock('../../../cosmo_backend/static/js/core/storage.js');
 
 describe('TaskTimer', () => {
   let taskTimer;

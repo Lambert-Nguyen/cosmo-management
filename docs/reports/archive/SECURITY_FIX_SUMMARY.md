@@ -55,7 +55,7 @@ def enhanced_excel_import_view(request):
 ## 📁 Files Changed
 
 ### Code Changes
-- `aristay_backend/api/views.py` - Fixed decorators (4 views)
+- `cosmo_backend/api/views.py` - Fixed decorators (4 views)
 
 ### Tests Added
 - `tests/security/test_excel_import_permissions.py` - Comprehensive test suite (10 tests)

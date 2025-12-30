@@ -1,6 +1,6 @@
 ## Task Groups: Staff Assignment and Dashboard Permissions
 
-This document describes the Task Group capability added to AriStay for assigning staff/crew to departments and scoping dashboard permissions.
+This document describes the Task Group capability added to Cosmo for assigning staff/crew to departments and scoping dashboard permissions.
 
 ### Overview
 - Purpose: Segment staff into functional groups for visibility and permissions
@@ -8,7 +8,7 @@ This document describes the Task Group capability added to AriStay for assigning
 - Affects: Django models, admin, API serialization, permissions, and a management command
 
 ### Model Changes
-- File: `aristay_backend/api/models.py`
+- File: `cosmo_backend/api/models.py`
 - Enum: `TaskGroup(models.TextChoices)` with values:
   - cleaning, maintenance, laundry, lawn_pool, general, none
 - Field: `Profile.task_group: CharField(choices=TaskGroup.choices, default=TaskGroup.NONE)`
@@ -32,18 +32,18 @@ This document describes the Task Group capability added to AriStay for assigning
 
 ### Admin UI
 - Files:
-  - `aristay_backend/api/admin.py`
-  - `aristay_backend/api/managersite.py`
+  - `cosmo_backend/api/admin.py`
+  - `cosmo_backend/api/managersite.py`
 - Add `task_group` to `ProfileInline` fields
 - Show task group in `list_display` via `get_task_group`
 - Add list filter on `profile__task_group` in manager admin
 
 ### API Serialization
-- File: `aristay_backend/api/serializers.py`
+- File: `cosmo_backend/api/serializers.py`
 - `UserSerializer` includes `task_group` via `get_task_group()`, returns enum value string or 'none'
 
 ### Management Command
-- File: `aristay_backend/api/management/commands/assign_task_groups.py`
+- File: `cosmo_backend/api/management/commands/assign_task_groups.py`
 - Purpose: Assign task groups in bulk or individually
 - Options:
   - `--list-groups` → list available groups
@@ -56,12 +56,12 @@ This document describes the Task Group capability added to AriStay for assigning
   - Auto: `python -m manage assign_task_groups --auto-assign`
   - Manual: `python -m manage assign_task_groups --username alice --task-group cleaning`
 
-Note: When calling via Django directly, use `python aristay_backend/manage.py assign_task_groups ...` from project root.
+Note: When calling via Django directly, use `python cosmo_backend/manage.py assign_task_groups ...` from project root.
 
 ### Migrations
 - Files:
-  - `aristay_backend/api/migrations/0064_add_task_group_to_profile.py`
-  - `aristay_backend/api/migrations/0065_booking_booking_no_overlap_active.py`
+  - `cosmo_backend/api/migrations/0064_add_task_group_to_profile.py`
+  - `cosmo_backend/api/migrations/0065_booking_booking_no_overlap_active.py`
 - PostgreSQL-only constraints are wrapped with `connection.vendor == 'postgresql'` guards to keep SQLite tests green.
 
 ### Permissions Behavior Summary

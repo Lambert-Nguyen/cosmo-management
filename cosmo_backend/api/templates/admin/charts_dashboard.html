@@ -1,0 +1,133 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}Admin Analytics Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a> &rsaquo; Analytics Dashboard
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+<!-- Cosmo Favicons -->
+<link rel="icon" type="image/x-icon" href="{% static 'images/favicons/favicon.ico' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
+<link rel="apple-touch-icon" href="{% static 'images/favicons/apple-touch-icon.png' %}">
+<meta name="theme-color" content="#3b82f6">
+<link rel="stylesheet" href="{% static 'css/pages/admin-charts-dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="logo-container">
+        <img src="{% static 'images/cosmo_logo.jpg' %}" alt="Cosmo Logo" class="header-logo">
+        <div class="header-text">
+            <h1>Cosmo Admin Analytics</h1>
+            <p class="dashboard-subtitle">Comprehensive system analytics and administrative insights</p>
+        </div>
+    </div>
+    <div class="admin-badge">🛡️ Administrator Access</div>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="stat-number">{{ total_tasks }}</div>
+        <div class="stat-label">📋 Total Tasks</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ overdue_count }}</div>
+        <div class="stat-label">⚠️ Overdue Tasks</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ property_count }}</div>
+        <div class="stat-label">🏢 Active Properties</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ task_type_count }}</div>
+        <div class="stat-label">🔧 Task Types</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ active_users }}</div>
+        <div class="stat-label">👥 Active Users</div>
+    </div>
+</div>
+
+<div class="admin-tools">
+    <h3>🛠️ Quick Administration</h3>
+    <div class="admin-links">
+        <a href="{% url 'task-list' %}" class="admin-link">📋 Manage Tasks</a>
+        <a href="{% url 'admin:api_property_changelist' %}" class="admin-link">🏢 Manage Properties</a>
+        <a href="{% url 'admin:auth_user_changelist' %}" class="admin-link">👥 Manage Users</a>
+        <a href="/api/admin/enhanced-excel-import/" class="admin-link">📊 Enhanced Excel Import</a>
+        <a href="/api/excel-import/" class="admin-link">📅 Basic Excel Import</a>
+        <button type="button" data-action="admin-show-file-stats" class="admin-link admin-button">🗑️ File Cleanup</button>
+        <a href="/api/admin/digest-management/" class="admin-link">📧 Email Digest</a>
+        <a href="/api/admin/notification-management/" class="admin-link">🔔 Notifications</a>
+        <a href="{% url 'admin:index' %}" class="admin-link">🏠 Back to Admin</a>
+    </div>
+</div>
+
+<!-- File Cleanup Modal for Admin -->
+<div id="adminFileCleanupModal" class="modal is-hidden">
+    <div class="modal-content">
+        <span class="close" role="button" tabindex="0" data-action="admin-close-modal">&times;</span>
+        <h2>🗂️ Admin File Storage Management</h2>
+        <div id="adminFileCleanupContent">
+            <p>Loading...</p>
+        </div>
+    </div>
+</div>
+
+<div class="charts-section">
+    <h2 class="section-title">📊 Task Distribution</h2>
+    <div class="charts-container">
+        <div class="chart-card">
+            <div class="chart-title">📈 Tasks by Status</div>
+            <div class="chart-container">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <div class="chart-title">🔧 Tasks by Type</div>
+            <div class="chart-container">
+                <canvas id="taskTypeChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <div class="chart-title">🏢 Tasks by Property</div>
+            <div class="chart-container">
+                <canvas id="propertyChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="charts-section">
+    <h2 class="section-title">👥 Team Analytics</h2>
+    <div class="charts-grid-large">
+        <div class="chart-card-large">
+            <div class="chart-title">🏆 User Performance</div>
+            <div class="chart-container">
+                <canvas id="userPerformanceChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card-large">
+            <div class="chart-title">⚡ Recent User Activity (7 days)</div>
+            <div class="chart-container">
+                <canvas id="userActivityChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ status_chart_data|json_script:"adminStatusChartData" }}
+{{ task_type_chart_data|json_script:"adminTaskTypeChartData" }}
+{{ property_chart_data|json_script:"adminPropertyChartData" }}
+{{ user_performance_chart_data|json_script:"adminUserPerformanceChartData" }}
+{{ user_activity_chart_data|json_script:"adminUserActivityChartData" }}
+<script type="module" src="{% static 'js/pages/admin-charts-dashboard.js' %}"></script>
+{% endblock %}

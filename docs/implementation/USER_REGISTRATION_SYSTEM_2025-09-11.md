@@ -6,7 +6,7 @@
 
 ## Overview
 
-The AriStay User Registration System implements a secure, invite-code-based user registration process that allows administrators to control user access and automatically assign roles and task groups. This system ensures that only authorized users can create accounts while providing a seamless registration experience.
+The Cosmo User Registration System implements a secure, invite-code-based user registration process that allows administrators to control user access and automatically assign roles and task groups. This system ensures that only authorized users can create accounts while providing a seamless registration experience.
 
 ## 🎯 Key Features
 
@@ -353,5 +353,5 @@ For technical support or questions about the registration system:
 ---
 
 **Last Updated:** September 11, 2025  
-**Maintained By:** AriStay Development Team  
+**Maintained By:** Cosmo Development Team  
 **Version:** 1.0

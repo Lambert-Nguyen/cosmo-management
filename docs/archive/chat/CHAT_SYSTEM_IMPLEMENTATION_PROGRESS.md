@@ -1,4 +1,4 @@
-# AriStay Chat System Implementation Progress
+# Cosmo Chat System Implementation Progress
 
 **Date**: 2025-10-19  
 **Status**: In Progress (60% Complete)  
@@ -216,7 +216,7 @@ location /ws/ {
 
 ### Installation
 ```bash
-cd aristay_backend
+cd cosmo_backend
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a comprehensive status update on the JWT authentication and security system implementation for the Aristay backend application.
+This document provides a comprehensive status update on the JWT authentication and security system implementation for the Cosmo backend application.
 
 ## ✅ Completed Features
 
@@ -150,7 +150,7 @@ Overall: 8/8 tests PASSED ✅
 
 ### Security System Files
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── auth_views.py              # JWT authentication views
 │   ├── auth_mixins.py             # Authentication mixins

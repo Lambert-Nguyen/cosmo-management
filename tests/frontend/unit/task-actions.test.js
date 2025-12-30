@@ -3,8 +3,8 @@
  */
 
 import { jest, describe, test, beforeEach, expect } from '@jest/globals';
-import { TaskActions } from '../../../aristay_backend/static/js/modules/task-actions.js';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { TaskActions } from '../../../cosmo_backend/static/js/modules/task-actions.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 describe('TaskActions', () => {
   let postSpy;

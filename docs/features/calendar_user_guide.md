@@ -1,21 +1,21 @@
 # Calendar User Guide
 
-## 📅 Welcome to the Aristay Calendar
+## 📅 Welcome to the Cosmo Calendar
 
-The Aristay Calendar provides a unified view of all your property bookings and tasks in one convenient location. This guide will help you get the most out of your calendar experience.
+The Cosmo Calendar provides a unified view of all your property bookings and tasks in one convenient location. This guide will help you get the most out of your calendar experience.
 
 ## 🚀 Getting Started
 
 ### Accessing the Calendar
 
 #### **Method 1: Portal Home**
-1. Log in to your Aristay account
+1. Log in to your Cosmo account
 2. Navigate to the Portal Home page
 3. Look for the "📅 Calendar View" card
 4. Click "Open Calendar"
 
 #### **Method 2: Navigation Menu**
-1. Log in to your Aristay account
+1. Log in to your Cosmo account
 2. Look for "📅 Calendar" in the navigation menu
 3. Click to open the calendar
 

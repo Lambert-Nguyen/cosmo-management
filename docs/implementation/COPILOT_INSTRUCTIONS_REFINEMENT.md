@@ -52,7 +52,7 @@ Successfully implemented comprehensive refinements to `.github/copilot-instructi
   ```bash
   ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.40
   CORS_ALLOWED_ORIGINS=http://127.0.0.1:3000,http://localhost:3000
-  CSRF_TRUSTED_ORIGINS=https://staging.aristay.com,https://app.aristay.com
+  CSRF_TRUSTED_ORIGINS=https://staging.cosmo.com,https://app.cosmo.com
   ```
 
 ### 10. **Import Style Consistency** ✅

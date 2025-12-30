@@ -7,7 +7,7 @@
 - ✅ **Security** - Locked permissions (contents: read) & Enterprise Code Quality
 
 ## 🎯 Overview
-Comprehensive production hardening and enterprise-grade code quality improvements transforming the Aristay booking system from development-ready to production-ready with bulletproof reliability.
+Comprehensive production hardening and enterprise-grade code quality improvements transforming the Cosmo booking system from development-ready to production-ready with bulletproof reliability.
 
 ## 🚀 Key Features
 
@@ -87,7 +87,7 @@ concurrency:
 ```yaml
 # Auto-install dependencies including pytest-django, pandas
 - name: Install deps
-  run: pip install -r aristay_backend/requirements.txt
+  run: pip install -r cosmo_backend/requirements.txt
 
 # Clean cache to avoid import conflicts  
 - name: Clean pyc cache

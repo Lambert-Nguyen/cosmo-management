@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Photo Approval Workflow provides managers and superusers with a comprehensive system for reviewing, approving, and managing photos across all tasks in the AriStay platform. This workflow ensures quality control and proper documentation of property maintenance activities.
+The Photo Approval Workflow provides managers and superusers with a comprehensive system for reviewing, approving, and managing photos across all tasks in the Cosmo platform. This workflow ensures quality control and proper documentation of property maintenance activities.
 
 ## Workflow States
 
@@ -320,7 +320,7 @@ const PHOTO_MANAGEMENT_CONFIG = {
 
 ## Conclusion
 
-The Photo Approval Workflow provides a comprehensive, secure, and user-friendly system for managing photo approvals across the AriStay platform. The workflow ensures quality control while maintaining efficiency and providing clear audit trails for compliance purposes.
+The Photo Approval Workflow provides a comprehensive, secure, and user-friendly system for managing photo approvals across the Cosmo platform. The workflow ensures quality control while maintaining efficiency and providing clear audit trails for compliance purposes.
 
 **Key Benefits:**
 - ✅ Streamlined approval process

@@ -11,8 +11,8 @@
 ## Root Cause ✅
 
 **Hardcoded Absolute Paths**: Tests used local machine paths that don't exist in CI environment
-- `/Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/staff_views.py`
-- `/Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/migrations/*uploaded_by*.py`
+- `/Users/duylam1407/Workspace/SJSU/cosmo-management/cosmo_backend/api/staff_views.py`
+- `/Users/duylam1407/Workspace/SJSU/cosmo-management/cosmo_backend/api/migrations/*uploaded_by*.py`
 
 These paths were CI-incompatible and prevented tests from finding the required files.
 
@@ -21,10 +21,10 @@ These paths were CI-incompatible and prevented tests from finding the required f
 ### 1. Dynamic Path Resolution
 ```python
 # Before (hardcoded):
-with open('/Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/staff_views.py', 'r') as f:
+with open('/Users/duylam1407/Workspace/SJSU/cosmo-management/cosmo_backend/api/staff_views.py', 'r') as f:
 
 # After (dynamic):
-backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'aristay_backend')
+backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'cosmo_backend')
 staff_views_path = os.path.join(backend_dir, 'api', 'staff_views.py')
 with open(staff_views_path, 'r') as f:
 ```
@@ -32,10 +32,10 @@ with open(staff_views_path, 'r') as f:
 ### 2. Relative Migration Path
 ```python
 # Before (hardcoded):
-migration_files = glob.glob('/Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend/api/migrations/*uploaded_by*.py')
+migration_files = glob.glob('/Users/duylam1407/Workspace/SJSU/cosmo-management/cosmo_backend/api/migrations/*uploaded_by*.py')
 
 # After (dynamic):
-backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'aristay_backend')
+backend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'cosmo_backend')
 migration_pattern = os.path.join(backend_dir, 'api', 'migrations', '*uploaded_by*.py')
 migration_files = glob.glob(migration_pattern)
 ```

@@ -24,7 +24,7 @@ The headers across different pages had inconsistencies:
 - Missing standardized styling
 
 ### 4. Staff Header (`staff/base.html`)
-- **Missing Logo Image**: Only had text "AriStay Staff Portal"
+- **Missing Logo Image**: Only had text "Cosmo Management Staff Portal"
 - No visual branding element
 
 ## Solutions Implemented
@@ -52,8 +52,8 @@ The headers across different pages had inconsistencies:
 
 **Consistent Logo Style Applied to All Templates:**
 ```html
-<img src="{% static 'images/aristay_logo.jpg' %}" 
-     alt="AriStay" 
+<img src="{% static 'images/cosmo_logo.jpg' %}" 
+     alt="Cosmo" 
      style="width: 50px; 
             height: 50px; 
             border-radius: 12px; 
@@ -87,30 +87,30 @@ The headers across different pages had inconsistencies:
 
 **Before:**
 ```html
-<div class="logo">AriStay Staff Portal</div>
+<div class="logo">Cosmo Management Staff Portal</div>
 ```
 
 **After:**
 ```html
 <div class="logo" style="display: flex; align-items: center; gap: 12px;">
-    <img src="{% static 'images/aristay_logo.jpg' %}" 
-         alt="AriStay" 
+    <img src="{% static 'images/cosmo_logo.jpg' %}" 
+         alt="Cosmo" 
          style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
-    <span>AriStay Staff Portal</span>
+    <span>Cosmo Management Staff Portal</span>
 </div>
 ```
 
 ## Files Modified
 
-1. **`aristay_backend/api/templates/admin/base_site.html`**
+1. **`cosmo_backend/api/templates/admin/base_site.html`**
    - Removed duplicate Manager button
    - Kept single Manager navigation link
 
-2. **`aristay_backend/api/templates/portal/base.html`**
+2. **`cosmo_backend/api/templates/portal/base.html`**
    - Added standardized inline logo styling
    - Removed conflicting CSS rules
 
-3. **`aristay_backend/api/templates/staff/base.html`**
+3. **`cosmo_backend/api/templates/staff/base.html`**
    - Added logo image with standardized styling
    - Wrapped text in `<span>` for proper layout
 
@@ -132,7 +132,7 @@ All headers now use consistent logo styling:
 ### Common Elements Across All Headers:
 
 1. **Logo Section** (Left)
-   - AriStay logo image (50x50px)
+   - Cosmo logo image (50x50px)
    - Page title/heading
    - Subtitle (where applicable)
 
@@ -167,7 +167,7 @@ After the fix, verify:
 
 4. ✅ **Staff Header** (`/api/staff/`)
    - Logo: 50px, rounded, bordered (NEW!)
-   - Text: "AriStay Staff Portal"
+   - Text: "Cosmo Management Staff Portal"
    - Navigation: Portal + Tasks + Inventory + Lost & Found
 
 ## Visual Consistency Achieved

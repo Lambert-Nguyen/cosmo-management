@@ -82,20 +82,20 @@ if user.profile.role == 'manager':
 ## Files Modified
 
 ### Core Files
-- `aristay_backend/api/registration_views.py` - Permission checks
-- `aristay_backend/api/serializers.py` - API serialization
-- `aristay_backend/api/admin.py` - Admin interface
-- `aristay_backend/api/auth_views.py` - Authentication
+- `cosmo_backend/api/registration_views.py` - Permission checks
+- `cosmo_backend/api/serializers.py` - API serialization
+- `cosmo_backend/api/admin.py` - Admin interface
+- `cosmo_backend/api/auth_views.py` - Authentication
 
 ### Templates
-- `aristay_backend/api/templates/staff/dashboard.html`
-- `aristay_backend/api/templates/portal/base.html`
-- `aristay_backend/api/templates/admin/base_site.html`
-- `aristay_backend/api/templates/admin/index.html`
+- `cosmo_backend/api/templates/staff/dashboard.html`
+- `cosmo_backend/api/templates/portal/base.html`
+- `cosmo_backend/api/templates/admin/base_site.html`
+- `cosmo_backend/api/templates/admin/index.html`
 
 ### Management Commands
-- `aristay_backend/api/management/commands/seed_test_data.py`
-- `aristay_backend/api/management/commands/create_sample_checklists_optimized.py`
+- `cosmo_backend/api/management/commands/seed_test_data.py`
+- `cosmo_backend/api/management/commands/create_sample_checklists_optimized.py`
 
 ## Benefits
 

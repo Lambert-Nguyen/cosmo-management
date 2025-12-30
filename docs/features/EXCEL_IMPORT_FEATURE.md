@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-The Excel Import feature allows customers to upload their daily cleaning schedule Excel files to automatically create and update bookings in the AriStay system. This feature significantly reduces manual work by automating the import process and automatically generating cleaning tasks for new bookings.
+The Excel Import feature allows customers to upload their daily cleaning schedule Excel files to automatically create and update bookings in the Cosmo system. This feature significantly reduces manual work by automating the import process and automatically generating cleaning tasks for new bookings.
 
 ## 🔍 Excel File Analysis
 

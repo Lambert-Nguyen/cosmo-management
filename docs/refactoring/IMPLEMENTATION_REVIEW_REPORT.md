@@ -136,7 +136,7 @@ However, **3 critical issues** have been identified that **must be fixed** befor
 
 #### 🔴 **Issue #1: Double Event Binding in task_actions.html**
 
-**Location**: `aristay_backend/api/templates/staff/components/task_actions.html`
+**Location**: `cosmo_backend/api/templates/staff/components/task_actions.html`
 
 **Problem**: Two buttons have BOTH inline `onclick` handlers AND JavaScript event listeners attached, causing actions to execute **twice**.
 
@@ -182,7 +182,7 @@ if (deleteBtn) {
 
 #### 🔴 **Issue #2: Incomplete onclick Migration in task_checklist.html**
 
-**Location**: `aristay_backend/api/templates/staff/components/task_checklist.html`
+**Location**: `cosmo_backend/api/templates/staff/components/task_checklist.html`
 
 **Problem**: Two inline onclick handlers remain:
 
@@ -459,7 +459,7 @@ Based on the comprehensive review, here is the **prioritized fix plan**:
 
 #### Fix 1.1: Remove Double Event Binding in task_actions.html
 
-**File**: `aristay_backend/api/templates/staff/components/task_actions.html`
+**File**: `cosmo_backend/api/templates/staff/components/task_actions.html`
 
 **Changes**:
 ```django-html
@@ -480,7 +480,7 @@ Based on the comprehensive review, here is the **prioritized fix plan**:
 
 #### Fix 1.2: Remove onclick Handlers from task_checklist.html
 
-**File**: `aristay_backend/api/templates/staff/components/task_checklist.html`
+**File**: `cosmo_backend/api/templates/staff/components/task_checklist.html`
 
 **Changes**:
 ```django-html

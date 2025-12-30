@@ -268,7 +268,7 @@ User Notification
 5. Fix any template rendering issues
 
 **Files to Modify**:
-- `aristay_backend/api/templates/staff/task_detail.html`
+- `cosmo_backend/api/templates/staff/task_detail.html`
 
 **Expected Changes**:
 - Remove ~500 lines of duplicate HTML
@@ -286,7 +286,7 @@ User Notification
 5. Verify no JavaScript in HTML attributes
 
 **Files to Modify**:
-- `aristay_backend/api/templates/staff/task_detail.html`
+- `cosmo_backend/api/templates/staff/task_detail.html`
 
 **Expected Changes**:
 - Remove ~1000 lines of inline JavaScript
@@ -418,7 +418,7 @@ Phase 2 Week 4 will be considered complete when:
 
 ### Component Templates (4 files)
 ```
-aristay_backend/api/templates/staff/components/
+cosmo_backend/api/templates/staff/components/
 ├── task_timer.html         (41 lines)   - Timer with start/pause/stop
 ├── task_navigation.html    (37 lines)   - Prev/next/list buttons
 ├── task_progress.html      (78 lines)   - Progress bar + stats
@@ -427,7 +427,7 @@ aristay_backend/api/templates/staff/components/
 
 ### JavaScript Modules (3 files)
 ```
-aristay_backend/static/js/modules/
+cosmo_backend/static/js/modules/
 ├── checklist-manager.js    (430 lines)  - Checklist interactions
 ├── photo-manager.js        (420 lines)  - Photo gallery CRUD
 └── navigation-manager.js   (200 lines)  - Task navigation
@@ -479,4 +479,4 @@ The work demonstrates:
 
 **Report Generated**: 2024-12-05  
 **Author**: AI Development Assistant  
-**Project**: Aristay Property Management - Django UI Refactoring
+**Project**: Cosmo Property Management - Django UI Refactoring

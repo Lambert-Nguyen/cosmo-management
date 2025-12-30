@@ -14,7 +14,7 @@ from pathlib import Path
 # Add the project root to Python path
 project_root = Path(__file__).parent
 sys.path.append(str(project_root))
-sys.path.append(str(project_root / 'aristay_backend'))
+sys.path.append(str(project_root / 'cosmo_backend'))
 
 # Set up Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -40,7 +40,7 @@ class JWTAuthenticationTests(APITestCase):
         self.test_user_data = {
             'username': 'testjwtuser',
             'password': 'securetestpass123',
-            'email': 'testjwt@aristay.com',
+            'email': 'testjwt@cosmo-management.cloud',
         }
         self.user = User.objects.create_user(**self.test_user_data)
         self.tokens = {}
@@ -199,7 +199,7 @@ class SecurityEventLoggingTests(APITestCase):
         self.user = User.objects.create_user(
             username='testsecuser',
             password='securetestpass123',
-            email='testsec@aristay.com',
+            email='testsec@cosmo-management.cloud',
         )
 
     def test_login_success_event(self):

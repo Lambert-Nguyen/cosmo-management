@@ -5,7 +5,7 @@ Replaces inline HTML sections with component includes and inline JS with modules
 """
 
 def refactor_task_detail():
-    template_path = "aristay_backend/api/templates/staff/task_detail.html"
+    template_path = "cosmo_backend/api/templates/staff/task_detail.html"
     
     with open(template_path, 'r') as f:
         lines = f.readlines()

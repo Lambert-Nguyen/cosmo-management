@@ -1,8 +1,8 @@
-# Aristay Property Management - API Endpoints Documentation
+# Cosmo Property Management - API Endpoints Documentation
 
 **Date:** September 12, 2025  
 **API Version:** 2.0  
-**Base URL:** `https://api.aristay.com/api` (Production)  
+**Base URL:** `https://api.cosmo.com/api` (Production)  
 **Development URL:** `http://127.0.0.1:8000/api` (Local Development)
 
 ## Authentication
@@ -136,7 +136,7 @@ Get list of tasks (filtered by user role).
 ```json
 {
     "count": 25,
-    "next": "http://api.aristay.com/api/staff/tasks/?page=2",
+    "next": "http://api.cosmo.com/api/staff/tasks/?page=2",
     "previous": null,
     "results": [
         {
@@ -204,7 +204,7 @@ Get detailed information about a specific task.
     "images": [
         {
             "id": 1,
-            "image": "https://api.aristay.com/media/task_images/image1.jpg",
+            "image": "https://api.cosmo.com/media/task_images/image1.jpg",
             "photo_type": "before",
             "uploaded_at": "2025-09-12T08:15:00Z"
         }
@@ -261,7 +261,7 @@ Upload a photo for a specific task.
 ```json
 {
     "id": 1,
-    "image": "https://api.aristay.com/media/task_images/image1.jpg",
+    "image": "https://api.cosmo.com/media/task_images/image1.jpg",
     "photo_type": "before",
     "photo_type_display": "Before Photo",
     "photo_status": "pending",
@@ -288,7 +288,7 @@ Get all photos for a specific task.
     "results": [
         {
             "id": 1,
-            "image": "https://api.aristay.com/media/task_images/image1.jpg",
+            "image": "https://api.cosmo.com/media/task_images/image1.jpg",
             "photo_type": "before",
             "uploaded_at": "2025-09-12T10:30:00Z"
         }
@@ -595,17 +595,17 @@ The API supports webhooks for real-time updates:
 
 Official SDKs are available for:
 
-- **Python**: `pip install aristay-sdk`
-- **JavaScript/Node.js**: `npm install aristay-sdk`
+- **Python**: `pip install cosmo-sdk`
+- **JavaScript/Node.js**: `npm install cosmo-sdk`
 - **Flutter**: Available in pub.dev
 
 ## Support
 
 For API support and questions:
 
-- **Documentation**: https://docs.aristay.com
-- **Support Email**: api-support@aristay.com
-- **Status Page**: https://status.aristay.com
+- **Documentation**: https://docs.cosmo.com
+- **Support Email**: api-support@cosmo-management.cloud
+- **Status Page**: https://status.cosmo.com
 
 ---
 *API Documentation generated on September 12, 2025*  

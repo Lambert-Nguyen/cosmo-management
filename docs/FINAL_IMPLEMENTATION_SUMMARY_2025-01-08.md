@@ -33,10 +33,10 @@
 - **Root Cause**: Incorrect field references in notification models/views
 
 ### **4. Test Data Role System Correction**
-- **Fixed**: Test data creation using legacy Django `is_staff`/`is_superuser` instead of Aristay's `Profile.role` system
-- **Root Cause**: Mixed usage of Django built-in permissions vs. Aristay's profile-based role system
+- **Fixed**: Test data creation using legacy Django `is_staff`/`is_superuser` instead of Cosmo's `Profile.role` system
+- **Root Cause**: Mixed usage of Django built-in permissions vs. Cosmo's profile-based role system
 - **Solution**: Updated test data generation to use `UserRole` enum with automatic Django permission sync
-- **Impact**: Test users now properly reflect Aristay's intended role-based access control architecture
+- **Impact**: Test users now properly reflect Cosmo's intended role-based access control architecture
 
 ### **5. Database Field Naming Consistency**
 **Established Pattern Understanding:**
@@ -49,9 +49,9 @@
 ## 📊 **Test Data Generation System**
 
 ### **Django Management Command Created:**
-- **Location**: `aristay_backend/api/management/commands/create_test_data.py`
+- **Location**: `cosmo_backend/api/management/commands/create_test_data.py`
 - **Usage**: `python manage.py create_test_data`
-- **Fixed**: Now uses proper Aristay `Profile.role` system instead of legacy `is_staff`
+- **Fixed**: Now uses proper Cosmo `Profile.role` system instead of legacy `is_staff`
 - **Auto-Sync**: Django permissions automatically synced based on Profile role
 
 ### **Comprehensive Test Users (Corrected Role System):**
@@ -110,7 +110,7 @@
 
 ### **Automated Tests Available:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python -m pytest tests/ -v  # Comprehensive test suite
 python manage.py check      # Django system validation
 ```
@@ -135,9 +135,9 @@ Booking.objects.select_related('property').all()
 
 ### **Proper File Placement per PROJECT_STRUCTURE.md:**
 - **Documentation**: `docs/USER_WORKFLOWS.md`, `docs/MANUAL_TESTING_GUIDE.md`
-- **Management Commands**: `aristay_backend/api/management/commands/`
-- **Service Logic**: `aristay_backend/api/services/`
-- **View Components**: `aristay_backend/api/staff_views.py`, etc.
+- **Management Commands**: `cosmo_backend/api/management/commands/`
+- **Service Logic**: `cosmo_backend/api/services/`
+- **View Components**: `cosmo_backend/api/staff_views.py`, etc.
 
 ### **Clean Project Structure:**
 - Removed duplicate/incorrect test data script from root
@@ -163,7 +163,7 @@ Booking.objects.select_related('property').all()
 
 ### **Quick Start Command:**
 ```bash
-cd aristay_backend
+cd cosmo_backend
 python manage.py create_test_data  # Generate all test users/data
 python manage.py runserver         # Start development server
 ```

@@ -15,11 +15,11 @@ source .venv/bin/activate
 
 # Upgrade pip and install requirements
 pip install --upgrade pip
-pip install -r aristay_backend/requirements.txt
+pip install -r cosmo_backend/requirements.txt
 
 # Set Django settings
 export DJANGO_SETTINGS_MODULE=backend.settings
 
 # Navigate to backend and run server
-cd aristay_backend
+cd cosmo_backend
 python manage.py runserver 0.0.0.0:8000

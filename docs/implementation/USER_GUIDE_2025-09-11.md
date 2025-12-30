@@ -1,6 +1,6 @@
-### AriStay Management User Guide (Non‑Technical)
+### Cosmo Management User Guide (Non‑Technical)
 
-Welcome to AriStay Management. This guide helps managers and staff use the system confidently.
+Welcome to Cosmo Management. This guide helps managers and staff use the system confidently.
 
 #### 1) Signing In
 - Go to the login page and enter your username and password.

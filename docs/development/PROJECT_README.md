@@ -1,6 +1,6 @@
-# Aristay App
+# Cosmo Management
 
-**Aristay** is a cleaning & maintenance management system for property managers.  
+**Cosmo Management** is a cleaning & maintenance management system for property managers.  
 It consists of a Flutter mobile frontend and a Django REST backend secured by token auth.  
 Users can sign up, log in, browse, filter and manage cleaning/maintenance tasksâ€”complete with photos, history, and per-user timezones.
 
@@ -54,8 +54,8 @@ Users can sign up, log in, browse, filter and manage cleaning/maintenance tasksâ
 
 1. **Clone & enter the backend repo:**
    ```bash
-   git clone <repo-url> aristay_backend
-   cd aristay_backend
+   git clone <repo-url> cosmo_backend
+   cd cosmo_backend
 2. **Create & activate a Python virtualenv:**
    ```bash
    python3 -m venv venv
@@ -91,8 +91,8 @@ Users can sign up, log in, browse, filter and manage cleaning/maintenance tasksâ
 
 1. **Clone & enter the Flutter repo:**
    ```bash
-   git clone <repo-url> aristay_flutter_frontend
-   cd aristay_flutter_frontend
+   git clone <repo-url> cosmo_app
+   cd cosmo_app
 3. **Install Flutter dependencies:**
       ```bash
    flutter clean

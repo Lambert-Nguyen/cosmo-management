@@ -1,0 +1,149 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Invite Codes - Cosmo Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/admin-invite-codes.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="invite-codes-container">
+    <div class="page-header">
+        <h1 class="page-title">Invite Codes</h1>
+        <a href="/admin/create-invite-code/" class="btn-create">
+            ➕ Create New Invite Code
+        </a>
+    </div>
+    
+    <div class="filters">
+        <form method="get" class="filter-row">
+            <div class="filter-group">
+                <label for="role">Role</label>
+                <select name="role" id="role">
+                    <option value="">All Roles</option>
+                    <option value="member" {% if request.GET.role == 'member' %}selected{% endif %}>Member</option>
+                    <option value="manager" {% if request.GET.role == 'manager' %}selected{% endif %}>Manager</option>
+                    <option value="admin" {% if request.GET.role == 'admin' %}selected{% endif %}>Admin</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="task_group">Task Group</label>
+                <select name="task_group" id="task_group">
+                    <option value="">All Groups</option>
+                    <option value="general" {% if request.GET.task_group == 'general' %}selected{% endif %}>General</option>
+                    <option value="cleaning" {% if request.GET.task_group == 'cleaning' %}selected{% endif %}>Cleaning</option>
+                    <option value="maintenance" {% if request.GET.task_group == 'maintenance' %}selected{% endif %}>Maintenance</option>
+                    <option value="laundry" {% if request.GET.task_group == 'laundry' %}selected{% endif %}>Laundry</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="status">Status</label>
+                <select name="status" id="status">
+                    <option value="">All Status</option>
+                    <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
+                    <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                    <option value="expired" {% if request.GET.status == 'expired' %}selected{% endif %}>Expired</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn-filter">Filter</button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="invite-codes-table">
+        <div class="table-header">
+            <h2 class="table-title">All Invite Codes ({{ invite_codes|length }})</h2>
+        </div>
+        
+        {% if invite_codes %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Created By</th>
+                        <th>Role</th>
+                        <th>Task Group</th>
+                        <th>Usage</th>
+                        <th>Status</th>
+                        <th>Expires</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for code in invite_codes %}
+                        <tr>
+                            <td class="code-cell">{{ code.code }}</td>
+                            <td>{{ code.created_by.username }}</td>
+                            <td>
+                                <span class="status-badge status-{{ code.role }}">
+                                    {{ code.get_role_display }}
+                                </span>
+                            </td>
+                            <td>{{ code.get_task_group_display }}</td>
+                            <td>
+                                <div class="usage-indicator">
+                                    <span>{{ code.used_count }}/{{ code.max_uses|default:"∞" }}</span>
+                                    <div class="usage-bar">
+                                        {% if code.max_uses > 0 %}
+                                            {% widthratio code.used_count code.max_uses 100 as usage_percent %}
+                                            <div class="usage-fill {% if usage_percent >= 100 %}danger{% elif usage_percent >= 80 %}warning{% endif %}" 
+                                                 style="width: {{ usage_percent }}%"></div>
+                                        {% else %}
+                                            <div class="usage-fill" style="width: 0%"></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if code.is_expired %}
+                                    <span class="status-badge status-expired">Expired</span>
+                                {% elif code.is_active %}
+                                    <span class="status-badge status-active">Active</span>
+                                {% else %}
+                                    <span class="status-badge status-inactive">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if code.expires_at %}
+                                    {{ code.expires_at|date:"M d, Y" }}
+                                {% else %}
+                                    Never
+                                {% endif %}
+                            </td>
+                            <td>{{ code.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-action btn-copy" data-action="copy-code" data-code="{{ code.code }}">
+                                        📋 Copy
+                                    </button>
+                                    {% if code.is_active %}
+                                        <a href="/admin/revoke-invite-code/{{ code.id }}/"
+                                           class="btn-action btn-revoke"
+                                           data-confirm="Are you sure you want to revoke this invite code?">
+                                            🚫 Revoke
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🔑</div>
+                <h3>No Invite Codes Found</h3>
+                <p>Create your first invite code to start inviting users to your system.</p>
+                <a href="/admin/create-invite-code/" class="btn-create">
+                    Create Invite Code
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script src="{% static 'js/pages/admin-invite-codes.js' %}"></script>
+{% endblock %}

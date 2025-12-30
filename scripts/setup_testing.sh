@@ -45,7 +45,7 @@ if curl -s http://127.0.0.1:8000 > /dev/null 2>&1; then
 else
     echo -e "${YELLOW}⚠️  Django server is not running${NC}"
     echo "   Please start it in another terminal:"
-    echo "   cd aristay_backend && python manage.py runserver 8000"
+    echo "   cd cosmo_backend && python manage.py runserver 8000"
     echo ""
 fi
 
@@ -65,7 +65,7 @@ echo "✨ Setup Complete!"
 echo "=================="
 echo ""
 echo "Next steps:"
-echo "1. Start Django if not running: cd aristay_backend && python manage.py runserver"
+echo "1. Start Django if not running: cd cosmo_backend && python manage.py runserver"
 echo "2. Run E2E tests: npm run test:e2e"
 echo "3. Run E2E tests with UI: npm run test:e2e:ui"
 echo "4. Run all tests: npm run test:all"

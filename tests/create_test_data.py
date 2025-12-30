@@ -19,9 +19,9 @@ from datetime import timedelta
 import random
 
 # Add Django project to path and setup
-sys.path.append('aristay_backend')
+sys.path.append('cosmo_backend')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-os.chdir('aristay_backend')
+os.chdir('cosmo_backend')
 django.setup()
 
 from api.models import (
@@ -46,7 +46,7 @@ class TestDataGenerator:
         superuser, created = User.objects.get_or_create(
             username='admin_super',
             defaults={
-                'email': 'superuser@aristay.com',
+                'email': 'superuser@cosmo-management.cloud',
                 'first_name': 'System',
                 'last_name': 'Administrator',
                 'is_staff': True,
@@ -74,7 +74,7 @@ class TestDataGenerator:
         manager, created = User.objects.get_or_create(
             username='manager_alice',
             defaults={
-                'email': 'alice.manager@aristay.com',
+                'email': 'alice.manager@cosmo-management.cloud',
                 'first_name': 'Alice',
                 'last_name': 'Manager',
                 'is_staff': True,
@@ -101,7 +101,7 @@ class TestDataGenerator:
         staff, created = User.objects.get_or_create(
             username='staff_bob',
             defaults={
-                'email': 'bob.staff@aristay.com',
+                'email': 'bob.staff@cosmo-management.cloud',
                 'first_name': 'Bob',
                 'last_name': 'Cleaner',
                 'is_staff': False,
@@ -133,7 +133,7 @@ class TestDataGenerator:
             user, created = User.objects.get_or_create(
                 username=username,
                 defaults={
-                    'email': f'{username}@aristay.com',
+                    'email': f'{username}@cosmo-management.cloud',
                     'first_name': name.split()[0],
                     'last_name': name.split()[1],
                     'is_staff': False,

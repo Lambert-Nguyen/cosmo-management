@@ -251,8 +251,8 @@ class StaffUIFunctionalityTest(TestCase):
 
         # Error handling patterns live in JS modules (avoid inline script assertions)
         repo_root = Path(__file__).resolve().parents[2]
-        api_client_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'core' / 'api-client.js'
-        task_actions_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'modules' / 'task-actions.js'
+        api_client_path = repo_root / 'cosmo_backend' / 'static' / 'js' / 'core' / 'api-client.js'
+        task_actions_path = repo_root / 'cosmo_backend' / 'static' / 'js' / 'modules' / 'task-actions.js'
 
         api_client_js = api_client_path.read_text(encoding='utf-8')
         task_actions_js = task_actions_path.read_text(encoding='utf-8')
@@ -282,7 +282,7 @@ class StaffUIFunctionalityTest(TestCase):
         
         # Check for accessibility features that actually exist
         self.assertContains(response, 'aria-label="Toggle navigation"')
-        self.assertContains(response, 'alt="AriStay"')
+        self.assertContains(response, 'alt="Cosmo"')
         self.assertContains(response, 'type="checkbox"')  # Form controls
 
     def test_task_timer_functionality(self):
@@ -299,7 +299,7 @@ class StaffUIFunctionalityTest(TestCase):
 
         # Timer behavior lives in JS modules
         repo_root = Path(__file__).resolve().parents[2]
-        timer_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'modules' / 'task-timer.js'
+        timer_path = repo_root / 'cosmo_backend' / 'static' / 'js' / 'modules' / 'task-timer.js'
         timer_js = timer_path.read_text(encoding='utf-8')
         self.assertIn('window.startTimer', timer_js)
         self.assertIn('window.pauseTimer', timer_js)

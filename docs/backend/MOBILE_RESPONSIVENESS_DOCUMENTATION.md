@@ -2,7 +2,7 @@
 
 ## 📋 **Overview**
 
-The AriStay application has been completely transformed with **mobile-first, responsive design** to provide an exceptional user experience on mobile phones, tablets, and desktop devices. This comprehensive mobile optimization ensures that staff, managers, and administrators can efficiently manage properties, tasks, and bookings from any device.
+The Cosmo application has been completely transformed with **mobile-first, responsive design** to provide an exceptional user experience on mobile phones, tablets, and desktop devices. This comprehensive mobile optimization ensures that staff, managers, and administrators can efficiently manage properties, tasks, and bookings from any device.
 
 ---
 
@@ -403,7 +403,7 @@ img {
 
 ## 🎯 **Conclusion**
 
-The AriStay application now provides a **world-class mobile experience** that rivals native mobile applications. With comprehensive mobile responsiveness, touch-friendly interfaces, and mobile-first design principles, users can efficiently manage properties, tasks, and bookings from any device.
+The Cosmo application now provides a **world-class mobile experience** that rivals native mobile applications. With comprehensive mobile responsiveness, touch-friendly interfaces, and mobile-first design principles, users can efficiently manage properties, tasks, and bookings from any device.
 
 ### **Key Achievements**
 ✅ **100% Mobile Coverage** - All templates optimized for mobile  

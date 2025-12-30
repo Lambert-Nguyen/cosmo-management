@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "973172271140",
+    "project_id": "cosmomanagement-ed731",
+    "storage_bucket": "cosmomanagement-ed731.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973172271140:android:bc3f219472e69c20dfd0b1",
+        "android_client_info": {
+          "package_name": "com.cosmomgmt.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaLEWm5sAqVsBqbvpon9sHY4oeHRg1ar0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

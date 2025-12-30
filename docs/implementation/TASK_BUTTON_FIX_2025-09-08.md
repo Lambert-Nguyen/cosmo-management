@@ -6,7 +6,7 @@
 **Issue**: Task detail page buttons not responding to clicks  
 **Status**: ✅ **RESOLVED**  
 **Root Cause**: JavaScript execution timing issue  
-**Files Modified**: `aristay_backend/api/templates/staff/task_detail.html`
+**Files Modified**: `cosmo_backend/api/templates/staff/task_detail.html`
 
 ## 🚨 Problem Description
 
@@ -44,7 +44,7 @@ Result: Event listeners reference undefined functions → buttons don't work
 
 ### Fix: Move Function Definitions Before DOMContentLoaded
 
-**File**: `aristay_backend/api/templates/staff/task_detail.html`
+**File**: `cosmo_backend/api/templates/staff/task_detail.html`
 
 #### Before (BROKEN - Lines 445, 1167):
 ```javascript
@@ -128,9 +128,9 @@ Line 484: DOMContentLoaded event fires
 
 1. **Start Django Server**:
    ```bash
-   cd /Users/duylam1407/Workspace/SJSU/aristay_app
+   cd /Users/duylam1407/Workspace/SJSU/cosmo-management
    source .venv/bin/activate
-   cd aristay_backend
+   cd cosmo_backend
    python manage.py runserver
    ```
 
@@ -195,7 +195,7 @@ Line 484: DOMContentLoaded event fires
 ## 🔗 Related Files
 
 ### Modified
-- ✅ `aristay_backend/api/templates/staff/task_detail.html` - JavaScript timing fix
+- ✅ `cosmo_backend/api/templates/staff/task_detail.html` - JavaScript timing fix
 
 ### Test Scripts Created  
 - ✅ `tests/ui/test_button_timing_analysis.py` - Diagnostic analysis

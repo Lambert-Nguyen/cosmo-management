@@ -16,7 +16,7 @@ User = get_user_model()
 
 def _read_portal_calendar_js() -> str:
     repo_root = Path(__file__).resolve().parents[2]
-    js_path = repo_root / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+    js_path = repo_root / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
     return js_path.read_text(encoding='utf-8')
 
 

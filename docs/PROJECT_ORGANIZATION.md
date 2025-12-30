@@ -19,19 +19,19 @@
 > - `tests/security/` for security-focused tests
 > - `tests/api/` for API-specific tests
 
-This document describes the organized structure of the Aristay project after comprehensive cleanup and reorganization.
+This document describes the organized structure of the Cosmo Management project after comprehensive cleanup and reorganization.
 
 ## 📁 Legacy Project Structure
 
 ```
-aristay_app/
+cosmo-management/
 ├── README.md                          # Main project documentation
 ├── PROJECT_STRUCTURE.md               # Detailed structure overview
 ├── Makefile                           # Build and development commands
 ├── dev.sh                             # Development setup script
 ├── .env.example                       # Environment variables template
 │
-├── 🏗️ aristay_backend/                # Django backend application
+├── 🏗️ cosmo_backend/                # Django backend application
 │   ├── manage.py
 │   ├── requirements.txt
 │   ├── api/                           # Main API application
@@ -44,7 +44,7 @@ aristay_app/
 │   ├── backend/                       # Django project settings
 │   └── static/                        # Static files
 │
-├── 📱 aristay_flutter_frontend/       # Flutter mobile application
+├── 📱 cosmo_app/       # Flutter mobile application
 │   ├── lib/                           # Dart source code
 │   ├── assets/                        # App assets
 │   └── pubspec.yaml                   # Dart dependencies
@@ -176,13 +176,13 @@ The project has achieved full production readiness with:
 
 ```bash
 # Production hardening tests
-cd aristay_backend && python ../tests/production/test_production_hardening.py
+cd cosmo_backend && python ../tests/production/test_production_hardening.py
 
 # Integration tests
-cd aristay_backend && python ../tests/integration/test_final_phases.py
+cd cosmo_backend && python ../tests/integration/test_final_phases.py
 
 # All tests via Django
-cd aristay_backend && python manage.py test
+cd cosmo_backend && python manage.py test
 ```
 
 ### Key Commands
@@ -198,7 +198,7 @@ make run-backend
 make run-frontend
 
 # Production deployment validation
-cd aristay_backend && python ../tests/integration/verify_production_readiness.py
+cd cosmo_backend && python ../tests/integration/verify_production_readiness.py
 ```
 
 ## 📈 Performance Metrics

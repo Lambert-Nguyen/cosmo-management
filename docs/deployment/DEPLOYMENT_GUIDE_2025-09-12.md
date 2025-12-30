@@ -1,4 +1,4 @@
-# Aristay Property Management - Deployment Guide
+# Cosmo Property Management - Deployment Guide
 
 **Date:** September 12, 2025  
 **Version:** 2.0  
@@ -6,7 +6,7 @@
 
 ## Overview
 
-This guide provides comprehensive instructions for deploying the Aristay Property Management System to production environments. The system has been thoroughly tested and is ready for production deployment.
+This guide provides comprehensive instructions for deploying the Cosmo Property Management System to production environments. The system has been thoroughly tested and is ready for production deployment.
 
 ## Prerequisites
 
@@ -57,10 +57,10 @@ sudo apt install -y nodejs
 sudo -u postgres psql
 
 # Create database and user
-CREATE DATABASE aristay_production;
-CREATE USER aristay_user WITH PASSWORD 'secure_password';
-GRANT ALL PRIVILEGES ON DATABASE aristay_production TO aristay_user;
-ALTER USER aristay_user CREATEDB;
+CREATE DATABASE cosmo_production;
+CREATE USER cosmo_user WITH PASSWORD 'secure_password';
+GRANT ALL PRIVILEGES ON DATABASE cosmo_production TO cosmo_user;
+ALTER USER cosmo_user CREATEDB;
 \q
 ```
 
@@ -68,19 +68,19 @@ ALTER USER aristay_user CREATEDB;
 
 ```bash
 # Create application directory
-sudo mkdir -p /opt/aristay
-sudo chown $USER:$USER /opt/aristay
-cd /opt/aristay
+sudo mkdir -p /opt/cosmo
+sudo chown $USER:$USER /opt/cosmo
+cd /opt/cosmo
 
 # Clone repository
-git clone https://github.com/your-org/aristay-app.git .
+git clone https://github.com/your-org/cosmo-app.git .
 
 # Create virtual environment
 python3.13 -m venv venv
 source venv/bin/activate
 
 # Install dependencies
-pip install -r aristay_backend/requirements.txt
+pip install -r cosmo_backend/requirements.txt
 
 # Install additional production dependencies
 pip install gunicorn psycopg2-binary redis
@@ -94,14 +94,14 @@ Create production environment file:
 
 ```bash
 # Create environment file
-sudo nano /opt/aristay/.env.production
+sudo nano /opt/cosmo/.env.production
 ```
 
 ```bash
 # Database Configuration
-DATABASE_URL=postgresql://aristay_user:secure_password@localhost/aristay_production
-DB_NAME=aristay_production
-DB_USER=aristay_user
+DATABASE_URL=postgresql://cosmo_user:secure_password@localhost/cosmo_production
+DB_NAME=cosmo_production
+DB_USER=cosmo_user
 DB_PASSWORD=secure_password
 DB_HOST=localhost
 DB_PORT=5432
@@ -148,7 +148,7 @@ Create production settings file:
 
 ```bash
 # Create production settings
-sudo nano /opt/aristay/aristay_backend/backend/settings_production.py
+sudo nano /opt/cosmo/cosmo_backend/backend/settings_production.py
 ```
 
 ```python
@@ -172,13 +172,13 @@ DATABASES = {
 }
 
 # Static files
-STATIC_ROOT = '/opt/aristay/staticfiles'
+STATIC_ROOT = '/opt/cosmo/staticfiles'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
 # Media files
-MEDIA_ROOT = '/opt/aristay/media'
+MEDIA_ROOT = '/opt/cosmo/media'
 MEDIA_URL = '/media/'
 
 # Security
@@ -202,7 +202,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/opt/aristay/logs/django.log',
+            'filename': '/opt/cosmo/logs/django.log',
         },
         'console': {
             'level': 'INFO',
@@ -221,7 +221,7 @@ Create Gunicorn configuration:
 
 ```bash
 # Create Gunicorn config
-sudo nano /opt/aristay/gunicorn.conf.py
+sudo nano /opt/cosmo/gunicorn.conf.py
 ```
 
 ```python
@@ -245,30 +245,30 @@ tmp_upload_dir = None
 
 ```bash
 # Activate virtual environment
-cd /opt/aristay
+cd /opt/cosmo
 source venv/bin/activate
 
 # Set environment
 export DJANGO_SETTINGS_MODULE=backend.settings_production
 
 # Run migrations
-python aristay_backend/manage.py migrate
+python cosmo_backend/manage.py migrate
 
 # Create superuser
-python aristay_backend/manage.py createsuperuser
+python cosmo_backend/manage.py createsuperuser
 
 # Collect static files
-python aristay_backend/manage.py collectstatic --noinput
+python cosmo_backend/manage.py collectstatic --noinput
 ```
 
 ### 2. Load Initial Data
 
 ```bash
 # Load initial data (if available)
-python aristay_backend/manage.py loaddata initial_data.json
+python cosmo_backend/manage.py loaddata initial_data.json
 
 # Create initial task groups
-python aristay_backend/manage.py assign_task_groups --auto-assign
+python cosmo_backend/manage.py assign_task_groups --auto-assign
 ```
 
 ## Web Server Configuration
@@ -279,7 +279,7 @@ Create Nginx configuration:
 
 ```bash
 # Create Nginx config
-sudo nano /etc/nginx/sites-available/aristay
+sudo nano /etc/nginx/sites-available/cosmo
 ```
 
 ```nginx
@@ -292,14 +292,14 @@ server {
 
     # Static files
     location /static/ {
-        alias /opt/aristay/staticfiles/;
+        alias /opt/cosmo/staticfiles/;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
 
     # Media files
     location /media/ {
-        alias /opt/aristay/media/;
+        alias /opt/cosmo/media/;
         expires 1y;
         add_header Cache-Control "public";
     }
@@ -336,7 +336,7 @@ Enable the site:
 
 ```bash
 # Enable site
-sudo ln -s /etc/nginx/sites-available/aristay /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/cosmo /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -362,21 +362,21 @@ Create systemd service:
 
 ```bash
 # Create service file
-sudo nano /etc/systemd/system/aristay.service
+sudo nano /etc/systemd/system/cosmo.service
 ```
 
 ```ini
 [Unit]
-Description=Aristay Property Management Gunicorn daemon
+Description=Cosmo Property Management Gunicorn daemon
 After=network.target
 
 [Service]
 User=www-data
 Group=www-data
-WorkingDirectory=/opt/aristay
-Environment="PATH=/opt/aristay/venv/bin"
+WorkingDirectory=/opt/cosmo
+Environment="PATH=/opt/cosmo/venv/bin"
 Environment="DJANGO_SETTINGS_MODULE=backend.settings_production"
-ExecStart=/opt/aristay/venv/bin/gunicorn --config gunicorn.conf.py backend.wsgi:application
+ExecStart=/opt/cosmo/venv/bin/gunicorn --config gunicorn.conf.py backend.wsgi:application
 ExecReload=/bin/kill -s HUP $MAINPID
 Restart=always
 
@@ -389,9 +389,9 @@ Start the service:
 ```bash
 # Enable and start service
 sudo systemctl daemon-reload
-sudo systemctl enable aristay
-sudo systemctl start aristay
-sudo systemctl status aristay
+sudo systemctl enable cosmo
+sudo systemctl start cosmo
+sudo systemctl status cosmo
 ```
 
 ### 2. Redis Service
@@ -418,8 +418,8 @@ Create log directory:
 
 ```bash
 # Create log directory
-sudo mkdir -p /opt/aristay/logs
-sudo chown www-data:www-data /opt/aristay/logs
+sudo mkdir -p /opt/cosmo/logs
+sudo chown www-data:www-data /opt/cosmo/logs
 ```
 
 ### 2. Log Rotation
@@ -428,11 +428,11 @@ Create logrotate configuration:
 
 ```bash
 # Create logrotate config
-sudo nano /etc/logrotate.d/aristay
+sudo nano /etc/logrotate.d/cosmo
 ```
 
 ```
-/opt/aristay/logs/*.log {
+/opt/cosmo/logs/*.log {
     daily
     missingok
     rotate 52
@@ -441,7 +441,7 @@ sudo nano /etc/logrotate.d/aristay
     notifempty
     create 644 www-data www-data
     postrotate
-        systemctl reload aristay
+        systemctl reload cosmo
     endscript
 }
 ```
@@ -452,23 +452,23 @@ Create health check script:
 
 ```bash
 # Create health check script
-sudo nano /opt/aristay/health_check.sh
+sudo nano /opt/cosmo/health_check.sh
 ```
 
 ```bash
 #!/bin/bash
 
 # Check if Gunicorn is running
-if ! systemctl is-active --quiet aristay; then
-    echo "ERROR: Aristay service is not running"
+if ! systemctl is-active --quiet cosmo; then
+    echo "ERROR: Cosmo service is not running"
     exit 1
 fi
 
 # Check if database is accessible
-cd /opt/aristay
+cd /opt/cosmo
 source venv/bin/activate
 export DJANGO_SETTINGS_MODULE=backend.settings_production
-if ! python aristay_backend/manage.py check --deploy; then
+if ! python cosmo_backend/manage.py check --deploy; then
     echo "ERROR: Django health check failed"
     exit 1
 fi
@@ -486,7 +486,7 @@ exit 0
 Make executable:
 
 ```bash
-sudo chmod +x /opt/aristay/health_check.sh
+sudo chmod +x /opt/cosmo/health_check.sh
 ```
 
 ## Backup Strategy
@@ -497,27 +497,27 @@ Create backup script:
 
 ```bash
 # Create backup script
-sudo nano /opt/aristay/backup_db.sh
+sudo nano /opt/cosmo/backup_db.sh
 ```
 
 ```bash
 #!/bin/bash
 
-BACKUP_DIR="/opt/aristay/backups"
+BACKUP_DIR="/opt/cosmo/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="$BACKUP_DIR/aristay_db_$DATE.sql"
+BACKUP_FILE="$BACKUP_DIR/cosmo_db_$DATE.sql"
 
 # Create backup directory
 mkdir -p $BACKUP_DIR
 
 # Create database backup
-pg_dump -h localhost -U aristay_user aristay_production > $BACKUP_FILE
+pg_dump -h localhost -U cosmo_user cosmo_production > $BACKUP_FILE
 
 # Compress backup
 gzip $BACKUP_FILE
 
 # Remove backups older than 30 days
-find $BACKUP_DIR -name "aristay_db_*.sql.gz" -mtime +30 -delete
+find $BACKUP_DIR -name "cosmo_db_*.sql.gz" -mtime +30 -delete
 
 echo "Database backup completed: $BACKUP_FILE.gz"
 ```
@@ -526,13 +526,13 @@ echo "Database backup completed: $BACKUP_FILE.gz"
 
 ```bash
 # Create media backup script
-sudo nano /opt/aristay/backup_media.sh
+sudo nano /opt/cosmo/backup_media.sh
 ```
 
 ```bash
 #!/bin/bash
 
-BACKUP_DIR="/opt/aristay/backups"
+BACKUP_DIR="/opt/cosmo/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
 MEDIA_BACKUP="$BACKUP_DIR/media_$DATE.tar.gz"
 
@@ -540,7 +540,7 @@ MEDIA_BACKUP="$BACKUP_DIR/media_$DATE.tar.gz"
 mkdir -p $BACKUP_DIR
 
 # Create media backup
-tar -czf $MEDIA_BACKUP -C /opt/aristay media/
+tar -czf $MEDIA_BACKUP -C /opt/cosmo media/
 
 # Remove backups older than 30 days
 find $BACKUP_DIR -name "media_*.tar.gz" -mtime +30 -delete
@@ -559,13 +559,13 @@ sudo crontab -e
 
 ```bash
 # Daily database backup at 2 AM
-0 2 * * * /opt/aristay/backup_db.sh
+0 2 * * * /opt/cosmo/backup_db.sh
 
 # Daily media backup at 3 AM
-0 3 * * * /opt/aristay/backup_media.sh
+0 3 * * * /opt/cosmo/backup_media.sh
 
 # Weekly full backup on Sunday at 1 AM
-0 1 * * 0 /opt/aristay/backup_db.sh && /opt/aristay/backup_media.sh
+0 1 * * 0 /opt/cosmo/backup_db.sh && /opt/cosmo/backup_media.sh
 ```
 
 ## Security Hardening
@@ -589,15 +589,15 @@ sudo ufw enable
 sudo apt install fail2ban
 
 # Create custom jail
-sudo nano /etc/fail2ban/jail.d/aristay.conf
+sudo nano /etc/fail2ban/jail.d/cosmo.conf
 ```
 
 ```ini
-[aristay]
+[cosmo]
 enabled = true
 port = http,https
-filter = aristay
-logpath = /opt/aristay/logs/django.log
+filter = cosmo
+logpath = /opt/cosmo/logs/django.log
 maxretry = 5
 bantime = 3600
 findtime = 600
@@ -607,7 +607,7 @@ findtime = 600
 
 ```bash
 # Create security update script
-sudo nano /opt/aristay/security_update.sh
+sudo nano /opt/cosmo/security_update.sh
 ```
 
 ```bash
@@ -617,13 +617,13 @@ sudo nano /opt/aristay/security_update.sh
 apt update && apt upgrade -y
 
 # Update Python packages
-cd /opt/aristay
+cd /opt/cosmo
 source venv/bin/activate
 pip install --upgrade pip
-pip install --upgrade -r aristay_backend/requirements.txt
+pip install --upgrade -r cosmo_backend/requirements.txt
 
 # Restart services
-systemctl restart aristay
+systemctl restart cosmo
 systemctl restart nginx
 
 echo "Security updates completed"
@@ -636,10 +636,10 @@ echo "Security updates completed"
 1. **Service won't start**
    ```bash
    # Check service status
-   sudo systemctl status aristay
+   sudo systemctl status cosmo
    
    # Check logs
-   sudo journalctl -u aristay -f
+   sudo journalctl -u cosmo -f
    ```
 
 2. **Database connection issues**
@@ -648,15 +648,15 @@ echo "Security updates completed"
    sudo -u postgres psql -c "SELECT 1;"
    
    # Check Django database connection
-   cd /opt/aristay
+   cd /opt/cosmo
    source venv/bin/activate
-   python aristay_backend/manage.py dbshell
+   python cosmo_backend/manage.py dbshell
    ```
 
 3. **Static files not loading**
    ```bash
    # Recollect static files
-   python aristay_backend/manage.py collectstatic --noinput
+   python cosmo_backend/manage.py collectstatic --noinput
    
    # Check Nginx configuration
    sudo nginx -t
@@ -665,8 +665,8 @@ echo "Security updates completed"
 4. **Permission issues**
    ```bash
    # Fix ownership
-   sudo chown -R www-data:www-data /opt/aristay
-   sudo chmod -R 755 /opt/aristay
+   sudo chown -R www-data:www-data /opt/cosmo
+   sudo chmod -R 755 /opt/cosmo
    ```
 
 ### Performance Monitoring
@@ -720,9 +720,9 @@ echo "Security updates completed"
 
 For deployment support:
 
-- **Documentation**: https://docs.aristay.com/deployment
-- **Support Email**: deployment-support@aristay.com
-- **Emergency Contact**: +1-555-ARISTAY
+- **Documentation**: https://docs.cosmo.com/deployment
+- **Support Email**: deployment-support@cosmo-management.cloud
+- **Emergency Contact**: +1-555-Cosmo
 
 ---
 *Deployment Guide generated on September 12, 2025*  

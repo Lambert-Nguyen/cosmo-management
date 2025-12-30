@@ -1,4 +1,4 @@
-# AriStay Chat System - Quick Start Guide
+# Cosmo Chat System - Quick Start Guide
 
 ## 🎯 What's Been Implemented
 
@@ -22,7 +22,7 @@
 
 ### 1. Install Dependencies
 ```bash
-cd aristay_backend
+cd cosmo_backend
 pip install -r requirements.txt
 ```
 
@@ -144,7 +144,7 @@ asyncio.run(test_chat())
 - `backend/settings.py` - Added `channels` to `INSTALLED_APPS`, configured `CHANNEL_LAYERS`
 - `api/models.py` - Import chat models
 - `requirements.txt` - Added chat dependencies
-- `aristay_backend/requirements.txt` - Added chat dependencies
+- `cosmo_backend/requirements.txt` - Added chat dependencies
 
 ---
 
@@ -395,7 +395,7 @@ worker: python manage.py runworker channels
 # Required for production
 REDIS_URL=redis://...
 USE_CLOUDINARY=true
-ALLOWED_HOSTS=your-domain.com,aristay-internal.cloud
+ALLOWED_HOSTS=your-domain.com,cosmo-management.cloud
 ```
 
 ### Nginx Configuration

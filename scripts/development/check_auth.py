@@ -6,7 +6,7 @@ import os
 import sys
 import django
 
-sys.path.append('/Users/duylam1407/Workspace/SJSU/aristay_app/aristay_backend')
+sys.path.append('cosmo_backend')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 

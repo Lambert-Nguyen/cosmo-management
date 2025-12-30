@@ -34,7 +34,7 @@ The Task model was refactored to use `property_ref` instead of `property` as the
 ## 🔧 Fix Implementation
 
 ### 1. Manager Charts Dashboard Fix
-**File**: `aristay_backend/api/views.py` (line ~948-950)
+**File**: `cosmo_backend/api/views.py` (line ~948-950)
 
 **Before**:
 ```python
@@ -65,7 +65,7 @@ property_name = item['property_ref__name'] # ✅ Correct key access
 ```
 
 ### 2. Admin Charts Dashboard Fix  
-**File**: `aristay_backend/api/views.py` (line ~1194)
+**File**: `cosmo_backend/api/views.py` (line ~1194)
 
 **Before**:
 ```python
@@ -86,7 +86,7 @@ property_name = item['property_ref__name'] # ✅ Correct key
 ```
 
 ### 3. Search Fields Fix
-**File**: `aristay_backend/api/views.py` 
+**File**: `cosmo_backend/api/views.py` 
 
 **Fixed BookingViewSet search field**:
 ```python

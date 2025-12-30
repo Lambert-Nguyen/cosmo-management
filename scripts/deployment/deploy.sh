@@ -12,4 +12,4 @@ git checkout deployment-clean
 git push heroku deployment-clean:main
 
 echo "✅ Deployment complete!"
-echo "🌐 App URL: https://aristay-internal-backend-72ffd16c9352.herokuapp.com/"
+echo "🌐 App URL: https://cosmo-management-backend.herokuapp.com/"

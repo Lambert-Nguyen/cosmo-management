@@ -103,7 +103,7 @@ This index provides a comprehensive guide to all documentation created for the P
 ```bash
 # Clone repository
 git clone <repository-url>
-cd aristay_app
+cd cosmo-management
 
 # Setup virtual environment
 python -m venv .venv
@@ -149,7 +149,7 @@ python -m pytest tests/api/ -v
 ### Environment Variables
 ```bash
 # Database
-POSTGRES_DB=aristay
+POSTGRES_DB=cosmo
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 

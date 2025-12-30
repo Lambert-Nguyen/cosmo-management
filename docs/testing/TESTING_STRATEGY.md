@@ -1,10 +1,10 @@
 # Testing Documentation
 
-This document describes the comprehensive testing strategy implemented for the Aristay project.
+This document describes the comprehensive testing strategy implemented for the Cosmo Management project.
 
 ## 📋 Testing Overview
 
-The Aristay project implements a multi-layered testing approach ensuring code quality, functionality, and production readiness.
+The Cosmo Management project implements a multi-layered testing approach ensuring code quality, functionality, and production readiness.
 
 ### Test Categories
 
@@ -135,26 +135,26 @@ python run_tests.py --help
 
 ```bash
 # Production hardening tests
-cd aristay_backend && python ../tests/production/test_production_hardening.py
+cd cosmo_backend && python ../tests/production/test_production_hardening.py
 
 # Comprehensive phase testing
-cd aristay_backend && python ../tests/integration/test_final_phases.py
+cd cosmo_backend && python ../tests/integration/test_final_phases.py
 
 # Production readiness verification
-cd aristay_backend && python ../tests/integration/verify_production_readiness.py
+cd cosmo_backend && python ../tests/integration/verify_production_readiness.py
 ```
 
 ### Django Test Framework
 
 ```bash
 # Run Django's built-in tests
-cd aristay_backend && python manage.py test
+cd cosmo_backend && python manage.py test
 
 # Run specific app tests
-cd aristay_backend && python manage.py test api
+cd cosmo_backend && python manage.py test api
 
 # Run with coverage
-cd aristay_backend && coverage run manage.py test && coverage report
+cd cosmo_backend && coverage run manage.py test && coverage report
 ```
 
 ## 📊 Test Results Interpretation
@@ -234,4 +234,4 @@ The project includes pre-commit hooks for:
 
 ---
 
-*This testing documentation ensures comprehensive validation of the Aristay system's functionality, reliability, and production readiness.*
+*This testing documentation ensures comprehensive validation of the Cosmo system's functionality, reliability, and production readiness.*

@@ -9,7 +9,7 @@
 regex:django-insecure-[0-9A-Za-z_+\-\!\(\)\.\#@\$%&\*]{20,}==>REDACTED
 
 # If you know exact SMTP usernames/passwords that leaked, put the EXACT strings here:
-# MS_T2FlZ8@aristay-internal.cloud==>REDACTED
+# MS_T2FlZ8@cosmo-management.cloud==>REDACTED
 # mssp.Yun5OWw.v69oxl53kzkg785k.9UyPJrd==>REDACTED
 
 # Firebase/FCM examples (replace with real ones if you know them):

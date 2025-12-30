@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Cosmo Manager Console{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/manager-admin-base-site.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div class="branding-container">
+    <div class="branding-logo-section">
+        <img src="{% static 'images/cosmo_logo.jpg' %}"
+             alt="Cosmo"
+             class="branding-logo">
+        <h1 id="site-name" class="site-title">
+            <a href="/manager/" class="site-title-link">
+                Cosmo Manager Console
+            </a>
+        </h1>
+    </div>
+
+    <div class="branding-nav-section">
+        <!-- Portal Home Link -->
+        <a href="/api/portal/" class="nav-link">
+            🏠 Portal Home
+        </a>
+
+        <!-- Admin Console (if superuser) -->
+        {% if user.is_superuser %}
+        <a href="/admin/" class="nav-link">
+            ⚙️ Admin
+        </a>
+        {% endif %}
+
+        <!-- User info -->
+        <span class="user-info">
+            {{ user.get_full_name|default:user.username }}
+        </span>
+    </div>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<script src="{% static 'js/pages/manager-admin-base-site.js' %}" defer></script>
+{% endblock %}

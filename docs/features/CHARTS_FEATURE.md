@@ -1,7 +1,7 @@
 # 📊 Charts Dashboard Feature
 
 ## Overview
-Added comprehensive analytics dashboard to the AriStay Manager console with interactive charts showing task distribution by status and property.
+Added comprehensive analytics dashboard to the Cosmo Manager console with interactive charts showing task distribution by status and property.
 
 ## Features Implemented
 

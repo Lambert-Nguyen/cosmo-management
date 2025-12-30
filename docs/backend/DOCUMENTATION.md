@@ -1,8 +1,8 @@
-# AriStay MVP Phase 1 - Complete Documentation
+# Cosmo MVP Phase 1 - Complete Documentation
 
 ## 📋 Overview
 
-AriStay is a comprehensive property management system designed for cleaning, maintenance, inventory, and staff coordination. This documentation covers the MVP Phase 1 implementation, which provides the foundation for property-centric task management with specialized workflows.
+Cosmo is a comprehensive property management system designed for cleaning, maintenance, inventory, and staff coordination. This documentation covers the MVP Phase 1 implementation, which provides the foundation for property-centric task management with specialized workflows.
 
 ## 🏗️ System Architecture
 
@@ -109,7 +109,7 @@ ChecklistItem.objects.create(
 
 **Custom Admin Classes**:
 ```python
-class AriStayUserAdmin(DjangoUserAdmin):
+class CosmoUserAdmin(DjangoUserAdmin):
     """Superuser admin with full password management capabilities"""
 
 class UserManagerAdmin(DjangoUserAdmin):
@@ -278,7 +278,7 @@ python manage.py generate_scheduled_tasks --dry-run
 #### Management Command Setup
 ```bash
 # Add to crontab for daily execution
-0 6 * * * cd /path/to/aristay_backend && python manage.py generate_scheduled_tasks
+0 6 * * * cd /path/to/cosmo_backend && python manage.py generate_scheduled_tasks
 ```
 
 ### 11. 🗂️ Lost & Found System
@@ -333,7 +333,7 @@ python manage.py generate_scheduled_tasks --dry-run
 - **Dual admin sites**: Superuser (`/admin/`) and Manager (`/manager/`) with custom namespaces
 - **Password management**: Role-based password reset and change capabilities
 - **Permission boundaries**: Strict role-based access control with granular permissions
-- **Custom admin classes**: `AriStayUserAdmin` and `UserManagerAdmin` with specialized features
+- **Custom admin classes**: `CosmoUserAdmin` and `UserManagerAdmin` with specialized features
 - **URL pattern fixes**: Resolved namespace conflicts and NoReverseMatch errors
 - **Inline editing**: Related model management with security restrictions
 - **Visual indicators**: Color-coded status displays and permission-aware UI elements
@@ -443,10 +443,10 @@ python manage.py migrate
 ### Cron Jobs
 ```bash
 # Daily task generation at 6 AM
-0 6 * * * cd /path/to/aristay_backend && python manage.py generate_scheduled_tasks
+0 6 * * * cd /path/to/cosmo_backend && python manage.py generate_scheduled_tasks
 
 # Weekly inventory reporting (optional)
-0 8 * * 1 cd /path/to/aristay_backend && python manage.py send_inventory_report
+0 8 * * 1 cd /path/to/cosmo_backend && python manage.py send_inventory_report
 ```
 
 ### Monitoring
@@ -558,7 +558,7 @@ This system metrics dashboard provides essential monitoring capabilities for mai
 
 **2. Admin Site URL Pattern Fixes**
 - ✅ **Namespace Conflicts**: Resolved `NoReverseMatch` errors in admin URL patterns
-- ✅ **Custom Admin Classes**: Implemented `AriStayUserAdmin` and `UserManagerAdmin` with proper inheritance
+- ✅ **Custom Admin Classes**: Implemented `CosmoUserAdmin` and `UserManagerAdmin` with proper inheritance
 - ✅ **URL Pattern Consistency**: Standardized URL patterns across superuser and manager admin sites
 - ✅ **Template Context**: Fixed template context issues with password reset buttons
 

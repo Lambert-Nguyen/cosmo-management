@@ -31,7 +31,7 @@ Successfully implemented a comprehensive local development environment that mirr
 ## Technical Implementation
 
 ### Database Configuration
-- **Local Development**: PostgreSQL (`aristay_local`)
+- **Local Development**: PostgreSQL (`cosmo_db`)
 - **Production**: Heroku Postgres
 - **Settings**: Separate local and production configurations
 - **Migrations**: Fully compatible between environments
@@ -116,7 +116,7 @@ docs/
 ```bash
 # Clone repository
 git clone <repository-url>
-cd aristay_app
+cd cosmo-management
 
 # Set up local development
 ./scripts/development/setup_local_dev.sh
@@ -139,7 +139,7 @@ cd aristay_app
 ### Database Management
 ```bash
 # Run migrations
-cd aristay_backend
+cd cosmo_backend
 python manage.py migrate --settings=backend.settings_local
 
 # Create superuser
@@ -149,7 +149,7 @@ python manage.py createsuperuser --settings=backend.settings_local
 ## Environment Configuration
 
 ### Local Development
-- **Database**: PostgreSQL (`aristay_local`)
+- **Database**: PostgreSQL (`cosmo_db`)
 - **Host**: 127.0.0.1:5432
 - **User**: postgres
 - **Settings**: `backend.settings_local`
@@ -264,7 +264,7 @@ This implementation eliminates the SQLite vs PostgreSQL compatibility issues and
 - `scripts/development/dev_local.sh`
 - `scripts/deployment/deploy.sh`
 - `scripts/README.md`
-- `aristay_backend/backend/settings_local.py`
+- `cosmo_backend/backend/settings_local.py`
 
 ### Modified Files
 - `docs/DOCUMENTATION_INDEX.md` (updated with new documentation)

@@ -171,7 +171,7 @@ All files                 |   72.29 |    58.82 |   71.51 |   72.88 |
 **Spy Setup Pattern**:
 ```javascript
 import { jest, describe, test, beforeEach, afterEach, expect } from '@jest/globals';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 describe('Module', () => {
   let getSpy, postSpy, requestSpy;
@@ -216,7 +216,7 @@ describe('Module', () => {
 
 ### Django Test Fixtures ✅
 
-Created `aristay_backend/fixtures/test_data.json` with:
+Created `cosmo_backend/fixtures/test_data.json` with:
 - 2 test users (staff + manager)
 - 1 test property
 - 3 test tasks (pending, in-progress, completed)
@@ -396,7 +396,7 @@ Gap: -17.51 percentage points
 
 ```bash
 # Start Django test server
-cd aristay_backend && python manage.py runserver 8000
+cd cosmo_backend && python manage.py runserver 8000
 
 # Load fixtures
 python manage.py loaddata fixtures/test_data.json

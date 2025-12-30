@@ -1,0 +1,169 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% load timezone_tags %}
+
+{% block title %}System Logs Viewer | Cosmo Administration{% endblock %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/pages/admin-system-logs.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <!-- Header -->
+    <div class="logs-header">
+        <a href="/api/admin/metrics/" class="back-link">
+            ← Back to Metrics
+        </a>
+        <div class="auto-refresh" id="auto-refresh-status">
+            🔄 Auto-refresh: OFF
+        </div>
+        <h1 class="logs-title">📝 System Logs Viewer</h1>
+        <p class="logs-subtitle">
+            Real-time log monitoring and analysis
+        </p>
+        <p class="logs-timezone">
+            Log timestamps shown in Tampa, FL timezone
+        </p>
+    </div>
+
+    {% if error_message %}
+    <div class="error-message">
+        ⚠️ {{ error_message }}
+    </div>
+    {% endif %}
+
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+        <form method="get" id="log-controls">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label" for="file">Log File</label>
+                    <select name="file" id="file" class="control-input">
+                        {% for file in available_files %}
+                        <option value="{{ file }}" {% if file == current_file %}selected{% endif %}>
+                            {{ file }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="lines">Lines to Show</label>
+                    <select name="lines" id="lines" class="control-input">
+                        <option value="50" {% if lines_shown == 50 %}selected{% endif %}>Last 50 lines</option>
+                        <option value="100" {% if lines_shown == 100 %}selected{% endif %}>Last 100 lines</option>
+                        <option value="200" {% if lines_shown == 200 %}selected{% endif %}>Last 200 lines</option>
+                        <option value="500" {% if lines_shown == 500 %}selected{% endif %}>Last 500 lines</option>
+                        <option value="1000" {% if lines_shown == 1000 %}selected{% endif %}>Last 1000 lines</option>
+                        <option value="0" {% if lines_shown == 0 %}selected{% endif %}>All lines</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="level">Log Level Filter</label>
+                    <select name="level" id="level" class="control-input">
+                        <option value="" {% if not level_filter %}selected{% endif %}>All Levels</option>
+                        {% for log_level in log_levels %}
+                        <option value="{{ log_level }}" {% if level_filter == log_level %}selected{% endif %}>
+                            {{ log_level }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="search">Search Text</label>
+                    <input type="text" name="search" id="search" class="control-input" 
+                           value="{{ search_term }}" placeholder="Search log content...">
+                </div>
+
+                <div class="control-group">
+                    <button type="submit" class="apply-button">
+                        🔍 Apply Filters
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- File Tabs -->
+    {% if available_files %}
+    <div class="file-tabs">
+        {% for file in available_files %}
+        <a href="?file={{ file }}&lines={{ lines_shown }}&level={{ level_filter }}&search={{ search_term }}" 
+           class="file-tab {% if file == current_file %}active{% endif %}">
+            {{ file }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Log Content -->
+    {% if log_content %}
+    <div class="logs-container" id="logs-container">
+        <div class="stats-bar">
+            <div>
+                Showing {{ log_content|length }} lines from <strong>{{ current_file }}</strong>
+                {% if search_term %} (filtered by "{{ search_term }}"){% endif %}
+                {% if level_filter %} ({{ level_filter }} level){% endif %}
+            </div>
+            <div class="stats-bar-controls">
+                <button class="stats-button download" data-action="download-logs">
+                    💾 Download
+                </button>
+                <button class="stats-button" data-action="scroll-bottom">
+                    ⬇️ Bottom
+                </button>
+                <button class="stats-button" data-action="scroll-top">
+                    ⬆️ Top
+                </button>
+            </div>
+        </div>
+
+        {% for line in log_content %}
+        <div class="log-line log-level-{{ line.level }}">
+            <div class="line-number">{{ line.number }}</div>
+            <div class="log-content">{{ line.content }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="logs-container">
+        <div class="no-logs">
+            {% if search_term or level_filter %}
+                🔍 No log entries found matching your filters
+                <br><br>
+                <a href="?file={{ current_file }}" class="no-logs-link">Clear filters</a>
+            {% else %}
+                📝 No log entries found in {{ current_file }}
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <a href="/api/admin/metrics/" class="apply-button">
+            📊 Back to Metrics
+        </a>
+        <a href="/api/admin/recovery/" class="apply-button warning">
+            🚨 Crash Recovery
+        </a>
+        <button class="apply-button purple" data-action="download-logs">
+            💾 Download Logs
+        </button>
+        <button class="apply-button success" data-action="refresh-logs">
+            🔄 Refresh Logs
+        </button>
+    </div>
+</div>
+
+<script>
+// Configuration data for JS
+window.logsCurrentFile = '{{ current_file }}';
+window.logsSearchTerm = '{{ search_term }}';
+window.logsLevelFilter = '{{ level_filter }}';
+</script>
+<script src="{% static 'js/pages/admin-system-logs.js' %}"></script>
+{% endblock %}

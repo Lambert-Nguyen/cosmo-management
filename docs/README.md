@@ -1,13 +1,13 @@
-# Aristay Documentation
+# Cosmo Management Documentation
 
-**Last Updated**: December 21, 2025
+**Last Updated**: December 26, 2025
 **Project Status**: ✅ UI Refactoring 100% COMPLETE
-**Current Branch**: refactor_01
+**Current Branch**: repo-set-up-name-change
 **Version**: 3.0
 
 ## 📚 Documentation Overview
 
-This directory contains comprehensive, up-to-date documentation for the Aristay property management platform. Recent cleanup (Dec 21, 2025) archived 35+ obsolete documents and removed 15+ duplicates.
+This directory contains comprehensive, up-to-date documentation for the Cosmo Management property management platform. Recent cleanup (Dec 21, 2025) archived 35+ obsolete documents and removed 15+ duplicates.
 
 **Active Documentation**: 210 files
 **Archived Documentation**: 35 files
@@ -16,7 +16,7 @@ This directory contains comprehensive, up-to-date documentation for the Aristay 
 
 ## 🚀 Quick Start
 
-### New to Aristay?
+### New to Cosmo Management?
 1. **[CURRENT_DOCUMENTATION.md](CURRENT_DOCUMENTATION.md)** - Quick reference guide (Nov 23, 2025)
 2. **[development/LOCAL_DEVELOPMENT_SETUP.md](development/LOCAL_DEVELOPMENT_SETUP.md)** - Set up local environment
 3. **[refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md](refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md)** - Current UI refactoring status
@@ -141,7 +141,7 @@ Completed work and superseded documentation:
 ### Run Local Development Server
 ```bash
 # From project root, navigate to backend
-cd aristay_backend
+cd cosmo_backend
 
 # Run Django development server
 python manage.py runserver --settings=backend.settings_local
@@ -220,6 +220,6 @@ Recent cleanup actions:
 
 ---
 
-**Aristay** - Modern Property Management Platform
+**Cosmo Management** - Modern Property Management Platform
 Built with Django, React, and modern web standards
 Enterprise-ready with comprehensive testing and documentation

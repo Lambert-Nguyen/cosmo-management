@@ -9,10 +9,10 @@ Usage:
     python cleanup_cron.py --target-mb 100  # Keep only enough files to stay under 100MB
 
 Add to crontab for weekly cleanup:
-    0 2 * * 0 cd /path/to/aristay_backend && python cleanup_cron.py --days 30
+    0 2 * * 0 cd /path/to/cosmo_backend && python cleanup_cron.py --days 30
 
 Add to crontab for daily size-based cleanup:
-    0 1 * * * cd /path/to/aristay_backend && python cleanup_cron.py --target-mb 50
+    0 1 * * * cd /path/to/cosmo_backend && python cleanup_cron.py --target-mb 50
 """
 
 import os

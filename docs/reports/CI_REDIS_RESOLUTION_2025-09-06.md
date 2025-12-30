@@ -46,7 +46,7 @@ else:
 # .github/workflows/backend-ci.yml
 env:
   DJANGO_SETTINGS_MODULE: backend.settings
-  PYTHONPATH: ${{ github.workspace }}/aristay_backend
+  PYTHONPATH: ${{ github.workspace }}/cosmo_backend
   SECRET_KEY: dummy
   DEBUG: '0'
   CI: 'true'  # ← Added to trigger test cache backend
@@ -72,10 +72,10 @@ pytestmark = pytest.mark.skipif(
 ## Files Modified
 
 ### Requirements
-- `aristay_backend/requirements.txt`: Added redis and django-redis packages
+- `cosmo_backend/requirements.txt`: Added redis and django-redis packages
 
 ### Configuration
-- `aristay_backend/backend/settings.py`: Smart cache backend selection
+- `cosmo_backend/backend/settings.py`: Smart cache backend selection
 - `.github/workflows/backend-ci.yml`: Added CI environment variable
 
 ### Test Organization

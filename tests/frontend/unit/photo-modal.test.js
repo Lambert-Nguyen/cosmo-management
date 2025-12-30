@@ -3,8 +3,8 @@
  */
 
 import { jest, describe, test, beforeEach, expect } from '@jest/globals';
-import { PhotoModal } from '../../../aristay_backend/static/js/modules/photo-modal.js';
-import { APIClient } from '../../../aristay_backend/static/js/core/api-client.js';
+import { PhotoModal } from '../../../cosmo_backend/static/js/modules/photo-modal.js';
+import { APIClient } from '../../../cosmo_backend/static/js/core/api-client.js';
 
 describe('PhotoModal', () => {
   let requestSpy;

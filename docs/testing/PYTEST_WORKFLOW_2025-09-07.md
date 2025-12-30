@@ -1,4 +1,4 @@
-# Aristay PyTest Workflow Guide
+# Cosmo PyTest Workflow Guide
 
 **Date**: September 7, 2025  
 **Status**: ✅ UPDATED - Test Organization Complete
@@ -66,7 +66,7 @@ python -m pytest tests/security/ tests/api/ tests/booking/ tests/production/ -q
 ```ini
 [pytest]
 DJANGO_SETTINGS_MODULE = backend.settings
-pythonpath = aristay_backend
+pythonpath = cosmo_backend
 testpaths = tests
 python_files = test_*.py *_test.py
 addopts = -q --tb=short --ignore=tests/legacy_validations/

@@ -17,13 +17,13 @@ python scripts/add_env_parameter.py production
 ### **Run Application**
 ```bash
 # Start development server
-cd aristay_backend && python manage.py runserver
+cd cosmo_backend && python manage.py runserver
 
 # Run tests
 python -m pytest
 
 # Check settings
-cd aristay_backend && python manage.py check
+cd cosmo_backend && python manage.py check
 ```
 
 ## 📋 **Environment Checklist**
@@ -31,7 +31,7 @@ cd aristay_backend && python manage.py check
 ### **Development Setup**
 - [ ] Run `python scripts/add_env_parameter.py development`
 - [ ] Verify PostgreSQL is running
-- [ ] Run `cd aristay_backend && python manage.py check`
+- [ ] Run `cd cosmo_backend && python manage.py check`
 - [ ] Start server with `python manage.py runserver`
 
 ### **Testing Setup**
@@ -58,7 +58,7 @@ cd aristay_backend && python manage.py check
    - Solution: Run `python scripts/manage_env.py testing`
 
 3. **Settings not loading**
-   - Solution: Check `.env` file exists in `aristay_backend/` directory
+   - Solution: Check `.env` file exists in `cosmo_backend/` directory
 
 4. **Database connection issues**
    - Solution: Verify PostgreSQL is running and credentials are correct
@@ -69,15 +69,15 @@ cd aristay_backend && python manage.py check
 python scripts/add_env_parameter.py --show
 
 # Check Django settings
-cd aristay_backend && python manage.py check
+cd cosmo_backend && python manage.py check
 
 # Check which settings file is being used
-cd aristay_backend && python -c "from django.conf import settings; print(settings.SETTINGS_MODULE)"
+cd cosmo_backend && python -c "from django.conf import settings; print(settings.SETTINGS_MODULE)"
 ```
 
 ## 📁 **File Locations**
 
-- **Environment file**: `aristay_backend/.env`
-- **Settings files**: `aristay_backend/backend/settings_*.py`
+- **Environment file**: `cosmo_backend/.env`
+- **Settings files**: `cosmo_backend/backend/settings_*.py`
 - **Management scripts**: `scripts/add_env_parameter.py`
-- **Example config**: `aristay_backend/backend/env.example`
+- **Example config**: `cosmo_backend/backend/env.example`

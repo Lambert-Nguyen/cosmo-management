@@ -200,7 +200,7 @@ This directory contains phase-by-phase reports for the comprehensive Django UI r
 
 1. **Create Unit Tests for New Modules**
    ```bash
-   cd aristay_backend
+   cd cosmo_backend
    # Create test files (est. 1,100 lines, 110+ tests)
    touch tests/frontend/unit/checklist-manager.test.js
    touch tests/frontend/unit/photo-manager.test.js
@@ -246,7 +246,7 @@ npm run test:e2e:ui        # E2E with UI
 npm run test:e2e:debug     # E2E debug mode
 
 # Django
-cd aristay_backend
+cd cosmo_backend
 python manage.py runserver
 python manage.py test
 

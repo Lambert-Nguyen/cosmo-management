@@ -10,7 +10,7 @@ This document reviews the chat implementation branch and identifies issues that 
 
 **Problem**: The WebSocket URL pattern used a loose regex `[0-9a-f-]+` which could match invalid UUIDs or cause routing issues.
 
-**Location**: `aristay_backend/api/routing.py`
+**Location**: `cosmo_backend/api/routing.py`
 
 **Fix**: Updated to strict UUID pattern matching:
 ```python
@@ -29,7 +29,7 @@ re_path(r'ws/chat/(?P<room_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0
 
 **Problem**: The template called `{{ room.get_display_name }}` without passing the `for_user` parameter, which is required for direct messages to show the correct recipient name.
 
-**Location**: `aristay_backend/api/templates/chat/chatbox.html` and `aristay_backend/api/views.py`
+**Location**: `cosmo_backend/api/templates/chat/chatbox.html` and `cosmo_backend/api/views.py`
 
 **Fix**: 
 - Modified `chat_view()` to pre-process room display names with user context
@@ -44,7 +44,7 @@ re_path(r'ws/chat/(?P<room_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0
 
 **Problem**: The query string parsing in `authenticate_user()` used simple string splitting which could fail with URL-encoded tokens or malformed query strings.
 
-**Location**: `aristay_backend/api/consumers.py`
+**Location**: `cosmo_backend/api/consumers.py`
 
 **Fix**: 
 - Use `urllib.parse.parse_qs()` for proper query string parsing
@@ -175,10 +175,10 @@ Verify in `backend/settings.py`:
 
 ## 📝 Files Modified
 
-1. `aristay_backend/api/routing.py` - Fixed WebSocket URL pattern
-2. `aristay_backend/api/views.py` - Added room display name preprocessing
-3. `aristay_backend/api/consumers.py` - Improved query string parsing
-4. `aristay_backend/api/templates/chat/chatbox.html` - Updated template to use pre-processed data
+1. `cosmo_backend/api/routing.py` - Fixed WebSocket URL pattern
+2. `cosmo_backend/api/views.py` - Added room display name preprocessing
+3. `cosmo_backend/api/consumers.py` - Improved query string parsing
+4. `cosmo_backend/api/templates/chat/chatbox.html` - Updated template to use pre-processed data
 
 ---
 

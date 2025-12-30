@@ -158,7 +158,7 @@ class CalendarTemplateTestCase(TestCase):
         # CSS is now loaded as an external stylesheet
         self.assertContains(response, 'css/pages/portal-calendar.css')
 
-        css_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
+        css_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
         css = css_path.read_text(encoding='utf-8')
         self.assertIn('event-task', css)
         self.assertIn('event-booking', css)
@@ -219,7 +219,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
         js = js_path.read_text(encoding='utf-8')
         self.assertIn('console.error', js)
     
@@ -230,7 +230,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
         js = js_path.read_text(encoding='utf-8')
         self.assertIn('console.error', js)
     
@@ -339,7 +339,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
         js = js_path.read_text(encoding='utf-8')
         self.assertIn('#007bff', js)  # Default event color
         self.assertIn('border-left: 3px solid', js)
@@ -353,7 +353,7 @@ class CalendarTemplateTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         
         self.assertContains(response, 'calendar-container')
-        css_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
+        css_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
         css = css_path.read_text(encoding='utf-8')
         self.assertIn('text-overflow: ellipsis', css)
         self.assertIn('overflow: hidden', css)
@@ -366,7 +366,7 @@ class CalendarTemplateTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         
         self.assertContains(response, 'calendar-container')
-        css_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
+        css_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'css' / 'pages' / 'portal-calendar.css'
         css = css_path.read_text(encoding='utf-8')
         self.assertIn('cursor: pointer', css)
     
@@ -377,7 +377,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
         js = js_path.read_text(encoding='utf-8')
         self.assertIn('toLocaleDateString', js)
         self.assertIn('toISOString', js)
@@ -389,7 +389,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
         js = js_path.read_text(encoding='utf-8')
         self.assertIn('addEventListener', js)
         self.assertIn('preventDefault', js)
@@ -417,7 +417,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
         js = js_path.read_text(encoding='utf-8')
         self.assertIn('console.log', js)
         self.assertIn('console.error', js)
@@ -429,7 +429,7 @@ class CalendarTemplateTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
         
-        js_path = Path(__file__).resolve().parents[2] / 'aristay_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
+        js_path = Path(__file__).resolve().parents[2] / 'cosmo_backend' / 'static' / 'js' / 'pages' / 'portal-calendar.js'
         js = js_path.read_text(encoding='utf-8')
         self.assertIn('console.error', js)
         self.assertIn('Error loading events', js)

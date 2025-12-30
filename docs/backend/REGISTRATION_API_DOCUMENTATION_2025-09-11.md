@@ -1,4 +1,4 @@
-# Registration API Documentation - AriStay
+# Registration API Documentation - Cosmo
 
 **API Version:** 1.0  
 **Last Updated:** September 11, 2025  
@@ -6,7 +6,7 @@
 
 ## Overview
 
-The AriStay Registration API provides endpoints for user registration with invite code validation. This API supports both web and mobile applications with comprehensive validation and error handling.
+The Cosmo Registration API provides endpoints for user registration with invite code validation. This API supports both web and mobile applications with comprehensive validation and error handling.
 
 ## Authentication
 
@@ -419,7 +419,7 @@ Import the following Postman collection for API testing:
 ```json
 {
   "info": {
-    "name": "AriStay Registration API",
+    "name": "Cosmo Registration API",
     "description": "API endpoints for user registration with invite codes"
   },
   "item": [
@@ -493,6 +493,6 @@ For technical support or questions about the Registration API:
 
 ---
 
-**API Documentation maintained by:** AriStay Development Team  
+**API Documentation maintained by:** Cosmo Development Team  
 **Last Updated:** September 11, 2025  
 **Version:** 1.0

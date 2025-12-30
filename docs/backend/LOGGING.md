@@ -1,8 +1,8 @@
-# 📊 AriStay Backend Logging System
+# 📊 Cosmo Backend Logging System
 
 ## 🚀 **Production-Ready Logging & Monitoring**
 
-This document describes the comprehensive logging and monitoring system implemented for the AriStay backend, designed for production environments with proper error tracking, performance monitoring, and security logging.
+This document describes the comprehensive logging and monitoring system implemented for the Cosmo backend, designed for production environments with proper error tracking, performance monitoring, and security logging.
 
 ---
 
@@ -77,7 +77,7 @@ Each log entry includes:
   "thread_name": "MainThread",
   "environment": {
     "debug": false,
-    "service": "aristay-backend",
+    "service": "cosmo-backend",
     "version": "1.0.0"
   },
   "request": {
@@ -189,7 +189,7 @@ curl http://localhost:8000/api/health/
 {
   "status": "healthy",
   "timestamp": "2025-08-28T00:13:17Z",
-  "service": "aristay-backend",
+  "service": "cosmo-backend",
   "version": "1.0.0"
 }
 ```
@@ -296,8 +296,8 @@ export SENTRY_DSN="your-sentry-dsn"
 ### **4. Set Up Log Rotation** (systemd example)
 ```bash
 # Create logrotate configuration
-sudo cat > /etc/logrotate.d/aristay << EOF
-/var/log/aristay/*.log {
+sudo cat > /etc/logrotate.d/cosmo << EOF
+/var/log/cosmo/*.log {
     daily
     missingok
     rotate 30
@@ -421,7 +421,7 @@ logger.info('User action', extra={
 
 ## 🏆 **Summary**
 
-The AriStay logging system provides enterprise-grade monitoring with:
+The Cosmo logging system provides enterprise-grade monitoring with:
 
 - ✅ **Production-ready** structured logging
 - ✅ **Automatic rotation** and space management
@@ -449,7 +449,7 @@ Your backend is now ready for production deployment with comprehensive monitorin
 
 **2. Admin Site URL Pattern Logging**
 - ✅ **Namespace Conflict Resolution**: Fixed `NoReverseMatch` errors with proper namespace logging
-- ✅ **Custom Admin Class Logging**: Added logging for `AriStayUserAdmin` and `UserManagerAdmin`
+- ✅ **Custom Admin Class Logging**: Added logging for `CosmoUserAdmin` and `UserManagerAdmin`
 - ✅ **URL Pattern Consistency**: Standardized URL logging across admin sites
 - ✅ **Template Rendering Logs**: Enhanced template error logging and debugging
 

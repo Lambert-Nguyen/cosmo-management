@@ -1,4 +1,4 @@
-# Aristay Testing Organization Guide
+# Cosmo Testing Organization Guide
 
 **Date**: September 7, 2025  
 **Component**: Testing Infrastructure  
@@ -6,7 +6,7 @@
 
 ## 🏗️ Testing Directory Structure
 
-Following the Aristay PROJECT_STRUCTURE guidelines, all tests are now properly organized:
+Following the Cosmo PROJECT_STRUCTURE guidelines, all tests are now properly organized:
 
 ```
 tests/
@@ -198,7 +198,7 @@ export CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name
 # conftest.py (repo root)
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parent / "aristay_backend"))
+sys.path.append(str(Path(__file__).resolve().parent / "cosmo_backend"))
 
 # pytest.ini configuration
 [pytest]

@@ -2,7 +2,7 @@
 
 ## 📅 Overview
 
-The Aristay Calendar system provides a unified view of all bookings and tasks in a comprehensive calendar interface. This implementation integrates seamlessly with the existing portal system and provides both API endpoints and web-based calendar views.
+The Cosmo Calendar system provides a unified view of all bookings and tasks in a comprehensive calendar interface. This implementation integrates seamlessly with the existing portal system and provides both API endpoints and web-based calendar views.
 
 ## 🏗️ Architecture
 
@@ -72,7 +72,7 @@ The Aristay Calendar system provides a unified view of all bookings and tasks in
 ## 📁 File Structure
 
 ```
-aristay_backend/
+cosmo_backend/
 ├── api/
 │   ├── calendar_views.py              # DRF API endpoints
 │   ├── calendar_django_views.py       # Django HTML views
@@ -312,7 +312,7 @@ When you click on an event, you'll see:
 
 ```bash
 # Database
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/aristay_local
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/cosmo_db
 
 # JWT Settings
 JWT_SIGNING_KEY=your-secret-key
@@ -452,7 +452,7 @@ Returns events for a specific day.
 
 ## 🎯 Conclusion
 
-The Aristay Calendar implementation provides a comprehensive, user-friendly interface for managing property bookings and tasks. With its seamless portal integration, advanced filtering capabilities, and robust permission system, it serves as a central hub for property management operations.
+The Cosmo Calendar implementation provides a comprehensive, user-friendly interface for managing property bookings and tasks. With its seamless portal integration, advanced filtering capabilities, and robust permission system, it serves as a central hub for property management operations.
 
 The implementation follows Django best practices, includes comprehensive testing, and provides a solid foundation for future enhancements. The calendar is production-ready and provides an excellent user experience across all devices.
 

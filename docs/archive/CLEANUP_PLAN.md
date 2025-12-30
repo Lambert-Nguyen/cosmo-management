@@ -15,11 +15,11 @@
 
 ### 3. Test File Disorganization
 - **17 legacy_validations files** - Should be archived
-- **Test files in aristay_backend root** - Should be in tests/
+- **Test files in cosmo_backend root** - Should be in tests/
 - **Scattered test utilities** - Needs consolidation
 
 ### 4. Script Inconsistency
-- Scripts scattered across root, aristay_backend/, and scripts/
+- Scripts scattered across root, cosmo_backend/, and scripts/
 - Inconsistent naming and organization
 
 ## Cleanup Actions
@@ -39,7 +39,7 @@
 
 ### Phase 3: Test Organization
 1. **Archive** `tests/legacy_validations/` → `tests/archive/legacy/`
-2. **Move aristay_backend/*.py tests** → `tests/backend/`
+2. **Move cosmo_backend/*.py tests** → `tests/backend/`
 3. **Consolidate test utilities** → `tests/utils/`
 
 ### Phase 4: Final Cleanup
@@ -51,19 +51,19 @@
 ## New Structure
 
 ```
-aristay_app/
+cosmo-management/
 ├── README.md                          # Main project readme
 ├── Makefile                           # Build automation
 ├── requirements.txt                   # Python dependencies
 ├── runtime.txt                        # Runtime version
 ├── .env.example                       # Environment template
 ├── pytest.ini                         # Test configuration
-├──aristay_backend/              # Django backend
+├──cosmo_backend/              # Django backend
 │   ├── manage.py                     # Django management
 │   ├── api/                          # API application
 │   ├── backend/                      # Django settings
 │   └── tests/                        # Backend-specific tests
-├── aristay_flutter_frontend/         # Flutter frontend
+├── cosmo_app/         # Flutter frontend
 ├── docs/                             # All documentation
 │   ├── README.md                     # Docs index
 │   ├── DOCUMENTATION_INDEX.md        # Complete index
@@ -104,7 +104,7 @@ aristay_app/
 
 ### Duplicates/Obsolete
 - cookies.txt (both copies)
-- aristay_backend/cookies.txt
+- cosmo_backend/cookies.txt
 - Multiple dated versions of same docs
 
 ### Can Be Deleted (Superseded)

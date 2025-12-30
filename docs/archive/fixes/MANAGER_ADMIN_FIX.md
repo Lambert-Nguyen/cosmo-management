@@ -4,7 +4,7 @@
 
 The same `KeyError: 'password1'` error was occurring in the **Manager Admin** (`/manager/auth/user/add/`) even after fixing the superuser admin. This happened because there are **two separate admin configurations**:
 
-1. **Superuser Admin** (`/admin/`) - Uses `AriStayUserAdmin` class
+1. **Superuser Admin** (`/admin/`) - Uses `CosmoUserAdmin` class
 2. **Manager Admin** (`/manager/`) - Uses `UserManagerAdmin` class
 
 ## Root Cause
@@ -39,7 +39,7 @@ class UserManagerAdmin(ManagerPermissionMixin, DjangoUserAdmin):
 ## Two Admin Systems
 
 ### Superuser Admin (`/admin/`)
-- **Class**: `AriStayUserAdmin` in `api/admin.py`
+- **Class**: `CosmoUserAdmin` in `api/admin.py`
 - **Access**: Superusers only
 - **Permissions**: Full user management capabilities
 - **Status**: ✅ Fixed (previously)
@@ -77,7 +77,7 @@ Both admin systems now properly handle user creation:
 
 ## Files Modified
 
-1. **`api/admin.py`**: Added `add_fieldsets` to `AriStayUserAdmin`
+1. **`api/admin.py`**: Added `add_fieldsets` to `CosmoUserAdmin`
 2. **`api/managersite.py`**: Added `add_fieldsets` to `UserManagerAdmin`
 
 Both admin interfaces now have consistent behavior for user creation while maintaining their respective permission restrictions.

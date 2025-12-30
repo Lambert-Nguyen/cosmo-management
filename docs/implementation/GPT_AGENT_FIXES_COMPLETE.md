@@ -99,7 +99,7 @@ class AuditMiddleware:
 
 ### **Environment Setup:**
 ```bash
-cd /Users/duylam1407/Workspace/SJSU/aristay_app
+cd /Users/duylam1407/Workspace/SJSU/cosmo-management
 make setup    # Create venv + install deps
 make migrate  # Apply migrations  
 make run      # Start server on :8000

@@ -397,9 +397,9 @@ LOGGING = {
 
 For technical support or questions about the invite code management system:
 
-- **System Administrator** - admin@aristay.com
-- **Development Team** - dev@aristay.com
-- **Documentation** - docs@aristay.com
+- **System Administrator** - admin@cosmo-management.cloud
+- **Development Team** - dev@cosmo-management.cloud
+- **Documentation** - docs@cosmo-management.cloud
 
 ---
 

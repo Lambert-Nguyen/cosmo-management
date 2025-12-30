@@ -40,16 +40,16 @@ The issue was caused by incorrect Django template block structure:
 
 ## Files Modified
 
-1. **`aristay_backend/api/templates/admin/base_site.html`**
+1. **`cosmo_backend/api/templates/admin/base_site.html`**
    - Removed footer HTML from `extrahead` block
    - Added dark mode footer CSS to `extrastyle` block
 
-2. **`aristay_backend/api/templates/admin/index.html`**
+2. **`cosmo_backend/api/templates/admin/index.html`**
    - Moved footer inside `content` block (before closing `</div>`)
    - Removed duplicate dark mode JavaScript code
    - Removed duplicate footer after `endblock`
 
-3. **`aristay_backend/api/templates/manager_admin/index.html`**
+3. **`cosmo_backend/api/templates/manager_admin/index.html`**
    - Moved footer inside `content` block (before closing `</div>`)
    - Removed duplicate dark mode JavaScript code
    - Removed duplicate footer after `endblock`

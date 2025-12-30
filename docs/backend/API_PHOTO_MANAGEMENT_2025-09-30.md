@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Photo Management API provides comprehensive endpoints for managing photos across all tasks in the AriStay platform. This API supports photo upload, retrieval, status management, and approval workflows.
+The Photo Management API provides comprehensive endpoints for managing photos across all tasks in the Cosmo platform. This API supports photo upload, retrieval, status management, and approval workflows.
 
 ## Authentication
 
@@ -536,12 +536,12 @@ A Postman collection is available for testing all endpoints:
 For API support and questions:
 - **Documentation**: `/docs/api/`
 - **Issue Tracker**: GitHub Issues
-- **Email**: api-support@aristay.com
+- **Email**: api-support@cosmo-management.cloud
 - **Slack**: #api-support channel
 
 ## Conclusion
 
-The Photo Management API provides a robust, secure, and scalable solution for managing photos across the AriStay platform. The API is designed with developer experience in mind, offering comprehensive documentation, clear error messages, and consistent response formats.
+The Photo Management API provides a robust, secure, and scalable solution for managing photos across the Cosmo platform. The API is designed with developer experience in mind, offering comprehensive documentation, clear error messages, and consistent response formats.
 
 **Key Features:**
 - ✅ RESTful API design

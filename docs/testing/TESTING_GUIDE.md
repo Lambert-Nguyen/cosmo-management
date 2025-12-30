@@ -1,6 +1,6 @@
 # Testing Guide
 
-**Aristay Property Management - Frontend Testing**
+**Cosmo Property Management - Frontend Testing**
 
 This guide covers all aspects of testing the refactored Django UI, including unit tests, integration tests, and end-to-end tests.
 
@@ -73,7 +73,7 @@ npm install
 npx playwright install
 
 # Start Django server (in separate terminal)
-cd aristay_backend
+cd cosmo_backend
 python manage.py runserver 8000
 ```
 
@@ -337,7 +337,7 @@ await page.waitForTimeout(5000);
 **Solution**:
 ```bash
 # Start Django in separate terminal
-cd aristay_backend
+cd cosmo_backend
 python manage.py runserver 8000
 
 # Verify it's running
@@ -387,7 +387,7 @@ test('slow page', async ({ page }) => {
 **Solution**:
 ```javascript
 // Use relative paths from test file
-import { Module } from '../../../aristay_backend/static/js/module.js';
+import { Module } from '../../../cosmo_backend/static/js/module.js';
 
 // Or configure Jest moduleNameMapper in package.json
 ```
@@ -466,7 +466,7 @@ jobs:
       
       - name: Start Django server
         run: |
-          cd aristay_backend
+          cd cosmo_backend
           python manage.py migrate
           python manage.py runserver &
           sleep 5
@@ -495,7 +495,7 @@ jobs:
 
 ```bash
 # Django management command
-cd aristay_backend
+cd cosmo_backend
 python manage.py shell
 
 from django.contrib.auth.models import User

@@ -14,7 +14,7 @@ import pytest
 
 # Robust path resolution
 REPO_ROOT = Path(__file__).resolve().parents[2]
-backend_dir = REPO_ROOT / "aristay_backend"
+backend_dir = REPO_ROOT / "cosmo_backend"
 
 if not backend_dir.exists():
     pytest.skip("Backend dir not found; skipping script-based tests on this environment", allow_module_level=True)

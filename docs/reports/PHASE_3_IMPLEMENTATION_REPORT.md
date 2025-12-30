@@ -70,7 +70,7 @@ Total: 800 lines (65% reduction from 2,314)
 
 ### 1. Unified Base Template ✅
 
-**File**: `aristay_backend/api/templates/layouts/base_unified.html` (100 lines)
+**File**: `cosmo_backend/api/templates/layouts/base_unified.html` (100 lines)
 
 **Features**:
 - Clean HTML5 structure with semantic blocks
@@ -105,7 +105,7 @@ Total: 800 lines (65% reduction from 2,314)
 
 ### 2. Staff Layout Template ✅
 
-**File**: `aristay_backend/api/templates/layouts/staff_layout.html` (300 lines)
+**File**: `cosmo_backend/api/templates/layouts/staff_layout.html` (300 lines)
 
 **Features**:
 - Extends unified base template
@@ -147,7 +147,7 @@ Always:
 
 ### 3. Common Components ✅
 
-**File**: `aristay_backend/api/templates/components/page_header.html`
+**File**: `cosmo_backend/api/templates/components/page_header.html`
 
 **Features**:
 - Reusable page header component
@@ -169,7 +169,7 @@ Always:
 
 ### 4. Migration Example ✅
 
-**Migrated**: `aristay_backend/api/templates/staff/task_detail.html`
+**Migrated**: `cosmo_backend/api/templates/staff/task_detail.html`
 
 **Changes**:
 ```diff
@@ -177,8 +177,8 @@ Always:
 + {% extends "layouts/staff_layout.html" %}
 
 + {% block page_title %}{{ task.title }}{% endblock %}
-- {% block title %}{{ task.title }} · AriStay{% endblock %}
-+ {% block title %}{{ task.title }} · AriStay Staff{% endblock %}
+- {% block title %}{{ task.title }} · Cosmo{% endblock %}
++ {% block title %}{{ task.title }} · Cosmo Staff{% endblock %}
 ```
 
 **Result**:
@@ -261,11 +261,11 @@ layouts/base_unified.html (100 lines) ✅ SINGLE SOURCE
 
 ```django
 <!-- OLD -->
-{% block title %}Page Title · AriStay{% endblock %}
+{% block title %}Page Title · Cosmo{% endblock %}
 
 <!-- NEW -->
 {% block page_title %}Page Title{% endblock %}
-{% block title %}Page Title · AriStay Staff{% endblock %}
+{% block title %}Page Title · Cosmo Staff{% endblock %}
 ```
 
 #### 4. Remove Duplicate Header/Nav (if any)

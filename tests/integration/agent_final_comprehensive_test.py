@@ -10,8 +10,8 @@ import sys
 import os
 from decimal import Decimal
 
-# Add the aristay_backend directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'aristay_backend'))
+# Add the cosmo_backend directory to the Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'cosmo_backend'))
 
 # Setup Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -35,7 +35,7 @@ def test_comprehensive_system():
     user, created = User.objects.get_or_create(
         username='test_manager',
         defaults={
-            'email': 'test@aristay.com',
+            'email': 'test@cosmo-management.cloud',
             'first_name': 'Test',
             'last_name': 'Manager',
         }

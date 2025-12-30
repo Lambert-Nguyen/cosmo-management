@@ -27,7 +27,7 @@ def test_nights_final_handling():
         user, created = User.objects.get_or_create(
             username='test_nights_final_user',
             defaults={
-                'email': 'test@aristay.com',
+                'email': 'test@cosmo-management.cloud',
                 'is_superuser': True
             }
         )

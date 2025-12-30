@@ -1,10 +1,10 @@
-# 🏗️ Aristay Project - Official Structure
+# 🏗️ Cosmo Project - Official Structure
 
-This document defines the official organization of the Aristay project, consolidating all previous reorganization plans into a single authoritative structure.
+This document defines the official organization of the Cosmo Management project, consolidating all previous reorganization plans into a single authoritative structure.
 
 ## 📋 Project Overview
 
-**Aristay** is a comprehensive property management system consisting of:
+**Cosmo** is a comprehensive property management system consisting of:
 - **Backend**: Django REST API with JWT authentication, booking management, and task automation
 - **Frontend**: Flutter mobile application for property managers and staff
 - **Infrastructure**: PostgreSQL database, file storage, and production deployment tools
@@ -12,7 +12,7 @@ This document defines the official organization of the Aristay project, consolid
 ## 📁 Official Project Structure
 
 ```
-aristay_app/
+cosmo-management/
 ├── README.md                              # Main project documentation
 ├── PROJECT_STRUCTURE.md                   # This document (official structure)
 ├── Makefile                               # Build and development commands
@@ -21,7 +21,7 @@ aristay_app/
 ├── .env.example                          # Environment variables template
 ├── .gitignore                            # Git ignore rules
 │
-├── 🏗️ aristay_backend/                    # Django backend application
+├── 🏗️ cosmo_backend/                    # Django backend application
 │   ├── manage.py                         # Django management script
 │   ├── requirements.txt                  # Python dependencies
 │   ├── api/                              # Main API application
@@ -43,7 +43,7 @@ aristay_app/
 │   ├── media/                            # User-uploaded files
 │   └── logs/                             # Application logs
 │
-├── 📱 aristay_flutter_frontend/           # Flutter mobile application
+├── 📱 cosmo_app/           # Flutter mobile application
 │   ├── lib/                              # Dart source code
 │   ├── assets/                           # App assets (images, fonts)
 │   ├── android/                          # Android-specific code
@@ -173,7 +173,7 @@ aristay_app/
 ## 🎯 Key Organizational Principles
 
 ### 1. **Clear Separation of Concerns**
-- **Application Code**: `aristay_backend/`, `aristay_flutter_frontend/`
+- **Application Code**: `cosmo_backend/`, `cosmo_app/`
 - **Testing**: `tests/` (organized by test type and scope)
 - **Documentation**: `docs/` (organized by audience and purpose)
 - **Automation**: `scripts/` (organized by function)
