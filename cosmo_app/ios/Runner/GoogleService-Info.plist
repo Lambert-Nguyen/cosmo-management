@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBEWjPyKBSb3TISbeLXposnwGZLb89KsoY</string>
+	<string>AIzaSyAgNgna2h8Tm7ey6oBHKQIcldLz8a17FqQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>676131410875</string>
+	<string>973172271140</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.cosmomgmt.app</string>
 	<key>PROJECT_ID</key>
-	<string>cosmoapp</string>
+	<string>cosmomanagement-ed731</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cosmoapp.firebasestorage.app</string>
+	<string>cosmomanagement-ed731.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:676131410875:ios:368ac79a81d4c17b2bea9e</string>
+	<string>1:973172271140:ios:64e012cd0740ce8adfd0b1</string>
 </dict>
 </plist>
