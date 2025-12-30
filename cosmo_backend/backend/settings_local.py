@@ -21,11 +21,15 @@ JWT_SIGNING_KEY = os.getenv('JWT_SIGNING_KEY', 'local-jwt-key-change-me')
 
 # CORS settings from your .env
 CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'true').lower() == 'true'
+
+# Default Flutter dev URLs for local development
+_default_cors_origins = 'http://localhost:3000,http://localhost:8080,http://127.0.0.1:3000,http://127.0.0.1:8080,http://localhost:5000'
 CORS_ALLOWED_ORIGINS = [
-    origin.strip() 
-    for origin in os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',') 
+    origin.strip()
+    for origin in os.getenv('CORS_ALLOWED_ORIGINS', _default_cors_origins).split(',')
     if origin.strip()
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 # Frontend URL from your .env
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')

@@ -25,7 +25,10 @@
       "Bash(xargs ls:*)",
       "Bash(grep:*)",
       "Bash(flutter pub get:*)",
-      "Bash(flutter pub upgrade:*)"
+      "Bash(flutter pub upgrade:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill -9)",
+      "Bash(curl:*)"
     ]
   }
 }

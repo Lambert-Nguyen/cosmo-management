@@ -47,6 +47,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'axes',
     'django_extensions',
+    'drf_spectacular',  # OpenAPI 3 documentation
 ]
 
 LOCAL_APPS = [
@@ -192,6 +193,21 @@ REST_FRAMEWORK = {
         'token_refresh': '2/min',
         'evidence_upload': '10/min',
         'taskimage': '20/min',
+    },
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# OpenAPI/Swagger Configuration (drf-spectacular)
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Cosmo Management API',
+    'DESCRIPTION': 'Universal property & operations management APIs.',
+    'VERSION': '1.0.0',
+    'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SECURITY': [{'jwtAuth': []}],
+    'AUTHENTICATION_WHITELIST': ['rest_framework_simplejwt.authentication.JWTAuthentication'],
+    'SECURITY_SCHEMES': {
+        'jwtAuth': {'type': 'http', 'scheme': 'bearer', 'bearerFormat': 'JWT'}
     },
 }
 
