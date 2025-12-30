@@ -397,6 +397,90 @@ curl -X POST http://localhost:8000/api/token/refresh/ \
 
 ---
 
+## Mobile Development Setup
+
+### Android Configuration (Already Done)
+
+The following configurations have been applied to `cosmo_app/android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<!-- Network permissions -->
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+<!-- Allow HTTP for development -->
+<application android:usesCleartextTraffic="true">
+```
+
+### iOS Configuration (Already Done)
+
+The following is configured in `cosmo_app/ios/Runner/Info.plist`:
+
+```xml
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+</dict>
+```
+
+### API Base URL by Platform
+
+```dart
+class ApiConfig {
+  static String get baseUrl {
+    if (kIsWeb) {
+      // Flutter Web - same origin or localhost
+      return 'http://localhost:8000';
+    } else if (Platform.isAndroid) {
+      // Android Emulator - special IP for host machine
+      return 'http://10.0.2.2:8000';
+    } else if (Platform.isIOS) {
+      // iOS Simulator - localhost works
+      return 'http://localhost:8000';
+    } else {
+      // Physical device - use your machine's local IP
+      return 'http://192.168.1.XXX:8000'; // Replace with actual IP
+    }
+  }
+}
+```
+
+### Testing on Physical Devices
+
+For physical Android/iOS devices on the same WiFi network:
+
+1. Find your machine's local IP: `ifconfig | grep "inet " | grep -v 127.0.0.1`
+2. Update `ApiConfig.baseUrl` to use that IP (e.g., `http://192.168.1.100:8000`)
+3. Ensure Django is running with `python manage.py runserver 0.0.0.0:8000`
+4. Make sure your firewall allows port 8000
+
+### Production Configuration
+
+For production, remove development-only settings:
+
+**Android:** Set `android:usesCleartextTraffic="false"` or remove it entirely
+
+**iOS:** Remove `NSAllowsArbitraryLoads` or set to `false`, then add specific domain exceptions:
+
+```xml
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>your-api-domain.com</key>
+        <dict>
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <false/>
+            <key>NSExceptionRequiresForwardSecrecy</key>
+            <true/>
+        </dict>
+    </dict>
+</dict>
+```
+
+---
+
 ## Checklist for Flutter Integration
 
 - [ ] Install dependencies (dio, flutter_secure_storage, jwt_decoder)
@@ -408,6 +492,9 @@ curl -X POST http://localhost:8000/api/token/refresh/ \
 - [ ] Handle token refresh
 - [ ] Handle logout
 - [ ] Test on Flutter Web (localhost:3000)
+- [ ] Test on Android Emulator (10.0.2.2:8000)
+- [ ] Test on iOS Simulator (localhost:8000)
+- [ ] Test on physical device (local network IP)
 
 ---
 

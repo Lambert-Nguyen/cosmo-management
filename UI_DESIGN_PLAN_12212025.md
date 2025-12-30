@@ -1,15 +1,17 @@
-# Cosmo Management UI Redesign Plan: Django Templates → Flutter Web
+# Cosmo Management UI Redesign Plan: Django Templates → Flutter (Web + Mobile)
 
-**Document Version:** 3.4
+**Document Version:** 3.5
 **Created:** 2025-12-21
 **Last Updated:** 2025-12-30
 **Status:** Phase 1 COMPLETE - Ready for Phase 2
 **Platform Name:** Cosmo Management (formerly AriStay)
+**Target Platforms:** Flutter Web, Android, iOS
 
 ### 📋 Revision History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.5 | 2025-12-30 | **Mobile Support Added:** Updated target to include Android/iOS. Fixed Android manifest (INTERNET permission, usesCleartextTraffic). Added mobile development documentation. |
 | 3.4 | 2025-12-30 | **Phase 1 COMPLETE:** Backend preparation done. JWT endpoints tested, CORS configured for Flutter, API docs at /schema/ working, endpoint audit complete. Ready for Phase 2. |
 | 3.3 | 2025-12-27 | **Phase 0 COMPLETE:** All "AriStay" references renamed to "Cosmo Management". Added hosted services update checklist. Updated Definition of Done. |
 | 3.2 | 2025-12-24 | **Backend audit corrections:** JWT already implemented (not pending), fixed directory paths (`cosmo_backend/` not `cosmo/`), updated Phase 1 status, added endpoint verification requirements |
@@ -2147,6 +2149,9 @@ git push -u origin main
 - [x] Bundle identifiers updated for iOS/Android (com.cosmomgmt.app) ✅
 - [x] pubspec.yaml updated (name: cosmo_app) ✅
 - [x] Django settings updated (cosmo_db, Cosmo Management branding) ✅
+- [x] Android INTERNET permission added ✅ (2025-12-30)
+- [x] Android usesCleartextTraffic enabled for dev ✅ (2025-12-30)
+- [x] iOS NSAllowsArbitraryLoads enabled ✅
 - [ ] Database created as cosmo_db (local setup pending)
 - [ ] Project runs successfully with new naming (requires database)
 - [x] Old repository archived (if keeping separate) ✅
