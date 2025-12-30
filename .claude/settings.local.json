@@ -34,7 +34,10 @@
       "Bash(echo \" No matches found \\(GOOD\\)\" echo \"\" echo \"2. Checking for ''AriStay'' references \\(should be 0\\):\" grep -ri \"AriStay\" --include=\"*.py\" --include=\"*.dart\" --include=\"*.yaml\" --include=\"*.json\" /Users/duylam1407/Workspace/gitHub/cosmo-management)",
       "Bash(__NEW_LINE__ echo \"1. Android Network Security \\(for HTTP during development\\):\")",
       "Bash(__NEW_LINE__ echo \"\")",
-      "Bash(flutter build:*)"
+      "Bash(flutter build:*)",
+      "Bash(wc:*)",
+      "Bash(git -C /Users/duylam1407/Workspace/gitHub/cosmo-management log --oneline)",
+      "Bash(flutter analyze:*)"
     ]
   }
 }

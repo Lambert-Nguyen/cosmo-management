@@ -2152,6 +2152,15 @@ git push -u origin main
 - [x] Android INTERNET permission added ✅ (2025-12-30)
 - [x] Android usesCleartextTraffic enabled for dev ✅ (2025-12-30)
 - [x] iOS NSAllowsArbitraryLoads enabled ✅
+- [x] iOS Info.plist CFBundleDisplayName/CFBundleName updated ✅ (2025-12-30)
+- [x] Windows main.cpp window title updated ✅ (2025-12-30)
+- [x] macOS project references updated ✅ (2025-12-30)
+- [x] lib/main.dart created with placeholder app ✅ (2025-12-30)
+- [x] lib/firebase_options.dart created ✅ (2025-12-30)
+- [x] widget_test.dart import fixed ✅ (2025-12-30)
+- [x] cosmo_app/README.md updated ✅ (2025-12-30)
+- [x] .gitignore updated for cosmo_app ✅ (2025-12-30)
+- [x] AI instructions updated (.github/copilot, .cursor) ✅ (2025-12-30)
 - [ ] Database created as cosmo_db (local setup pending)
 - [ ] Project runs successfully with new naming (requires database)
 - [x] Old repository archived (if keeping separate) ✅
