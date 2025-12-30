@@ -25,7 +25,19 @@
       "Bash(xargs ls:*)",
       "Bash(grep:*)",
       "Bash(flutter pub get:*)",
-      "Bash(flutter pub upgrade:*)"
+      "Bash(flutter pub upgrade:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill -9)",
+      "Bash(curl:*)",
+      "Bash(git show:*)",
+      "Bash(echo \"\" echo \"1. Checking for ''aristay'' references \\(should be 0\\):\" grep -ri \"aristay\" --include=\"*.py\" --include=\"*.dart\" --include=\"*.yaml\" --include=\"*.json\" --include=\"*.md\" /Users/duylam1407/Workspace/gitHub/cosmo-management)",
+      "Bash(echo \" No matches found \\(GOOD\\)\" echo \"\" echo \"2. Checking for ''AriStay'' references \\(should be 0\\):\" grep -ri \"AriStay\" --include=\"*.py\" --include=\"*.dart\" --include=\"*.yaml\" --include=\"*.json\" /Users/duylam1407/Workspace/gitHub/cosmo-management)",
+      "Bash(__NEW_LINE__ echo \"1. Android Network Security \\(for HTTP during development\\):\")",
+      "Bash(__NEW_LINE__ echo \"\")",
+      "Bash(flutter build:*)",
+      "Bash(wc:*)",
+      "Bash(git -C /Users/duylam1407/Workspace/gitHub/cosmo-management log --oneline)",
+      "Bash(flutter analyze:*)"
     ]
   }
 }

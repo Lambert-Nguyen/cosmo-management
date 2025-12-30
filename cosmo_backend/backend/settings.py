@@ -405,11 +405,15 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # CORS configuration
 CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'true').lower() == 'true'
+
+# Default Flutter dev URLs when CORS_ALLOWED_ORIGINS env var is not set
+_default_cors_origins = 'http://localhost:3000,http://localhost:8080,http://127.0.0.1:3000,http://127.0.0.1:8080,http://localhost:5000'
 CORS_ALLOWED_ORIGINS = [
-    origin.strip() 
-    for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') 
+    origin.strip()
+    for origin in os.getenv('CORS_ALLOWED_ORIGINS', _default_cors_origins).split(',')
     if origin.strip()
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 FCM_SERVER_KEY = "your-firebase-server-key-here"
 FIREBASE_PROJECT_ID = 'cosmomanagement'

@@ -29,13 +29,13 @@ ENV/
 .env.production
 .env.development
 
-# === Flutter/Dart (for cosmo_flutter_frontend) ===
+# === Flutter/Dart (for cosmo_app) ===
 # Build and generated files
-cosmo_flutter_frontend/build/
-cosmo_flutter_frontend/.dart_tool/
-cosmo_flutter_frontend/.flutter-plugins
-cosmo_flutter_frontend/.flutter-plugins-dependencies
-cosmo_flutter_frontend/.packages
+cosmo_app/build/
+cosmo_app/.dart_tool/
+cosmo_app/.flutter-plugins
+cosmo_app/.flutter-plugins-dependencies
+cosmo_app/.packages
 
 # Additional Flutter/Dart ignores
 **/doc/api/

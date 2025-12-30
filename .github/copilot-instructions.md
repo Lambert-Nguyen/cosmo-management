@@ -6,7 +6,7 @@
 
 ### Core Components
 - **Django Backend** (`cosmo_backend/`): REST API with JWT auth, task automation, booking management, Excel import
-- **Flutter Frontend** (`cosmo_flutter_frontend/`): Mobile app for property managers and staff  
+- **Flutter Frontend** (`cosmo_app/`): Mobile app for property managers and staff  
 - **JWT Security System**: Custom rate-limited auth with token ownership verification
 - **Task Automation**: Template-driven task creation from booking imports
 - **Role-Based Access**: Dynamic permissions with custom decorators and viewsets
@@ -103,7 +103,7 @@ class DynamicTaskPermissions(BasePermission):
 
 ## 📱 Flutter Frontend Architecture
 
-**Service Layer Pattern**: Central API communication through singleton services in `cosmo_flutter_frontend/lib/services/`:
+**Service Layer Pattern**: Central API communication through singleton services in `cosmo_app/lib/services/`:
 
 ```dart
 // API service with token management and error handling
@@ -501,7 +501,7 @@ cosmo_backend/
 
 ### **Frontend Structure**:
 ```
-cosmo_flutter_frontend/
+cosmo_app/
 ├── lib/
 │   ├── main.dart           # App entry point with Firebase integration
 │   ├── screens/           # Full-screen views by feature
@@ -567,8 +567,8 @@ cosmo_flutter_frontend/
 - `api/services/enhanced_excel_import_service.py` - Booking conflict resolution system
 - `PROJECT_STRUCTURE.md` - Official project organization
 - `tests/run_tests.py` - Central test orchestration
-- `cosmo_flutter_frontend/lib/main.dart` - Flutter app entry point
-- `cosmo_flutter_frontend/lib/services/api_service.dart` - Mobile API layer
+- `cosmo_app/lib/main.dart` - Flutter app entry point
+- `cosmo_app/lib/services/api_service.dart` - Mobile API layer
 
 ## 💡 Development Philosophy
 
