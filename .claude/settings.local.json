@@ -28,7 +28,8 @@
       "Bash(flutter pub upgrade:*)",
       "Bash(lsof:*)",
       "Bash(xargs kill -9)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git show:*)"
     ]
   }
 }
