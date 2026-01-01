@@ -1,4 +1,8 @@
-name: Cosmo Management CI
+# DEPRECATED: This workflow is being replaced by flutter-ci.yml and backend-ci.yml
+# Will be removed after 2-week transition period
+# Use the new specialized workflows instead
+
+name: Cosmo Management CI (LEGACY - DEPRECATED)
 permissions:
   contents: read
 
