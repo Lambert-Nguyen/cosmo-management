@@ -152,11 +152,11 @@ def run_integration_tests():
     """Run integration tests (multi-component)"""
     print("\n🔗 RUNNING INTEGRATION TESTS")
     print("=" * 50)
-    
+
     python_exe = get_python_executable()
     test_files = [
         TESTS_DIR / "integration" / "test_phase_completion.py",
-        TESTS_DIR / "integration" / "test_production_readiness.py",
+        # NOTE: test_production_readiness.py is in tests/production/, not integration/
         TESTS_DIR / "integration" / "test_no_duplicate_tasks.py",
         TESTS_DIR / "integration" / "test_agent_validation.py",
         TESTS_DIR / "integration" / "test_combined_behavior.py",
@@ -165,7 +165,7 @@ def run_integration_tests():
         TESTS_DIR / "integration" / "verify_phases.py",
         TESTS_DIR / "integration" / "verify_production_readiness_new.py"
     ]
-    
+
     success = True
     for test_file in test_files:
         if test_file.exists():
@@ -173,7 +173,7 @@ def run_integration_tests():
                 success = False
         else:
             print(f"⚠️  Test file not found: {test_file}")
-    
+
     return success
 
 def run_production_tests():
@@ -190,44 +190,6 @@ def run_production_tests():
     success = True
     for test_file in test_files:
         if test_file.exists():
-            if not run_command([python_exe, "-m", "pytest", str(test_file), "-v"], cwd=BACKEND_DIR):
-                success = False
-        else:
-            print(f"⚠️  Test file not found: {test_file}")
-    
-    return success
-
-def run_ui_tests():
-    """Run UI and user interface tests"""
-    print("\n🎨 RUNNING UI TESTS")
-    print("=" * 50)
-    
-    python_exe = get_python_executable()
-    test_files = [
-        # Calendar UI - simple template content test (run without pytest/django)
-        TESTS_DIR / "ui" / "test_calendar_template_content.py",
-        TESTS_DIR / "ui" / "test_button_fix_verification.py",
-        TESTS_DIR / "ui" / "test_button_functionality_analysis.py",
-        TESTS_DIR / "ui" / "test_button_timing_analysis.py",
-        TESTS_DIR / "ui" / "test_file_cleanup_ui.py",
-        TESTS_DIR / "ui" / "test_nav_visibility.py",
-        TESTS_DIR / "ui" / "test_notifications_widget.py",
-        TESTS_DIR / "ui" / "test_password_descriptions.py",
-        TESTS_DIR / "ui" / "test_password_field_configuration.py",
-        TESTS_DIR / "ui" / "test_timing_fix_verification.py",
-        TESTS_DIR / "ui" / "test_ui_selector_fix.py"
-    ]
-    
-    success = True
-    for test_file in test_files:
-        if test_file.exists():
-            # Run the simple template content test without pytest/django from project root
-            if test_file.name == "test_calendar_template_content.py":
-                if not run_command([python_exe, str(test_file)], cwd=PROJECT_ROOT):
-                    success = False
-                continue
-
-            # All other UI tests run under pytest with Django settings from backend dir
             if not run_command([python_exe, "-m", "pytest", str(test_file), "-v"], cwd=BACKEND_DIR):
                 success = False
         else:
@@ -274,6 +236,8 @@ def main():
         sys.exit(1)
     
     # Track results
+    # NOTE: UI tests have been archived to tests/archive/deprecated_django_ui/
+    # The app has migrated from Django templates to Flutter
     results = {
         "unit": False,
         "api": False,
@@ -281,7 +245,6 @@ def main():
         "booking": False,
         "integration": False,
         "production": False,
-        "ui": False,
         "cloudinary": False
     }
     
@@ -303,22 +266,18 @@ def main():
     
     if "--production" in sys.argv or "--all" in sys.argv:
         results["production"] = run_production_tests()
-    
-    if "--ui" in sys.argv or "--all" in sys.argv:
-        results["ui"] = run_ui_tests()
-    
+
     if "--cloudinary" in sys.argv or "--all" in sys.argv:
         results["cloudinary"] = run_cloudinary_tests()
-    
+
     # If no specific test type requested, run all
-    if not any(arg in sys.argv for arg in ["--unit", "--api", "--security", "--booking", "--integration", "--production", "--ui", "--cloudinary", "--all"]):
+    if not any(arg in sys.argv for arg in ["--unit", "--api", "--security", "--booking", "--integration", "--production", "--cloudinary", "--all"]):
         results["unit"] = run_unit_tests()
         results["api"] = run_api_tests()
         results["security"] = run_security_tests()
         results["booking"] = run_booking_tests()
         results["integration"] = run_integration_tests()
         results["production"] = run_production_tests()
-        results["ui"] = run_ui_tests()
         results["cloudinary"] = run_cloudinary_tests()
     
     # Print summary
@@ -330,7 +289,7 @@ def main():
     total_passed = 0
     
     for test_type, passed in results.items():
-        if test_type in ["unit", "api", "security", "booking", "integration", "production", "ui", "cloudinary"]:
+        if test_type in ["unit", "api", "security", "booking", "integration", "production", "cloudinary"]:
             total_run += 1
             if passed:
                 total_passed += 1
@@ -365,16 +324,20 @@ Options:
     --booking       Run only booking tests
     --integration   Run only integration tests
     --production    Run only production tests
-    --ui            Run only UI tests
     --cloudinary    Run only Cloudinary tests
     --help          Show this help message
 
+Note:
+    Django template UI tests have been archived to tests/archive/deprecated_django_ui/
+    The app has migrated from Django templates to Flutter.
+    For Flutter tests, use: python tests/run_flutter_tests.py
+
 Examples:
-    python run_tests_comprehensive.py                    # Run all tests
+    python run_tests_comprehensive.py                    # Run all backend tests
     python run_tests_comprehensive.py --api              # Run only API tests
     python run_tests_comprehensive.py --security         # Run only security tests
     python run_tests_comprehensive.py --unit --api       # Run unit and API tests
 """)
         sys.exit(0)
-    
+
     main()
