@@ -1,9 +1,9 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter (Web + Mobile)
 
-**Document Version:** 3.5
+**Document Version:** 3.6
 **Created:** 2025-12-21
-**Last Updated:** 2025-12-30
-**Status:** Phase 1 COMPLETE - Ready for Phase 2
+**Last Updated:** 2025-12-31
+**Status:** Phase 3 COMPLETE - Ready for Phase 4
 **Platform Name:** Cosmo Management (formerly AriStay)
 **Target Platforms:** Flutter Web, Android, iOS
 
@@ -11,6 +11,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.6 | 2025-12-31 | **Phase 3 COMPLETE:** Authentication module implemented. RegisterScreen with multi-step invite code validation, ForgotPasswordScreen, ResetPasswordScreen with deep link support. Added 82 unit/widget tests for auth. |
 | 3.5 | 2025-12-30 | **Mobile Support Added:** Updated target to include Android/iOS. Fixed Android manifest (INTERNET permission, usesCleartextTraffic). Added mobile development documentation. |
 | 3.4 | 2025-12-30 | **Phase 1 COMPLETE:** Backend preparation done. JWT endpoints tested, CORS configured for Flutter, API docs at /schema/ working, endpoint audit complete. Ready for Phase 2. |
 | 3.3 | 2025-12-27 | **Phase 0 COMPLETE:** All "AriStay" references renamed to "Cosmo Management". Added hosted services update checklist. Updated Definition of Done. |
@@ -2929,16 +2930,16 @@ lib/
 - Device registration for push notifications
 - Logout from all devices option
 
-#### Definition of Done - Phase 2
-- [ ] User can login with email/password
-- [ ] User can register with valid invite code
-- [ ] User can request password reset email
-- [ ] User can set new password from reset link
-- [ ] JWT tokens stored securely
-- [ ] Token refresh happens automatically before expiry
-- [ ] Login redirects to correct dashboard based on role
-- [ ] Firebase device token registered on login
-- [ ] Error states shown (invalid credentials, locked account, invalid invite)
+#### Definition of Done - Phase 3
+- [x] User can login with email/password
+- [x] User can register with valid invite code
+- [x] User can request password reset email
+- [x] User can set new password from reset link
+- [x] JWT tokens stored securely
+- [x] Token refresh happens automatically before expiry
+- [ ] Login redirects to correct dashboard based on role *(pending: requires staff dashboard)*
+- [ ] Firebase device token registered on login *(deferred to Phase 4)*
+- [x] Error states shown (invalid credentials, locked account, invalid invite)
 
 ---
 
@@ -2976,7 +2977,7 @@ lib/
 7. `date_input` - Date picker
 8. `time_input` - Time picker
 
-#### Definition of Done - Phase 3
+#### Definition of Done - Phase 4
 - [ ] Staff can view dashboard with task counts by status
 - [ ] Staff can filter tasks by type, status, property, date
 - [ ] Staff can view task details with checklist
@@ -3013,7 +3014,7 @@ lib/
 - Multi-photo upload with progress
 - Before/after photo comparison
 
-#### Definition of Done - Phase 4
+#### Definition of Done - Phase 5
 - [ ] Staff can search inventory by property
 - [ ] Staff can log inventory transactions
 - [ ] Low stock alerts display correctly
@@ -3048,7 +3049,7 @@ lib/
 - Calendar with month/week/day views
 - Calendar filtering by property
 
-#### Definition of Done - Phase 5
+#### Definition of Done - Phase 6
 - [ ] Portal users can view their properties
 - [ ] Portal users can search properties
 - [ ] Portal users can view bookings
@@ -3088,7 +3089,7 @@ lib/
 
 *Note: Typing indicators removed for v1.0 - unreliable with polling*
 
-#### Definition of Done - Phase 6
+#### Definition of Done - Phase 9
 - [ ] Users can view chat room list
 - [ ] Users can send/receive messages
 - [ ] Users can create new chat rooms
@@ -3199,7 +3200,7 @@ lib/
    - XSS prevention
    - Input validation
 
-#### Definition of Done - Phase 9
+#### Definition of Done - Phase 11
 - [ ] All unit tests passing (>80% coverage)
 - [ ] All widget tests passing
 - [ ] Critical flows have integration tests
