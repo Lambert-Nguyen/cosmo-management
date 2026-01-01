@@ -177,7 +177,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: isLoading ? null : _handleLogin,
                       isLoading: isLoading,
                     ),
-                    const SizedBox(height: AppSpacing.xl),
+                    const SizedBox(height: AppSpacing.lg),
+
+                    // Create account link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Don\'t have an account?',
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                        TextButton(
+                          onPressed: isLoading
+                              ? null
+                              : () => context.push(RouteNames.register),
+                          child: const Text('Sign Up'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
 
                     // Footer
                     Text(

@@ -75,6 +75,9 @@ class AppTextField extends StatelessWidget {
   /// Whether the field is required
   final bool isRequired;
 
+  /// Text capitalization behavior
+  final TextCapitalization textCapitalization;
+
   const AppTextField({
     super.key,
     this.controller,
@@ -98,6 +101,7 @@ class AppTextField extends StatelessWidget {
     this.focusNode,
     this.validator,
     this.isRequired = false,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   @override
@@ -140,6 +144,7 @@ class AppTextField extends StatelessWidget {
           textInputAction: textInputAction,
           autofillHints: autofillHints,
           focusNode: focusNode,
+          textCapitalization: textCapitalization,
           validator: validator ?? _defaultValidator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
@@ -180,6 +185,8 @@ class PasswordTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final String? Function(String?)? validator;
   final bool isRequired;
+  final bool enabled;
+  final Iterable<String>? autofillHints;
 
   const PasswordTextField({
     super.key,
@@ -193,6 +200,8 @@ class PasswordTextField extends StatefulWidget {
     this.focusNode,
     this.validator,
     this.isRequired = false,
+    this.enabled = true,
+    this.autofillHints,
   });
 
   @override
@@ -216,10 +225,11 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       onChanged: widget.onChanged,
       onSubmitted: widget.onSubmitted,
       textInputAction: widget.textInputAction,
-      autofillHints: const [AutofillHints.password],
+      autofillHints: widget.autofillHints ?? const [AutofillHints.password],
       focusNode: widget.focusNode,
       validator: widget.validator ?? _passwordValidator,
       isRequired: widget.isRequired,
+      enabled: widget.enabled,
     );
   }
 

@@ -69,6 +69,35 @@ class AuthUser {
   }
 }
 
+/// Result of invite code validation
+class InviteValidation {
+  final bool isValid;
+  final String? role;
+  final String? email;
+  final DateTime? expiresAt;
+  final String? message;
+
+  const InviteValidation({
+    required this.isValid,
+    this.role,
+    this.email,
+    this.expiresAt,
+    this.message,
+  });
+
+  factory InviteValidation.fromJson(Map<String, dynamic> json) {
+    return InviteValidation(
+      isValid: json['valid'] as bool? ?? json['is_valid'] as bool? ?? true,
+      role: json['role'] as String?,
+      email: json['email'] as String?,
+      expiresAt: json['expires_at'] != null
+          ? DateTime.tryParse(json['expires_at'] as String)
+          : null,
+      message: json['message'] as String?,
+    );
+  }
+}
+
 /// Service for handling user authentication
 ///
 /// Features:
@@ -167,6 +196,152 @@ class AuthService {
       if (e.response?.statusCode == 401) {
         throw const UnauthorizedException(
           message: 'Invalid email or password',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  /// Validate an invite code before registration
+  ///
+  /// Returns invite details if valid, throws exception if invalid.
+  Future<InviteValidation> validateInviteCode(String code) async {
+    try {
+      final response = await _dio.post(
+        ApiConfig.validateInvite,
+        data: {'code': code},
+      );
+
+      return InviteValidation.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        final data = e.response?.data;
+        final message = data is Map ? (data['error'] ?? 'Invalid invite code') : 'Invalid invite code';
+        throw ValidationException(
+          message: message.toString(),
+          fieldErrors: const {},
+        );
+      }
+      if (e.response?.statusCode == 404) {
+        throw const NotFoundException(
+          message: 'Invite code not found or has expired',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  /// Register a new user with invite code
+  ///
+  /// Returns the new user on success and automatically logs them in.
+  Future<AuthUser> register({
+    required String email,
+    required String password,
+    required String inviteCode,
+    String? firstName,
+    String? lastName,
+  }) async {
+    try {
+      final response = await _dio.post(
+        ApiConfig.register,
+        data: {
+          'email': email,
+          'password': password,
+          'invite_code': inviteCode,
+          if (firstName != null) 'first_name': firstName,
+          if (lastName != null) 'last_name': lastName,
+        },
+      );
+
+      // If registration returns tokens, use them
+      if (response.data['access'] != null && response.data['refresh'] != null) {
+        final accessToken = response.data['access'] as String;
+        final refreshToken = response.data['refresh'] as String;
+
+        await _authInterceptor.saveTokens(
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        );
+
+        await _fetchCurrentUser();
+        _updateState(AuthState.authenticated);
+        return _currentUser!;
+      }
+
+      // Otherwise, auto-login after registration
+      return login(email, password);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        final data = e.response?.data as Map<String, dynamic>?;
+        if (data != null) {
+          final fieldErrors = <String, List<String>>{};
+          data.forEach((key, value) {
+            if (value is List) {
+              fieldErrors[key] = value.map((e) => e.toString()).toList();
+            } else if (value is String) {
+              fieldErrors[key] = [value];
+            }
+          });
+          throw ValidationException(
+            message: 'Registration failed. Please check your input.',
+            fieldErrors: fieldErrors,
+          );
+        }
+      }
+      if (e.response?.statusCode == 409) {
+        throw const ValidationException(
+          message: 'An account with this email already exists',
+          fieldErrors: {'email': ['This email is already registered']},
+        );
+      }
+      rethrow;
+    }
+  }
+
+  /// Request a password reset email
+  Future<void> requestPasswordReset(String email) async {
+    try {
+      await _dio.post(
+        ApiConfig.passwordReset,
+        data: {'email': email},
+      );
+    } on DioException catch (e) {
+      // Most backends return 200 even if email doesn't exist (security)
+      // Only throw on actual errors
+      if (e.response?.statusCode == 429) {
+        throw const ApiException(
+          statusCode: 429,
+          message: 'Too many requests. Please try again later.',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  /// Confirm password reset with token
+  Future<void> confirmPasswordReset({
+    required String token,
+    required String uid,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.post(
+        ApiConfig.passwordResetConfirm,
+        data: {
+          'token': token,
+          'uid': uid,
+          'new_password': newPassword,
+        },
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        final data = e.response?.data;
+        final message = data is Map
+            ? (data['error'] ?? data['detail'] ?? 'Invalid or expired reset link')
+            : 'Invalid or expired reset link';
+        throw ValidationException(
+          message: message.toString(),
+          fieldErrors: const {},
         );
       }
       rethrow;

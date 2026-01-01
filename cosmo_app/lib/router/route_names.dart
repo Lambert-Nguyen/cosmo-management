@@ -19,8 +19,14 @@ class RouteNames {
   /// Login screen
   static const String login = '/login';
 
+  /// Register screen
+  static const String register = '/register';
+
   /// Forgot password screen
   static const String forgotPassword = '/forgot-password';
+
+  /// Password reset confirmation (from email link)
+  static const String resetPassword = '/reset-password';
 
   // ============================================
   // Main App Routes

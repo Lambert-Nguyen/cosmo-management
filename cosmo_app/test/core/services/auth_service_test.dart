@@ -133,6 +133,120 @@ void main() {
     });
   });
 
+  group('InviteValidation', () {
+    test('should create InviteValidation with required fields', () {
+      const validation = InviteValidation(isValid: true);
+
+      expect(validation.isValid, isTrue);
+      expect(validation.role, isNull);
+      expect(validation.email, isNull);
+      expect(validation.expiresAt, isNull);
+      expect(validation.message, isNull);
+    });
+
+    test('should create InviteValidation with all fields', () {
+      final expiresAt = DateTime(2025, 12, 31);
+      final validation = InviteValidation(
+        isValid: true,
+        role: 'staff',
+        email: 'test@example.com',
+        expiresAt: expiresAt,
+        message: 'Valid invite code',
+      );
+
+      expect(validation.isValid, isTrue);
+      expect(validation.role, 'staff');
+      expect(validation.email, 'test@example.com');
+      expect(validation.expiresAt, expiresAt);
+      expect(validation.message, 'Valid invite code');
+    });
+
+    group('JSON deserialization', () {
+      test('should deserialize from JSON with "valid" key', () {
+        final json = {
+          'valid': true,
+          'role': 'manager',
+          'email': 'manager@example.com',
+        };
+
+        final validation = InviteValidation.fromJson(json);
+
+        expect(validation.isValid, isTrue);
+        expect(validation.role, 'manager');
+        expect(validation.email, 'manager@example.com');
+      });
+
+      test('should deserialize from JSON with "is_valid" key', () {
+        final json = {
+          'is_valid': true,
+          'role': 'staff',
+        };
+
+        final validation = InviteValidation.fromJson(json);
+
+        expect(validation.isValid, isTrue);
+        expect(validation.role, 'staff');
+      });
+
+      test('should default to true when no valid key present', () {
+        final json = <String, dynamic>{
+          'role': 'owner',
+        };
+
+        final validation = InviteValidation.fromJson(json);
+
+        expect(validation.isValid, isTrue);
+      });
+
+      test('should parse expires_at date', () {
+        final json = {
+          'valid': true,
+          'expires_at': '2025-12-31T23:59:59.000Z',
+        };
+
+        final validation = InviteValidation.fromJson(json);
+
+        expect(validation.expiresAt, isNotNull);
+        expect(validation.expiresAt!.year, 2025);
+        expect(validation.expiresAt!.month, 12);
+        expect(validation.expiresAt!.day, 31);
+      });
+
+      test('should handle invalid expires_at date gracefully', () {
+        final json = {
+          'valid': true,
+          'expires_at': 'invalid-date',
+        };
+
+        final validation = InviteValidation.fromJson(json);
+
+        expect(validation.expiresAt, isNull);
+      });
+
+      test('should handle null expires_at', () {
+        final json = {
+          'valid': true,
+          'expires_at': null,
+        };
+
+        final validation = InviteValidation.fromJson(json);
+
+        expect(validation.expiresAt, isNull);
+      });
+
+      test('should parse message field', () {
+        final json = {
+          'valid': true,
+          'message': 'Invite valid for 24 hours',
+        };
+
+        final validation = InviteValidation.fromJson(json);
+
+        expect(validation.message, 'Invite valid for 24 hours');
+      });
+    });
+  });
+
   group('AuthService', () {
     late AuthService authService;
 

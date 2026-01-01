@@ -32,6 +32,18 @@ class ApiConfig {
   static const String tokenRevokeAll = '/api/token/revoke-all/';
 
   // ============================================
+  // Registration Endpoints
+  // ============================================
+
+  /// Register new user
+  /// POST /api/register/
+  static const String register = '/api/register/';
+
+  /// Validate invite code before registration
+  /// POST /api/validate-invite/
+  static const String validateInvite = '/api/validate-invite/';
+
+  // ============================================
   // Password Reset Endpoints
   // ============================================
 
