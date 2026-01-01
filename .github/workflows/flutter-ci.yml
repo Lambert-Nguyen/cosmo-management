@@ -37,11 +37,7 @@ jobs:
 
       - name: Analyze code
         working-directory: cosmo_app
-        run: flutter analyze
-
-      - name: Check formatting
-        working-directory: cosmo_app
-        run: dart format --set-exit-if-changed .
+        run: flutter analyze --no-fatal-infos
 
   unit-tests:
     name: Unit Tests

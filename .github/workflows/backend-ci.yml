@@ -49,6 +49,8 @@ jobs:
       POSTGRES_HOST: 'localhost'
       POSTGRES_PORT: '5432'
       TESTING: 'true'
+      USE_CLOUDINARY: 'false'
+      LOAD_DOTENV: 'false'
     steps:
       - uses: actions/checkout@v4
 
@@ -88,8 +90,19 @@ jobs:
         working-directory: cosmo_backend
         run: python manage.py collectstatic --noinput
 
+      - name: Ensure logs directory exists
+        run: mkdir -p cosmo_backend/logs
+
       - name: Run pytest
         run: python -m pytest -q
 
       - name: Run final validation
         run: python tests/run_final_validation.py
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-logs
+          path: cosmo_backend/logs
+          if-no-files-found: ignore
