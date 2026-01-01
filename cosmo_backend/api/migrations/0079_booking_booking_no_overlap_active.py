@@ -14,6 +14,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # First remove the constraint if it exists (from previous migrations)
+        migrations.RemoveConstraint(
+            model_name="booking",
+            name="booking_no_overlap_active",
+        ),
+        # Then add it with the correct definition
         migrations.AddConstraint(
             model_name="booking",
             constraint=django.contrib.postgres.constraints.ExclusionConstraint(
