@@ -33,8 +33,11 @@ class TaskListScreen extends ConsumerStatefulWidget {
 
 class _TaskListScreenState extends ConsumerState<TaskListScreen> {
   final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
   TaskStatus? _selectedStatus;
   bool _showOverdue = false;
+  bool _isSearching = false;
+  String? _searchQuery;
 
   @override
   void initState() {
@@ -57,7 +60,31 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
+  }
+
+  void _openSearch() {
+    setState(() => _isSearching = true);
+  }
+
+  void _closeSearch() {
+    setState(() {
+      _isSearching = false;
+      _searchQuery = null;
+      _searchController.clear();
+    });
+    ref.read(taskListProvider.notifier).setSearch(null);
+  }
+
+  void _onSearchSubmitted(String query) {
+    final trimmedQuery = query.trim();
+    setState(() {
+      _searchQuery = trimmedQuery.isEmpty ? null : trimmedQuery;
+    });
+    ref.read(taskListProvider.notifier).setSearch(
+          trimmedQuery.isEmpty ? null : trimmedQuery,
+        );
   }
 
   void _onScroll() {
@@ -92,14 +119,47 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tasks'),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: 'Search tasks...',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                style: Theme.of(context).textTheme.titleLarge,
+                onSubmitted: _onSearchSubmitted,
+                onChanged: (value) {
+                  // Debounce could be added here for live search
+                  if (value.isEmpty && _searchQuery != null) {
+                    _onSearchSubmitted('');
+                  }
+                },
+              )
+            : Text(_searchQuery != null ? 'Results: "$_searchQuery"' : 'Tasks'),
+        leading: _isSearching
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: _closeSearch,
+              )
+            : null,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // TODO: Implement search
-            },
-          ),
+          if (!_isSearching)
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: _openSearch,
+            )
+          else
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                _searchController.clear();
+                _onSearchSubmitted('');
+              },
+            ),
           const SyncIndicatorButton(),
           const SizedBox(width: 8),
         ],
@@ -172,7 +232,10 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen> {
     String title;
     String subtitle;
 
-    if (_showOverdue) {
+    if (_searchQuery != null && _searchQuery!.isNotEmpty) {
+      title = 'No results for "$_searchQuery"';
+      subtitle = 'Try a different search term or clear filters.';
+    } else if (_showOverdue) {
       title = 'No overdue tasks';
       subtitle = 'Great job staying on top of your tasks!';
     } else if (_selectedStatus != null) {
@@ -184,11 +247,11 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen> {
     }
 
     return StaffEmptyState(
-      icon: Icons.task_outlined,
+      icon: _searchQuery != null ? Icons.search_off : Icons.task_outlined,
       title: title,
       subtitle: subtitle,
-      action: () => context.push(RouteNames.staffTaskCreate),
-      actionLabel: 'Create Task',
+      action: _searchQuery != null ? _closeSearch : () => context.push(RouteNames.staffTaskCreate),
+      actionLabel: _searchQuery != null ? 'Clear Search' : 'Create Task',
     );
   }
 

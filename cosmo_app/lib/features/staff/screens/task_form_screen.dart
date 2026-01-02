@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/providers/service_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/inputs/app_text_field.dart';
 import '../../../data/models/task_model.dart';
+import '../providers/staff_providers.dart';
 
 /// Task form screen for creating or editing tasks
 class TaskFormScreen extends ConsumerStatefulWidget {
@@ -56,7 +58,34 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
   }
 
   Future<void> _loadTask() async {
-    // TODO: Load existing task data for editing
+    setState(() => _isLoading = true);
+
+    try {
+      final taskRepository = ref.read(taskRepositoryProvider);
+      final task = await taskRepository.getTaskById(widget.taskId!);
+
+      if (mounted) {
+        setState(() {
+          _titleController.text = task.title;
+          _descriptionController.text = task.description ?? '';
+          _priority = task.priority;
+          _dueDate = task.dueDate;
+          _propertyId = task.propertyId;
+          _assigneeId = task.assignedToId;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading task: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 
   void _onFieldChanged() {
@@ -98,8 +127,43 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // TODO: Implement save logic
-      await Future.delayed(const Duration(seconds: 1)); // Placeholder
+      final taskRepository = ref.read(taskRepositoryProvider);
+
+      if (widget.isEditing) {
+        // Update existing task
+        await taskRepository.updateTask(
+          widget.taskId!,
+          title: _titleController.text.trim(),
+          description: _descriptionController.text.trim().isEmpty
+              ? null
+              : _descriptionController.text.trim(),
+          priority: _priority,
+          dueDate: _dueDate,
+          propertyId: _propertyId,
+          assignedToId: _assigneeId,
+        );
+
+        // Invalidate task detail cache
+        ref.invalidate(taskDetailProvider(widget.taskId!));
+      } else {
+        // Create new task
+        await taskRepository.createTask(
+          title: _titleController.text.trim(),
+          description: _descriptionController.text.trim().isEmpty
+              ? null
+              : _descriptionController.text.trim(),
+          priority: _priority,
+          dueDate: _dueDate,
+          propertyId: _propertyId,
+          assignedToId: _assigneeId,
+        );
+      }
+
+      // Refresh task list
+      ref.read(taskListProvider.notifier).loadTasks(refresh: true);
+
+      // Refresh dashboard
+      ref.read(staffDashboardProvider.notifier).refresh();
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

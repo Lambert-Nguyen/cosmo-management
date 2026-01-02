@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/connectivity_service.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../data/models/checklist_model.dart';
-import '../../../data/models/offline_mutation_model.dart';
 import '../../../data/models/task_model.dart';
 import '../../../data/repositories/offline_mutation_repository.dart';
 import '../../../data/repositories/task_repository.dart';
@@ -302,6 +301,49 @@ class TaskDetailNotifier extends StateNotifier<TaskDetailState> {
             hasUnsyncedChanges: true,
           );
         }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Upload photo for a checklist item
+  Future<void> uploadChecklistPhoto({
+    required int checklistItemId,
+    required String filePath,
+  }) async {
+    final currentState = state;
+    if (currentState is! TaskDetailLoaded) return;
+
+    try {
+      if (_connectivityService.isConnected) {
+        // Upload photo to server
+        final photoUrl = await _taskRepository.uploadChecklistPhoto(
+          checklistItemId: checklistItemId,
+          filePath: filePath,
+        );
+
+        // Submit response with the photo URL
+        await _taskRepository.submitChecklistResponse(
+          taskId: _taskId,
+          checklistItemId: checklistItemId,
+          photoUrls: [photoUrl],
+        );
+
+        // Reload to get updated checklist
+        await load();
+      } else {
+        // Store locally for offline (file path will be uploaded when online)
+        await _mutationRepository.queueChecklistResponse(
+          taskId: _taskId,
+          checklistItemId: checklistItemId,
+          photoUrls: [filePath], // Store local path for now
+        );
+
+        state = currentState.copyWith(
+          isOffline: true,
+          hasUnsyncedChanges: true,
+        );
       }
     } catch (e) {
       rethrow;

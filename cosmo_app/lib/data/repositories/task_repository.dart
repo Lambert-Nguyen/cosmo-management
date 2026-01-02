@@ -332,6 +332,21 @@ class TaskRepository extends BaseRepository {
     );
   }
 
+  /// Upload checklist photo
+  ///
+  /// Returns the URL of the uploaded photo
+  Future<String> uploadChecklistPhoto({
+    required int checklistItemId,
+    required String filePath,
+  }) async {
+    final response = await apiService.uploadFile<Map<String, dynamic>>(
+      ApiConfig.checklistPhotoUpload(checklistItemId),
+      filePath: filePath,
+      fieldName: 'photo',
+    );
+    return response['url'] as String? ?? response['photo_url'] as String;
+  }
+
   /// Invalidate dashboard cache
   Future<void> invalidateDashboardCache() async {
     await invalidateCache(_dashboardCacheKey);

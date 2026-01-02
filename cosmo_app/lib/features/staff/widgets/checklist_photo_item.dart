@@ -6,6 +6,7 @@ library;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -326,18 +327,54 @@ class ChecklistPhotoItem extends StatelessWidget {
     );
   }
 
-  void _takePhoto(BuildContext context) {
-    // TODO: Implement camera capture using image_picker
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Camera capture not yet implemented')),
-    );
+  Future<void> _takePhoto(BuildContext context) async {
+    try {
+      final picker = ImagePicker();
+      final image = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 80,
+        maxWidth: 1920,
+        maxHeight: 1080,
+      );
+
+      if (image != null) {
+        onPhotoTaken(image.path);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error taking photo: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 
-  void _pickFromGallery(BuildContext context) {
-    // TODO: Implement gallery picker using image_picker
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Gallery picker not yet implemented')),
-    );
+  Future<void> _pickFromGallery(BuildContext context) async {
+    try {
+      final picker = ImagePicker();
+      final image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+        maxWidth: 1920,
+        maxHeight: 1080,
+      );
+
+      if (image != null) {
+        onPhotoTaken(image.path);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error picking photo: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 
   void _viewPhoto(BuildContext context, String path) {

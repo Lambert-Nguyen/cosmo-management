@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/providers/service_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/status_badge.dart';
@@ -134,7 +135,13 @@ class TaskDetailScreen extends ConsumerWidget {
                             numberValue: number,
                           ),
                       onPhotoTaken: (itemId, path) {
-                        // TODO: Handle photo upload
+                        if (path.isEmpty) return; // Skip if clearing photo
+                        ref
+                            .read(taskDetailProvider(taskId).notifier)
+                            .uploadChecklistPhoto(
+                              checklistItemId: itemId,
+                              filePath: path,
+                            );
                       },
                     ),
                   ],
@@ -188,10 +195,50 @@ class TaskDetailScreen extends ConsumerWidget {
   }
 
   Future<void> _duplicateTask(BuildContext context, WidgetRef ref) async {
-    // TODO: Implement duplicate via repository
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Duplicate task not yet implemented')),
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
     );
+
+    try {
+      final taskRepository = ref.read(taskRepositoryProvider);
+      final newTask = await taskRepository.duplicateTask(taskId);
+
+      // Refresh task list
+      ref.read(taskListProvider.notifier).loadTasks(refresh: true);
+
+      // Refresh dashboard
+      ref.read(staffDashboardProvider.notifier).refresh();
+
+      if (context.mounted) {
+        // Close loading dialog
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Task duplicated successfully'),
+            action: SnackBarAction(
+              label: 'View',
+              onPressed: () => context.push(RouteNames.staffTaskDetail(newTask.id)),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        // Close loading dialog
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error duplicating task: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
@@ -219,8 +266,47 @@ class TaskDetailScreen extends ConsumerWidget {
     );
 
     if (confirmed == true && context.mounted) {
-      // TODO: Implement delete
-      context.pop();
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      try {
+        final taskRepository = ref.read(taskRepositoryProvider);
+        await taskRepository.deleteTask(taskId);
+
+        // Remove from task list locally
+        ref.read(taskListProvider.notifier).removeTaskLocally(taskId);
+
+        // Refresh dashboard
+        ref.read(staffDashboardProvider.notifier).refresh();
+
+        if (context.mounted) {
+          // Close loading dialog
+          Navigator.pop(context);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Task deleted successfully')),
+          );
+
+          // Go back to task list
+          context.pop();
+        }
+      } catch (e) {
+        if (context.mounted) {
+          // Close loading dialog
+          Navigator.pop(context);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error deleting task: $e'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      }
     }
   }
 }
