@@ -1,12 +1,13 @@
-name: Cosmo Management CI
+# DEPRECATED: This workflow is being replaced by flutter-ci.yml and backend-ci.yml
+# DISABLED - Will be removed after verification period
+# Use the new specialized workflows instead
+
+name: Cosmo Management CI (LEGACY - DEPRECATED)
 permissions:
   contents: read
 
 on:
-  push:
-    branches: [ "**" ]
-  pull_request:
-    branches: [ "**" ]
+  workflow_dispatch:  # Only manual trigger - disabled for automatic runs
 
 jobs:
   test:

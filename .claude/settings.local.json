@@ -37,7 +37,12 @@
       "Bash(flutter build:*)",
       "Bash(wc:*)",
       "Bash(git -C /Users/duylam1407/Workspace/gitHub/cosmo-management log --oneline)",
-      "Bash(flutter analyze:*)"
+      "Bash(flutter analyze:*)",
+      "Bash(flutter test:*)",
+      "Bash(dart run build_runner:*)",
+      "Bash(gh pr list:*)",
+      "Bash(tree:*)",
+      "Bash(python tests/run_tests_comprehensive.py:*)"
     ]
   }
 }

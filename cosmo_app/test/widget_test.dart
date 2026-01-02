@@ -1,30 +1,43 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+/// Basic widget tests for Cosmo Management
+///
+/// Note: More comprehensive tests will be added in later phases.
+library;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:cosmo_app/main.dart';
+import 'package:cosmo_app/core/config/env_config.dart';
+import 'package:cosmo_app/core/services/storage_service.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('EnvConfig', () {
+    test('should initialize with development environment', () {
+      EnvConfig.init(Environment.development);
+      expect(EnvConfig.environment, Environment.development);
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    test('should have correct API URL for development', () {
+      EnvConfig.init(Environment.development);
+      expect(EnvConfig.apiBaseUrl, 'http://localhost:8000');
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('should enable logging in development', () {
+      EnvConfig.init(Environment.development);
+      expect(EnvConfig.enableLogging, true);
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('should disable secure connection in development', () {
+      EnvConfig.init(Environment.development);
+      expect(EnvConfig.useSecureConnection, false);
+    });
+  });
+
+  group('StorageService', () {
+    test('should throw when not initialized', () {
+      final storage = StorageService();
+      expect(
+        () => storage.hasValidCache('test'),
+        throwsA(isA<StateError>()),
+      );
+    });
   });
 }

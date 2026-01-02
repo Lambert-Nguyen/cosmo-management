@@ -37,6 +37,10 @@ cosmo_app/.flutter-plugins
 cosmo_app/.flutter-plugins-dependencies
 cosmo_app/.packages
 
+# Flutter test coverage
+cosmo_app/coverage/
+cosmo_app/test/.test_coverage.dart
+
 # Additional Flutter/Dart ignores
 **/doc/api/
 **/ios/Flutter/.last_build_id
