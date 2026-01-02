@@ -1,9 +1,9 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter (Web + Mobile)
 
-**Document Version:** 3.6
+**Document Version:** 3.7
 **Created:** 2025-12-21
-**Last Updated:** 2025-12-31
-**Status:** Phase 3 COMPLETE - Ready for Phase 4
+**Last Updated:** 2026-01-02
+**Status:** Phase 4 IN PROGRESS - Staff Module Core (70% complete)
 **Platform Name:** Cosmo Management (formerly AriStay)
 **Target Platforms:** Flutter Web, Android, iOS
 
@@ -11,6 +11,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.7 | 2026-01-02 | **Phase 4 IN PROGRESS (70%):** Staff Module core structure complete. Added Freezed models (checklist, offline_mutation, dashboard). Created 5 providers, 10 widgets, 5 screens. Routing configured with StatefulShellRoute. Remaining: task form save logic, photo upload, search, tests. |
 | 3.6 | 2025-12-31 | **Phase 3 COMPLETE:** Authentication module implemented. RegisterScreen with multi-step invite code validation, ForgotPasswordScreen, ResetPasswordScreen with deep link support. Added 82 unit/widget tests for auth. |
 | 3.5 | 2025-12-30 | **Mobile Support Added:** Updated target to include Android/iOS. Fixed Android manifest (INTERNET permission, usesCleartextTraffic). Added mobile development documentation. |
 | 3.4 | 2025-12-30 | **Phase 1 COMPLETE:** Backend preparation done. JWT endpoints tested, CORS configured for Flutter, API docs at /schema/ working, endpoint audit complete. Ready for Phase 2. |
@@ -2978,15 +2979,39 @@ lib/
 8. `time_input` - Time picker
 
 #### Definition of Done - Phase 4
-- [ ] Staff can view dashboard with task counts by status
-- [ ] Staff can filter tasks by type, status, property, date
-- [ ] Staff can view task details with checklist
-- [ ] Staff can complete checklist items (all 8 types)
-- [ ] Staff can change task status
-- [ ] Staff can create new tasks
-- [ ] Staff can duplicate existing tasks
-- [ ] Tasks viewable offline (cached)
-- [ ] Status updates queued offline and sync when online
+
+**Completed (2026-01-02):**
+
+- [x] Staff can view dashboard with task counts by status
+- [x] Staff can filter tasks by type, status, property, date
+- [x] Staff can view task details with checklist
+- [x] Staff can complete checklist items (checkbox, text, number types)
+- [x] Staff can change task status
+- [x] Tasks viewable offline (cached)
+- [x] Status updates queued offline and sync when online
+
+**In Progress / Remaining:**
+
+- [ ] Staff can create new tasks *(UI exists, save logic TODO)*
+- [ ] Staff can duplicate existing tasks *(UI exists, not wired)*
+- [ ] Staff can complete checklist items: photo upload *(TODO)*
+- [ ] Search functionality *(TODO)*
+- [ ] Unit/widget tests for Phase 4 *(TODO)*
+
+**Files Created:**
+
+- Models: `checklist_model.dart`, `offline_mutation_model.dart`, `dashboard_model.dart`
+- Repositories: `offline_mutation_repository.dart`
+- Providers (5): `staff_dashboard_notifier.dart`, `task_list_notifier.dart`, `task_detail_notifier.dart`, `offline_sync_notifier.dart`, `staff_providers.dart`
+- Widgets (10): `stat_card.dart`, `task_list_item.dart`, `sync_indicator.dart`, `offline_banner.dart`, `filter_chips_row.dart`, `checklist_section.dart`, `checklist_check_item.dart`, `checklist_photo_item.dart`, `checklist_text_item.dart`, `checklist_number_item.dart`
+- Screens (5): `staff_dashboard_screen.dart`, `task_list_screen.dart`, `task_detail_screen.dart`, `task_form_screen.dart`, `staff_shell.dart`
+
+**Known Issues:**
+
+1. `task_form_screen.dart` - Save/load logic not implemented (TODOs at lines 59, 101)
+2. `checklist_photo_item.dart` - Camera/gallery integration not implemented
+3. `task_detail_screen.dart` - Duplicate/delete actions show placeholder messages
+4. `offlineMutationRepositoryProvider` - Requires initialization in main.dart ProviderScope
 
 ---
 
