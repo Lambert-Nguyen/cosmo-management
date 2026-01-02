@@ -18,6 +18,11 @@ import '../features/auth/screens/forgot_password_screen.dart';
 import '../features/auth/screens/login_screen.dart';
 import '../features/auth/screens/register_screen.dart';
 import '../features/auth/screens/splash_screen.dart';
+import '../features/staff/screens/staff_dashboard_screen.dart';
+import '../features/staff/screens/staff_shell.dart';
+import '../features/staff/screens/task_detail_screen.dart';
+import '../features/staff/screens/task_form_screen.dart';
+import '../features/staff/screens/task_list_screen.dart';
 import 'route_names.dart';
 
 /// App router configuration
@@ -187,6 +192,90 @@ class AppRouter {
           builder: (context, state) => const _PlaceholderScreen(
             title: 'Profile',
           ),
+        ),
+
+        // Staff routes with bottom navigation shell
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return StaffShell(navigationShell: navigationShell);
+          },
+          branches: [
+            // Dashboard branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.staffDashboard,
+                  name: 'staffDashboard',
+                  builder: (context, state) => const StaffDashboardScreen(),
+                ),
+              ],
+            ),
+            // Tasks branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.staffTaskList,
+                  name: 'staffTaskList',
+                  builder: (context, state) {
+                    final status = state.uri.queryParameters['status'];
+                    return TaskListScreen(initialStatus: status);
+                  },
+                  routes: [
+                    // Task create
+                    GoRoute(
+                      path: 'create',
+                      name: 'staffTaskCreate',
+                      builder: (context, state) => const TaskFormScreen(),
+                    ),
+                    // Task detail
+                    GoRoute(
+                      path: ':id',
+                      name: 'staffTaskDetail',
+                      builder: (context, state) {
+                        final id = int.parse(state.pathParameters['id']!);
+                        return TaskDetailScreen(taskId: id);
+                      },
+                      routes: [
+                        // Task edit
+                        GoRoute(
+                          path: 'edit',
+                          name: 'staffTaskEdit',
+                          builder: (context, state) {
+                            final id = int.parse(state.pathParameters['id']!);
+                            return TaskFormScreen(taskId: id);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Schedule branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.staffSchedule,
+                  name: 'staffSchedule',
+                  builder: (context, state) => const _PlaceholderScreen(
+                    title: 'Schedule',
+                  ),
+                ),
+              ],
+            ),
+            // Profile branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.staffProfile,
+                  name: 'staffProfile',
+                  builder: (context, state) => const _PlaceholderScreen(
+                    title: 'Staff Profile',
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ];
 

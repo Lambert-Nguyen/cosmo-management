@@ -4,6 +4,8 @@
 library;
 
 import '../../core/config/api_config.dart';
+import '../models/checklist_model.dart';
+import '../models/dashboard_model.dart';
 import '../models/task_model.dart';
 import 'base_repository.dart';
 
@@ -192,6 +194,149 @@ class TaskRepository extends BaseRepository {
   }
 
   String _taskCacheKey(int id) => 'task_$id';
+  String _taskChecklistCacheKey(int id) => 'task_checklist_$id';
+  static const String _taskCountsCacheKey = 'task_counts';
+  static const String _dashboardCacheKey = 'staff_dashboard';
+
+  // ============================================
+  // Staff Module Methods
+  // ============================================
+
+  /// Get task counts by status
+  Future<TaskCountModel> getTaskCounts() async {
+    return getCachedOrFetch<TaskCountModel>(
+      cacheKey: _taskCountsCacheKey,
+      fetchFunction: () async {
+        final response = await apiService.get(ApiConfig.taskCountByStatus);
+        return TaskCountModel.fromJson(response);
+      },
+      fromJson: (json) => TaskCountModel.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  /// Get today's tasks for a user
+  Future<List<TaskModel>> getTodaysTasks(int userId) async {
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    final todayEnd = todayStart.add(const Duration(days: 1));
+
+    final response = await apiService.get(
+      ApiConfig.tasks,
+      queryParameters: {
+        'assigned_to': userId,
+        'due_date__gte': todayStart.toIso8601String(),
+        'due_date__lt': todayEnd.toIso8601String(),
+        'status__in': 'pending,in_progress',
+        'ordering': 'due_date',
+      },
+    );
+
+    final paginated = PaginatedTasks.fromJson(response);
+    return paginated.results;
+  }
+
+  /// Get task with full checklist data
+  Future<TaskModel> getTaskWithChecklist(int id) async {
+    return getCachedOrFetch<TaskModel>(
+      cacheKey: _taskChecklistCacheKey(id),
+      fetchFunction: () async {
+        final response = await apiService.get(
+          ApiConfig.taskDetail(id),
+          queryParameters: {'include': 'checklist'},
+        );
+        return TaskModel.fromJson(response);
+      },
+      fromJson: (json) => TaskModel.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  /// Assign task to current user
+  Future<TaskModel> assignToMe(int taskId) async {
+    final response = await apiService.post(ApiConfig.taskAssignToMe(taskId));
+    await invalidateCache(_taskCacheKey(taskId));
+    await invalidateCache(_taskChecklistCacheKey(taskId));
+    return TaskModel.fromJson(response);
+  }
+
+  /// Set task status via dedicated endpoint
+  Future<TaskModel> setStatus(int taskId, TaskStatus status) async {
+    final response = await apiService.post(
+      ApiConfig.taskSetStatus(taskId),
+      data: {'status': status.value},
+    );
+    await invalidateCache(_taskCacheKey(taskId));
+    await invalidateCache(_taskChecklistCacheKey(taskId));
+    await invalidateCache(_taskCountsCacheKey);
+    return TaskModel.fromJson(response);
+  }
+
+  /// Duplicate a task
+  Future<TaskModel> duplicateTask(int taskId) async {
+    final response = await apiService.post(ApiConfig.taskDuplicate(taskId));
+    return TaskModel.fromJson(response);
+  }
+
+  /// Get task checklist
+  Future<TaskChecklistModel> getTaskChecklist(int taskId) async {
+    final response = await apiService.get(ApiConfig.taskChecklist(taskId));
+    return TaskChecklistModel.fromJson(response);
+  }
+
+  /// Submit checklist response
+  Future<ChecklistResponseModel> submitChecklistResponse({
+    required int taskId,
+    required int checklistItemId,
+    bool? isCompleted,
+    String? textValue,
+    double? numberValue,
+    List<String>? photoUrls,
+    String? notes,
+  }) async {
+    final response = await apiService.post(
+      ApiConfig.checklistRespond(taskId),
+      data: {
+        'checklist_item_id': checklistItemId,
+        if (isCompleted != null) 'is_completed': isCompleted,
+        if (textValue != null) 'text_response': textValue,
+        if (numberValue != null) 'number_response': numberValue,
+        if (photoUrls != null) 'photo_urls': photoUrls,
+        if (notes != null) 'notes': notes,
+      },
+    );
+    await invalidateCache(_taskChecklistCacheKey(taskId));
+    return ChecklistResponseModel.fromJson(response);
+  }
+
+  /// Mute task notifications
+  Future<void> muteTask(int taskId) async {
+    await apiService.post(ApiConfig.taskMute(taskId));
+    await invalidateCache(_taskCacheKey(taskId));
+  }
+
+  /// Unmute task notifications
+  Future<void> unmuteTask(int taskId) async {
+    await apiService.post(ApiConfig.taskUnmute(taskId));
+    await invalidateCache(_taskCacheKey(taskId));
+  }
+
+  /// Get staff dashboard data
+  Future<StaffDashboardModel> getStaffDashboard() async {
+    return getCachedOrFetch<StaffDashboardModel>(
+      cacheKey: _dashboardCacheKey,
+      fetchFunction: () async {
+        final response = await apiService.get(ApiConfig.staffDashboard);
+        return StaffDashboardModel.fromJson(response);
+      },
+      fromJson: (json) =>
+          StaffDashboardModel.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  /// Invalidate dashboard cache
+  Future<void> invalidateDashboardCache() async {
+    await invalidateCache(_dashboardCacheKey);
+    await invalidateCache(_taskCountsCacheKey);
+  }
 }
 
 /// Paginated tasks response

@@ -41,6 +41,15 @@ _$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
       notes: json['notes'] as String?,
       estimatedDurationMinutes: (json['estimated_duration'] as num?)?.toInt(),
       actualDurationMinutes: (json['actual_duration'] as num?)?.toInt(),
+      checklist: json['checklist'] == null
+          ? null
+          : TaskChecklistModel.fromJson(
+              json['checklist'] as Map<String, dynamic>),
+      checklistProgress: json['checklist_progress'] == null
+          ? null
+          : ChecklistProgressModel.fromJson(
+              json['checklist_progress'] as Map<String, dynamic>),
+      hasBlockingItems: json['has_blocking_items'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$TaskModelImplToJson(_$TaskModelImpl instance) =>
@@ -65,6 +74,9 @@ Map<String, dynamic> _$$TaskModelImplToJson(_$TaskModelImpl instance) =>
       'notes': instance.notes,
       'estimated_duration': instance.estimatedDurationMinutes,
       'actual_duration': instance.actualDurationMinutes,
+      'checklist': instance.checklist,
+      'checklist_progress': instance.checklistProgress,
+      'has_blocking_items': instance.hasBlockingItems,
     };
 
 const _$TaskStatusEnumMap = {

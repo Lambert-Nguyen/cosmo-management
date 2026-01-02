@@ -95,4 +95,29 @@ class RouteNames {
 
   /// Service requests
   static const String serviceRequests = '/portal/requests';
+
+  // ============================================
+  // Staff Routes
+  // ============================================
+
+  /// Staff dashboard
+  static const String staffDashboard = '/staff';
+
+  /// Staff task list
+  static const String staffTaskList = '/staff/tasks';
+
+  /// Staff task detail
+  static String staffTaskDetail(int id) => '/staff/tasks/$id';
+
+  /// Staff create task
+  static const String staffTaskCreate = '/staff/tasks/create';
+
+  /// Staff edit task
+  static String staffTaskEdit(int id) => '/staff/tasks/$id/edit';
+
+  /// Staff schedule
+  static const String staffSchedule = '/staff/schedule';
+
+  /// Staff profile
+  static const String staffProfile = '/staff/profile';
 }
