@@ -488,7 +488,7 @@ class _DueDateField extends StatelessWidget {
 }
 
 /// Property dropdown
-class _PropertyDropdown extends StatelessWidget {
+class _PropertyDropdown extends ConsumerWidget {
   const _PropertyDropdown({
     required this.value,
     required this.onChanged,
@@ -498,8 +498,9 @@ class _PropertyDropdown extends StatelessWidget {
   final void Function(int?) onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Fetch properties from provider
+  Widget build(BuildContext context, WidgetRef ref) {
+    final propertiesAsync = ref.watch(propertiesProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -510,18 +511,46 @@ class _PropertyDropdown extends StatelessWidget {
               ),
         ),
         const SizedBox(height: AppSpacing.xs),
-        DropdownButtonFormField<int>(
-          value: value,
-          decoration: const InputDecoration(
-            hintText: 'Select property',
-            border: OutlineInputBorder(),
+        propertiesAsync.when(
+          data: (properties) => DropdownButtonFormField<int>(
+            value: value,
+            decoration: const InputDecoration(
+              hintText: 'Select property (optional)',
+              border: OutlineInputBorder(),
+            ),
+            items: [
+              const DropdownMenuItem<int>(
+                value: null,
+                child: Text('No property'),
+              ),
+              ...properties.map(
+                (property) => DropdownMenuItem(
+                  value: property.id,
+                  child: Text(property.name),
+                ),
+              ),
+            ],
+            onChanged: onChanged,
           ),
-          items: const [
-            DropdownMenuItem(value: 1, child: Text('Property 1')),
-            DropdownMenuItem(value: 2, child: Text('Property 2')),
-            DropdownMenuItem(value: 3, child: Text('Property 3')),
-          ],
-          onChanged: onChanged,
+          loading: () => DropdownButtonFormField<int>(
+            value: null,
+            decoration: const InputDecoration(
+              hintText: 'Loading properties...',
+              border: OutlineInputBorder(),
+            ),
+            items: const [],
+            onChanged: null,
+          ),
+          error: (error, _) => DropdownButtonFormField<int>(
+            value: null,
+            decoration: InputDecoration(
+              hintText: 'Error loading properties',
+              errorText: error.toString(),
+              border: const OutlineInputBorder(),
+            ),
+            items: const [],
+            onChanged: null,
+          ),
         ),
       ],
     );
@@ -529,7 +558,7 @@ class _PropertyDropdown extends StatelessWidget {
 }
 
 /// Assignee dropdown
-class _AssigneeDropdown extends StatelessWidget {
+class _AssigneeDropdown extends ConsumerWidget {
   const _AssigneeDropdown({
     required this.value,
     required this.onChanged,
@@ -539,8 +568,9 @@ class _AssigneeDropdown extends StatelessWidget {
   final void Function(int?) onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Fetch staff members from provider
+  Widget build(BuildContext context, WidgetRef ref) {
+    final staffAsync = ref.watch(staffMembersProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -551,18 +581,46 @@ class _AssigneeDropdown extends StatelessWidget {
               ),
         ),
         const SizedBox(height: AppSpacing.xs),
-        DropdownButtonFormField<int>(
-          value: value,
-          decoration: const InputDecoration(
-            hintText: 'Select assignee (optional)',
-            border: OutlineInputBorder(),
+        staffAsync.when(
+          data: (staffMembers) => DropdownButtonFormField<int>(
+            value: value,
+            decoration: const InputDecoration(
+              hintText: 'Select assignee (optional)',
+              border: OutlineInputBorder(),
+            ),
+            items: [
+              const DropdownMenuItem<int>(
+                value: null,
+                child: Text('Unassigned'),
+              ),
+              ...staffMembers.map(
+                (staff) => DropdownMenuItem(
+                  value: staff.id,
+                  child: Text(staff.fullName),
+                ),
+              ),
+            ],
+            onChanged: onChanged,
           ),
-          items: const [
-            DropdownMenuItem(value: null, child: Text('Unassigned')),
-            DropdownMenuItem(value: 1, child: Text('Staff Member 1')),
-            DropdownMenuItem(value: 2, child: Text('Staff Member 2')),
-          ],
-          onChanged: onChanged,
+          loading: () => DropdownButtonFormField<int>(
+            value: null,
+            decoration: const InputDecoration(
+              hintText: 'Loading staff members...',
+              border: OutlineInputBorder(),
+            ),
+            items: const [],
+            onChanged: null,
+          ),
+          error: (error, _) => DropdownButtonFormField<int>(
+            value: null,
+            decoration: InputDecoration(
+              hintText: 'Error loading staff',
+              errorText: error.toString(),
+              border: const OutlineInputBorder(),
+            ),
+            items: const [],
+            onChanged: null,
+          ),
         ),
       ],
     );

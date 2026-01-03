@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/service_providers.dart';
 import '../../../data/models/dashboard_model.dart';
 import '../../../data/models/offline_mutation_model.dart';
+import '../../../data/models/property_model.dart';
 import '../../../data/models/task_model.dart';
+import '../../../data/models/user_model.dart';
 import '../../../data/repositories/offline_mutation_repository.dart';
 import 'offline_sync_notifier.dart';
 import 'staff_dashboard_notifier.dart';
@@ -159,4 +161,25 @@ final pendingCountProvider = Provider<int>((ref) {
 final isOfflineProvider = Provider<bool>((ref) {
   final connectivity = ref.watch(connectivityServiceProvider);
   return !connectivity.isConnected;
+});
+
+// ============================================
+// Form Data Providers
+// ============================================
+
+/// Properties list provider for dropdowns
+///
+/// Fetches all active properties for use in task form.
+final propertiesProvider = FutureProvider<List<PropertyModel>>((ref) async {
+  final propertyRepository = ref.watch(propertyRepositoryProvider);
+  final response = await propertyRepository.getProperties(pageSize: 100);
+  return response.results;
+});
+
+/// Staff members list provider for dropdowns
+///
+/// Fetches all active staff members for task assignment.
+final staffMembersProvider = FutureProvider<List<UserModel>>((ref) async {
+  final userRepository = ref.watch(userRepositoryProvider);
+  return userRepository.getStaffMembers();
 });
