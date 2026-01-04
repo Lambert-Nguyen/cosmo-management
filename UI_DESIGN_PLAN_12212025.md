@@ -201,13 +201,15 @@ class ApiException implements Exception {
 │     ├── ✅ Rename project directories (cosmo_backend, cosmo_app)          │
 │     ├── ✅ Update all code references (AriStay → Cosmo Management)        │
 │     ├── ✅ Update bundle identifiers (com.cosmomgmt.app)                   │
-│     └── ⏳ Database + hosted services setup (see manual steps below)       │
+│     └── ⏳ Database + hosted services setup (tracked separately; not       │
+│         blocking mobile/web dev)                                          │
 │                                                                              │
-│  Phase 1: Backend Preparation ◀── PREREQUISITE ─────────────────────────── │
-│     ├── Implement JWT authentication endpoints                              │
-│     ├── Configure CORS for Flutter development                              │
-│     ├── Document all API endpoints Flutter will use                         │
-│     └── Set up staging environment                                          │
+│  Phase 1: Backend Preparation ✅ COMPLETE ──────────────────────────────── │
+│     ├── ✅ JWT authentication endpoints implemented and verified via        │
+│         endpoint audit (2025-12-30)                                         │
+│     ├── ✅ CORS configured for Flutter dev                                  │
+│     ├── ✅ API endpoints documented for Flutter                             │
+│     └── ✅ Staging environment live                                         │
 │                                                                              │
 │  Phase 2: New Project Setup ────────────────────────────────────────────── │
 │     ├── Create new `cosmo_app/` project (parallel to existing)              │
@@ -228,10 +230,11 @@ class ApiException implements Exception {
 │     └── TaskFormScreen (create/edit)                                        │
 │                                                                              │
 │  ────────────────── STAGE 1 GATE: Architecture Validation ─────────────── │
-│  ✓ All services working correctly                                          │
-│  ✓ Offline mode tested and functional                                       │
-│  ✓ Core workflow (view → edit → complete task) working                     │
-│  ✓ Unit tests for services (80%+ coverage)                                 │
+│  ✓ Services smoke-tested (auth, tasks, sync) on staging                     │
+│  ✓ Offline suite: task list/load, create/edit/complete, photo queue        │
+│    replay with zero duplicate mutations                                     │
+│  ✓ Core workflow (view → edit → complete task) verified online/offline      │
+│  ✓ Tests: ≥80% coverage for service layer; widget tests for Auth & Staff    │
 │                                                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                    STAGE 2: BETA (Complete Modules)                          │
@@ -299,6 +302,10 @@ class ApiException implements Exception {
 │     ├── CI/CD pipeline setup                                                │
 │     ├── Production hosting configuration                                    │
 │     ├── Migration from Django templates                                     │
+│     ├── Blue/green or canary cutover with rollback trigger defined          │
+│     ├── Data migration dry-run + checksum/row-count verification            │
+│     ├── Dual-run window (Django templates read-only fallback)               │
+│     ├── Post-cutover smoke tests (auth, task CRUD, photo upload)            │
 │     └── User communication and training                                     │
 │                                                                              │
 │  ────────────────── v1.0 RELEASE ──────────────────────────────────────── │
@@ -309,6 +316,18 @@ class ApiException implements Exception {
 │  ├── Stage 2: 11 screens (Staff Aux + Portal + Web Platform)               │
 │  └── Stage 3: 11 screens (Manager + Chat + Settings + Testing + Deploy)    │
 └─────────────────────────────────────────────────────────────────────────────┘
+
+### Stage 1 exit evidence (must be collected before moving to Phase 5)
+- Service-layer coverage report ≥80% plus widget tests for Auth & Staff screens attached to CI artifacts.
+- Offline test suite run log showing: task list/read/write/complete, photo queue replay, and sync conflicts resolved with zero duplicate tasks or uploads.
+- Staging smoke checklist (auth, tasks, sync) signed off; includes at least one online→offline→online cycle.
+
+### Offline idempotency & conflict handling (Stage 1 requirement)
+- Every queued mutation carries a stable `request_id` persisted in Hive; backend treats it as an idempotency key and returns existing result on replay.
+- Server rejects duplicates gracefully (409/200 with canonical body) and never creates duplicate tasks/bookings; dedupe keyed by `(entity_id, operation, request_id)`.
+- Conflict resolution rules: server wins when `updated_at` is newer; offline edits merge comment/attachments without overwriting newer status/assignee fields.
+- Test coverage: replay same mutation 3x after reconnect; assert single side-effect, correct final state, and consistent client cache.
+- Attachments/photos: upload queue validates checksum and skips duplicate uploads on retry.
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │              v2.0+ DEFERRED (Multi-Tenant SaaS)                              │
@@ -324,8 +343,8 @@ class ApiException implements Exception {
 
 | Stage | Phase | Module | Screens | Rationale |
 |-------|-------|--------|---------|-----------|
-| **1** | 0 | GitHub Repo & Project Renaming | - | ✅ **COMPLETE** - Clean start with new identity |
-| **1** | 1 | Backend Preparation | - | **PREREQUISITE** - JWT, CORS, API docs |
+| **1** | 0 | GitHub Repo & Project Renaming | - | ✅ **COMPLETE** - Clean start with new identity (infra setup tracked separately) |
+| **1** | 1 | Backend Preparation | - | ✅ **COMPLETE** - JWT, CORS, API docs, staging verified |
 | **1** | 2 | Project Setup | - | New project with production architecture |
 | **1** | 3 | Authentication | 3 | Required for all other modules |
 | **1** | 4 | Staff Core | 4 | **PRIMARY VALUE** - task management |
