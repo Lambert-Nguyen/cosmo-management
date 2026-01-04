@@ -204,8 +204,15 @@ class TaskListNotifier extends StateNotifier<TaskListState> {
     final currentState = state as TaskListLoaded;
     if (!currentState.hasMore) return;
 
+    final previousPage = _currentPage;
     _currentPage++;
-    await loadTasks();
+    try {
+      await loadTasks();
+    } catch (e) {
+      // Restore page number on failure
+      _currentPage = previousPage;
+      rethrow;
+    }
   }
 
   /// Update filter and reload

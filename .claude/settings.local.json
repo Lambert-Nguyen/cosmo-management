@@ -42,7 +42,8 @@
       "Bash(dart run build_runner:*)",
       "Bash(gh pr list:*)",
       "Bash(tree:*)",
-      "Bash(python tests/run_tests_comprehensive.py:*)"
+      "Bash(python tests/run_tests_comprehensive.py:*)",
+      "Bash(flutter pub outdated:*)"
     ]
   }
 }
