@@ -5,6 +5,7 @@ library;
 
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/api_config.dart';
@@ -195,13 +196,27 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
     }
   }
 
+  /// Build options with idempotency key header
+  ///
+  /// The idempotency key ensures that replayed mutations (e.g., due to
+  /// network failures or reconnects) don't create duplicate server-side
+  /// writes. The server uses this key to deduplicate requests.
+  Options _buildIdempotentOptions(String idempotencyKey) {
+    return Options(
+      headers: {'X-Idempotency-Key': idempotencyKey},
+    );
+  }
+
   /// Process a single mutation
   Future<void> _processMutation(OfflineMutationModel mutation) async {
+    final options = _buildIdempotentOptions(mutation.id);
+
     switch (mutation.type) {
       case MutationType.create:
         await _apiService.post(
           ApiConfig.tasks,
           data: mutation.payload,
+          options: options,
         );
         break;
 
@@ -209,12 +224,14 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
         await _apiService.patch(
           ApiConfig.taskDetail(mutation.entityId),
           data: mutation.payload,
+          options: options,
         );
         break;
 
       case MutationType.delete:
         await _apiService.delete(
           ApiConfig.taskDetail(mutation.entityId),
+          options: options,
         );
         break;
 
@@ -222,6 +239,7 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
         await _apiService.post(
           ApiConfig.taskSetStatus(mutation.entityId),
           data: mutation.payload,
+          options: options,
         );
         break;
 
@@ -230,12 +248,14 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
         await _apiService.post(
           ApiConfig.checklistRespond(taskId),
           data: mutation.payload,
+          options: options,
         );
         break;
 
       case MutationType.assign:
         await _apiService.post(
           ApiConfig.taskAssignToMe(mutation.entityId),
+          options: options,
         );
         break;
     }

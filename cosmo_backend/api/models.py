@@ -2451,6 +2451,70 @@ class InviteCode(models.Model):
 
 
 # =============================================================================
+# IDEMPOTENCY KEY STORAGE
+# =============================================================================
+
+class IdempotencyKey(models.Model):
+    """
+    Stores processed idempotency keys to prevent duplicate mutations from
+    offline sync replays. When a request includes an X-Idempotency-Key header,
+    the system checks if that key has been processed before.
+
+    If processed: Returns the cached response without re-executing the mutation.
+    If new: Executes the mutation and stores the key with the response.
+    """
+    key = models.CharField(
+        max_length=64,
+        unique=True,
+        primary_key=True,
+        help_text="UUID idempotency key from client"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='idempotency_keys',
+        help_text="User who made the request"
+    )
+    endpoint = models.CharField(
+        max_length=255,
+        help_text="API endpoint path"
+    )
+    method = models.CharField(
+        max_length=10,
+        help_text="HTTP method (POST, PATCH, PUT, DELETE)"
+    )
+    response_status = models.PositiveSmallIntegerField(
+        help_text="HTTP response status code"
+    )
+    response_body = models.JSONField(
+        default=dict,
+        help_text="Cached response body"
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text="When the key was first processed"
+    )
+
+    class Meta:
+        verbose_name = "Idempotency Key"
+        verbose_name_plural = "Idempotency Keys"
+        indexes = [
+            models.Index(fields=['user', 'created_at']),
+            models.Index(fields=['created_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.key[:8]}... ({self.endpoint})"
+
+    @classmethod
+    def cleanup_old_keys(cls, days=7):
+        """Remove idempotency keys older than the specified number of days."""
+        cutoff = timezone.now() - timedelta(days=days)
+        deleted, _ = cls.objects.filter(created_at__lt=cutoff).delete()
+        return deleted
+
+
+# =============================================================================
 # SIGNAL RECEIVERS
 # =============================================================================
 

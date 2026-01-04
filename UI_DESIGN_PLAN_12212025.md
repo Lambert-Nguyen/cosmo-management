@@ -196,7 +196,7 @@ class ApiException implements Exception {
 │                    Deliverable: Working mobile app with auth + tasks         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Phase 0: GitHub Repo & Project Renaming ✅ COMPLETE ───────────────────── │
+│  Phase 0: GitHub Repo & Project Renaming ◀── PREREQUISITE, ✅ COMPLETE ───────────────────── │
 │     ├── ✅ Rename GitHub repository → cosmo-management                     │
 │     ├── ✅ Rename project directories (cosmo_backend, cosmo_app)          │
 │     ├── ✅ Update all code references (AriStay → Cosmo Management)        │
