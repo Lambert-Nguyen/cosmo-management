@@ -235,6 +235,21 @@ class OfflineMutationRepository {
     );
   }
 
+  /// Reset a mutation for retry (resets status to pending and clears error)
+  Future<void> resetForRetry(String id) async {
+    _ensureInitialized();
+    final mutation = await getMutation(id);
+    if (mutation == null) return;
+
+    final updated = mutation.copyWith(
+      syncStatus: SyncStatus.pending,
+      errorMessage: null,
+      retryCount: 0,
+    );
+
+    await _saveMutation(updated);
+  }
+
   /// Delete a mutation
   Future<void> deleteMutation(String id) async {
     _ensureInitialized();

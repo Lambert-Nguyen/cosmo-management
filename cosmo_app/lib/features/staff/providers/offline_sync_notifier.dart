@@ -61,6 +61,7 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
 
   StreamSubscription? _connectivitySubscription;
   bool _isSyncing = false;
+  Completer<SyncResultModel>? _syncCompleter;
 
   OfflineSyncNotifier({
     required OfflineMutationRepository mutationRepository,
@@ -77,15 +78,21 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
     // Listen for connectivity changes
     _connectivitySubscription = _connectivityService.statusStream.listen(
       (status) {
-        if (status != ConnectivityStatus.offline && !_isSyncing) {
-          // Auto-sync when coming online
-          syncPendingMutations();
+        // Use atomic check with sync lock to prevent race condition
+        if (status != ConnectivityStatus.offline) {
+          _tryAutoSync();
         }
       },
     );
 
     // Load initial status
     await refreshStatus();
+  }
+
+  /// Attempt auto-sync with lock to prevent race conditions
+  void _tryAutoSync() {
+    if (_isSyncing || _syncCompleter != null) return;
+    syncPendingMutations();
   }
 
   /// Refresh sync status
@@ -101,6 +108,11 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
 
   /// Sync all pending mutations
   Future<SyncResultModel> syncPendingMutations() async {
+    // Return existing sync result if already syncing
+    if (_syncCompleter != null) {
+      return _syncCompleter!.future;
+    }
+
     if (_isSyncing) {
       return const SyncResultModel();
     }
@@ -113,13 +125,17 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
     }
 
     _isSyncing = true;
+    _syncCompleter = Completer<SyncResultModel>();
 
     try {
       final pending = await _mutationRepository.getRetryableMutations();
       if (pending.isEmpty) {
         await refreshStatus();
+        const emptyResult = SyncResultModel();
+        _syncCompleter?.complete(emptyResult);
+        _syncCompleter = null;
         _isSyncing = false;
-        return const SyncResultModel();
+        return emptyResult;
       }
 
       int synced = 0;
@@ -165,6 +181,9 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
 
       state = OfflineSyncComplete(result);
 
+      // Complete the sync completer
+      _syncCompleter?.complete(result);
+
       // After a delay, go back to idle
       await Future.delayed(const Duration(seconds: 3));
       await refreshStatus();
@@ -172,6 +191,7 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
       return result;
     } finally {
       _isSyncing = false;
+      _syncCompleter = null;
     }
   }
 
@@ -231,6 +251,41 @@ class OfflineSyncNotifier extends StateNotifier<OfflineSyncState> {
     final failed = await _mutationRepository.getFailedMutations();
     for (final mutation in failed) {
       await _mutationRepository.deleteMutation(mutation.id);
+    }
+    await refreshStatus();
+  }
+
+  /// Get all conflict mutations for resolution
+  Future<List<OfflineMutationModel>> getConflicts() async {
+    return _mutationRepository.getConflictMutations();
+  }
+
+  /// Resolve a conflict by keeping local changes (retry sync)
+  Future<void> resolveConflictKeepLocal(String mutationId) async {
+    await _mutationRepository.resetForRetry(mutationId);
+    await refreshStatus();
+  }
+
+  /// Resolve a conflict by discarding local changes
+  Future<void> resolveConflictDiscard(String mutationId) async {
+    await _mutationRepository.deleteMutation(mutationId);
+    await refreshStatus();
+  }
+
+  /// Resolve all conflicts by keeping local changes
+  Future<void> resolveAllConflictsKeepLocal() async {
+    final conflicts = await _mutationRepository.getConflictMutations();
+    for (final conflict in conflicts) {
+      await _mutationRepository.resetForRetry(conflict.id);
+    }
+    await refreshStatus();
+  }
+
+  /// Resolve all conflicts by discarding local changes
+  Future<void> resolveAllConflictsDiscard() async {
+    final conflicts = await _mutationRepository.getConflictMutations();
+    for (final conflict in conflicts) {
+      await _mutationRepository.deleteMutation(conflict.id);
     }
     await refreshStatus();
   }

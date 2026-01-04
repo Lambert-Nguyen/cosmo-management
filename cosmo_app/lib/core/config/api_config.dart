@@ -163,6 +163,11 @@ class ApiConfig {
   static String checklistPhotoUpload(int itemId) =>
       '/api/staff/checklist/$itemId/photo/';
 
+  /// Checklist photo deletion
+  /// DELETE /api/staff/checklist/photos/{photoId}/
+  static String checklistPhotoDelete(int photoId) =>
+      '/api/staff/checklist/photos/$photoId/';
+
   // ============================================
   // Property Endpoints
   // ============================================

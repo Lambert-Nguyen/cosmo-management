@@ -20,6 +20,7 @@ class ChecklistPhotoItem extends StatelessWidget {
     super.key,
     required this.item,
     required this.onPhotoTaken,
+    this.onPhotoRemoved,
     this.response,
     this.photos = const [],
     this.isRequired = false,
@@ -30,11 +31,14 @@ class ChecklistPhotoItem extends StatelessWidget {
   final ChecklistResponseModel? response;
   final List<ChecklistPhotoModel> photos;
   final void Function(String photoPath) onPhotoTaken;
+  /// Callback when a photo is removed. If not provided, removal is disabled.
+  final void Function(int photoId)? onPhotoRemoved;
   final bool isRequired;
   final bool isOffline;
 
   bool get hasPhoto => photos.isNotEmpty;
   bool get isCompleted => response?.isCompleted ?? false;
+  bool get canRemovePhoto => onPhotoRemoved != null && hasPhoto;
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +312,7 @@ class ChecklistPhotoItem extends StatelessWidget {
                 _pickFromGallery(context);
               },
             ),
-            if (hasPhoto)
+            if (canRemovePhoto)
               ListTile(
                 leading: const Icon(Icons.delete, color: AppColors.error),
                 title: const Text(
@@ -317,8 +321,10 @@ class ChecklistPhotoItem extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  // Clear photo by passing empty string
-                  onPhotoTaken('');
+                  // Call the proper removal callback with photo ID
+                  if (photos.isNotEmpty) {
+                    onPhotoRemoved!(photos.first.id);
+                  }
                 },
               ),
           ],

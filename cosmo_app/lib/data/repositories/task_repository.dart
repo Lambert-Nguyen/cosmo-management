@@ -347,6 +347,11 @@ class TaskRepository extends BaseRepository {
     return response['url'] as String? ?? response['photo_url'] as String;
   }
 
+  /// Delete checklist photo
+  Future<void> deleteChecklistPhoto(int photoId) async {
+    await apiService.delete(ApiConfig.checklistPhotoDelete(photoId));
+  }
+
   /// Invalidate dashboard cache
   Future<void> invalidateDashboardCache() async {
     await invalidateCache(_dashboardCacheKey);

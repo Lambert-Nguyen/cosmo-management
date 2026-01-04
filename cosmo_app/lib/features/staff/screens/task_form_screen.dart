@@ -11,6 +11,7 @@ import '../../../core/providers/service_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/inputs/app_text_field.dart';
+import '../../../data/models/offline_mutation_model.dart';
 import '../../../data/models/task_model.dart';
 import '../providers/staff_providers.dart';
 
@@ -127,7 +128,51 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     setState(() => _isLoading = true);
 
     try {
+      final isOffline = ref.read(isOfflineProvider);
       final taskRepository = ref.read(taskRepositoryProvider);
+
+      if (isOffline) {
+        // Queue for offline sync
+        final mutationRepository = ref.read(offlineMutationRepositoryProvider);
+        final payload = {
+          'title': _titleController.text.trim(),
+          if (_descriptionController.text.trim().isNotEmpty)
+            'description': _descriptionController.text.trim(),
+          'priority': _priority.value,
+          if (_dueDate != null) 'due_date': _dueDate!.toIso8601String(),
+          if (_propertyId != null) 'property_id': _propertyId,
+          if (_assigneeId != null) 'assigned_to': _assigneeId,
+        };
+
+        await mutationRepository.queueMutation(
+          type: widget.isEditing ? MutationType.update : MutationType.create,
+          entityType: EntityType.task,
+          entityId: widget.taskId ?? 0,
+          payload: payload,
+        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                widget.isEditing
+                    ? 'Task queued for sync (offline)'
+                    : 'Task queued for creation (offline)',
+              ),
+              backgroundColor: AppColors.taskPending,
+              action: SnackBarAction(
+                label: 'View Queue',
+                textColor: Colors.white,
+                onPressed: () {
+                  // Could navigate to sync status screen
+                },
+              ),
+            ),
+          );
+          context.pop(true);
+        }
+        return;
+      }
 
       if (widget.isEditing) {
         // Update existing task
