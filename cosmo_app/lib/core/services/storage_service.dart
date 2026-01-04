@@ -1,10 +1,12 @@
 /// Storage service for Cosmo Management
 ///
-/// Provides local storage using Hive for offline-first caching.
+/// Provides encrypted local storage using Hive for offline-first caching.
 library;
 
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../config/env_config.dart';
@@ -12,26 +14,72 @@ import '../config/env_config.dart';
 /// Service for local data storage and caching
 ///
 /// Uses Hive for fast NoSQL storage with:
+/// - AES-256 encryption for sensitive data
 /// - Automatic cache expiration
 /// - Type-safe data retrieval
 /// - Offline data persistence
 class StorageService {
-  static const String _cacheBoxName = 'cache';
+  static const String _cacheBoxName = 'cache_encrypted';
   static const String _metadataBoxName = 'cache_metadata';
+  static const String _encryptionKeyName = 'hive_encryption_key';
+
+  final FlutterSecureStorage _secureStorage;
 
   Box<String>? _cacheBox;
   Box<int>? _metadataBox;
 
   bool _isInitialized = false;
 
-  /// Initialize the storage service
+  StorageService({FlutterSecureStorage? secureStorage})
+      : _secureStorage = secureStorage ??
+            const FlutterSecureStorage(
+              aOptions: AndroidOptions(),
+              iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
+            );
+
+  /// Initialize the storage service with encryption
   Future<void> init() async {
     if (_isInitialized) return;
 
     await Hive.initFlutter();
-    _cacheBox = await Hive.openBox<String>(_cacheBoxName);
+
+    // Get or generate encryption key
+    final encryptionKey = await _getOrCreateEncryptionKey();
+    final cipher = HiveAesCipher(encryptionKey);
+
+    // Open encrypted cache box
+    _cacheBox = await Hive.openBox<String>(
+      _cacheBoxName,
+      encryptionCipher: cipher,
+    );
+
+    // Metadata box doesn't need encryption (just timestamps)
     _metadataBox = await Hive.openBox<int>(_metadataBoxName);
+
     _isInitialized = true;
+  }
+
+  /// Get or create the encryption key
+  Future<Uint8List> _getOrCreateEncryptionKey() async {
+    // Try to get existing key
+    final existingKey = await _secureStorage.read(key: _encryptionKeyName);
+
+    if (existingKey != null) {
+      // Decode existing key from base64
+      return base64Decode(existingKey);
+    }
+
+    // Generate new 256-bit key (32 bytes)
+    final newKey = Hive.generateSecureKey();
+    final keyBytes = Uint8List.fromList(newKey);
+
+    // Store key securely
+    await _secureStorage.write(
+      key: _encryptionKeyName,
+      value: base64Encode(keyBytes),
+    );
+
+    return keyBytes;
   }
 
   /// Ensure the service is initialized
@@ -41,7 +89,7 @@ class StorageService {
     }
   }
 
-  /// Cache data with automatic JSON serialization
+  /// Cache data with automatic JSON serialization (encrypted)
   Future<void> cacheData<T>(String key, T data) async {
     _ensureInitialized();
 
@@ -170,6 +218,9 @@ class StorageService {
     return size;
   }
 
+  /// Check if encryption is enabled (always true after init)
+  bool get isEncrypted => _isInitialized;
+
   /// Check if cache has expired based on EnvConfig.cacheExpiryHours
   bool _isCacheExpired(String key) {
     final timestamp = _metadataBox!.get(key);
@@ -195,5 +246,17 @@ class StorageService {
       await _metadataBox?.close();
       _isInitialized = false;
     }
+  }
+
+  /// Delete all data including encryption key (for logout/reset)
+  Future<void> deleteAll() async {
+    await close();
+
+    // Delete encryption key
+    await _secureStorage.delete(key: _encryptionKeyName);
+
+    // Delete Hive boxes
+    await Hive.deleteBoxFromDisk(_cacheBoxName);
+    await Hive.deleteBoxFromDisk(_metadataBoxName);
   }
 }

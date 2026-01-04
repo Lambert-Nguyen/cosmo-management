@@ -5,9 +5,11 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/offline_mutation_model.dart';
+import '../../../router/route_names.dart';
 import '../providers/staff_providers.dart';
 
 /// Sync indicator for app bar
@@ -76,10 +78,8 @@ class SyncIndicator extends ConsumerWidget {
       return IconButton(
         icon: const Icon(Icons.sync_problem),
         color: AppColors.error,
-        tooltip: '${status.failedCount} failed to sync',
-        onPressed: () {
-          // Could show a dialog with failed items
-        },
+        tooltip: '${status.failedCount} failed to sync - tap to resolve',
+        onPressed: () => context.push(RouteNames.syncConflicts),
       );
     }
 
@@ -102,12 +102,8 @@ class SyncIndicator extends ConsumerWidget {
     return IconButton(
       icon: const Icon(Icons.sync_problem),
       color: AppColors.error,
-      tooltip: message,
-      onPressed: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
-      },
+      tooltip: '$message - tap to resolve',
+      onPressed: () => context.push(RouteNames.syncConflicts),
     );
   }
 

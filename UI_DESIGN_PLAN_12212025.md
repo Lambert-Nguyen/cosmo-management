@@ -1,9 +1,9 @@
 # Cosmo Management UI Redesign Plan: Django Templates → Flutter (Web + Mobile)
 
-**Document Version:** 3.8
+**Document Version:** 3.9
 **Created:** 2025-12-21
 **Last Updated:** 2026-01-03
-**Status:** Phase 4 COMPLETE - Staff Module Core (100%)
+**Status:** Phase 4 COMPLETE - Staff Module Core (100%) + Security Enhancements
 **Platform Name:** Cosmo Management (formerly AriStay)
 **Target Platforms:** Flutter Web, Android, iOS
 
@@ -11,6 +11,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.9 | 2026-01-03 | **Security & UX Enhancements:** Added AES-256 cache encryption via HiveAesCipher with secure key storage (flutter_secure_storage). Created SyncConflictsScreen for conflict resolution UI with bulk actions. Added navigation from SyncIndicator to conflicts screen. |
 | 3.8 | 2026-01-03 | **Phase 4 COMPLETE (100%):** Staff Module fully implemented. Fixed race condition in offline sync (added Completer), added offline form submission with mutation queuing, wired photo upload/deletion, connected property/assignee dropdowns to providers, fixed cache serialization in BaseRepository, improved pagination error handling. Search and duplicate fully functional. |
 | 3.7 | 2026-01-02 | **Phase 4 IN PROGRESS (70%):** Staff Module core structure complete. Added Freezed models (checklist, offline_mutation, dashboard). Created 5 providers, 10 widgets, 5 screens. Routing configured with StatefulShellRoute. Remaining: task form save logic, photo upload, search, tests. |
 | 3.6 | 2025-12-31 | **Phase 3 COMPLETE:** Authentication module implemented. RegisterScreen with multi-step invite code validation, ForgotPasswordScreen, ResetPasswordScreen with deep link support. Added 82 unit/widget tests for auth. |
@@ -3015,7 +3016,7 @@ lib/
 - Repositories: `offline_mutation_repository.dart`
 - Providers (5): `staff_dashboard_notifier.dart`, `task_list_notifier.dart`, `task_detail_notifier.dart`, `offline_sync_notifier.dart`, `staff_providers.dart`
 - Widgets (10): `stat_card.dart`, `task_list_item.dart`, `sync_indicator.dart`, `offline_banner.dart`, `filter_chips_row.dart`, `checklist_section.dart`, `checklist_check_item.dart`, `checklist_photo_item.dart`, `checklist_text_item.dart`, `checklist_number_item.dart`
-- Screens (5): `staff_dashboard_screen.dart`, `task_list_screen.dart`, `task_detail_screen.dart`, `task_form_screen.dart`, `staff_shell.dart`
+- Screens (6): `staff_dashboard_screen.dart`, `task_list_screen.dart`, `task_detail_screen.dart`, `task_form_screen.dart`, `staff_shell.dart`, `sync_conflicts_screen.dart`
 
 **Known Issues (Resolved):**
 
@@ -3032,6 +3033,13 @@ lib/
 - Added proper page rollback in `TaskListNotifier.loadMore()` on error
 - Added `deleteChecklistPhoto()` in `TaskRepository` with API endpoint
 - Connected `propertiesProvider` and `staffMembersProvider` for form dropdowns
+
+**Security Enhancements (v3.9):**
+
+- **Encrypted Cache**: `StorageService` now uses `HiveAesCipher` for AES-256 encryption
+- **Secure Key Storage**: Encryption key stored via `flutter_secure_storage` (Keychain on iOS, encrypted SharedPreferences on Android)
+- **Conflict Resolution UI**: `SyncConflictsScreen` provides visual conflict management with retry/discard options
+- **Bulk Conflict Actions**: "Retry All" and "Discard All" buttons for efficient conflict handling
 
 ---
 

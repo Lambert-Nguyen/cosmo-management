@@ -20,6 +20,7 @@ import '../features/auth/screens/register_screen.dart';
 import '../features/auth/screens/splash_screen.dart';
 import '../features/staff/screens/staff_dashboard_screen.dart';
 import '../features/staff/screens/staff_shell.dart';
+import '../features/staff/screens/sync_conflicts_screen.dart';
 import '../features/staff/screens/task_detail_screen.dart';
 import '../features/staff/screens/task_form_screen.dart';
 import '../features/staff/screens/task_list_screen.dart';
@@ -192,6 +193,13 @@ class AppRouter {
           builder: (context, state) => const _PlaceholderScreen(
             title: 'Profile',
           ),
+        ),
+
+        // Sync conflicts (outside shell for full screen)
+        GoRoute(
+          path: RouteNames.syncConflicts,
+          name: 'syncConflicts',
+          builder: (context, state) => const SyncConflictsScreen(),
         ),
 
         // Staff routes with bottom navigation shell

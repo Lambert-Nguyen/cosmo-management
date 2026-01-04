@@ -120,4 +120,7 @@ class RouteNames {
 
   /// Staff profile
   static const String staffProfile = '/staff/profile';
+
+  /// Sync conflicts screen
+  static const String syncConflicts = '/staff/sync-conflicts';
 }
