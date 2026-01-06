@@ -43,7 +43,8 @@
       "Bash(gh pr list:*)",
       "Bash(tree:*)",
       "Bash(python tests/run_tests_comprehensive.py:*)",
-      "Bash(flutter pub outdated:*)"
+      "Bash(flutter pub outdated:*)",
+      "Bash(flutter --version:*)"
     ]
   }
 }
