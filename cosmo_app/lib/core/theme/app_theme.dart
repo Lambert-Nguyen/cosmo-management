@@ -138,7 +138,7 @@ class AppTheme {
   // Card Themes
   // ============================================
 
-  static CardTheme _lightCardTheme = CardTheme(
+  static CardThemeData _lightCardTheme = CardThemeData(
     elevation: 0,
     color: AppColors.surface,
     surfaceTintColor: Colors.transparent,
@@ -149,7 +149,7 @@ class AppTheme {
     margin: EdgeInsets.zero,
   );
 
-  static CardTheme _darkCardTheme = CardTheme(
+  static CardThemeData _darkCardTheme = CardThemeData(
     elevation: 0,
     color: AppColors.surfaceDark,
     surfaceTintColor: Colors.transparent,
@@ -387,7 +387,7 @@ class AppTheme {
   // Dialog Theme
   // ============================================
 
-  static DialogTheme _dialogTheme = DialogTheme(
+  static DialogThemeData _dialogTheme = DialogThemeData(
     shape: RoundedRectangleBorder(
       borderRadius: AppSpacing.borderRadiusLg,
     ),

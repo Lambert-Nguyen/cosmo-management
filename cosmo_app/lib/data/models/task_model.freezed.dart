@@ -54,6 +54,18 @@ mixin _$TaskModel {
   @JsonKey(name: 'actual_duration')
   int? get actualDurationMinutes => throw _privateConstructorUsedError;
 
+  /// Checklist data (when included in response)
+  TaskChecklistModel? get checklist => throw _privateConstructorUsedError;
+
+  /// Checklist progress summary
+  @JsonKey(name: 'checklist_progress')
+  ChecklistProgressModel? get checklistProgress =>
+      throw _privateConstructorUsedError;
+
+  /// Whether checklist has incomplete blocking items
+  @JsonKey(name: 'has_blocking_items')
+  bool get hasBlockingItems => throw _privateConstructorUsedError;
+
   /// Serializes this TaskModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -89,7 +101,14 @@ abstract class $TaskModelCopyWith<$Res> {
       List<String> images,
       String? notes,
       @JsonKey(name: 'estimated_duration') int? estimatedDurationMinutes,
-      @JsonKey(name: 'actual_duration') int? actualDurationMinutes});
+      @JsonKey(name: 'actual_duration') int? actualDurationMinutes,
+      TaskChecklistModel? checklist,
+      @JsonKey(name: 'checklist_progress')
+      ChecklistProgressModel? checklistProgress,
+      @JsonKey(name: 'has_blocking_items') bool hasBlockingItems});
+
+  $TaskChecklistModelCopyWith<$Res>? get checklist;
+  $ChecklistProgressModelCopyWith<$Res>? get checklistProgress;
 }
 
 /// @nodoc
@@ -127,6 +146,9 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
     Object? notes = freezed,
     Object? estimatedDurationMinutes = freezed,
     Object? actualDurationMinutes = freezed,
+    Object? checklist = freezed,
+    Object? checklistProgress = freezed,
+    Object? hasBlockingItems = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -209,7 +231,48 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
           ? _value.actualDurationMinutes
           : actualDurationMinutes // ignore: cast_nullable_to_non_nullable
               as int?,
+      checklist: freezed == checklist
+          ? _value.checklist
+          : checklist // ignore: cast_nullable_to_non_nullable
+              as TaskChecklistModel?,
+      checklistProgress: freezed == checklistProgress
+          ? _value.checklistProgress
+          : checklistProgress // ignore: cast_nullable_to_non_nullable
+              as ChecklistProgressModel?,
+      hasBlockingItems: null == hasBlockingItems
+          ? _value.hasBlockingItems
+          : hasBlockingItems // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
+  }
+
+  /// Create a copy of TaskModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TaskChecklistModelCopyWith<$Res>? get checklist {
+    if (_value.checklist == null) {
+      return null;
+    }
+
+    return $TaskChecklistModelCopyWith<$Res>(_value.checklist!, (value) {
+      return _then(_value.copyWith(checklist: value) as $Val);
+    });
+  }
+
+  /// Create a copy of TaskModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChecklistProgressModelCopyWith<$Res>? get checklistProgress {
+    if (_value.checklistProgress == null) {
+      return null;
+    }
+
+    return $ChecklistProgressModelCopyWith<$Res>(_value.checklistProgress!,
+        (value) {
+      return _then(_value.copyWith(checklistProgress: value) as $Val);
+    });
   }
 }
 
@@ -241,7 +304,16 @@ abstract class _$$TaskModelImplCopyWith<$Res>
       List<String> images,
       String? notes,
       @JsonKey(name: 'estimated_duration') int? estimatedDurationMinutes,
-      @JsonKey(name: 'actual_duration') int? actualDurationMinutes});
+      @JsonKey(name: 'actual_duration') int? actualDurationMinutes,
+      TaskChecklistModel? checklist,
+      @JsonKey(name: 'checklist_progress')
+      ChecklistProgressModel? checklistProgress,
+      @JsonKey(name: 'has_blocking_items') bool hasBlockingItems});
+
+  @override
+  $TaskChecklistModelCopyWith<$Res>? get checklist;
+  @override
+  $ChecklistProgressModelCopyWith<$Res>? get checklistProgress;
 }
 
 /// @nodoc
@@ -277,6 +349,9 @@ class __$$TaskModelImplCopyWithImpl<$Res>
     Object? notes = freezed,
     Object? estimatedDurationMinutes = freezed,
     Object? actualDurationMinutes = freezed,
+    Object? checklist = freezed,
+    Object? checklistProgress = freezed,
+    Object? hasBlockingItems = null,
   }) {
     return _then(_$TaskModelImpl(
       id: null == id
@@ -359,6 +434,18 @@ class __$$TaskModelImplCopyWithImpl<$Res>
           ? _value.actualDurationMinutes
           : actualDurationMinutes // ignore: cast_nullable_to_non_nullable
               as int?,
+      checklist: freezed == checklist
+          ? _value.checklist
+          : checklist // ignore: cast_nullable_to_non_nullable
+              as TaskChecklistModel?,
+      checklistProgress: freezed == checklistProgress
+          ? _value.checklistProgress
+          : checklistProgress // ignore: cast_nullable_to_non_nullable
+              as ChecklistProgressModel?,
+      hasBlockingItems: null == hasBlockingItems
+          ? _value.hasBlockingItems
+          : hasBlockingItems // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -386,7 +473,10 @@ class _$TaskModelImpl extends _TaskModel {
       final List<String> images = const [],
       this.notes,
       @JsonKey(name: 'estimated_duration') this.estimatedDurationMinutes,
-      @JsonKey(name: 'actual_duration') this.actualDurationMinutes})
+      @JsonKey(name: 'actual_duration') this.actualDurationMinutes,
+      this.checklist,
+      @JsonKey(name: 'checklist_progress') this.checklistProgress,
+      @JsonKey(name: 'has_blocking_items') this.hasBlockingItems = false})
       : _images = images,
         super._();
 
@@ -456,9 +546,23 @@ class _$TaskModelImpl extends _TaskModel {
   @JsonKey(name: 'actual_duration')
   final int? actualDurationMinutes;
 
+  /// Checklist data (when included in response)
+  @override
+  final TaskChecklistModel? checklist;
+
+  /// Checklist progress summary
+  @override
+  @JsonKey(name: 'checklist_progress')
+  final ChecklistProgressModel? checklistProgress;
+
+  /// Whether checklist has incomplete blocking items
+  @override
+  @JsonKey(name: 'has_blocking_items')
+  final bool hasBlockingItems;
+
   @override
   String toString() {
-    return 'TaskModel(id: $id, title: $title, description: $description, taskType: $taskType, status: $status, priority: $priority, propertyId: $propertyId, propertyName: $propertyName, assignedToId: $assignedToId, assignedToName: $assignedToName, createdById: $createdById, createdByName: $createdByName, dueDate: $dueDate, completedAt: $completedAt, createdAt: $createdAt, updatedAt: $updatedAt, images: $images, notes: $notes, estimatedDurationMinutes: $estimatedDurationMinutes, actualDurationMinutes: $actualDurationMinutes)';
+    return 'TaskModel(id: $id, title: $title, description: $description, taskType: $taskType, status: $status, priority: $priority, propertyId: $propertyId, propertyName: $propertyName, assignedToId: $assignedToId, assignedToName: $assignedToName, createdById: $createdById, createdByName: $createdByName, dueDate: $dueDate, completedAt: $completedAt, createdAt: $createdAt, updatedAt: $updatedAt, images: $images, notes: $notes, estimatedDurationMinutes: $estimatedDurationMinutes, actualDurationMinutes: $actualDurationMinutes, checklist: $checklist, checklistProgress: $checklistProgress, hasBlockingItems: $hasBlockingItems)';
   }
 
   @override
@@ -500,7 +604,13 @@ class _$TaskModelImpl extends _TaskModel {
                     other.estimatedDurationMinutes, estimatedDurationMinutes) ||
                 other.estimatedDurationMinutes == estimatedDurationMinutes) &&
             (identical(other.actualDurationMinutes, actualDurationMinutes) ||
-                other.actualDurationMinutes == actualDurationMinutes));
+                other.actualDurationMinutes == actualDurationMinutes) &&
+            (identical(other.checklist, checklist) ||
+                other.checklist == checklist) &&
+            (identical(other.checklistProgress, checklistProgress) ||
+                other.checklistProgress == checklistProgress) &&
+            (identical(other.hasBlockingItems, hasBlockingItems) ||
+                other.hasBlockingItems == hasBlockingItems));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -526,7 +636,10 @@ class _$TaskModelImpl extends _TaskModel {
         const DeepCollectionEquality().hash(_images),
         notes,
         estimatedDurationMinutes,
-        actualDurationMinutes
+        actualDurationMinutes,
+        checklist,
+        checklistProgress,
+        hasBlockingItems
       ]);
 
   /// Create a copy of TaskModel
@@ -566,8 +679,12 @@ abstract class _TaskModel extends TaskModel {
       final List<String> images,
       final String? notes,
       @JsonKey(name: 'estimated_duration') final int? estimatedDurationMinutes,
-      @JsonKey(name: 'actual_duration')
-      final int? actualDurationMinutes}) = _$TaskModelImpl;
+      @JsonKey(name: 'actual_duration') final int? actualDurationMinutes,
+      final TaskChecklistModel? checklist,
+      @JsonKey(name: 'checklist_progress')
+      final ChecklistProgressModel? checklistProgress,
+      @JsonKey(name: 'has_blocking_items')
+      final bool hasBlockingItems}) = _$TaskModelImpl;
   const _TaskModel._() : super._();
 
   factory _TaskModel.fromJson(Map<String, dynamic> json) =
@@ -626,6 +743,20 @@ abstract class _TaskModel extends TaskModel {
   @override
   @JsonKey(name: 'actual_duration')
   int? get actualDurationMinutes;
+
+  /// Checklist data (when included in response)
+  @override
+  TaskChecklistModel? get checklist;
+
+  /// Checklist progress summary
+  @override
+  @JsonKey(name: 'checklist_progress')
+  ChecklistProgressModel? get checklistProgress;
+
+  /// Whether checklist has incomplete blocking items
+  @override
+  @JsonKey(name: 'has_blocking_items')
+  bool get hasBlockingItems;
 
   /// Create a copy of TaskModel
   /// with the given fields replaced by the non-null parameter values.

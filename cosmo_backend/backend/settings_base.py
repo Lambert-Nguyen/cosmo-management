@@ -74,6 +74,8 @@ MIDDLEWARE = [
     'backend.middleware.AdminAccessMiddleware',
     # Agent's Phase 2: Audit middleware for request context capture
     'api.audit_middleware.AuditMiddleware',
+    # Idempotency middleware for offline sync replay deduplication (after auth)
+    'api.idempotency_middleware.IdempotencyMiddleware',
     # Now your timezone middleware can safely reference request.user
     'backend.middleware.TimezoneMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

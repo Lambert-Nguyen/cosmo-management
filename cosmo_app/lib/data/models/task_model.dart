@@ -5,6 +5,8 @@ library;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'checklist_model.dart';
+
 part 'task_model.freezed.dart';
 part 'task_model.g.dart';
 
@@ -34,6 +36,15 @@ class TaskModel with _$TaskModel {
     String? notes,
     @JsonKey(name: 'estimated_duration') int? estimatedDurationMinutes,
     @JsonKey(name: 'actual_duration') int? actualDurationMinutes,
+
+    /// Checklist data (when included in response)
+    TaskChecklistModel? checklist,
+
+    /// Checklist progress summary
+    @JsonKey(name: 'checklist_progress') ChecklistProgressModel? checklistProgress,
+
+    /// Whether checklist has incomplete blocking items
+    @JsonKey(name: 'has_blocking_items') @Default(false) bool hasBlockingItems,
   }) = _TaskModel;
 
   const TaskModel._();

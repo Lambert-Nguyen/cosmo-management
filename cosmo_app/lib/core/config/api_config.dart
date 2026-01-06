@@ -96,6 +96,78 @@ class ApiConfig {
   static String tasksByStatus(String status) =>
       '/api/tasks/by-status/?status=$status';
 
+  /// Task count by status
+  /// GET /api/tasks/count-by-status/
+  static const String taskCountByStatus = '/api/tasks/count-by-status/';
+
+  /// Assign task to current user
+  /// POST /api/tasks/{id}/assign_to_me/
+  static String taskAssignToMe(int id) => '/api/tasks/$id/assign_to_me/';
+
+  /// Set task status
+  /// POST /api/tasks/{id}/set_status/
+  static String taskSetStatus(int id) => '/api/tasks/$id/set_status/';
+
+  /// Mute task notifications
+  /// POST /api/tasks/{id}/mute/
+  static String taskMute(int id) => '/api/tasks/$id/mute/';
+
+  /// Unmute task notifications
+  /// POST /api/tasks/{id}/unmute/
+  static String taskUnmute(int id) => '/api/tasks/$id/unmute/';
+
+  /// Task images
+  /// GET/POST /api/tasks/{id}/images/
+  static String taskImages(int id) => '/api/tasks/$id/images/';
+
+  /// Task image detail
+  /// GET/PATCH/DELETE /api/tasks/{taskId}/images/{imageId}/
+  static String taskImageDetail(int taskId, int imageId) =>
+      '/api/tasks/$taskId/images/$imageId/';
+
+  // ============================================
+  // Staff Module Endpoints
+  // ============================================
+
+  /// Staff dashboard
+  /// GET /api/mobile/dashboard/
+  static const String staffDashboard = '/api/mobile/dashboard/';
+
+  /// Offline sync
+  /// POST /api/mobile/offline-sync/
+  static const String offlineSync = '/api/mobile/offline-sync/';
+
+  /// Staff task duplicate
+  /// POST /api/staff/tasks/{id}/duplicate/
+  static String taskDuplicate(int id) => '/api/staff/tasks/$id/duplicate/';
+
+  /// Staff task progress
+  /// GET /api/staff/tasks/{id}/progress/
+  static String taskProgress(int id) => '/api/staff/tasks/$id/progress/';
+
+  // ============================================
+  // Checklist Endpoints
+  // ============================================
+
+  /// Task checklist
+  /// GET /api/tasks/{id}/checklist/
+  static String taskChecklist(int id) => '/api/tasks/$id/checklist/';
+
+  /// Submit checklist response
+  /// POST /api/tasks/{taskId}/checklist/respond/
+  static String checklistRespond(int taskId) =>
+      '/api/tasks/$taskId/checklist/respond/';
+
+  /// Checklist item photo upload
+  /// POST /api/staff/checklist/{itemId}/photo/
+  static String checklistPhotoUpload(int itemId) =>
+      '/api/staff/checklist/$itemId/photo/';
+
+  /// Checklist photo deletion
+  /// DELETE /api/staff/checklist/photos/{photoId}/
+  static String checklistPhotoDelete(int photoId) =>
+      '/api/staff/checklist/photos/$photoId/';
+
   // ============================================
   // Property Endpoints
   // ============================================

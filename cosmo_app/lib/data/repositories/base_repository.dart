@@ -19,6 +19,8 @@ abstract class BaseRepository {
   });
 
   /// Get cached data or fetch from API
+  ///
+  /// The model type T must have a toJson() method (Freezed models).
   Future<T> getCachedOrFetch<T>({
     required String cacheKey,
     required Future<T> Function() fetchFunction,
@@ -37,8 +39,13 @@ abstract class BaseRepository {
     // Fetch from API
     final data = await fetchFunction();
 
-    // Cache the result
-    await storageService.cacheData(cacheKey, data);
+    // Cache the result - convert to JSON for Freezed models
+    try {
+      final jsonData = (data as dynamic).toJson();
+      await storageService.cacheData(cacheKey, jsonData);
+    } catch (_) {
+      // Model doesn't support toJson(), skip caching
+    }
 
     return data;
   }

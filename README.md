@@ -1,46 +1,49 @@
-# Cosmo Management - Universal Property & Operations Management
+# Cosmo Management
 
-**Cosmo Management** is a comprehensive, enterprise-grade property management platform designed for modern hospitality operations. It features a robust Django REST API backend with JWT authentication, automated task management, real-time chat, and a Flutter mobile application.
+**Cosmo Management** is a comprehensive property and operations management platform built with a Flutter-first, offline-first architecture. It features a Django REST API backend with JWT authentication, automated task management, and native mobile applications for iOS and Android.
 
-## Project Overview
+## Project Status
 
-### Core Features
-- **JWT Authentication** - Secure, token-based authentication system
-- **Booking Management** - Comprehensive reservation and guest management
-- **Task Automation** - Automated cleaning and maintenance task creation
-- **Role-Based Access Control** - Granular permission system with 38 custom permissions
-- **Real-Time Chat** - WebSocket-based messaging system with Django Channels
-- **Mobile Application** - Flutter-based mobile interface
-- **Admin Dashboard** - Staff management and reporting interface
-- **Photo Management** - Before/after photo tracking and approval workflow
-- **Calendar System** - Property and task scheduling interface
-- **Modern UI/UX** - **100% refactored** with ES modules and design system
+| Component | Status | Description |
+|-----------|--------|-------------|
+| **Backend API** | Production Ready | Django REST + PostgreSQL + JWT |
+| **Flutter App** | Phase 4 Complete | Staff Module 100% implemented |
+| **Offline Sync** | Implemented | Idempotency-based deduplication |
+| **Stage** | Stage 1 Alpha | Architecture validation |
 
-### Technology Stack
-- **Backend**: Django REST Framework with PostgreSQL
-- **Real-Time**: Django Channels with Redis for WebSocket support
-- **Frontend**: Flutter mobile application
-- **Web UI**: Modern Django templates with ES module architecture
-- **Design System**: Consistent tokens, components, and patterns
-- **Authentication**: JWT with djangorestframework-simplejwt
-- **CDN**: Cloudinary with 8x compression
-- **Testing**: Comprehensive test suite with pytest
-- **Deployment**: Production-ready with security hardening
+### What's Working
+- JWT Authentication (login, register, password reset)
+- Staff Task Management (list, detail, create, edit, complete)
+- Offline-First Architecture (queue mutations, sync on reconnect)
+- Idempotency System (prevents duplicate mutations on replay)
+- Photo Management (upload, queue offline, sync)
+- Conflict Resolution UI (resolve server vs local conflicts)
 
-## Quick Start
+---
+
+## Quick Start Guide
 
 ### Prerequisites
-- Python 3.13+ with virtual environment
-- **PostgreSQL 12+** (REQUIRED - SQLite is not supported)
-- Node.js and Flutter SDK (for mobile app)
-- Git
-- Redis (optional, for caching and WebSocket support)
 
-### Installation
+| Requirement | Version | Purpose |
+|-------------|---------|---------|
+| Python | 3.11+ | Django backend |
+| PostgreSQL | 12+ | Database (required) |
+| Flutter SDK | 3.19+ | Mobile app |
+| Xcode | 15+ | iOS development (macOS only) |
+| Android Studio | Latest | Android development |
 
-#### 1. Install PostgreSQL
+---
 
-**On Ubuntu/Debian/Raspberry Pi:**
+## Step 1: Install PostgreSQL
+
+### macOS
+```bash
+brew install postgresql@15
+brew services start postgresql@15
+```
+
+### Ubuntu/Debian
 ```bash
 sudo apt update
 sudo apt install -y postgresql postgresql-contrib
@@ -48,298 +51,369 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 ```
 
-**On macOS:**
+### Create Database
 ```bash
-brew install postgresql@15
-brew services start postgresql@15
-```
-
-**On Windows:**
-Download and install from [postgresql.org](https://www.postgresql.org/download/windows/)
-
-#### 2. Create Database and User
-
-```bash
-# Switch to postgres user and create database
+# Create database and user
 sudo -u postgres psql -c "CREATE DATABASE cosmo_db;"
 sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD 'postgres';"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE cosmo_db TO postgres;"
 sudo -u postgres psql -c "ALTER DATABASE cosmo_db OWNER TO postgres;"
 
-# For PostgreSQL 15+ (if needed):
+# For PostgreSQL 15+ grant schema access
 sudo -u postgres psql -d cosmo_db -c "GRANT ALL ON SCHEMA public TO postgres;"
 ```
 
-#### 3. Set Up Backend
+---
+
+## Step 2: Set Up Django Backend
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd cosmo-management
+# 1. Navigate to backend directory
+cd cosmo-management/cosmo_backend
 
-# Set up backend environment
-cd cosmo_backend
+# 2. Create and activate virtual environment
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# Set up environment variables
-cp backend/env.example .env
-# Edit .env with your PostgreSQL configuration (default should work for local setup)
-
-# Create logs directory
+# 4. Create logs directory
 mkdir -p logs
 
-# Run database migrations
-python manage.py migrate --settings=backend.settings_local
+# 5. Run database migrations
+python manage.py migrate
 
-# Create superuser
-python manage.py createsuperuser --settings=backend.settings_local
+# 6. Create admin superuser
+python manage.py createsuperuser
 
-# Collect static files
-python manage.py collectstatic --noinput --settings=backend.settings_local
+# 7. Collect static files
+python manage.py collectstatic --noinput
 
-# Start development server
-python manage.py runserver --settings=backend.settings_local
+# 8. Start development server
+python manage.py runserver
 ```
 
-Visit `http://127.0.0.1:8000` to access the application.
+**Backend running at:** http://127.0.0.1:8000
 
-**Important Notes:**
-- **PostgreSQL is REQUIRED** - This project does not support SQLite
-- Default local credentials: `postgres:postgres@localhost:5432/cosmo_db`
-- Update `DATABASE_URL` in `.env` if using different credentials
+### Verify Backend Setup
+| URL | Purpose |
+|-----|---------|
+| http://127.0.0.1:8000/admin/ | Admin panel |
+| http://127.0.0.1:8000/api/schema/swagger-ui/ | API documentation |
+| http://127.0.0.1:8000/api/health/ | Health check |
 
-### Flutter Mobile App Setup
+---
+
+## Step 3: Set Up Flutter App
+
 ```bash
-# Navigate to Flutter directory
-cd cosmo_app
+# 1. Navigate to Flutter app directory
+cd cosmo-management/cosmo_app
 
-# Install dependencies
+# 2. Get dependencies
 flutter pub get
 
-# Run the app
+# 3. Generate Freezed models (required after model changes)
+dart run build_runner build --delete-conflicting-outputs
+
+# 4. Run on connected device or emulator
 flutter run
 ```
 
-## Documentation
+### Configure API URL
 
-All project documentation is comprehensively organized in the [`docs/`](docs/) directory:
+Edit `lib/core/config/env_config.dart`:
 
-### Essential Documentation
-- **[docs/README.md](docs/README.md)** - Complete documentation hub (START HERE!)
-- **[docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)** - Full documentation catalog
-- **[docs/CURRENT_DOCUMENTATION.md](docs/CURRENT_DOCUMENTATION.md)** - Quick reference guide
-- **[docs/refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md](docs/refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md)** - 100% COMPLETE UI refactoring status
+```dart
+class EnvConfig {
+  // Choose the appropriate URL for your setup:
 
-### Quick Links
-- **Setup**: [Local Development](docs/development/LOCAL_DEVELOPMENT_SETUP.md) | [Deployment Guide](docs/deployment/DEPLOYMENT_GUIDE_2025-09-12.md)
-- **Features**: [Chat System](docs/features/chat/CHAT_SYSTEM_QUICKSTART.md) | [Calendar](docs/features/calendar_user_guide.md) | [Photo Management](docs/features/BEFORE_AFTER_PHOTO_QUICK_REFERENCE.md)
-- **Backend**: [API Endpoints](docs/backend/API_ENDPOINTS_2025-09-12.md) | [Environment Config](docs/backend/ENVIRONMENT_CONFIGURATION.md)
-- **Security**: [JWT Authentication](docs/security/JWT_AUTHENTICATION_GUIDE.md) | [Security Implementation](docs/security/ENHANCED_SECURITY_IMPLEMENTATION.md)
-- **Testing**: [Testing Manual](docs/TESTING_MANUAL.md) | [Test Organization](docs/testing/TEST_ORGANIZATION.md)
+  // Android Emulator (default)
+  static const String apiBaseUrl = 'http://10.0.2.2:8000/api';
 
-## Testing
+  // iOS Simulator
+  // static const String apiBaseUrl = 'http://localhost:8000/api';
 
-The project includes a comprehensive test suite organized by scope and purpose:
-
-```bash
-# Run all tests using the comprehensive test runner
-python tests/run_tests_comprehensive.py
-
-# Run specific test suites
-python tests/run_tests_comprehensive.py --ui          # UI tests
-python tests/run_tests_comprehensive.py --api         # API tests
-python tests/run_tests_comprehensive.py --security    # Security tests
-python tests/run_tests_comprehensive.py --integration # Integration tests
-
-# Verify refactoring quality
-./verify_refactoring.sh
+  // Physical device (use your computer's IP)
+  // static const String apiBaseUrl = 'http://192.168.x.x:8000/api';
+}
 ```
 
-### Test Categories
-- **Unit Tests**: Component-specific validation
-- **Integration Tests**: Multi-component workflows
-- **Security Tests**: Authentication and authorization
-- **Production Tests**: Production readiness validation
-- **API Tests**: Endpoint functionality testing
-- **UI Tests**: Template and interface testing
-- **Booking Tests**: Reservation system validation
-- **Cloudinary Tests**: CDN integration testing
+### Run on Specific Platform
+```bash
+# List available devices
+flutter devices
 
-## UI/UX Refactoring - 100% COMPLETE
+# iOS Simulator (macOS only)
+flutter run -d ios
 
-**Major achievement**: Complete modernization of Django template architecture
+# Android Emulator
+flutter run -d android
 
-### Refactoring Results
-- **100% inline event handlers removed** (67 → 0)
-- **100% inline styles eliminated** (202 → 0)
-- **All templates refactored** (Staff, Portal, Admin, Manager, Layouts)
-- **31 CSS page files created** with design system
-- **18 JavaScript ES modules** implemented
-- **Design system established** with consistent tokens
-- **Event delegation** throughout
-- **CSRF-safe API client** for all requests
-- **All tests passing** - Zero regressions
+# Chrome (Web)
+flutter run -d chrome
+```
 
-### What Changed
-- **Before**: Inline onclick handlers, scattered styles, hard to maintain
-- **After**: Modern ES modules, external CSS, design system, easy to maintain
+---
 
-**For details**: See [docs/refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md](docs/refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md)
+## Step 4: Create Test User
 
-## Security Features
+### Option A: Via Admin Panel
+1. Go to http://127.0.0.1:8000/admin/
+2. Login with superuser credentials
+3. Navigate to **API > Invite Codes > Add**
+4. Create invite code (e.g., `STAFF001`, role: `staff`, task_group: `cleaning`)
+5. Open Flutter app and register using the invite code
 
-Cosmo Management implements enterprise-grade security:
+### Option B: Via Django Shell
+```bash
+cd cosmo_backend
+source .venv/bin/activate
+python manage.py shell
+```
 
-- **JWT Authentication** with refresh tokens and secure headers
-- **Rate Limiting** with redis-based throttling
-- **Role-Based Permissions** with 38 custom permissions
-- **API Security** with CORS, CSRF protection, and input validation
-- **Production Hardening** with security headers and monitoring
-- **Audit System** - Transaction-safe logging with universal JSON serialization
+```python
+from django.contrib.auth.models import User
+from api.models import InviteCode
 
-For detailed security information, see the [Security Documentation](docs/security/).
+# Create invite code
+code = InviteCode.objects.create(
+    code='STAFF001',
+    created_by=User.objects.first(),
+    task_group='cleaning',
+    role='staff',
+    max_uses=10
+)
+print(f"Created invite code: {code.code}")
+```
+
+---
+
+## Step 5: Test Offline Sync
+
+1. **Login** to the Flutter app
+2. **Load tasks** while online
+3. **Enable airplane mode** (go offline)
+4. **Make changes** (update task status, complete checklist items)
+5. **Observe** sync indicator showing pending changes
+6. **Disable airplane mode** (go online)
+7. **Watch** automatic sync - changes upload without duplicates
+
+### Verify Idempotency Works
+```bash
+cd cosmo_backend
+source .venv/bin/activate
+python manage.py shell -c "from api.models import IdempotencyKey; print(f'Stored keys: {IdempotencyKey.objects.count()}')"
+```
+
+---
 
 ## Project Structure
 
 ```
 cosmo-management/
-├── README.md                          # This file
-├── verify_refactoring.sh              # Refactoring verification script
-├── conftest.py                        # Global pytest configuration
-├── pytest.ini                         # Test configuration
-├── requirements.txt                   # Python dependencies
-├── cosmo_backend/                     # Django REST API
-│   ├── api/                           # API application
-│   │   ├── models_chat.py            # Chat models
-│   │   ├── views_chat.py             # Chat views
-│   │   ├── consumers.py              # WebSocket consumers
-│   │   ├── templates/                # Django templates (100% refactored!)
-│   │   └── management/commands/      # Custom Django commands
-│   ├── static/                        # Static assets
-│   │   ├── css/                      # Organized CSS
-│   │   │   ├── design-system.css     # Design tokens
-│   │   │   ├── components.css        # Reusable components
-│   │   │   └── pages/                # Page-specific CSS (31 files)
-│   │   └── js/                       # Organized JavaScript
-│   │       ├── core/                 # Core utilities (API client, CSRF)
-│   │       ├── pages/                # Page entrypoints (18 files)
-│   │       └── modules/              # Feature managers (8 files)
-│   ├── backend/                       # Django settings
-│   │   ├── settings_base.py          # Base settings
-│   │   ├── settings_local.py         # Local development
-│   │   ├── settings_production.py    # Production settings
-│   │   └── settings_test.py          # Test settings
-│   └── manage.py                      # Django management
-├── cosmo_app/                         # Flutter mobile app
-├── tests/                             # Comprehensive test suite
-│   ├── run_tests_comprehensive.py    # Main test runner
-│   ├── api/                          # API tests
-│   ├── chat/                         # Chat system tests
-│   ├── ui/                           # UI tests
-│   ├── backend/                      # Backend tests
-│   ├── security/                     # Security tests
-│   ├── booking/                      # Booking tests
-│   └── utils/                        # Test utilities
-├── docs/                              # Complete documentation
-│   ├── README.md                     # Documentation hub (START HERE!)
-│   ├── DOCUMENTATION_INDEX.md        # Complete catalog
-│   ├── CURRENT_DOCUMENTATION.md      # Quick reference
-│   ├── refactoring/                  # UI refactoring docs (100% complete!)
-│   ├── features/                     # Feature documentation
-│   ├── backend/                      # Backend documentation
-│   ├── testing/                      # Testing guides
-│   ├── security/                     # Security documentation
-│   ├── development/                  # Development guides
-│   ├── deployment/                   # Deployment guides
-│   └── archive/                      # Historical documentation
-└── scripts/                           # Development & admin scripts
-    ├── testing/                      # Test scripts
-    └── admin/                        # Administrative scripts
+├── cosmo_backend/                  # Django REST API
+│   ├── api/
+│   │   ├── models.py              # 38 database models
+│   │   ├── views.py               # API endpoints
+│   │   ├── serializers.py         # DRF serializers
+│   │   ├── idempotency_middleware.py  # Offline sync dedupe
+│   │   └── migrations/
+│   ├── backend/
+│   │   ├── settings.py            # Default settings
+│   │   ├── settings_base.py       # Base configuration
+│   │   └── settings_local.py      # Local development
+│   └── manage.py
+│
+├── cosmo_app/                      # Flutter mobile app
+│   ├── lib/
+│   │   ├── main.dart              # App entry point
+│   │   ├── core/
+│   │   │   ├── config/            # Environment config
+│   │   │   ├── services/          # API, Auth, Connectivity
+│   │   │   └── router/            # GoRouter configuration
+│   │   ├── data/
+│   │   │   ├── models/            # Freezed models
+│   │   │   └── repositories/      # Data repositories
+│   │   └── features/
+│   │       ├── auth/              # Login, Register, Password Reset
+│   │       └── staff/             # Task list, detail, forms
+│   └── test/
+│
+├── tests/                          # Backend test suite
+├── docs/                           # Documentation
+├── STAGE_1_EVIDENCE_CHECKLIST.md   # Stage 1 gate criteria
+└── UI_DESIGN_PLAN_12212025.md      # Architecture plan
 ```
-
-## Project Status
-
-### Production Ready - All Features Complete
-
-- **Core System** - Enterprise-ready with comprehensive testing
-- **Security Hardened** - JWT authentication, rate limiting, audit logging
-- **Well Documented** - 210+ active documentation files
-- **Fully Tested** - Comprehensive test coverage across 8 test suites
-- **Modern UI/UX** - **100% refactored** with ES modules and design system (Dec 21, 2025)
-- **Chat System** - Real-time messaging with WebSocket support
-- **Photo Management** - Before/after workflow with approval system
-- **CDN Integration** - Cloudinary delivering 8x compression
-- **Clean Codebase** - Professional project organization
-- **Mobile Ready** - Flutter application for iOS/Android
-
-## Development Workflow
-
-### For New Features
-1. Review [Development Setup](docs/development/LOCAL_DEVELOPMENT_SETUP.md)
-2. Follow established patterns from [Refactoring Guide](docs/refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md)
-3. Use design system tokens and components
-4. Add comprehensive tests
-5. Update documentation
-6. Run full test suite
-
-### For UI Changes
-1. Use external CSS files in `static/css/pages/`
-2. Use ES modules in `static/js/pages/` or `static/js/modules/`
-3. Implement event delegation with `data-action` attributes
-4. Use design system tokens from `design-system.css`
-5. Follow established patterns (see refactoring docs)
-
-### For Bug Fixes
-1. Reproduce issue with test case
-2. Implement fix following established patterns
-3. Verify fix with all relevant tests
-4. Update documentation if needed
-
-## Performance & Scalability
-
-- **Database Optimization**: Efficient queries with proper indexing
-- **API Performance**: Optimized endpoints with caching
-- **Mobile Performance**: Efficient Flutter implementation
-- **CDN Integration**: Cloudinary with 8x image compression
-- **Static Assets**: Browser-cacheable external CSS/JS
-- **Scalable Architecture**: Modular design for growth
-
-## Support & Troubleshooting
-
-### Common Issues
-- **Environment Setup**: See [Local Development Setup](docs/development/LOCAL_DEVELOPMENT_SETUP.md)
-- **Test Failures**: See [Testing Manual](docs/TESTING_MANUAL.md)
-- **Deployment Issues**: See [Deployment Guide](docs/deployment/DEPLOYMENT_GUIDE_2025-09-12.md)
-- **UI Questions**: See [Refactoring Status](docs/refactoring/STATUS_AND_REFACTOR_PLAN_2025-12-13.md)
-
-### Getting Help
-1. Check the [Documentation Hub](docs/README.md)
-2. Review relevant troubleshooting guides
-3. Check test output for specific error messages
-4. Consult refactoring docs for UI patterns
-5. Review archived documentation for historical context
-
-## License
-
-Copyright (c) 2025 Nguyen, Phuong Duy Lam. All rights reserved.
-
-## Acknowledgments
-
-- **Django REST Framework** for robust API development
-- **Flutter** for cross-platform mobile development
-- **JWT Authentication** for secure token-based auth
-- **pytest** for comprehensive testing framework
-- **Cloudinary** for global CDN and image optimization
-- **Django Channels** for WebSocket support
 
 ---
 
-**Cosmo Management**
-*Professional - Secure - Scalable - Modern*
+## Technology Stack
 
-**UI Refactoring 100% Complete** - December 21, 2025
-*Enterprise-grade, production-ready property management platform*
+### Backend
+| Component | Technology |
+|-----------|------------|
+| Framework | Django 5.x + Django REST Framework |
+| Database | PostgreSQL 15+ |
+| Authentication | JWT (djangorestframework-simplejwt) |
+| File Storage | Cloudinary CDN |
+| Real-time | Django Channels (WebSocket) |
 
-**Last Updated**: December 26, 2025
+### Flutter App
+| Component | Technology |
+|-----------|------------|
+| State Management | Riverpod 2.x |
+| HTTP Client | Dio with interceptors |
+| Routing | GoRouter |
+| Local Storage | Hive (AES-256 encrypted) |
+| Secure Storage | flutter_secure_storage |
+| Models | Freezed + json_serializable |
+
+---
+
+## Offline-First Architecture
+
+```
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│   Flutter App   │────▶│   Hive Queue     │────▶│  Django API     │
+│                 │     │  (UUID + Data)   │     │  (Idempotency)  │
+└─────────────────┘     └──────────────────┘     └─────────────────┘
+        │                        │                        │
+        │   1. User makes        │   3. On reconnect,    │
+        │      changes offline   │      replay queue     │
+        │                        │                        │
+        │   2. Store mutation    │   4. Server checks    │
+        │      with UUID         │      X-Idempotency-Key│
+        │                        │                        │
+        │                        │   5. Dedupe or execute│
+        └────────────────────────┴────────────────────────┘
+```
+
+### How It Works
+1. **Mutation Queueing**: Changes made offline stored in Hive with UUIDs
+2. **Idempotency Keys**: Each mutation has unique key in `X-Idempotency-Key` header
+3. **Automatic Sync**: Connectivity restored triggers replay of queued mutations
+4. **Deduplication**: Backend middleware returns cached response for duplicate keys
+5. **Conflict Resolution**: UI allows user to choose server or local version
+
+---
+
+## Running Tests
+
+### Backend Tests
+```bash
+cd cosmo_backend
+source .venv/bin/activate
+
+# Run all tests
+python -m pytest
+
+# Run with coverage
+python -m pytest --cov=api --cov-report=html
+
+# Run specific test file
+python -m pytest tests/api/test_tasks.py -v
+```
+
+### Flutter Tests
+```bash
+cd cosmo_app
+
+# Run all tests
+flutter test
+
+# Run with coverage
+flutter test --coverage
+
+# Generate HTML coverage report
+genhtml coverage/lcov.info -o coverage/html
+open coverage/html/index.html  # macOS
+```
+
+---
+
+## API Endpoints
+
+### Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/token/` | Get JWT tokens (login) |
+| POST | `/api/token/refresh/` | Refresh access token |
+| POST | `/api/auth/register/` | Register with invite code |
+| POST | `/api/auth/password-reset/` | Request password reset |
+
+### Tasks
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/tasks/` | List tasks (paginated) |
+| POST | `/api/tasks/` | Create task |
+| GET | `/api/tasks/{id}/` | Get task detail |
+| PATCH | `/api/tasks/{id}/` | Update task |
+| POST | `/api/tasks/{id}/set-status/` | Change task status |
+| POST | `/api/tasks/{id}/assign-to-me/` | Self-assign task |
+
+**Full API docs:** http://127.0.0.1:8000/api/schema/swagger-ui/
+
+---
+
+## Troubleshooting
+
+### PostgreSQL not running
+```bash
+# macOS
+brew services start postgresql@15
+
+# Linux
+sudo systemctl start postgresql
+```
+
+### Database doesn't exist
+```bash
+sudo -u postgres psql -c "CREATE DATABASE cosmo_db;"
+```
+
+### Flutter build errors
+```bash
+flutter clean
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+```
+
+### API connection refused (Android emulator)
+Use `10.0.2.2` instead of `localhost` in `env_config.dart`
+
+### Offline sync not creating keys
+Check middleware is registered in `settings_base.py`:
+```python
+MIDDLEWARE = [
+    ...
+    'api.idempotency_middleware.IdempotencyMiddleware',
+    ...
+]
+```
+
+---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [UI_DESIGN_PLAN_12212025.md](UI_DESIGN_PLAN_12212025.md) | Full architecture and implementation plan |
+| [STAGE_1_EVIDENCE_CHECKLIST.md](STAGE_1_EVIDENCE_CHECKLIST.md) | Stage 1 exit criteria checklist |
+| [docs/README.md](docs/README.md) | Documentation hub |
+| [docs/backend/API_ENDPOINTS_2025-09-12.md](docs/backend/API_ENDPOINTS_2025-09-12.md) | Complete API reference |
+
+---
+
+## License
+
+Copyright (c) 2025-2026 Nguyen, Phuong Duy Lam. All rights reserved.
+
+---
+
+**Cosmo Management** - Professional Property Operations Platform
+
+*Flutter-First | Offline-First | Production-Ready*
+
+*Last Updated: January 5, 2026*
