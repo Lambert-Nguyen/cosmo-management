@@ -123,4 +123,41 @@ class RouteNames {
 
   /// Sync conflicts screen
   static const String syncConflicts = '/staff/sync-conflicts';
+
+  // ============================================
+  // Staff Inventory Routes
+  // ============================================
+
+  /// Staff inventory list
+  static const String staffInventory = '/staff/inventory';
+
+  /// Staff inventory alerts (low stock)
+  static const String staffInventoryAlerts = '/staff/inventory/alerts';
+
+  // ============================================
+  // Staff Lost & Found Routes
+  // ============================================
+
+  /// Staff lost & found list
+  static const String staffLostFound = '/staff/lost-found';
+
+  /// Staff lost & found create
+  static const String staffLostFoundCreate = '/staff/lost-found/create';
+
+  /// Staff lost & found detail
+  static String staffLostFoundDetail(int id) => '/staff/lost-found/$id';
+
+  /// Staff lost & found edit
+  static String staffLostFoundEdit(int id) => '/staff/lost-found/$id/edit';
+
+  // ============================================
+  // Staff Photo Routes
+  // ============================================
+
+  /// Staff photo upload
+  static const String staffPhotoUpload = '/staff/photos/upload';
+
+  /// Staff photo comparison
+  static String staffPhotoComparison(int taskId) =>
+      '/staff/photos/comparison/$taskId';
 }

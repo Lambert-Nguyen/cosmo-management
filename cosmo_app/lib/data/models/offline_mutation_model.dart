@@ -65,7 +65,15 @@ enum EntityType {
   @JsonValue('task')
   task('task'),
   @JsonValue('checklist_response')
-  checklistResponse('checklist_response');
+  checklistResponse('checklist_response'),
+  @JsonValue('inventory')
+  inventory('inventory'),
+  @JsonValue('inventory_transaction')
+  inventoryTransaction('inventory_transaction'),
+  @JsonValue('lost_found')
+  lostFound('lost_found'),
+  @JsonValue('photo')
+  photo('photo');
 
   final String value;
 
@@ -141,6 +149,10 @@ class OfflineMutationModel with _$OfflineMutationModel {
     final entity = switch (entityType) {
       EntityType.task => 'task',
       EntityType.checklistResponse => 'checklist item',
+      EntityType.inventory => 'inventory item',
+      EntityType.inventoryTransaction => 'inventory transaction',
+      EntityType.lostFound => 'lost & found item',
+      EntityType.photo => 'photo',
     };
 
     return '$action $entity #$entityId';

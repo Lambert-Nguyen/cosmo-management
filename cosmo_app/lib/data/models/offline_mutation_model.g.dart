@@ -54,6 +54,10 @@ const _$MutationTypeEnumMap = {
 const _$EntityTypeEnumMap = {
   EntityType.task: 'task',
   EntityType.checklistResponse: 'checklist_response',
+  EntityType.inventory: 'inventory',
+  EntityType.inventoryTransaction: 'inventory_transaction',
+  EntityType.lostFound: 'lost_found',
+  EntityType.photo: 'photo',
 };
 
 const _$SyncStatusEnumMap = {

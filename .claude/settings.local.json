@@ -44,7 +44,10 @@
       "Bash(tree:*)",
       "Bash(python tests/run_tests_comprehensive.py:*)",
       "Bash(flutter pub outdated:*)",
-      "Bash(flutter --version:*)"
+      "Bash(flutter --version:*)",
+      "Bash(xargs:*)",
+      "Bash(flutter pub run build_runner build:*)",
+      "Bash(echo:*)"
     ]
   }
 }
