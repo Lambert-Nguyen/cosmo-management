@@ -13,6 +13,8 @@ import '../../../core/widgets/loading/loading_indicator.dart';
 import '../../../data/models/inventory_model.dart';
 import '../providers/inventory_providers.dart';
 import '../widgets/inventory_list_item.dart';
+import '../widgets/transaction_form.dart';
+import 'inventory_alerts_screen.dart';
 
 /// Inventory screen with tabbed interface
 class InventoryScreen extends ConsumerStatefulWidget {
@@ -60,7 +62,6 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final lowStockCount = ref.watch(lowStockCountProvider);
 
     return Scaffold(
@@ -232,7 +233,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
             ? EmptyState(
                 icon: Icons.inventory_2_outlined,
                 title: 'No Inventory Items',
-                message: 'Add items to track your inventory',
+                description: 'Add items to track your inventory',
                 actionLabel: 'Add Item',
                 onAction: _showAddItemDialog,
               )
@@ -300,7 +301,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
           return const EmptyState(
             icon: Icons.history,
             title: 'No Transactions',
-            message: 'Transaction history will appear here',
+            description: 'Transaction history will appear here',
           );
         }
 
@@ -377,20 +378,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   void _showTransactionDialog({InventoryModel? item}) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Log Transaction'),
-        content: const Text('Transaction form coming soon...'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Save'),
-          ),
-        ],
-      ),
+      builder: (context) => TransactionFormDialog(item: item),
     );
   }
 
@@ -422,9 +410,10 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   }
 
   void _navigateToAlerts(BuildContext context) {
-    // TODO: Navigate to alerts screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Navigate to low stock alerts')),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const InventoryAlertsScreen(),
+      ),
     );
   }
 }

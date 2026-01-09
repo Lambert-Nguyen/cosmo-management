@@ -303,35 +303,108 @@ class _LostFoundListScreenState extends ConsumerState<LostFoundListScreen> {
   }
 
   void _showClaimDialog(LostFoundModel item) {
+    final contactController = TextEditingController();
+    final identificationController = TextEditingController();
+    final notesController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Claim Item'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Claim "${item.title}"?'),
-            const SizedBox(height: AppSpacing.md),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Contact Information',
-                hintText: 'Phone or email',
-              ),
+        content: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Claim "${item.title}"?'),
+                const SizedBox(height: AppSpacing.md),
+                TextFormField(
+                  controller: contactController,
+                  decoration: const InputDecoration(
+                    labelText: 'Contact Information *',
+                    hintText: 'Phone or email',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter contact information';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                TextFormField(
+                  controller: identificationController,
+                  decoration: const InputDecoration(
+                    labelText: 'Identification Provided (optional)',
+                    hintText: 'e.g., Driver License, ID Card',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                TextFormField(
+                  controller: notesController,
+                  decoration: const InputDecoration(
+                    labelText: 'Verification Notes (optional)',
+                    hintText: 'Any additional notes...',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 2,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              contactController.dispose();
+              identificationController.dispose();
+              notesController.dispose();
+              Navigator.pop(context);
+            },
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              // TODO: Implement claim
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Item claimed successfully')),
-              );
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                try {
+                  final repository = ref.read(lostFoundRepositoryProvider);
+                  await repository.claimItem(
+                    item.id,
+                    claimantContact: contactController.text.trim(),
+                    identificationProvided:
+                        identificationController.text.trim().isNotEmpty
+                            ? identificationController.text.trim()
+                            : null,
+                    verificationNotes: notesController.text.trim().isNotEmpty
+                        ? notesController.text.trim()
+                        : null,
+                  );
+
+                  contactController.dispose();
+                  identificationController.dispose();
+                  notesController.dispose();
+
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Item claimed successfully')),
+                    );
+                    // Refresh list
+                    ref.read(lostFoundListProvider.notifier).loadItems(refresh: true);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error claiming item: $e')),
+                    );
+                  }
+                }
+              }
             },
             child: const Text('Claim'),
           ),

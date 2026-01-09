@@ -3,8 +3,11 @@
 /// Screen for creating and editing lost/found items.
 library;
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/loading/loading_indicator.dart';
@@ -38,6 +41,8 @@ class _LostFoundFormScreenState extends ConsumerState<LostFoundFormScreen> {
   bool _isValuable = false;
   bool _isLoading = false;
   bool _isSaving = false;
+  final List<XFile> _selectedPhotos = [];
+  final _imagePicker = ImagePicker();
 
   bool get isEditing => widget.itemId != null;
 
@@ -359,19 +364,73 @@ class _LostFoundFormScreenState extends ConsumerState<LostFoundFormScreen> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
 
-                  // Photo section placeholder
+                  // Photo section
                   Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.add_a_photo_outlined),
-                      title: const Text('Add Photos'),
-                      subtitle: const Text('Take or select photos of the item'),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        // TODO: Implement photo picker
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Photo picker coming soon')),
-                        );
-                      },
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.add_a_photo_outlined),
+                          title: const Text('Add Photos'),
+                          subtitle: Text(_selectedPhotos.isEmpty
+                              ? 'Take or select photos of the item'
+                              : '${_selectedPhotos.length} photo(s) selected'),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: _showPhotoOptions,
+                        ),
+                        if (_selectedPhotos.isNotEmpty) ...[
+                          const Divider(height: 1),
+                          SizedBox(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.all(AppSpacing.sm),
+                              itemCount: _selectedPhotos.length,
+                              itemBuilder: (context, index) {
+                                final photo = _selectedPhotos[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: AppSpacing.sm),
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.file(
+                                          File(photo.path),
+                                          width: 80,
+                                          height: 80,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 4,
+                                        right: 4,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              _selectedPhotos.removeAt(index);
+                                            });
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black54,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.close,
+                                              size: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl),
@@ -396,5 +455,72 @@ class _LostFoundFormScreenState extends ConsumerState<LostFoundFormScreen> {
               ),
             ),
     );
+  }
+
+  void _showPhotoOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take Photo'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+            if (_selectedPhotos.isNotEmpty)
+              ListTile(
+                leading: const Icon(Icons.delete_outline),
+                title: const Text('Clear All Photos'),
+                onTap: () {
+                  Navigator.pop(context);
+                  setState(() {
+                    _selectedPhotos.clear();
+                  });
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      if (source == ImageSource.gallery) {
+        // Allow multiple selection from gallery
+        final List<XFile> images = await _imagePicker.pickMultiImage();
+        if (images.isNotEmpty) {
+          setState(() {
+            _selectedPhotos.addAll(images);
+          });
+        }
+      } else {
+        // Single photo from camera
+        final XFile? image = await _imagePicker.pickImage(source: source);
+        if (image != null) {
+          setState(() {
+            _selectedPhotos.add(image);
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error picking image: $e')),
+        );
+      }
+    }
   }
 }
