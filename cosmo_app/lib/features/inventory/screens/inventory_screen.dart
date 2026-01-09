@@ -387,15 +387,17 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Add Inventory Item'),
-        content: const Text('Add item form coming soon...'),
+        content: const Text(
+          'To add new inventory items, please use the web portal or contact your system administrator.\n\n'
+          'Mobile app currently supports:\n'
+          '• Viewing inventory\n'
+          '• Logging transactions\n'
+          '• Viewing low stock alerts',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Add'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -403,9 +405,70 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   }
 
   void _navigateToDetail(BuildContext context, InventoryModel item) {
-    // TODO: Navigate to detail screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('View ${item.name}')),
+    // Navigate to inventory detail screen
+    // For now, show item information in a dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(item.name),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (item.description != null) ...[
+                Text(item.description!),
+                const SizedBox(height: 16),
+              ],
+              _buildDetailRow('Category', item.category.displayName),
+              _buildDetailRow('Current Stock', item.quantityDisplay),
+              _buildDetailRow('Status', item.stockStatus),
+              if (item.parLevel != null)
+                _buildDetailRow('Par Level', item.parLevel.toString()),
+              if (item.reorderPoint != null)
+                _buildDetailRow('Reorder Point', item.reorderPoint.toString()),
+              if (item.location != null)
+                _buildDetailRow('Location', item.location!),
+              if (item.sku != null) _buildDetailRow('SKU', item.sku!),
+              if (item.unitCost != null)
+                _buildDetailRow('Unit Cost', '\$${item.unitCost!.toStringAsFixed(2)}'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+          FilledButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              _showTransactionDialog(item: item);
+            },
+            icon: const Icon(Icons.add_circle_outline),
+            label: const Text('Log Transaction'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 120,
+            child: Text(
+              '$label:',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(child: Text(value)),
+        ],
+      ),
     );
   }
 

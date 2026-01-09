@@ -14,6 +14,7 @@ import '../../../core/widgets/loading/loading_indicator.dart';
 import '../../../data/models/inventory_model.dart';
 import '../providers/inventory_alerts_notifier.dart';
 import '../providers/inventory_providers.dart';
+import '../widgets/transaction_form.dart';
 
 /// Inventory alerts screen
 class InventoryAlertsScreen extends ConsumerStatefulWidget {
@@ -441,19 +442,28 @@ class _InventoryAlertsScreenState extends ConsumerState<InventoryAlertsScreen> {
     }
   }
 
-  void _logRestock(LowStockAlertModel alert) {
-    // TODO: Open transaction dialog with stock-in pre-selected
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Log restock for ${alert.inventoryName}'),
-        action: SnackBarAction(
-          label: 'Open',
-          onPressed: () {
-            // Navigate to transaction form
-          },
-        ),
-      ),
-    );
+  void _logRestock(LowStockAlertModel alert) async {
+    // Fetch full inventory item details
+    try {
+      final repository = ref.read(inventoryRepositoryProvider);
+      final item = await repository.getInventoryById(alert.inventoryId);
+
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => TransactionFormDialog(
+            item: item,
+            initialType: InventoryTransactionType.stockIn,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading item: $e')),
+        );
+      }
+    }
   }
 }
 

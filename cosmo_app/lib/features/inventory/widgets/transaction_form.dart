@@ -308,9 +308,174 @@ class _TransactionFormDialogState extends ConsumerState<TransactionFormDialog> {
   }
 
   void _showItemPicker() {
-    // TODO: Implement item picker dialog with search
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Item picker coming soon')),
+    final inventoryState = ref.read(inventoryListProvider);
+    final items = switch (inventoryState) {
+      InventoryListLoaded(items: final i) => i,
+      InventoryListLoading(existingItems: final i) => i,
+      InventoryListError(cachedItems: final i) => i,
+      _ => <InventoryModel>[],
+    };
+
+    if (items.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No inventory items available')),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => _ItemPickerDialog(
+        items: items,
+        onItemSelected: (item) {
+          setState(() => _selectedItem = item);
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+}
+
+/// Item picker dialog for selecting inventory items
+class _ItemPickerDialog extends StatefulWidget {
+  final List<InventoryModel> items;
+  final void Function(InventoryModel) onItemSelected;
+
+  const _ItemPickerDialog({
+    required this.items,
+    required this.onItemSelected,
+  });
+
+  @override
+  State<_ItemPickerDialog> createState() => _ItemPickerDialogState();
+}
+
+class _ItemPickerDialogState extends State<_ItemPickerDialog> {
+  final _searchController = TextEditingController();
+  List<InventoryModel> _filteredItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredItems = widget.items;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredItems = widget.items;
+      } else {
+        _filteredItems = widget.items.where((item) {
+          final searchLower = query.toLowerCase();
+          return item.name.toLowerCase().contains(searchLower) ||
+              (item.description?.toLowerCase().contains(searchLower) ?? false) ||
+              item.category.displayName.toLowerCase().contains(searchLower);
+        }).toList();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return AlertDialog(
+      title: const Text('Select Item'),
+      content: SizedBox(
+        width: double.maxFinite,
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: Column(
+          children: [
+            // Search field
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search items...',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          _filterItems('');
+                        },
+                      )
+                    : null,
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: _filterItems,
+            ),
+            const SizedBox(height: AppSpacing.md),
+
+            // Items list
+            Expanded(
+              child: _filteredItems.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search_off,
+                            size: 48,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          Text(
+                            'No items found',
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: _filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final item = _filteredItems[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            child: Icon(
+                              Icons.inventory_2_outlined,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                          title: Text(item.name),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(item.category.displayName),
+                              Text(
+                                'Stock: ${item.quantityDisplay}',
+                                style: TextStyle(
+                                  color: item.isLowStock
+                                      ? theme.colorScheme.error
+                                      : theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () => widget.onItemSelected(item),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+      ],
     );
   }
 }

@@ -14,6 +14,7 @@ import '../../../data/models/lost_found_model.dart';
 import '../providers/lost_found_list_notifier.dart';
 import '../providers/lost_found_providers.dart';
 import '../widgets/lost_found_list_item.dart';
+import 'lost_found_form_screen.dart';
 
 /// Lost & Found list screen
 class LostFoundListScreen extends ConsumerStatefulWidget {
@@ -289,16 +290,18 @@ class _LostFoundListScreenState extends ConsumerState<LostFoundListScreen> {
   }
 
   void _navigateToForm(BuildContext context, {LostFoundModel? item}) {
-    // TODO: Navigate to form screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(item != null ? 'Edit: ${item.title}' : 'Create new item'),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => LostFoundFormScreen(itemId: item?.id),
       ),
-    );
+    ).then((_) {
+      // Refresh list when returning from form
+      ref.read(lostFoundListProvider.notifier).loadItems(refresh: true);
+    });
   }
 
   void _navigateToDetail(BuildContext context, LostFoundModel item) {
-    // TODO: Navigate to detail/form screen
+    // Navigate to form screen in edit mode (which also serves as detail view)
     _navigateToForm(context, item: item);
   }
 
