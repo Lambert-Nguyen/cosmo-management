@@ -220,6 +220,92 @@ class ApiConfig {
   static String inventoryDetail(int id) => '/api/inventory/$id/';
 
   // ============================================
+  // Staff Inventory Endpoints
+  // ============================================
+
+  /// Staff inventory lookup (with property filter)
+  /// GET /api/staff/inventory/
+  static const String staffInventory = '/api/staff/inventory/';
+
+  /// Staff inventory detail
+  /// GET /api/staff/inventory/{id}/
+  static String staffInventoryDetail(int id) => '/api/staff/inventory/$id/';
+
+  /// Staff inventory transactions list
+  /// GET /api/staff/inventory/transactions/
+  static const String staffInventoryTransactions =
+      '/api/staff/inventory/transactions/';
+
+  /// Log inventory transaction
+  /// POST /api/staff/inventory/transaction/
+  static const String staffInventoryTransaction =
+      '/api/staff/inventory/transaction/';
+
+  /// Get low stock alerts
+  /// GET /api/staff/inventory/low-stock/
+  static const String staffInventoryLowStock = '/api/staff/inventory/low-stock/';
+
+  /// Report inventory shortage (creates restocking task)
+  /// POST /api/staff/inventory/{id}/shortage/
+  static String staffInventoryShortage(int id) =>
+      '/api/staff/inventory/$id/shortage/';
+
+  /// Inventory categories
+  /// GET /api/staff/inventory/categories/
+  static const String staffInventoryCategories =
+      '/api/staff/inventory/categories/';
+
+  // ============================================
+  // Lost & Found Endpoints
+  // ============================================
+
+  /// Lost & found items list/create
+  /// GET/POST /api/staff/lost-found/
+  static const String staffLostFound = '/api/staff/lost-found/';
+
+  /// Lost & found item detail
+  /// GET/PUT/PATCH/DELETE /api/staff/lost-found/{id}/
+  static String staffLostFoundDetail(int id) => '/api/staff/lost-found/$id/';
+
+  /// Claim a found item
+  /// POST /api/staff/lost-found/{id}/claim/
+  static String staffLostFoundClaim(int id) => '/api/staff/lost-found/$id/claim/';
+
+  /// Archive a lost & found item
+  /// POST /api/staff/lost-found/{id}/archive/
+  static String staffLostFoundArchive(int id) =>
+      '/api/staff/lost-found/$id/archive/';
+
+  /// Lost & found statistics
+  /// GET /api/staff/lost-found/stats/
+  static const String staffLostFoundStats = '/api/staff/lost-found/stats/';
+
+  // ============================================
+  // Photo Endpoints
+  // ============================================
+
+  /// Batch photo upload
+  /// POST /api/staff/photos/upload/
+  static const String staffPhotoUpload = '/api/staff/photos/upload/';
+
+  /// Photo list (filterable by entity)
+  /// GET /api/staff/photos/
+  static const String staffPhotos = '/api/staff/photos/';
+
+  /// Photo detail
+  /// GET/DELETE /api/staff/photos/{id}/
+  static String staffPhotoDetail(int id) => '/api/staff/photos/$id/';
+
+  /// Photo comparison pairs for a task
+  /// GET /api/staff/photos/comparison/{taskId}/
+  static String staffPhotoComparison(int taskId) =>
+      '/api/staff/photos/comparison/$taskId/';
+
+  /// Approve/reject photo
+  /// POST /api/staff/photos/{id}/review/
+  static String staffPhotoReview(int id) => '/api/staff/photos/$id/review/';
+
+  // ============================================
   // Report Endpoints
   // ============================================
 

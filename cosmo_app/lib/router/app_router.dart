@@ -18,6 +18,13 @@ import '../features/auth/screens/forgot_password_screen.dart';
 import '../features/auth/screens/login_screen.dart';
 import '../features/auth/screens/register_screen.dart';
 import '../features/auth/screens/splash_screen.dart';
+import '../features/inventory/screens/inventory_alerts_screen.dart';
+import '../features/inventory/screens/inventory_detail_screen.dart';
+import '../features/inventory/screens/inventory_screen.dart';
+import '../features/lost_found/screens/lost_found_form_screen.dart';
+import '../features/lost_found/screens/lost_found_list_screen.dart';
+import '../features/photos/screens/photo_comparison_screen.dart';
+import '../features/photos/screens/photo_upload_screen.dart';
 import '../features/staff/screens/staff_dashboard_screen.dart';
 import '../features/staff/screens/staff_shell.dart';
 import '../features/staff/screens/sync_conflicts_screen.dart';
@@ -259,6 +266,60 @@ class AppRouter {
                 ),
               ],
             ),
+            // Inventory branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.staffInventory,
+                  name: 'staffInventory',
+                  builder: (context, state) => const InventoryScreen(),
+                  routes: [
+                    // Inventory alerts
+                    GoRoute(
+                      path: 'alerts',
+                      name: 'staffInventoryAlerts',
+                      builder: (context, state) => const InventoryAlertsScreen(),
+                    ),
+                    // Inventory detail
+                    GoRoute(
+                      path: ':id',
+                      name: 'staffInventoryDetail',
+                      builder: (context, state) {
+                        final id = int.parse(state.pathParameters['id']!);
+                        return InventoryDetailScreen(inventoryId: id);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Lost & Found branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.staffLostFound,
+                  name: 'staffLostFound',
+                  builder: (context, state) => const LostFoundListScreen(),
+                  routes: [
+                    // Create lost/found item
+                    GoRoute(
+                      path: 'create',
+                      name: 'staffLostFoundCreate',
+                      builder: (context, state) => const LostFoundFormScreen(),
+                    ),
+                    // Lost/found detail/edit
+                    GoRoute(
+                      path: ':id',
+                      name: 'staffLostFoundDetail',
+                      builder: (context, state) {
+                        final id = int.parse(state.pathParameters['id']!);
+                        return LostFoundFormScreen(itemId: id);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
             // Schedule branch
             StatefulShellBranch(
               routes: [
@@ -284,6 +345,33 @@ class AppRouter {
               ],
             ),
           ],
+        ),
+
+        // Photo routes (standalone, accessible from multiple places)
+        GoRoute(
+          path: RouteNames.staffPhotoUpload,
+          name: 'staffPhotoUpload',
+          builder: (context, state) {
+            final entityType = state.uri.queryParameters['entityType'];
+            final entityIdStr = state.uri.queryParameters['entityId'];
+            final entityId = entityIdStr != null ? int.tryParse(entityIdStr) : null;
+            return PhotoUploadScreen(
+              entityType: entityType,
+              entityId: entityId,
+            );
+          },
+        ),
+        GoRoute(
+          path: '/staff/photos/comparison/:taskId',
+          name: 'staffPhotoComparison',
+          builder: (context, state) {
+            final taskId = int.parse(state.pathParameters['taskId']!);
+            final taskTitle = state.uri.queryParameters['title'];
+            return PhotoComparisonScreen(
+              taskId: taskId,
+              taskTitle: taskTitle,
+            );
+          },
         ),
       ];
 
