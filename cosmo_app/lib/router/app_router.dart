@@ -18,6 +18,8 @@ import '../features/auth/screens/forgot_password_screen.dart';
 import '../features/auth/screens/login_screen.dart';
 import '../features/auth/screens/register_screen.dart';
 import '../features/auth/screens/splash_screen.dart';
+import '../features/inventory/screens/inventory_alerts_screen.dart';
+import '../features/inventory/screens/inventory_detail_screen.dart';
 import '../features/inventory/screens/inventory_screen.dart';
 import '../features/lost_found/screens/lost_found_form_screen.dart';
 import '../features/lost_found/screens/lost_found_list_screen.dart';
@@ -276,9 +278,16 @@ class AppRouter {
                     GoRoute(
                       path: 'alerts',
                       name: 'staffInventoryAlerts',
-                      builder: (context, state) => const _PlaceholderScreen(
-                        title: 'Low Stock Alerts',
-                      ),
+                      builder: (context, state) => const InventoryAlertsScreen(),
+                    ),
+                    // Inventory detail
+                    GoRoute(
+                      path: ':id',
+                      name: 'staffInventoryDetail',
+                      builder: (context, state) {
+                        final id = int.parse(state.pathParameters['id']!);
+                        return InventoryDetailScreen(inventoryId: id);
+                      },
                     ),
                   ],
                 ),

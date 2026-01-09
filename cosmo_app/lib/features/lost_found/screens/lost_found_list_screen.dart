@@ -221,7 +221,7 @@ class _LostFoundListScreenState extends ConsumerState<LostFoundListScreen> {
             ? EmptyState(
                 icon: Icons.search_off,
                 title: 'No Items Found',
-                message: 'Report a lost or found item to get started',
+                description: 'Report a lost or found item to get started',
                 actionLabel: 'Report Item',
                 onAction: () => _navigateToForm(context),
               )

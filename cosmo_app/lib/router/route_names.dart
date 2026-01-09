@@ -134,6 +134,9 @@ class RouteNames {
   /// Staff inventory alerts (low stock)
   static const String staffInventoryAlerts = '/staff/inventory/alerts';
 
+  /// Staff inventory detail
+  static String staffInventoryDetail(int id) => '/staff/inventory/$id';
+
   // ============================================
   // Staff Lost & Found Routes
   // ============================================

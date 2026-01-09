@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/providers/service_providers.dart';
 import '../../../core/theme/app_colors.dart';
@@ -391,10 +392,7 @@ class _InventoryAlertsScreenState extends ConsumerState<InventoryAlertsScreen> {
   }
 
   void _navigateToInventoryDetail(int inventoryId) {
-    // TODO: Navigate to inventory detail screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('View inventory item #$inventoryId')),
-    );
+    context.push('/staff/inventory/$inventoryId');
   }
 
   void _reportShortage(LowStockAlertModel alert) async {
