@@ -25,6 +25,14 @@ import '../features/lost_found/screens/lost_found_form_screen.dart';
 import '../features/lost_found/screens/lost_found_list_screen.dart';
 import '../features/photos/screens/photo_comparison_screen.dart';
 import '../features/photos/screens/photo_upload_screen.dart';
+import '../features/portal/screens/booking_detail_screen.dart';
+import '../features/portal/screens/booking_list_screen.dart';
+import '../features/portal/screens/calendar_screen.dart';
+import '../features/portal/screens/photo_gallery_screen.dart';
+import '../features/portal/screens/portal_dashboard_screen.dart';
+import '../features/portal/screens/portal_shell.dart';
+import '../features/portal/screens/property_detail_screen.dart';
+import '../features/portal/screens/property_list_screen.dart';
 import '../features/staff/screens/staff_dashboard_screen.dart';
 import '../features/staff/screens/staff_shell.dart';
 import '../features/staff/screens/sync_conflicts_screen.dart';
@@ -372,6 +380,87 @@ class AppRouter {
               taskTitle: taskTitle,
             );
           },
+        ),
+
+        // Portal routes with bottom navigation shell
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return PortalShell(navigationShell: navigationShell);
+          },
+          branches: [
+            // Dashboard branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.portalDashboard,
+                  name: 'portalDashboard',
+                  builder: (context, state) => const PortalDashboardScreen(),
+                ),
+              ],
+            ),
+            // Properties branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.portalProperties,
+                  name: 'portalProperties',
+                  builder: (context, state) => const PropertyListScreen(),
+                  routes: [
+                    // Property detail
+                    GoRoute(
+                      path: ':id',
+                      name: 'portalPropertyDetail',
+                      builder: (context, state) {
+                        final id = int.parse(state.pathParameters['id']!);
+                        return PropertyDetailScreen(propertyId: id);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Calendar branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.portalCalendar,
+                  name: 'portalCalendar',
+                  builder: (context, state) => const CalendarScreen(),
+                ),
+              ],
+            ),
+            // Bookings branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.portalBookings,
+                  name: 'portalBookings',
+                  builder: (context, state) => const BookingListScreen(),
+                  routes: [
+                    // Booking detail
+                    GoRoute(
+                      path: ':id',
+                      name: 'portalBookingDetail',
+                      builder: (context, state) {
+                        final id = int.parse(state.pathParameters['id']!);
+                        return BookingDetailScreen(bookingId: id);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Photos branch
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: RouteNames.portalPhotos,
+                  name: 'portalPhotos',
+                  builder: (context, state) => const PhotoGalleryScreen(),
+                ),
+              ],
+            ),
+          ],
         ),
       ];
 
