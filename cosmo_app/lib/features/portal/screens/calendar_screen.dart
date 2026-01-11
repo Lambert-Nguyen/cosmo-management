@@ -362,7 +362,6 @@ class _WeekView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final weekStart = selectedDate.subtract(
       Duration(days: selectedDate.weekday - 1),
     );

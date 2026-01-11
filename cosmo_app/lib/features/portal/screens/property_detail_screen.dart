@@ -12,7 +12,6 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../data/models/property_model.dart';
 import '../../../router/route_names.dart';
 import '../providers/portal_providers.dart';
-import '../widgets/property_card.dart';
 import 'portal_shell.dart';
 
 /// Property detail screen

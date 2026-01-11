@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_spacing.dart';
-import '../../../data/models/property_model.dart';
 import '../../../router/route_names.dart';
 import '../providers/portal_providers.dart';
 import '../widgets/property_card.dart';
@@ -109,7 +108,6 @@ class _PropertyListScreenState extends ConsumerState<PropertyListScreen> {
           ),
         PropertyListLoaded(
           properties: final properties,
-          totalCount: final totalCount,
           hasMore: final hasMore,
         ) =>
           properties.isEmpty

@@ -27,11 +27,13 @@ class BookingListScreen extends ConsumerStatefulWidget {
 class _BookingListScreenState extends ConsumerState<BookingListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _scrollController.addListener(_onScroll);
     // Load bookings on init
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(bookingListProvider.notifier).load();
@@ -41,7 +43,15 @@ class _BookingListScreenState extends ConsumerState<BookingListScreen>
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      ref.read(bookingListProvider.notifier).loadMore();
+    }
   }
 
   @override
@@ -77,32 +87,44 @@ class _BookingListScreenState extends ConsumerState<BookingListScreen>
             message: msg,
             onRetry: () => ref.read(bookingListProvider.notifier).refresh(),
           ),
-        BookingListLoaded(bookings: final bookings) => bookings.isEmpty
-            ? const PortalEmptyState(
-                icon: Icons.book_outlined,
-                title: 'No bookings found',
-                subtitle: 'Bookings will appear here once created',
-              )
-            : RefreshIndicator(
-                onRefresh: () =>
-                    ref.read(bookingListProvider.notifier).refresh(),
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(AppSpacing.md),
-                  itemCount: bookings.length,
-                  itemBuilder: (context, index) {
-                    final booking = bookings[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                      child: _BookingCard(
-                        booking: booking,
-                        onTap: () => context.push(
-                          RouteNames.portalBookingDetail(booking.id),
+        BookingListLoaded(
+          bookings: final bookings,
+          hasMore: final hasMore,
+        ) =>
+          bookings.isEmpty
+              ? const PortalEmptyState(
+                  icon: Icons.book_outlined,
+                  title: 'No bookings found',
+                  subtitle: 'Bookings will appear here once created',
+                )
+              : RefreshIndicator(
+                  onRefresh: () =>
+                      ref.read(bookingListProvider.notifier).refresh(),
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    itemCount: bookings.length + (hasMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == bookings.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(AppSpacing.md),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      final booking = bookings[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                        child: _BookingCard(
+                          booking: booking,
+                          onTap: () => context.push(
+                            RouteNames.portalBookingDetail(booking.id),
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
       },
     );
   }
