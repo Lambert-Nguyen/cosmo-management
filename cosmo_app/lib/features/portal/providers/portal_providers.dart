@@ -49,11 +49,11 @@ class PortalDashboardError extends PortalDashboardState {
 
 /// Portal dashboard notifier
 class PortalDashboardNotifier extends StateNotifier<PortalDashboardState> {
-  final PortalRepository _portalRepository;
+  final Ref _ref;
 
   PortalDashboardNotifier({
-    required PortalRepository portalRepository,
-  })  : _portalRepository = portalRepository,
+    required Ref ref,
+  })  : _ref = ref,
         super(const PortalDashboardInitial()) {
     load();
   }
@@ -61,11 +61,21 @@ class PortalDashboardNotifier extends StateNotifier<PortalDashboardState> {
   Future<void> load() async {
     state = const PortalDashboardLoading();
     try {
-      final stats = await _portalRepository.getDashboardStats();
+      final portalRepository = _ref.read(portalRepositoryProvider);
+      final bookingRepository = _ref.read(bookingRepositoryProvider);
+
+      // Load dashboard stats and upcoming bookings in parallel
+      final results = await Future.wait([
+        portalRepository.getDashboardStats(),
+        bookingRepository.getUpcomingBookings(limit: 5),
+      ]);
+
+      final stats = results[0] as PortalDashboardStats;
+      final upcomingBookings = results[1] as List<BookingModel>;
 
       state = PortalDashboardLoaded(
         stats: stats,
-        upcomingBookings: [],
+        upcomingBookings: upcomingBookings,
         recentTasks: [],
       );
     } catch (e) {
@@ -81,9 +91,7 @@ class PortalDashboardNotifier extends StateNotifier<PortalDashboardState> {
 /// Portal dashboard provider
 final portalDashboardProvider =
     StateNotifierProvider<PortalDashboardNotifier, PortalDashboardState>((ref) {
-  return PortalDashboardNotifier(
-    portalRepository: ref.watch(portalRepositoryProvider),
-  );
+  return PortalDashboardNotifier(ref: ref);
 });
 
 // ============================================
@@ -235,29 +243,61 @@ class BookingListError extends BookingListState {
 
 /// Booking list notifier
 class BookingListNotifier extends StateNotifier<BookingListState> {
-  final PortalRepository _portalRepository;
+  final Ref _ref;
   int _currentPage = 1;
   BookingStatus? _statusFilter;
   int? _propertyFilter;
 
   BookingListNotifier({
-    required PortalRepository portalRepository,
-  })  : _portalRepository = portalRepository,
+    required Ref ref,
+  })  : _ref = ref,
         super(const BookingListInitial());
 
   Future<void> load() async {
     state = const BookingListLoading();
     _currentPage = 1;
     try {
-      final bookingRepo = _portalRepository;
-      // Using the portal repository for now - would need booking repo integration
-      state = const BookingListLoaded(
-        bookings: [],
-        totalCount: 0,
-        hasMore: false,
+      final bookingRepository = _ref.read(bookingRepositoryProvider);
+      final response = await bookingRepository.getBookings(
+        page: _currentPage,
+        status: _statusFilter,
+        propertyId: _propertyFilter,
+      );
+
+      state = BookingListLoaded(
+        bookings: response.results,
+        totalCount: response.count,
+        hasMore: response.next != null,
+        statusFilter: _statusFilter,
+        propertyFilter: _propertyFilter,
       );
     } catch (e) {
       state = BookingListError(e.toString());
+    }
+  }
+
+  Future<void> loadMore() async {
+    final currentState = state;
+    if (currentState is! BookingListLoaded || !currentState.hasMore) return;
+
+    _currentPage++;
+    try {
+      final bookingRepository = _ref.read(bookingRepositoryProvider);
+      final response = await bookingRepository.getBookings(
+        page: _currentPage,
+        status: _statusFilter,
+        propertyId: _propertyFilter,
+      );
+
+      state = BookingListLoaded(
+        bookings: [...currentState.bookings, ...response.results],
+        totalCount: response.count,
+        hasMore: response.next != null,
+        statusFilter: _statusFilter,
+        propertyFilter: _propertyFilter,
+      );
+    } catch (e) {
+      _currentPage--;
     }
   }
 
@@ -279,9 +319,7 @@ class BookingListNotifier extends StateNotifier<BookingListState> {
 /// Booking list provider
 final bookingListProvider =
     StateNotifierProvider<BookingListNotifier, BookingListState>((ref) {
-  return BookingListNotifier(
-    portalRepository: ref.watch(portalRepositoryProvider),
-  );
+  return BookingListNotifier(ref: ref);
 });
 
 // ============================================
@@ -504,21 +542,25 @@ class PhotoGalleryNotifier extends StateNotifier<PhotoGalleryState> {
     }
   }
 
-  Future<void> approvePhoto(int photoId) async {
+  /// Returns true if successful, false otherwise
+  Future<bool> approvePhoto(int photoId) async {
     try {
       await _portalRepository.approvePhoto(photoId);
       _removePhotoFromList(photoId);
+      return true;
     } catch (e) {
-      // Handle error
+      return false;
     }
   }
 
-  Future<void> rejectPhoto(int photoId, {String? reason}) async {
+  /// Returns true if successful, false otherwise
+  Future<bool> rejectPhoto(int photoId, {String? reason}) async {
     try {
       await _portalRepository.rejectPhoto(photoId, reason: reason);
       _removePhotoFromList(photoId);
+      return true;
     } catch (e) {
-      // Handle error
+      return false;
     }
   }
 

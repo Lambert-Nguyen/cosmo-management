@@ -90,10 +90,21 @@ class PhotoGalleryScreen extends ConsumerWidget {
                             final photo = photos[index];
                             return _PhotoCard(
                               photo: photo,
-                              onApprove: () {
-                                ref
+                              onApprove: () async {
+                                final success = await ref
                                     .read(photoGalleryProvider.notifier)
                                     .approvePhoto(photo.id);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(success
+                                          ? 'Photo approved'
+                                          : 'Failed to approve photo'),
+                                      backgroundColor:
+                                          success ? AppColors.success : AppColors.error,
+                                    ),
+                                  );
+                                }
                               },
                               onReject: () {
                                 _showRejectDialog(context, ref, photo.id);
@@ -114,10 +125,11 @@ class PhotoGalleryScreen extends ConsumerWidget {
 
   void _showRejectDialog(BuildContext context, WidgetRef ref, int photoId) {
     final reasonController = TextEditingController();
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Reject Photo'),
         content: TextField(
           controller: reasonController,
@@ -129,18 +141,26 @@ class PhotoGalleryScreen extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Cancel'),
           ),
           FilledButton(
-            onPressed: () {
-              ref.read(photoGalleryProvider.notifier).rejectPhoto(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              final success = await ref.read(photoGalleryProvider.notifier).rejectPhoto(
                     photoId,
                     reason: reasonController.text.isNotEmpty
                         ? reasonController.text
                         : null,
                   );
-              Navigator.pop(context);
+              scaffoldMessenger.showSnackBar(
+                SnackBar(
+                  content: Text(success
+                      ? 'Photo rejected'
+                      : 'Failed to reject photo'),
+                  backgroundColor: success ? AppColors.success : AppColors.error,
+                ),
+              );
             },
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
@@ -153,17 +173,26 @@ class PhotoGalleryScreen extends ConsumerWidget {
   }
 
   void _showPhotoDetail(BuildContext context, WidgetRef ref, PhotoModel photo) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => _PhotoDetailSheet(
+      builder: (sheetContext) => _PhotoDetailSheet(
         photo: photo,
-        onApprove: () {
-          ref.read(photoGalleryProvider.notifier).approvePhoto(photo.id);
-          Navigator.pop(context);
+        onApprove: () async {
+          Navigator.pop(sheetContext);
+          final success = await ref.read(photoGalleryProvider.notifier).approvePhoto(photo.id);
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text(success ? 'Photo approved' : 'Failed to approve photo'),
+              backgroundColor: success ? AppColors.success : AppColors.error,
+            ),
+          );
         },
         onReject: () {
-          Navigator.pop(context);
+          Navigator.pop(sheetContext);
+          // Use the original context for the reject dialog, not the sheet context
           _showRejectDialog(context, ref, photo.id);
         },
       ),
@@ -181,7 +210,7 @@ class _PhotoCard extends StatelessWidget {
   });
 
   final PhotoModel photo;
-  final VoidCallback onApprove;
+  final Future<void> Function() onApprove;
   final VoidCallback onReject;
   final VoidCallback onTap;
 
@@ -282,7 +311,7 @@ class _PhotoDetailSheet extends StatelessWidget {
   });
 
   final PhotoModel photo;
-  final VoidCallback onApprove;
+  final Future<void> Function() onApprove;
   final VoidCallback onReject;
 
   @override

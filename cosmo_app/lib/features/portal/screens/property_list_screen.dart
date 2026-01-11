@@ -3,6 +3,8 @@
 /// Displays list of owner's properties with search functionality.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,18 +29,33 @@ class PropertyListScreen extends ConsumerStatefulWidget {
 class _PropertyListScreenState extends ConsumerState<PropertyListScreen> {
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onSearchChanged() {
+    // Trigger rebuild to update clear button visibility
+    setState(() {});
+
+    // Debounce the actual search
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      ref.read(propertyListProvider.notifier).search(_searchController.text);
+    });
   }
 
   void _onScroll() {
@@ -74,13 +91,10 @@ class _PropertyListScreenState extends ConsumerState<PropertyListScreen> {
                     icon: const Icon(Icons.clear),
                     onPressed: () {
                       _searchController.clear();
-                      ref.read(propertyListProvider.notifier).search('');
+                      // Listener will handle the search call
                     },
                   ),
               ],
-              onChanged: (value) {
-                ref.read(propertyListProvider.notifier).search(value);
-              },
             ),
           ),
         ),
