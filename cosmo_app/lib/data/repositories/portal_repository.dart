@@ -101,7 +101,7 @@ class PortalRepository extends BaseRepository {
 
     final response = await apiService.get(
       endpoint,
-      queryParameters: propertyId != null ? null : queryParams,
+      queryParameters: queryParams,
     );
 
     final List<dynamic> results = response['results'] ?? response;

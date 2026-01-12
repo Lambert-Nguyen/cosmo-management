@@ -3202,7 +3202,7 @@ All issues resolved:
 - Calendar supports month/week/day views with property filtering
 - Photo gallery includes full-screen preview with approve/reject actions
 
-#### Code Quality Improvements (Review Pass)
+#### Code Quality Improvements (Review Pass 1)
 
 - **BookingListNotifier**: Fixed to properly load from bookingRepository with pagination
 - **PortalDashboardNotifier**: Now loads dashboard stats and upcoming bookings in parallel
@@ -3211,6 +3211,16 @@ All issues resolved:
 - **SearchBar Clear Button**: Fixed visibility update using TextEditingController listener
 - **Booking List**: Added infinite scroll pagination with loading indicator
 - **Removed unused imports**: Cleaned up property_detail_screen.dart and property_list_screen.dart
+
+#### Code Quality Improvements (Review Pass 2)
+
+- **BookingListNotifier**: Now auto-loads on creation (consistent with other notifiers)
+- **Pagination Race Condition Fix**: Added `_isLoadingMore` guard to all notifiers:
+  - `BookingListNotifier.loadMore()`
+  - `PropertyListNotifier.loadMore()`
+  - `PhotoGalleryNotifier.loadMore()`
+- **Calendar Query Params Bug**: Fixed date range params being lost when filtering by property
+- **Booking List Screen**: Removed redundant manual load call (now handled by notifier)
 
 #### Definition of Done - Phase 6
 - [x] Portal users can view their properties

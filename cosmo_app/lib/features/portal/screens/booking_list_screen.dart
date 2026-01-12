@@ -34,10 +34,6 @@ class _BookingListScreenState extends ConsumerState<BookingListScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _scrollController.addListener(_onScroll);
-    // Load bookings on init
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(bookingListProvider.notifier).load();
-    });
   }
 
   @override

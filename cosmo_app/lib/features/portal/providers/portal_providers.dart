@@ -134,6 +134,7 @@ class PropertyListError extends PropertyListState {
 class PropertyListNotifier extends StateNotifier<PropertyListState> {
   final PortalRepository _portalRepository;
   int _currentPage = 1;
+  bool _isLoadingMore = false;
   String? _searchQuery;
 
   PropertyListNotifier({
@@ -164,9 +165,11 @@ class PropertyListNotifier extends StateNotifier<PropertyListState> {
   }
 
   Future<void> loadMore() async {
+    if (_isLoadingMore) return;
     final currentState = state;
     if (currentState is! PropertyListLoaded || !currentState.hasMore) return;
 
+    _isLoadingMore = true;
     _currentPage++;
     try {
       final response = await _portalRepository.getProperties(
@@ -182,6 +185,8 @@ class PropertyListNotifier extends StateNotifier<PropertyListState> {
       );
     } catch (e) {
       _currentPage--;
+    } finally {
+      _isLoadingMore = false;
     }
   }
 
@@ -245,13 +250,16 @@ class BookingListError extends BookingListState {
 class BookingListNotifier extends StateNotifier<BookingListState> {
   final Ref _ref;
   int _currentPage = 1;
+  bool _isLoadingMore = false;
   BookingStatus? _statusFilter;
   int? _propertyFilter;
 
   BookingListNotifier({
     required Ref ref,
   })  : _ref = ref,
-        super(const BookingListInitial());
+        super(const BookingListInitial()) {
+    load();
+  }
 
   Future<void> load() async {
     state = const BookingListLoading();
@@ -277,9 +285,11 @@ class BookingListNotifier extends StateNotifier<BookingListState> {
   }
 
   Future<void> loadMore() async {
+    if (_isLoadingMore) return;
     final currentState = state;
     if (currentState is! BookingListLoaded || !currentState.hasMore) return;
 
+    _isLoadingMore = true;
     _currentPage++;
     try {
       final bookingRepository = _ref.read(bookingRepositoryProvider);
@@ -298,6 +308,8 @@ class BookingListNotifier extends StateNotifier<BookingListState> {
       );
     } catch (e) {
       _currentPage--;
+    } finally {
+      _isLoadingMore = false;
     }
   }
 
@@ -496,6 +508,7 @@ class PhotoGalleryError extends PhotoGalleryState {
 class PhotoGalleryNotifier extends StateNotifier<PhotoGalleryState> {
   final PortalRepository _portalRepository;
   int _currentPage = 1;
+  bool _isLoadingMore = false;
 
   PhotoGalleryNotifier({
     required PortalRepository portalRepository,
@@ -523,9 +536,11 @@ class PhotoGalleryNotifier extends StateNotifier<PhotoGalleryState> {
   }
 
   Future<void> loadMore() async {
+    if (_isLoadingMore) return;
     final currentState = state;
     if (currentState is! PhotoGalleryLoaded || !currentState.hasMore) return;
 
+    _isLoadingMore = true;
     _currentPage++;
     try {
       final response = await _portalRepository.getPhotosPendingApproval(
@@ -539,6 +554,8 @@ class PhotoGalleryNotifier extends StateNotifier<PhotoGalleryState> {
       );
     } catch (e) {
       _currentPage--;
+    } finally {
+      _isLoadingMore = false;
     }
   }
 
