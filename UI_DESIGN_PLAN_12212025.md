@@ -3222,6 +3222,14 @@ All issues resolved:
 - **Calendar Query Params Bug**: Fixed date range params being lost when filtering by property
 - **Booking List Screen**: Removed redundant manual load call (now handled by notifier)
 
+#### Code Quality Improvements (Review Pass 3)
+
+- **Freezed @JsonKey Warnings**: Fixed 29 `invalid_annotation_target` warnings in booking_model.dart and calendar_model.dart
+  - Added `invalid_annotation_target: ignore` to analysis_options.yaml
+  - This is a known Freezed false positive - @JsonKey on constructor parameters is valid for Freezed but the analyzer doesn't recognize it
+  - See: [freezed#488](https://github.com/rrousselGit/freezed/issues/488)
+- **All portal screens pass flutter analyze with no issues**
+
 #### Definition of Done - Phase 6
 - [x] Portal users can view their properties
 - [x] Portal users can search properties (with debounced search)
