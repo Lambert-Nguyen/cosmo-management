@@ -90,11 +90,29 @@ class RouteNames {
   // Portal Routes
   // ============================================
 
-  /// Portal home
-  static const String portal = '/portal';
+  /// Portal dashboard
+  static const String portalDashboard = '/portal';
 
-  /// Service requests
-  static const String serviceRequests = '/portal/requests';
+  /// Portal properties list
+  static const String portalProperties = '/portal/properties';
+
+  /// Portal property detail
+  static String portalPropertyDetail(int id) => '/portal/properties/$id';
+
+  /// Portal bookings list
+  static const String portalBookings = '/portal/bookings';
+
+  /// Portal booking detail
+  static String portalBookingDetail(int id) => '/portal/bookings/$id';
+
+  /// Portal calendar
+  static const String portalCalendar = '/portal/calendar';
+
+  /// Portal photos (for approval)
+  static const String portalPhotos = '/portal/photos';
+
+  /// Portal task detail (read-only)
+  static String portalTaskDetail(int id) => '/portal/tasks/$id';
 
   // ============================================
   // Staff Routes

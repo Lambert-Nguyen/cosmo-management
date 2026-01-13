@@ -3171,18 +3171,19 @@ All issues resolved:
 **Objective:** Property management interface for owners
 
 #### Screens to Build (8):
-| Screen | Purpose | API Endpoints |
-|--------|---------|---------------|
-| `PortalDashboardScreen` | Dashboard with stats | `GET /api/mobile/dashboard/` |
-| `PropertyListScreen` | Browse properties (with search) | `GET /api/properties/`, `GET /api/properties/search/` |
-| `PropertyDetailScreen` | Property info, bookings, tasks | `GET /api/properties/{id}/` |
-| `BookingListScreen` | All bookings | `GET /api/bookings/` |
-| `BookingDetailScreen` | Booking information | `GET /api/bookings/{id}/` |
-| `CalendarScreen` | Unified calendar view | `GET /api/calendar/*` |
-| `PhotoGalleryScreen` | Browse/approve photos | `GET /api/portal/photos/`, `POST /api/tasks/{id}/images/{id}/approve/` |
-| `TaskDetailScreen` | Task details (shared with Staff, role-based UI) | `GET /api/tasks/{id}/` |
+| Screen | Purpose | API Endpoints | Status |
+|--------|---------|---------------|--------|
+| `PortalDashboardScreen` | Dashboard with stats | `GET /api/mobile/dashboard/` | Done |
+| `PropertyListScreen` | Browse properties (with search) | `GET /api/properties/`, `GET /api/properties/search/` | Done |
+| `PropertyDetailScreen` | Property info, bookings, tasks | `GET /api/properties/{id}/` | Done |
+| `BookingListScreen` | All bookings | `GET /api/bookings/` | Done |
+| `BookingDetailScreen` | Booking information | `GET /api/bookings/{id}/` | Done |
+| `CalendarScreen` | Unified calendar view | `GET /api/calendar/*` | Done |
+| `PhotoGalleryScreen` | Browse/approve photos | `GET /api/portal/photos/`, `POST /api/tasks/{id}/images/{id}/approve/` | Done |
+| `TaskDetailScreen` | Task details (shared with Staff, role-based UI) | `GET /api/tasks/{id}/` | Shared |
 
 *Note: PropertySearch is integrated into PropertyListScreen, not separate*
+*Note: TaskDetailScreen uses existing staff TaskDetailScreen with role-based UI (portal users see read-only version)*
 
 #### Features:
 - Property list with search/filter
@@ -3192,13 +3193,44 @@ All issues resolved:
 - Calendar with month/week/day views
 - Calendar filtering by property
 
+#### Implementation Notes:
+- Created `BookingModel` with freezed for booking data
+- Created `CalendarEventModel` with month/week/day view modes
+- Created `PortalDashboardStats` for dashboard statistics
+- Added portal repositories and providers
+- Portal navigation uses StatefulShellRoute with 5-tab bottom navigation
+- Calendar supports month/week/day views with property filtering
+- Photo gallery includes full-screen preview with approve/reject actions
+
+#### Code Quality Improvements (Review Pass 1)
+
+- **BookingListNotifier**: Fixed to properly load from bookingRepository with pagination
+- **PortalDashboardNotifier**: Now loads dashboard stats and upcoming bookings in parallel
+- **Photo Gallery**: Added SnackBar feedback for approve/reject actions with proper async handling
+- **Property Search**: Added 300ms debouncing to prevent excessive API calls
+- **SearchBar Clear Button**: Fixed visibility update using TextEditingController listener
+- **Booking List**: Added infinite scroll pagination with loading indicator
+- **Removed unused imports**: Cleaned up property_detail_screen.dart and property_list_screen.dart
+
+#### Code Quality Improvements (Review Pass 2)
+
+- **BookingListNotifier**: Now auto-loads on creation (consistent with other notifiers)
+- **Pagination Race Condition Fix**: Added `_isLoadingMore` guard to all notifiers:
+  - `BookingListNotifier.loadMore()`
+  - `PropertyListNotifier.loadMore()`
+  - `PhotoGalleryNotifier.loadMore()`
+- **Calendar Query Params Bug**: Fixed date range params being lost when filtering by property
+- **Booking List Screen**: Removed redundant manual load call (now handled by notifier)
+
 #### Definition of Done - Phase 6
-- [ ] Portal users can view their properties
-- [ ] Portal users can search properties
-- [ ] Portal users can view bookings
-- [ ] Portal users can view calendar
-- [ ] Portal users can approve/reject photos
-- [ ] Portal users can view task details (read-only)
+- [x] Portal users can view their properties
+- [x] Portal users can search properties (with debounced search)
+- [x] Portal users can view bookings (with pagination)
+- [x] Portal users can view calendar
+- [x] Portal users can approve/reject photos (with user feedback)
+- [x] Portal users can view task details (read-only)
+
+**Phase 6 is 100% complete.** All 7 portal-specific screens implemented with full functionality. TaskDetailScreen is shared with staff module with role-based rendering. Code quality review completed with all issues resolved.
 
 ---
 

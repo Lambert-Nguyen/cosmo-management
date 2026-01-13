@@ -332,4 +332,82 @@ class ApiConfig {
   /// Send message
   /// POST /api/chat/rooms/{id}/messages/
   static String sendMessage(int roomId) => '/api/chat/rooms/$roomId/messages/';
+
+  // ============================================
+  // Portal Endpoints
+  // ============================================
+
+  /// Portal dashboard stats
+  /// GET /api/portal/dashboard/
+  static const String portalDashboard = '/api/portal/dashboard/';
+
+  /// Portal properties (owner's properties)
+  /// GET /api/portal/properties/
+  static const String portalProperties = '/api/portal/properties/';
+
+  /// Portal property detail
+  /// GET /api/portal/properties/{id}/
+  static String portalPropertyDetail(int id) => '/api/portal/properties/$id/';
+
+  /// Portal property search
+  /// GET /api/portal/properties/search/
+  static const String portalPropertySearch = '/api/portal/properties/search/';
+
+  // ============================================
+  // Booking Endpoints
+  // ============================================
+
+  /// Booking list
+  /// GET /api/bookings/
+  static const String bookings = '/api/bookings/';
+
+  /// Booking detail
+  /// GET /api/bookings/{id}/
+  static String bookingDetail(int id) => '/api/bookings/$id/';
+
+  /// Bookings by property
+  /// GET /api/bookings/by-property/{propertyId}/
+  static String bookingsByProperty(int propertyId) =>
+      '/api/bookings/by-property/$propertyId/';
+
+  /// Upcoming bookings
+  /// GET /api/bookings/upcoming/
+  static const String bookingsUpcoming = '/api/bookings/upcoming/';
+
+  /// Today's check-ins
+  /// GET /api/bookings/check-ins-today/
+  static const String bookingsCheckInsToday = '/api/bookings/check-ins-today/';
+
+  /// Today's check-outs
+  /// GET /api/bookings/check-outs-today/
+  static const String bookingsCheckOutsToday = '/api/bookings/check-outs-today/';
+
+  // ============================================
+  // Calendar Endpoints
+  // ============================================
+
+  /// Calendar events
+  /// GET /api/calendar/events/
+  static const String calendarEvents = '/api/calendar/events/';
+
+  /// Calendar events by property
+  /// GET /api/calendar/events/property/{propertyId}/
+  static String calendarEventsByProperty(int propertyId) =>
+      '/api/calendar/events/property/$propertyId/';
+
+  // ============================================
+  // Portal Photo Endpoints
+  // ============================================
+
+  /// Portal photos list (for approval)
+  /// GET /api/portal/photos/
+  static const String portalPhotos = '/api/portal/photos/';
+
+  /// Approve photo
+  /// POST /api/portal/photos/{id}/approve/
+  static String portalPhotoApprove(int id) => '/api/portal/photos/$id/approve/';
+
+  /// Reject photo
+  /// POST /api/portal/photos/{id}/reject/
+  static String portalPhotoReject(int id) => '/api/portal/photos/$id/reject/';
 }

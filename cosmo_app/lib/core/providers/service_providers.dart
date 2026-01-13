@@ -6,7 +6,9 @@ library;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/booking_repository.dart';
 import '../../data/repositories/notification_repository.dart';
+import '../../data/repositories/portal_repository.dart';
 import '../../data/repositories/property_repository.dart';
 import '../../data/repositories/task_repository.dart';
 import '../../data/repositories/user_repository.dart';
@@ -141,6 +143,22 @@ final taskRepositoryProvider = Provider<TaskRepository>((ref) {
 /// Notification repository provider
 final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
   return NotificationRepository(
+    apiService: ref.watch(apiServiceProvider),
+    storageService: ref.watch(storageServiceProvider),
+  );
+});
+
+/// Booking repository provider
+final bookingRepositoryProvider = Provider<BookingRepository>((ref) {
+  return BookingRepository(
+    apiService: ref.watch(apiServiceProvider),
+    storageService: ref.watch(storageServiceProvider),
+  );
+});
+
+/// Portal repository provider
+final portalRepositoryProvider = Provider<PortalRepository>((ref) {
+  return PortalRepository(
     apiService: ref.watch(apiServiceProvider),
     storageService: ref.watch(storageServiceProvider),
   );
