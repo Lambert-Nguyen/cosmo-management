@@ -6,6 +6,7 @@ library;
 import 'dart:io';
 
 import '../../core/config/api_config.dart';
+import '../../core/services/image_compression_service.dart';
 import '../models/photo_model.dart';
 import 'base_repository.dart';
 
@@ -14,7 +15,10 @@ class PhotoRepository extends BaseRepository {
   PhotoRepository({
     required super.apiService,
     required super.storageService,
-  });
+    ImageCompressionService? compressionService,
+  }) : _compressionService = compressionService ?? ImageCompressionService();
+
+  final ImageCompressionService _compressionService;
 
   // Cache keys
   String _taskPhotosCacheKey(int taskId) => 'photos_task_$taskId';
@@ -24,18 +28,32 @@ class PhotoRepository extends BaseRepository {
   // Photo Upload
   // ============================================
 
-  /// Upload a single photo
+  /// Upload a single photo with optional compression
   Future<PhotoModel> uploadPhoto({
     required String filePath,
     PhotoType type = PhotoType.general,
     String? entityType,
     int? entityId,
     String? caption,
+    bool compressBeforeUpload = true,
+    ImageCompressionConfig compressionConfig = const ImageCompressionConfig(),
     void Function(double progress)? onProgress,
   }) async {
     final file = File(filePath);
     if (!file.existsSync()) {
       throw Exception('File not found: $filePath');
+    }
+
+    // Compress image if enabled and file is large enough
+    var uploadPath = filePath;
+    CompressionResult? compressionResult;
+
+    if (compressBeforeUpload && _compressionService.needsCompression(filePath)) {
+      compressionResult = await _compressionService.compressImage(
+        filePath,
+        config: compressionConfig,
+      );
+      uploadPath = compressionResult.path;
     }
 
     final additionalData = <String, dynamic>{
@@ -45,17 +63,24 @@ class PhotoRepository extends BaseRepository {
       if (caption != null) 'caption': caption,
     };
 
-    final response = await apiService.uploadFile<Map<String, dynamic>>(
-      ApiConfig.staffPhotoUpload,
-      filePath: filePath,
-      fieldName: 'file',
-      additionalData: additionalData,
-      onSendProgress: onProgress != null
-          ? (sent, total) => onProgress(sent / total)
-          : null,
-    );
+    try {
+      final response = await apiService.uploadFile<Map<String, dynamic>>(
+        ApiConfig.staffPhotoUpload,
+        filePath: uploadPath,
+        fieldName: 'file',
+        additionalData: additionalData,
+        onSendProgress: onProgress != null
+            ? (sent, total) => onProgress(sent / total)
+            : null,
+      );
 
-    return PhotoModel.fromJson(response);
+      return PhotoModel.fromJson(response);
+    } finally {
+      // Clean up compressed temp file if created
+      if (compressionResult != null && uploadPath != filePath) {
+        await _compressionService.cleanupTempFiles([uploadPath]);
+      }
+    }
   }
 
   /// Upload multiple photos in batch

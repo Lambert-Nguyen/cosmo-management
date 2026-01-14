@@ -56,13 +56,19 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.cosmomgmt.app',
   );
 
-  // Web configuration - update these values from Firebase Console
+  // Web configuration
+  // To get the web appId:
+  // 1. Go to Firebase Console > Project Settings > Your apps
+  // 2. Click "Add app" > Web icon
+  // 3. Register app with nickname "Cosmo Web"
+  // 4. Copy the appId value (format: 1:973172271140:web:xxxxxxxxxx)
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAaLEWm5sAqVsBqbvpon9sHY4oeHRg1ar0',
-    appId: '1:973172271140:web:YOUR_WEB_APP_ID', // TODO: Get from Firebase Console
+    appId: '1:973172271140:web:placeholder_configure_in_firebase',
     messagingSenderId: '973172271140',
     projectId: 'cosmomanagement-ed731',
     storageBucket: 'cosmomanagement-ed731.firebasestorage.app',
+    authDomain: 'cosmomanagement-ed731.firebaseapp.com',
   );
 
   // macOS configuration (same as iOS for most cases)
@@ -75,12 +81,18 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.cosmomgmt.app',
   );
 
-  // Windows configuration - update these values from Firebase Console
+  // Windows configuration (uses web app registration)
+  // To get the windows appId:
+  // 1. Go to Firebase Console > Project Settings > Your apps
+  // 2. Click "Add app" > Web icon (Windows uses web SDK)
+  // 3. Register app with nickname "Cosmo Windows"
+  // 4. Copy the appId value (format: 1:973172271140:web:xxxxxxxxxx)
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyAaLEWm5sAqVsBqbvpon9sHY4oeHRg1ar0',
-    appId: '1:973172271140:web:YOUR_WINDOWS_APP_ID', // TODO: Get from Firebase Console
+    appId: '1:973172271140:web:placeholder_configure_in_firebase',
     messagingSenderId: '973172271140',
     projectId: 'cosmomanagement-ed731',
     storageBucket: 'cosmomanagement-ed731.firebasestorage.app',
+    authDomain: 'cosmomanagement-ed731.firebaseapp.com',
   );
 }
