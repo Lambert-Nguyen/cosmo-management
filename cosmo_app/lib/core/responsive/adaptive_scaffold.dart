@@ -135,25 +135,45 @@ class AdaptiveScaffold extends StatelessWidget {
   }
 }
 
-/// A shell widget that provides adaptive navigation for StatefulShellRoute
+/// A shell widget that provides adaptive navigation with callbacks
 ///
-/// Use this as a wrapper for GoRouter's StatefulShellRoute to get
-/// adaptive navigation behavior.
+/// Use this when you need adaptive navigation but want to manage
+/// navigation state yourself. For GoRouter's StatefulShellRoute,
+/// see StaffShell and PortalShell for implementation examples.
+///
+/// Example usage:
+/// ```dart
+/// AdaptiveNavigationShell(
+///   body: currentPage,
+///   destinations: myDestinations,
+///   selectedIndex: currentIndex,
+///   onDestinationSelected: (index) => navigateTo(index),
+/// )
+/// ```
 class AdaptiveNavigationShell extends StatelessWidget {
   const AdaptiveNavigationShell({
-    required this.navigationShell,
+    required this.body,
     required this.destinations,
+    required this.selectedIndex,
+    required this.onDestinationSelected,
     this.appBarBuilder,
     this.floatingActionButton,
     this.showLabelsOnRail = true,
+    this.leading,
     super.key,
   });
 
-  /// The navigation shell from GoRouter
-  final Widget navigationShell;
+  /// The main content body
+  final Widget body;
 
   /// Navigation destinations
   final List<AdaptiveDestination> destinations;
+
+  /// Currently selected index
+  final int selectedIndex;
+
+  /// Callback when destination is selected
+  final ValueChanged<int> onDestinationSelected;
 
   /// Optional app bar builder
   final PreferredSizeWidget Function(BuildContext context)? appBarBuilder;
@@ -161,87 +181,80 @@ class AdaptiveNavigationShell extends StatelessWidget {
   /// Optional floating action button
   final Widget? floatingActionButton;
 
-  /// Whether to show labels on the navigation rail
+  /// Whether to show labels on the navigation rail when expanded
   final bool showLabelsOnRail;
+
+  /// Optional leading widget for the navigation rail (e.g., title)
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
     return ScreenTypeBuilder(
       builder: (context, screenType) {
         if (screenType.isCompact) {
-          return Scaffold(
-            appBar: appBarBuilder?.call(context),
-            body: navigationShell,
-            floatingActionButton: floatingActionButton,
-          );
+          return _buildCompactLayout(context);
         }
-
-        return Scaffold(
-          appBar: appBarBuilder?.call(context),
-          body: Row(
-            children: [
-              _NavigationRailFromShell(
-                destinations: destinations,
-                screenType: screenType,
-                showLabels: showLabelsOnRail,
-              ),
-              const VerticalDivider(thickness: 1, width: 1),
-              Expanded(child: navigationShell),
-            ],
-          ),
-          floatingActionButton: floatingActionButton,
-        );
+        return _buildExpandedLayout(context, screenType);
       },
     );
   }
-}
 
-class _NavigationRailFromShell extends StatelessWidget {
-  const _NavigationRailFromShell({
-    required this.destinations,
-    required this.screenType,
-    required this.showLabels,
-  });
-
-  final List<AdaptiveDestination> destinations;
-  final ScreenType screenType;
-  final bool showLabels;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final extended = screenType.isExpanded && showLabels;
-
-    return NavigationRail(
-      selectedIndex: _getSelectedIndex(context),
-      onDestinationSelected: (index) => _onDestinationSelected(context, index),
-      extended: extended,
-      minWidth: Breakpoints.railWidth,
-      minExtendedWidth: Breakpoints.railExtendedWidth,
-      labelType: extended
-          ? NavigationRailLabelType.none
-          : NavigationRailLabelType.selected,
-      backgroundColor: theme.colorScheme.surfaceContainerLow,
-      destinations: destinations
-          .map(
-            (dest) => NavigationRailDestination(
-              icon: Icon(dest.icon),
-              selectedIcon: Icon(dest.selectedIcon),
-              label: Text(dest.label),
-            ),
-          )
-          .toList(),
+  Widget _buildCompactLayout(BuildContext context) {
+    return Scaffold(
+      appBar: appBarBuilder?.call(context),
+      body: body,
+      floatingActionButton: floatingActionButton,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: onDestinationSelected,
+        destinations: destinations
+            .map(
+              (dest) => NavigationDestination(
+                icon: Icon(dest.icon),
+                selectedIcon: Icon(dest.selectedIcon),
+                label: dest.label,
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 
-  int _getSelectedIndex(BuildContext context) {
-    // This would typically be connected to GoRouter's currentIndex
-    // For now, return 0 as default
-    return 0;
-  }
+  Widget _buildExpandedLayout(BuildContext context, ScreenType screenType) {
+    final theme = Theme.of(context);
+    final extended = screenType.isExpanded && showLabelsOnRail;
 
-  void _onDestinationSelected(BuildContext context, int index) {
-    // This would typically navigate using GoRouter
+    return Scaffold(
+      appBar: appBarBuilder?.call(context),
+      body: Row(
+        children: [
+          NavigationRail(
+            selectedIndex: selectedIndex,
+            onDestinationSelected: onDestinationSelected,
+            extended: extended,
+            minWidth: Breakpoints.railWidth,
+            minExtendedWidth: Breakpoints.railExtendedWidth,
+            labelType: extended
+                ? NavigationRailLabelType.none
+                : NavigationRailLabelType.selected,
+            backgroundColor: theme.colorScheme.surfaceContainerLow,
+            leading: leading,
+            destinations: destinations
+                .map(
+                  (dest) => NavigationRailDestination(
+                    icon: Icon(dest.icon),
+                    selectedIcon: Icon(dest.selectedIcon),
+                    label: Text(dest.label),
+                  ),
+                )
+                .toList(),
+          ),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: body),
+        ],
+      ),
+      floatingActionButton: floatingActionButton,
+    );
   }
 }
 

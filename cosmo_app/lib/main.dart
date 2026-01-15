@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'app.dart';
 import 'core/config/env_config.dart';
@@ -23,10 +24,15 @@ import 'core/services/storage_service.dart';
 /// - Environment configuration
 /// - Core services (Storage, Connectivity, Auth)
 /// - Riverpod state management
-/// - Web-specific URL strategy
+/// - Web-specific URL strategy (path-based for clean URLs)
 void main() async {
   // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure web URL strategy for clean URLs (path-based instead of hash-based)
+  // This enables URLs like /staff/tasks instead of /#/staff/tasks
+  // Note: Server must be configured to handle SPA routing for this to work
+  usePathUrlStrategy();
 
   // Initialize environment
   EnvConfig.init(Environment.development);
