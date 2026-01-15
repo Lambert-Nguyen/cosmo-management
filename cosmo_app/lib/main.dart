@@ -1,8 +1,10 @@
 /// Cosmo Management - Universal Property & Operations Management Platform
 ///
 /// Entry point for the Flutter application.
+/// Supports web, iOS, and Android platforms with responsive layouts.
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +23,7 @@ import 'core/services/storage_service.dart';
 /// - Environment configuration
 /// - Core services (Storage, Connectivity, Auth)
 /// - Riverpod state management
+/// - Web-specific URL strategy
 void main() async {
   // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,23 +31,28 @@ void main() async {
   // Initialize environment
   EnvConfig.init(Environment.development);
 
-  // Set preferred orientations (allow all for web/tablet)
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+  // Platform-specific initialization
+  if (!kIsWeb) {
+    // Mobile: Set preferred orientations (allow all for tablet)
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
 
-  // Set system UI overlay style
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
-  );
+  // Set system UI overlay style (mobile only)
+  if (!kIsWeb) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
+  }
 
   // Initialize core services
   final storageService = StorageService();

@@ -1,6 +1,6 @@
 /// Property list screen for Cosmo Management Portal
 ///
-/// Displays list of owner's properties with search functionality.
+/// Displays list of owner's properties with search and responsive layout.
 library;
 
 import 'dart:async';
@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/responsive/responsive.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../router/route_names.dart';
 import '../providers/portal_providers.dart';
@@ -98,55 +99,96 @@ class _PropertyListScreenState extends ConsumerState<PropertyListScreen> {
           ),
         ),
       ),
-      body: switch (propertyState) {
-        PropertyListInitial() ||
-        PropertyListLoading() =>
-          const PortalLoadingState(message: 'Loading properties...'),
-        PropertyListError(message: final msg) => PortalErrorState(
-            message: msg,
-            onRetry: () => ref.read(propertyListProvider.notifier).refresh(),
-          ),
-        PropertyListLoaded(
-          properties: final properties,
-          hasMore: final hasMore,
-        ) =>
-          properties.isEmpty
-              ? PortalEmptyState(
-                  icon: Icons.home_work_outlined,
-                  title: 'No properties found',
-                  subtitle: _searchController.text.isNotEmpty
-                      ? 'Try a different search term'
-                      : 'You have no properties assigned to your account',
-                )
-              : RefreshIndicator(
-                  onRefresh: () =>
-                      ref.read(propertyListProvider.notifier).refresh(),
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    itemCount: properties.length + (hasMore ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == properties.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(AppSpacing.md),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
+      body: ResponsiveCenter(
+        maxWidth: Breakpoints.maxContentWidth,
+        child: switch (propertyState) {
+          PropertyListInitial() ||
+          PropertyListLoading() =>
+            const PortalLoadingState(message: 'Loading properties...'),
+          PropertyListError(message: final msg) => PortalErrorState(
+              message: msg,
+              onRetry: () => ref.read(propertyListProvider.notifier).refresh(),
+            ),
+          PropertyListLoaded(
+            properties: final properties,
+            hasMore: final hasMore,
+          ) =>
+            properties.isEmpty
+                ? PortalEmptyState(
+                    icon: Icons.home_work_outlined,
+                    title: 'No properties found',
+                    subtitle: _searchController.text.isNotEmpty
+                        ? 'Try a different search term'
+                        : 'You have no properties assigned to your account',
+                  )
+                : RefreshIndicator(
+                    onRefresh: () =>
+                        ref.read(propertyListProvider.notifier).refresh(),
+                    child: ScreenTypeBuilder(
+                      builder: (context, screenType) {
+                        final columns = screenType.gridColumns;
+                        final padding = screenType.isExpanded
+                            ? AppSpacing.lg
+                            : AppSpacing.md;
 
-                      final property = properties[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                        child: PropertyCard(
-                          property: property,
-                          onTap: () => context.push(
-                            RouteNames.portalPropertyDetail(property.id),
+                        if (columns == 1) {
+                          // Single column list for mobile
+                          return ListView.builder(
+                            controller: _scrollController,
+                            padding: EdgeInsets.all(padding),
+                            itemCount: properties.length + (hasMore ? 1 : 0),
+                            itemBuilder: (context, index) {
+                              if (index == properties.length) {
+                                return const Padding(
+                                  padding: EdgeInsets.all(AppSpacing.md),
+                                  child: Center(child: CircularProgressIndicator()),
+                                );
+                              }
+
+                              final property = properties[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                                child: PropertyCard(
+                                  property: property,
+                                  onTap: () => context.push(
+                                    RouteNames.portalPropertyDetail(property.id),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }
+
+                        // Grid layout for tablet/desktop
+                        return GridView.builder(
+                          controller: _scrollController,
+                          padding: EdgeInsets.all(padding),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: columns,
+                            mainAxisSpacing: AppSpacing.md,
+                            crossAxisSpacing: AppSpacing.md,
+                            childAspectRatio: 1.8,
                           ),
-                        ),
-                      );
-                    },
+                          itemCount: properties.length + (hasMore ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == properties.length) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+
+                            final property = properties[index];
+                            return PropertyCard(
+                              property: property,
+                              onTap: () => context.push(
+                                RouteNames.portalPropertyDetail(property.id),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-      },
+        },
+      ),
     );
   }
 }
