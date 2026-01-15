@@ -47,38 +47,44 @@ class InventoryDetailScreen extends ConsumerStatefulWidget {
 class _InventoryDetailScreenState
     extends ConsumerState<InventoryDetailScreen> {
   @override
-  void initState() {
-    super.initState();
-    // Load inventory details on init
-    Future.microtask(() => _loadInventory());
-  }
-
-  void _loadInventory() {
-    // TODO: Add individual inventory item fetch when API is ready
-    // For now, items are already loaded in the main inventory list
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final inventoryState = ref.watch(inventoryListProvider);
+    // Use dedicated provider for individual item fetch
+    final inventoryAsync = ref.watch(inventoryDetailProvider(widget.inventoryId));
 
-    // Find the inventory item in the loaded state
-    final item = inventoryState is InventoryListLoaded
-        ? inventoryState.items
-            .cast<InventoryModel?>()
-            .firstWhere((i) => i?.id == widget.inventoryId, orElse: () => null)
-        : null;
-
-    if (item == null) {
-      return Scaffold(
+    return inventoryAsync.when(
+      loading: () => Scaffold(
         appBar: AppBar(
           title: const Text('Inventory Details'),
         ),
         body: const Center(
-          child: Text('Item not found'),
+          child: CircularProgressIndicator(),
         ),
-      );
-    }
+      ),
+      error: (error, stack) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Inventory Details'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 16),
+              Text('Failed to load inventory item'),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () => ref.invalidate(inventoryDetailProvider(widget.inventoryId)),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      ),
+      data: (item) => _buildDetailView(context, item),
+    );
+  }
+
+  Widget _buildDetailView(BuildContext context, InventoryModel item) {
 
     return Scaffold(
       appBar: AppBar(
@@ -99,9 +105,7 @@ class _InventoryDetailScreenState
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await ref
-              .read(inventoryListProvider.notifier)
-              .loadInventory(refresh: true);
+          ref.invalidate(inventoryDetailProvider(widget.inventoryId));
         },
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.md),
@@ -147,10 +151,9 @@ class _InventoryDetailScreenState
         ),
       ),
     ).then((_) {
-      // Refresh inventory list
-      ref
-          .read(inventoryListProvider.notifier)
-          .loadInventory(refresh: true);
+      // Refresh inventory detail and list
+      ref.invalidate(inventoryDetailProvider(widget.inventoryId));
+      ref.read(inventoryListProvider.notifier).loadInventory(refresh: true);
     });
   }
 }
