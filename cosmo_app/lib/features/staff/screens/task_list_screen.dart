@@ -1,12 +1,13 @@
 /// Task list screen for Cosmo Management
 ///
-/// Filterable list of all tasks.
+/// Filterable list of all tasks with responsive layout.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/responsive/responsive.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../data/models/task_model.dart';
 import '../../../router/route_names.dart';
@@ -164,62 +165,71 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen> {
           const SizedBox(width: 8),
         ],
       ),
-      body: Column(
-        children: [
-          // Filter chips
-          TaskStatusFilterChips(
-            selectedStatus: _selectedStatus,
-            onStatusSelected: _onStatusSelected,
-            showOverdue: true,
-            isOverdueSelected: _showOverdue,
-            onOverdueSelected: _onOverdueSelected,
-          ),
+      body: ResponsiveCenter(
+        maxWidth: Breakpoints.maxContentWidth,
+        child: Column(
+          children: [
+            // Filter chips
+            TaskStatusFilterChips(
+              selectedStatus: _selectedStatus,
+              onStatusSelected: _onStatusSelected,
+              showOverdue: true,
+              isOverdueSelected: _showOverdue,
+              onOverdueSelected: _onOverdueSelected,
+            ),
 
-          // Task list
-          Expanded(
-            child: switch (taskListState) {
-              TaskListInitial() ||
-              TaskListLoading() =>
-                const StaffLoadingState(message: 'Loading tasks...'),
-              TaskListError(message: final msg) => StaffErrorState(
-                  message: msg,
-                  onRetry: () =>
-                      ref.read(taskListProvider.notifier).loadTasks(refresh: true),
-                ),
-              TaskListLoaded(
-                tasks: final tasks,
-                hasMore: final hasMore,
-              ) =>
-                tasks.isEmpty
-                    ? _buildEmptyState()
-                    : RefreshIndicator(
-                        onRefresh: () =>
-                            ref.read(taskListProvider.notifier).loadTasks(refresh: true),
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.only(
-                            top: AppSpacing.sm,
-                            bottom: 80,
+            // Task list
+            Expanded(
+              child: switch (taskListState) {
+                TaskListInitial() ||
+                TaskListLoading() =>
+                  const StaffLoadingState(message: 'Loading tasks...'),
+                TaskListError(message: final msg) => StaffErrorState(
+                    message: msg,
+                    onRetry: () =>
+                        ref.read(taskListProvider.notifier).loadTasks(refresh: true),
+                  ),
+                TaskListLoaded(
+                  tasks: final tasks,
+                  hasMore: final hasMore,
+                ) =>
+                  tasks.isEmpty
+                      ? _buildEmptyState()
+                      : RefreshIndicator(
+                          onRefresh: () =>
+                              ref.read(taskListProvider.notifier).loadTasks(refresh: true),
+                          child: ScreenTypeBuilder(
+                            builder: (context, screenType) {
+                              return ListView.builder(
+                                controller: _scrollController,
+                                padding: EdgeInsets.only(
+                                  left: screenType.isExpanded ? AppSpacing.lg : AppSpacing.sm,
+                                  right: screenType.isExpanded ? AppSpacing.lg : AppSpacing.sm,
+                                  top: AppSpacing.sm,
+                                  bottom: 80,
+                                ),
+                                itemCount: tasks.length + (hasMore ? 1 : 0),
+                                itemBuilder: (context, index) {
+                                  if (index == tasks.length) {
+                                    return _buildLoadMoreIndicator();
+                                  }
+
+                                  final task = tasks[index];
+                                  return TaskListItem(
+                                    task: task,
+                                    onTap: () => context.push(
+                                      RouteNames.staffTaskDetail(task.id),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                           ),
-                          itemCount: tasks.length + (hasMore ? 1 : 0),
-                          itemBuilder: (context, index) {
-                            if (index == tasks.length) {
-                              return _buildLoadMoreIndicator();
-                            }
-
-                            final task = tasks[index];
-                            return TaskListItem(
-                              task: task,
-                              onTap: () => context.push(
-                                RouteNames.staffTaskDetail(task.id),
-                              ),
-                            );
-                          },
                         ),
-                      ),
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(RouteNames.staffTaskCreate),

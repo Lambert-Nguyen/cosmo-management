@@ -13,6 +13,7 @@ import '../core/services/auth_service.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../core/widgets/buttons/primary_button.dart';
+import '../core/widgets/errors/deep_link_error_screen.dart';
 import '../core/widgets/inputs/app_text_field.dart';
 import '../features/auth/screens/forgot_password_screen.dart';
 import '../features/auth/screens/login_screen.dart';
@@ -254,19 +255,15 @@ class AppRouter {
                     GoRoute(
                       path: ':id',
                       name: 'staffTaskDetail',
-                      builder: (context, state) {
-                        final id = int.parse(state.pathParameters['id']!);
-                        return TaskDetailScreen(taskId: id);
-                      },
+                      builder: (context, state) =>
+                          state.withIntParam('id', (id) => TaskDetailScreen(taskId: id), resourceType: 'task'),
                       routes: [
                         // Task edit
                         GoRoute(
                           path: 'edit',
                           name: 'staffTaskEdit',
-                          builder: (context, state) {
-                            final id = int.parse(state.pathParameters['id']!);
-                            return TaskFormScreen(taskId: id);
-                          },
+                          builder: (context, state) =>
+                              state.withIntParam('id', (id) => TaskFormScreen(taskId: id), resourceType: 'task'),
                         ),
                       ],
                     ),
@@ -292,10 +289,8 @@ class AppRouter {
                     GoRoute(
                       path: ':id',
                       name: 'staffInventoryDetail',
-                      builder: (context, state) {
-                        final id = int.parse(state.pathParameters['id']!);
-                        return InventoryDetailScreen(inventoryId: id);
-                      },
+                      builder: (context, state) =>
+                          state.withIntParam('id', (id) => InventoryDetailScreen(inventoryId: id), resourceType: 'inventory'),
                     ),
                   ],
                 ),
@@ -319,10 +314,8 @@ class AppRouter {
                     GoRoute(
                       path: ':id',
                       name: 'staffLostFoundDetail',
-                      builder: (context, state) {
-                        final id = int.parse(state.pathParameters['id']!);
-                        return LostFoundFormScreen(itemId: id);
-                      },
+                      builder: (context, state) =>
+                          state.withIntParam('id', (id) => LostFoundFormScreen(itemId: id), resourceType: 'item'),
                     ),
                   ],
                 ),
@@ -372,14 +365,14 @@ class AppRouter {
         GoRoute(
           path: '/staff/photos/comparison/:taskId',
           name: 'staffPhotoComparison',
-          builder: (context, state) {
-            final taskId = int.parse(state.pathParameters['taskId']!);
-            final taskTitle = state.uri.queryParameters['title'];
-            return PhotoComparisonScreen(
+          builder: (context, state) => state.withIntParam(
+            'taskId',
+            (taskId) => PhotoComparisonScreen(
               taskId: taskId,
-              taskTitle: taskTitle,
-            );
-          },
+              taskTitle: state.uri.queryParameters['title'],
+            ),
+            resourceType: 'task',
+          ),
         ),
 
         // Portal routes with bottom navigation shell
@@ -410,10 +403,8 @@ class AppRouter {
                     GoRoute(
                       path: ':id',
                       name: 'portalPropertyDetail',
-                      builder: (context, state) {
-                        final id = int.parse(state.pathParameters['id']!);
-                        return PropertyDetailScreen(propertyId: id);
-                      },
+                      builder: (context, state) =>
+                          state.withIntParam('id', (id) => PropertyDetailScreen(propertyId: id), resourceType: 'property'),
                     ),
                   ],
                 ),
@@ -441,10 +432,8 @@ class AppRouter {
                     GoRoute(
                       path: ':id',
                       name: 'portalBookingDetail',
-                      builder: (context, state) {
-                        final id = int.parse(state.pathParameters['id']!);
-                        return BookingDetailScreen(bookingId: id);
-                      },
+                      builder: (context, state) =>
+                          state.withIntParam('id', (id) => BookingDetailScreen(bookingId: id), resourceType: 'booking'),
                     ),
                   ],
                 ),
@@ -464,25 +453,12 @@ class AppRouter {
         ),
       ];
 
-  /// Error page builder
+  /// Error page builder for 404 and other navigation errors
   Widget _errorBuilder(BuildContext context, GoRouterState state) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Page Not Found')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 64),
-            const SizedBox(height: 16),
-            Text('Route not found: ${state.matchedLocation}'),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => context.go(RouteNames.home),
-              child: const Text('Go Home'),
-            ),
-          ],
-        ),
-      ),
+    return DeepLinkErrorScreen(
+      errorType: DeepLinkErrorType.notFound,
+      path: state.matchedLocation,
+      homeRoute: RouteNames.staffDashboard,
     );
   }
 }

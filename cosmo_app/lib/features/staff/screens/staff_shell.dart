@@ -1,19 +1,57 @@
 /// Staff shell screen for Cosmo Management
 ///
-/// Bottom navigation shell for staff screens.
+/// Adaptive navigation shell for staff screens.
+/// Uses bottom navigation on mobile and navigation rail on desktop.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/responsive/responsive.dart';
 import '../../../core/theme/app_colors.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sync_indicator.dart';
 
+/// Staff navigation destinations
+const _staffDestinations = [
+  AdaptiveDestination(
+    icon: Icons.dashboard_outlined,
+    selectedIcon: Icons.dashboard,
+    label: 'Dashboard',
+  ),
+  AdaptiveDestination(
+    icon: Icons.task_outlined,
+    selectedIcon: Icons.task,
+    label: 'Tasks',
+  ),
+  AdaptiveDestination(
+    icon: Icons.inventory_2_outlined,
+    selectedIcon: Icons.inventory_2,
+    label: 'Inventory',
+  ),
+  AdaptiveDestination(
+    icon: Icons.search_outlined,
+    selectedIcon: Icons.search,
+    label: 'Lost & Found',
+  ),
+  AdaptiveDestination(
+    icon: Icons.calendar_today_outlined,
+    selectedIcon: Icons.calendar_today,
+    label: 'Schedule',
+  ),
+  AdaptiveDestination(
+    icon: Icons.person_outline,
+    selectedIcon: Icons.person,
+    label: 'Profile',
+  ),
+];
+
 /// Staff navigation shell
 ///
-/// Provides bottom navigation for staff screens.
+/// Provides adaptive navigation for staff screens:
+/// - Bottom navigation on compact screens (mobile)
+/// - Navigation rail on medium/expanded screens (tablet/desktop)
 class StaffShell extends ConsumerWidget {
   const StaffShell({
     super.key,
@@ -22,57 +60,97 @@ class StaffShell extends ConsumerWidget {
 
   final StatefulNavigationShell navigationShell;
 
+  void _onDestinationSelected(int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: Column(
-        children: [
-          // Offline banner at top
-          const OfflineBanner(),
+    return ScreenTypeBuilder(
+      builder: (context, screenType) {
+        final body = Column(
+          children: [
+            // Offline banner at top
+            const OfflineBanner(),
+            // Main content
+            Expanded(child: navigationShell),
+          ],
+        );
 
-          // Main content
-          Expanded(child: navigationShell),
-        ],
-      ),
+        if (screenType.isCompact) {
+          return _buildCompactLayout(context, body);
+        }
+        return _buildExpandedLayout(context, body, screenType);
+      },
+    );
+  }
+
+  Widget _buildCompactLayout(BuildContext context, Widget body) {
+    return Scaffold(
+      body: body,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: (index) {
-          navigationShell.goBranch(
-            index,
-            initialLocation: index == navigationShell.currentIndex,
-          );
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined),
-            selectedIcon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+        onDestinationSelected: _onDestinationSelected,
+        destinations: _staffDestinations
+            .map(
+              (dest) => NavigationDestination(
+                icon: Icon(dest.icon),
+                selectedIcon: Icon(dest.selectedIcon),
+                label: dest.label,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildExpandedLayout(
+    BuildContext context,
+    Widget body,
+    ScreenType screenType,
+  ) {
+    final theme = Theme.of(context);
+    final extended = screenType.isExpanded;
+
+    return Scaffold(
+      body: Row(
+        children: [
+          NavigationRail(
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: _onDestinationSelected,
+            extended: extended,
+            minWidth: Breakpoints.railWidth,
+            minExtendedWidth: Breakpoints.railExtendedWidth,
+            labelType: extended
+                ? NavigationRailLabelType.none
+                : NavigationRailLabelType.selected,
+            backgroundColor: theme.colorScheme.surfaceContainerLow,
+            leading: extended
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Staff',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : null,
+            destinations: _staffDestinations
+                .map(
+                  (dest) => NavigationRailDestination(
+                    icon: Icon(dest.icon),
+                    selectedIcon: Icon(dest.selectedIcon),
+                    label: Text(dest.label),
+                  ),
+                )
+                .toList(),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.task_outlined),
-            selectedIcon: Icon(Icons.task),
-            label: 'Tasks',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.inventory_2_outlined),
-            selectedIcon: Icon(Icons.inventory_2),
-            label: 'Inventory',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search),
-            label: 'Lost & Found',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_today_outlined),
-            selectedIcon: Icon(Icons.calendar_today),
-            label: 'Schedule',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: body),
         ],
       ),
     );

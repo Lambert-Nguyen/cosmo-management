@@ -1,11 +1,14 @@
 /// Cosmo Management - Universal Property & Operations Management Platform
 ///
 /// Entry point for the Flutter application.
+/// Supports web, iOS, and Android platforms with responsive layouts.
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'app.dart';
 import 'core/config/env_config.dart';
@@ -21,30 +24,41 @@ import 'core/services/storage_service.dart';
 /// - Environment configuration
 /// - Core services (Storage, Connectivity, Auth)
 /// - Riverpod state management
+/// - Web-specific URL strategy (path-based for clean URLs)
 void main() async {
   // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Configure web URL strategy for clean URLs (path-based instead of hash-based)
+  // This enables URLs like /staff/tasks instead of /#/staff/tasks
+  // Note: Server must be configured to handle SPA routing for this to work
+  usePathUrlStrategy();
+
   // Initialize environment
   EnvConfig.init(Environment.development);
 
-  // Set preferred orientations (allow all for web/tablet)
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+  // Platform-specific initialization
+  if (!kIsWeb) {
+    // Mobile: Set preferred orientations (allow all for tablet)
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
 
-  // Set system UI overlay style
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
-  );
+  // Set system UI overlay style (mobile only)
+  if (!kIsWeb) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
+  }
 
   // Initialize core services
   final storageService = StorageService();

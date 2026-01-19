@@ -1,5 +1,6 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
     "python-envs.pythonProjects": [],
-    "makefile.configureOnOpen": false
+    "makefile.configureOnOpen": false,
+    "cmake.sourceDirectory": "/Users/duylam1407/Workspace/gitHub/cosmo-management/cosmo_app/linux"
 }

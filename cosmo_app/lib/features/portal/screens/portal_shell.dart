@@ -1,15 +1,49 @@
 /// Portal shell screen for Cosmo Management
 ///
-/// Bottom navigation shell for portal screens.
+/// Adaptive navigation shell for portal screens.
+/// Uses bottom navigation on mobile and navigation rail on desktop.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/responsive/responsive.dart';
+
+/// Portal navigation destinations
+const _portalDestinations = [
+  AdaptiveDestination(
+    icon: Icons.dashboard_outlined,
+    selectedIcon: Icons.dashboard,
+    label: 'Dashboard',
+  ),
+  AdaptiveDestination(
+    icon: Icons.home_work_outlined,
+    selectedIcon: Icons.home_work,
+    label: 'Properties',
+  ),
+  AdaptiveDestination(
+    icon: Icons.calendar_month_outlined,
+    selectedIcon: Icons.calendar_month,
+    label: 'Calendar',
+  ),
+  AdaptiveDestination(
+    icon: Icons.book_outlined,
+    selectedIcon: Icons.book,
+    label: 'Bookings',
+  ),
+  AdaptiveDestination(
+    icon: Icons.photo_library_outlined,
+    selectedIcon: Icons.photo_library,
+    label: 'Photos',
+  ),
+];
+
 /// Portal navigation shell
 ///
-/// Provides bottom navigation for portal screens.
+/// Provides adaptive navigation for portal screens:
+/// - Bottom navigation on compact screens (mobile)
+/// - Navigation rail on medium/expanded screens (tablet/desktop)
 class PortalShell extends ConsumerWidget {
   const PortalShell({
     super.key,
@@ -18,44 +52,84 @@ class PortalShell extends ConsumerWidget {
 
   final StatefulNavigationShell navigationShell;
 
+  void _onDestinationSelected(int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return ScreenTypeBuilder(
+      builder: (context, screenType) {
+        if (screenType.isCompact) {
+          return _buildCompactLayout(context);
+        }
+        return _buildExpandedLayout(context, screenType);
+      },
+    );
+  }
+
+  Widget _buildCompactLayout(BuildContext context) {
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: (index) {
-          navigationShell.goBranch(
-            index,
-            initialLocation: index == navigationShell.currentIndex,
-          );
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined),
-            selectedIcon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+        onDestinationSelected: _onDestinationSelected,
+        destinations: _portalDestinations
+            .map(
+              (dest) => NavigationDestination(
+                icon: Icon(dest.icon),
+                selectedIcon: Icon(dest.selectedIcon),
+                label: dest.label,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildExpandedLayout(BuildContext context, ScreenType screenType) {
+    final theme = Theme.of(context);
+    final extended = screenType.isExpanded;
+
+    return Scaffold(
+      body: Row(
+        children: [
+          NavigationRail(
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: _onDestinationSelected,
+            extended: extended,
+            minWidth: Breakpoints.railWidth,
+            minExtendedWidth: Breakpoints.railExtendedWidth,
+            labelType: extended
+                ? NavigationRailLabelType.none
+                : NavigationRailLabelType.selected,
+            backgroundColor: theme.colorScheme.surfaceContainerLow,
+            leading: extended
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Portal',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : null,
+            destinations: _portalDestinations
+                .map(
+                  (dest) => NavigationRailDestination(
+                    icon: Icon(dest.icon),
+                    selectedIcon: Icon(dest.selectedIcon),
+                    label: Text(dest.label),
+                  ),
+                )
+                .toList(),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.home_work_outlined),
-            selectedIcon: Icon(Icons.home_work),
-            label: 'Properties',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.book_outlined),
-            selectedIcon: Icon(Icons.book),
-            label: 'Bookings',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.photo_library_outlined),
-            selectedIcon: Icon(Icons.photo_library),
-            label: 'Photos',
-          ),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: navigationShell),
         ],
       ),
     );
